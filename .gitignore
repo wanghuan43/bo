@@ -9,3 +9,4 @@ composer.lock
 .idea/*
 composer.json
 .idea
+.DS_Store
