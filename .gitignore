@@ -1,6 +1,11 @@
 .buildpath
 .project
 .settings
+.htaccess
 application/database.php
 application/config.php
 runtime/*
+composer.lock
+.idea/*
+composer.json
+.idea

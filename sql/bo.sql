@@ -11,7 +11,7 @@
  Target Server Version : 50505
  File Encoding         : utf-8
 
- Date: 08/23/2017 15:32:55 PM
+ Date: 08/23/2017 17:51:34 PM
 */
 
 SET NAMES utf8;
@@ -30,11 +30,22 @@ CREATE TABLE `kj_acceptance` (
   `a_type` tinyint(1) NOT NULL DEFAULT '1' COMMENT '1:销售;2:采销',
   `a_coid` int(11) NOT NULL COMMENT '对方公司ID',
   `a_coname` varchar(200) NOT NULL COMMENT '对方公司名',
-  `a_money` decimal(18,2) NOT NULL DEFAULT '0.00' COMMENT '总金额',
-  `a_used` decimal(18,2) NOT NULL DEFAULT '0.00' COMMENT '已使用金额',
+  `a_money` decimal(18,2) unsigned NOT NULL DEFAULT '0.00' COMMENT '总金额',
+  `a_used` decimal(18,2) unsigned NOT NULL DEFAULT '0.00' COMMENT '已使用金额',
+  `a_noused` decimal(18,2) unsigned NOT NULL DEFAULT '0.00',
   `a_date` int(10) NOT NULL COMMENT '验收时间',
   PRIMARY KEY (`a_id`,`a_no`,`a_mid`,`a_coid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='验收单表';
+
+-- ----------------------------
+--  Table structure for `kj_admin`
+-- ----------------------------
+DROP TABLE IF EXISTS `kj_admin`;
+CREATE TABLE `kj_admin` (
+  `a_id` int(11) NOT NULL AUTO_INCREMENT,
+  `a_mid` int(11) NOT NULL,
+  PRIMARY KEY (`a_id`,`a_mid`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='管理员表';
 
 -- ----------------------------
 --  Table structure for `kj_chances`
@@ -81,9 +92,10 @@ CREATE TABLE `kj_contract` (
   `c_no` char(50) NOT NULL COMMENT '合同号',
   `c_name` varchar(200) NOT NULL COMMENT '合同名称',
   `c_type` tinyint(1) NOT NULL DEFAULT '1' COMMENT '1:销售;2:采销',
-  `c_money` decimal(18,2) NOT NULL DEFAULT '0.00' COMMENT '总金额',
-  `c_used` decimal(18,2) NOT NULL DEFAULT '0.00' COMMENT '已使用金额',
-  `c_coid` varchar(200) NOT NULL COMMENT '公司主键',
+  `c_money` decimal(18,2) unsigned NOT NULL DEFAULT '0.00' COMMENT '总金额',
+  `c_used` decimal(18,2) unsigned NOT NULL DEFAULT '0.00' COMMENT '已使用金额',
+  `c_noused` decimal(18,2) unsigned NOT NULL DEFAULT '0.00',
+  `c_coid` int(11) NOT NULL COMMENT '公司主键',
   `c_coname` varchar(200) NOT NULL COMMENT '公司名称',
   `c_mid` int(11) NOT NULL COMMENT '责任人主键',
   `c_mname` varchar(200) DEFAULT NULL COMMENT '责任人名称',
@@ -130,8 +142,9 @@ CREATE TABLE `kj_invoice` (
   `i_coname` varchar(200) NOT NULL COMMENT '公司名称',
   `i_type` tinyint(1) NOT NULL DEFAULT '1' COMMENT '1:销售;2:采销',
   `i_tax` tinyint(1) NOT NULL DEFAULT '1' COMMENT '1:3%;2:6% 增;3:6% 普;4:17% 增;5:17% 普;',
-  `i_money` decimal(18,2) NOT NULL DEFAULT '0.00' COMMENT '总价格',
-  `i_used` decimal(18,2) NOT NULL DEFAULT '0.00' COMMENT '已使用价格',
+  `i_money` decimal(18,2) unsigned NOT NULL DEFAULT '0.00' COMMENT '总价格',
+  `i_used` decimal(18,2) unsigned NOT NULL DEFAULT '0.00' COMMENT '已使用价格',
+  `i_noused` decimal(18,2) unsigned NOT NULL DEFAULT '0.00',
   `i_createtime` int(10) NOT NULL COMMENT '创建时间',
   `i_updatetime` int(10) NOT NULL COMMENT '更新时间',
   PRIMARY KEY (`i_id`,`i_no`,`i_mid`,`i_coid`),
@@ -148,6 +161,7 @@ CREATE TABLE `kj_logs` (
   `l_mname` varchar(200) NOT NULL COMMENT '操作人名',
   `l_content` text NOT NULL COMMENT '操作内容',
   `l_model` char(50) NOT NULL COMMENT '操作model',
+  `i_isadmin` tinyint(1) NOT NULL DEFAULT '1' COMMENT '1:非管理员;2:管理员',
   `l_createtime` int(10) NOT NULL COMMENT '操作时间',
   PRIMARY KEY (`l_id`,`l_mid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -267,8 +281,9 @@ CREATE TABLE `kj_received` (
   `r_coid` int(11) NOT NULL COMMENT '公司主键',
   `r_coname` varchar(200) NOT NULL COMMENT '公司名称',
   `r_date` int(10) NOT NULL COMMENT '发生时间',
-  `r_money` decimal(18,2) NOT NULL DEFAULT '0.00' COMMENT '总金额',
-  `r_uesd` decimal(18,2) NOT NULL DEFAULT '0.00' COMMENT '已使用金额',
+  `r_money` decimal(18,2) unsigned NOT NULL DEFAULT '0.00' COMMENT '总金额',
+  `r_uesd` decimal(18,2) unsigned NOT NULL DEFAULT '0.00' COMMENT '已使用金额',
+  `r_noused` decimal(18,2) unsigned NOT NULL DEFAULT '0.00',
   `r_createtime` int(10) NOT NULL COMMENT '生成时间',
   `r_updatetime` int(10) NOT NULL COMMENT '结束时间',
   PRIMARY KEY (`r_id`,`r_no`,`r_mid`,`r_coid`),

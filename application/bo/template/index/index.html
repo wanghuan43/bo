@@ -6,6 +6,14 @@
 </head>
 <body>
 <{$test}>
-<{$taglib->tl_name}>
+<br />
+<{volist name="taglib" id="vo"}>
+<{$vo->tl_name}>
+<br />
+<{/volist}>
+<{volist name="try" id="vo"}>
+<{$vo}>
+<br />
+<{/volist}>
 </body>
 </html>
