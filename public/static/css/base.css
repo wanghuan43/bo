@@ -195,3 +195,18 @@ table.list td:first-child{
 .thead td:first-child{
 	background: none;
 }
+.pager li{
+	float:left;
+	background: #0070c0;
+	border: none;
+	color: #FFFFFF;
+	padding: 0 1em;
+	margin-right: 5px;
+}
+.pager li.disabled{
+	background: grey;
+	color: black;
+}
+.pager li a{
+	color: white;
+}

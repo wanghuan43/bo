@@ -104,11 +104,4 @@ return [
         'var_page'  => 'page',
         'list_rows' => 20,
     ],
-
-    'typeList' => [
-        "1" => "销售",
-        "2" => "采销",
-    ],
-
-    ''
 ];

@@ -5,5 +5,5 @@ use think\Model;
 
 class Orders extends Model
 {
-
+    protected $pk = 'o_id';
 }
