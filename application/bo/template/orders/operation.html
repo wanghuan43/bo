@@ -2,10 +2,9 @@
 <html>
 
 <head>
-    <meta charset="utf-8" />
+    <meta charset="utf-8"/>
     <title><{$title}></title>
-    <link href="/static/css/font-awesome.min.css" rel="stylesheet" />
-    <link href="/static/css/base.css" rel="stylesheet" />
+    <{load href="/static/css/base.css,/static/css/font-awesome.min.css"/}>
 </head>
 
 <body>
@@ -40,57 +39,78 @@
                 <td class="txt">订单号:</td>
                 <td colspan="3"><{$order.o_no}></td>
                 <td class="txt"><i class="fa fa-search"></i>对应合同号:</td>
-                <td><input type="text" value="<{$order.o_cno}>" /></td>
+                <td>
+                    <input type="text" name="o_cno" id="o_cno" value="<{$order.o_cno}>"/>
+                    <input type="hidden" name="o_cid" id="o_cid" value="<{$order.o_cid}>"/>
+                </td>
                 <td class="txt">最后更新日期:</td>
                 <td><?php echo (empty($order['o_updatetime']) ? "" : date($order['o_updatetime'], "Y-m-d"));?></td>
             </tr>
             <tr>
                 <td class="txt">项目名称:</td>
-                <td colspan="5"><{$order.o_pname}></td>
+                <td colspan="5">
+                    <input type="text" name="o_pname" id="o_pname" value="<{$order.o_pname}>"/>
+                    <input type="hidden" name="o_pid" id="o_pid" value="<{$order.o_pid}>"/>
+                </td>
                 <td class="txt">订单责任人</td>
-                <td><{$order.o_mname}></td>
+                <td>
+                    <{$order.o_mname}>
+                    <input type="text" name="o_mname" id="o_mname" value="<{$order.o_mname}>"/>
+                    <input type="hidden" name="o_mid" id="o_mid" value="<{$order.o_mid}>"/>
+                </td>
             </tr>
             <tr>
                 <td class="txt">订单主题:</td>
-                <td colspan="5"><input type="text" value="<{$order.o_subject}>"/></td>
+                <td colspan="5"><input type="text" name="o_subject" id="o_subject" value="<{$order.o_subject}>"/></td>
                 <td class="txt">销售/采销:</td>
                 <td>
-                    <select>
+                    <select name="o_type" id="o_type">
                         <{volist name="typeList" id="tl" key="k"}>
-                        <option value="<{$k}>" <{eq name="$k" value="$order.o_type"}>selected<{/eq}>><{$tl}></option>
+                        <option value="<{$k}>"
+                        <{eq name="$k" value="$order.o_type"}>selected<{/eq}>><{$tl}></option>
                         <{/volist}>
                     </select>
                 </td>
             </tr>
             <tr>
                 <td class="txt">对方名称:</td>
-                <td colspan="3"><input type="text" value="<{$order.o_coname}>" /></td>
+                <td colspan="3">
+                    <input name="o_coname" id="o_coname" type="text" value="<{$order.o_coname}>"/>
+                    <input type="hidden" name="o_coid" id="o_coid" value="<{$order.o_coid}>"/>
+                </td>
                 <td class="txt">外部/内部:</td>
                 <td>
-                    <select>
+                    <select name="o_lie" id="o_lie">
                         <{volist name="lieList" id="ll" key="k"}>
-                        <option value="<{$k}>" <{eq name="$k" value="$order.o_lie"}>selected<{/eq}>><{$ll}></option>
+                        <option value="<{$k}>"
+                        <{eq name="$k" value="$order.o_lie"}>selected<{/eq}>><{$ll}></option>
                         <{/volist}>
                     </select>
                 </td>
                 <td class="txt">部门:</td>
                 <td>
-                    <select>
+                    <select name="o_did" id="o_did">
+                        <{volist name="dList" id="dl"}>
+                        <option value="<{$dl.d_id}>"
+                        <{eq name="$dl.d_id" value="$order.o_did"}>selected<{/eq}>><{$dl.d_name}></option>
+                        <{/volist}>
                     </select>
+                    <input type="hidden" name="o_dname" id="o_dname" value="<{$order.o_dname}>"/>
                 </td>
             </tr>
             <tr>
                 <td class="txt">预计日期:</td>
-                <td><input type="text" value="2017/8/25" /></td>
+                <td><input type="text" name="o_date" id="o_date" value=""/></td>
                 <td class="txt">预计金额:</td>
-                <td><input type="text" value="10000000.00" /></td>
+                <td><input type="text" name="o_money" id="o_money" value=""/></td>
                 <td class="txt">订单数量:</td>
-                <td><input type="text" value="10" /></td>
+                <td><input type="text" name="o_num" id="o_num" value=""/></td>
                 <td class="txt">税率:</td>
                 <td>
-                    <select>
+                    <select name="o_tax" id="o_tax">
                         <{volist name="taxList" id="ll" key="k"}>
-                        <option value="<{$k}>" <{eq name="$k" value="$order.o_tax"}>selected<{/eq}>><{$ll}></option>
+                        <option value="<{$k}>"
+                        <{eq name="$k" value="$order.o_tax"}>selected<{/eq}>><{$ll}></option>
                         <{/volist}>
                     </select>
                 </td>
@@ -98,36 +118,37 @@
             <tr>
                 <td class="txt">成交机会:</td>
                 <td>
-                    <select>
-                        <option value="0">请选择</option>
-                        <option value="1">确保</option>
-                        <option value="2">机会大</option>
-                        <option value="3">有机会</option>
+                    <select name="o_deal" id="o_deal">
+                        <{volist name="chancesList" id="cl"}>
+                        <option value="<{$cl.cs_id}>"
+                        <{eq name="$cl.cs_id" value="$order.o_deal"}>selected<{/eq}>><{$cl.cs_mname}></option>
+                        <{/volist}>
                     </select>
                 </td>
                 <td class="txt">商机状态:</td>
                 <td>
-                    <select>
+                    <select name="o_status" id="o_status">
                         <{volist name="statusList" id="ll" key="k"}>
-                        <option value="<{$k}>" <{eq name="$k" value="$order.o_status"}>selected<{/eq}>><{$ll}></option>
+                        <option value="<{$k}>"
+                        <{eq name="$k" value="$order.o_status"}>selected<{/eq}>><{$ll}></option>
                         <{/volist}>
                     </select>
                 </td>
                 <td class="txt">利润率:</td>
                 <td>
-                    <input type="text" value="" />
+                    <input type="text" name="o_profits" id="o_profits" value=""/>
                 </td>
             </tr>
             <tr>
                 <td class="txt">关键字/标签:</td>
                 <td colspan="3">
-                    <input type="text" value="<{$tagNameList}>" />
-                    <input type="hidden" value="<{$tagIDList}>" />
+                    <input type="text" value="<{$tagNameList}>"/>
+                    <input type="hidden" name="tagList" id="tagList" value="<{$tagIDList}>"/>
                 </td>
                 <td class="txt">传阅人:</td>
                 <td colspan="3">
-                    <input type="text" value="" />
-                    <input type="hidden" value="" />
+                    <input type="text" value="<{$cNameList}>"/>
+                    <input type="hidden" name="cList" id="cList" value="<{$cIDList}>"/>
                 </td>
             </tr>
         </table>
@@ -137,7 +158,7 @@
     <h3>预计执行计划</h3>
     <div class="content table clearfix">
         <div class="col33">
-            <table>
+            <table data="1">
                 <thead>
                 <tr>
                     <th class="icon"><i class="fa fa-plus"></i></th>
@@ -147,31 +168,11 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr>
-                    <td></td>
-                    <td>
-                        <select>
-                            <option value="30%">-3M</option>
-                        </select>
-                    </td>
-                    <td><input type="text" value="30%" /></td>
-                    <td><input type="text" value="300000.00" /></td>
-                </tr>
-                <tr>
-                    <td class="icon"><i class="fa fa-remove"></i></td>
-                    <td>
-                        <select>
-                            <option value="30%">-3M</option>
-                        </select>
-                    </td>
-                    <td><input type="text" value="30%" /></td>
-                    <td><input type="text" value="300000.00" /></td>
-                </tr>
                 </tbody>
             </table>
         </div>
         <div class="col33">
-            <table>
+            <table data="2">
                 <thead>
                 <tr>
                     <th class="icon"><i class="fa fa-plus"></i></th>
@@ -181,31 +182,11 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr>
-                    <td></td>
-                    <td>
-                        <select>
-                            <option value="30%">-3M</option>
-                        </select>
-                    </td>
-                    <td><input type="text" value="30%" /></td>
-                    <td><input type="text" value="300000.00" /></td>
-                </tr>
-                <tr>
-                    <td class="icon"><i class="fa fa-remove"></i></td>
-                    <td>
-                        <select>
-                            <option value="30%">-3M</option>
-                        </select>
-                    </td>
-                    <td><input type="text" value="30%" /></td>
-                    <td><input type="text" value="300000.00" /></td>
-                </tr>
                 </tbody>
             </table>
         </div>
         <div class="col33">
-            <table>
+            <table data="3">
                 <thead>
                 <tr>
                     <th class="icon"><i class="fa fa-plus"></i></th>
@@ -215,159 +196,149 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr>
-                    <td></td>
-                    <td>
-                        <select>
-                            <option value="30%">-3M</option>
-                        </select>
-                    </td>
-                    <td><input type="text" value="30%" /></td>
-                    <td><input type="text" value="300000.00" /></td>
-                </tr>
-                <tr>
-                    <td class="icon"><i class="fa fa-remove"></i></td>
-                    <td>
-                        <select>
-                            <option value="30%">-3M</option>
-                        </select>
-                    </td>
-                    <td><input type="text" value="30%" /></td>
-                    <td><input type="text" value="300000.00" /></td>
-                </tr>
                 </tbody>
             </table>
         </div>
     </div>
 </div>
 
-<!-- 弹窗 START -->
-<div class="f-layer" style="display: none;">
-    <div class="clearfix header">
-        <h2>合同信息搜索条件:</h2>
-        <div class="btn-pannel">
-            <button class="btn">保存</button>
-            <button class="btn red">取消</button>
-            <button class="btn">搜索</button>
-        </div>
-    </div>
-    <div class="search-condition">
-        <table>
-            <tr>
-                <td>
-                    <select>
-                        <option value="0">对方名称</option>
-                    </select>
-                </td>
-                <td>
-                    <select>
-                        <option value="0">等于</option>
-                    </select>
-                </td>
-                <td><input type="text" value="新奥燃气" /></td>
-                <td class="holder"></td>
-                <td>
-                    <select>
-                        <option value="1">合同名称</option>
-                    </select>
-                </td>
-                <td>
-                    <select>
-                        <option value="0">包含</option>
-                    </select>
-                </td>
-                <td><input type="text" value="新奥燃气" /></td>
-            </tr>
-            <tr>
-                <td>
-                    <select>
-                        <option value="0">合同金额</option>
-                    </select>
-                </td>
-                <td>
-                    <select>
-                        <option value="0">大于等于</option>
-                    </select>
-                </td>
-                <td><input type="text" value="100000.00" /></td>
-                <td></td>
-                <td>
-                    <select>
-                        <option value="0">签约日期</option>
-                    </select>
-                </td>
-                <td>
-                    <select>
-                        <option value="0">大于</option>
-                    </select>
-                </td>
-                <td><input type="text" value="2017-8-2" /></td>
-            </tr>
-        </table>
-    </div>
-    <div class="clearfix header">
-        <h2>搜索到4条合同记录......</h2>
-        <div class="btn-pannel">
-            <button class="btn">下页</button>
-            <button class="btn">上页</button>
-        </div>
-    </div>
-    <div class="search-result">
-        <table cellspacing="0" class="list">
-            <thead>
-            <tr>
-                <th></th>
-                <th>合同号</th>
-                <th>合同名称</th>
-                <th>对方名称</th>
-                <th>签约日期</th>
-                <th>合同金额</th>
-                <th>未对应订单金额</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr>
-                <td><input type="radio" name="test001" value="test001" /></td>
-                <td>P1608024X-001</td>
-                <td>廊坊市新奥生态环境控制股份有限公司</td>
-                <td>新奥生态控股股份有限公司</td>
-                <td>2017-5-12</td>
-                <td>1517000.00</td>
-                <td>1517000.00</td>
-            </tr>
-            <tr>
-                <td><input type="radio" name="test001" value="test001" /></td>
-                <td>P1608024X-001</td>
-                <td>廊坊市新奥生态环境控制股份有限公司</td>
-                <td>新奥生态控股股份有限公司</td>
-                <td>2017-5-12</td>
-                <td>1517000.00</td>
-                <td>1517000.00</td>
-            </tr>
-            <tr>
-                <td><input type="radio" name="test001" value="test001" /></td>
-                <td>P1608024X-001</td>
-                <td>廊坊市新奥生态环境控制股份有限公司</td>
-                <td>新奥生态控股股份有限公司</td>
-                <td>2017-5-12</td>
-                <td>1517000.00</td>
-                <td>1517000.00</td>
-            </tr>
-            <tr>
-                <td><input type="radio" name="test001" value="test001" /></td>
-                <td>P1608024X-001</td>
-                <td>廊坊市新奥生态环境控制股份有限公司</td>
-                <td>新奥生态控股股份有限公司</td>
-                <td>2017-5-12</td>
-                <td>1517000.00</td>
-                <td>1517000.00</td>
-            </tr>
-            </tbody>
-        </table>
-    </div>
-</div>
-<!-- 弹窗 END -->
+<{load href="/static/js/jquery-3.2.1.min.js,/static/js/plugin/laydate/laydate.js"/}>
+<script>
+    var baseMonth = '<{$baseMonth}>';
+    laydate.render({
+        elem: '#o_date'
+    });
+    $(document).ready(function () {
+        $("#o_money").change(function () {
+            calculateAll();
+        });
+        $(".fa-plus").click(function () {
+            var table = $(this).parents("table");
+            bindClick(table);
+        });
+        $(".fa-search").click(function () {
+            if ($(".f-layer").length <= 0) {
+                $.ajax({
+                    url: "<{:url("/contract/searchContract")}>",
+                    dataType: "json",
+                    method: "post",
+                    success: function (data) {
+                        $("body").append(data.content);
+                        $(".f-layer").show();
+                        $(".f-layer-back").show();
+                        $(".close").click(function () {
+                            $(".f-layer").hide();
+                            $(".f-layer-back").hide();
+                        });
+                    }
+                });
+            }else{
+                $(".f-layer").show();
+                $(".f-layer-back").show();
+            }
+        });
+    });
+    function bindClick(element) {
+        var baseTR = getBaseTR($(element).attr('data'));
+        $(element).append(baseTR);
+        $(".fa-remove").unbind("click");
+        $(".fa-remove").click(function () {
+            $(this).parents("tr").remove();
+        });
+        bindChange(element);
 
+    }
+    function bindChange(element) {
+        var index = $(element).attr('data');
+        if ($(".orderProject_value_" + index).length > 0) {
+            $(".orderProject_value_" + index).unbind("change");
+            $(".orderProject_value_" + index).each(function () {
+                $(this).change(function () {
+                    calculate($(element).attr('data'));
+                });
+            })
+        }
+    }
+    function calculateAll() {
+        $(".fa-plus").each(function (i, e) {
+            var i = $(e).parents("table").attr("data");
+            calculate(i);
+        });
+    }
+    function calculate(index) {
+        var values = $(".orderProject_value_" + index);
+        var percents = $(".orderProject_percent_" + index);
+        var cal = 0;
+        var total = parseFloat($("#o_money").val());
+        $(values).each(function (i, ele) {
+            var tmp = parseFloat($(ele).val());
+            tmp = isNaN(tmp) ? 0 : tmp;
+            cal = cal + tmp;
+        });
+        if (!isNaN(total) && total > 0) {
+            if (cal > total) {
+                if (total % $(values).length != 0) {
+                    var c = Math.ceil(total / $(values).length);
+                    $(values).eq(0).val(c.toFixed(2));
+                    var e = Math.ceil(100 / $(values).length);
+                    $(percents).eq(0).val(e.toFixed(2) + "%");
+                    $(values).each(function (i, ele) {
+                        if (i > 0) {
+                            var cc = (total - c) / ($(values).length - 1);
+                            $(ele).val(cc.toFixed(2));
+                        }
+                    });
+                    $(percents).each(function (i, ele) {
+                        if (i > 0) {
+                            var ee = (100 - e) / ($(values).length - 1);
+                            $(ele).val(ee.toFixed(2) + "%");
+                        }
+                    })
+                } else {
+                    var c = total / $(values).length;
+                    var e = 100 / $(values).length;
+                    $(values).each(function (i, ele) {
+                        $(ele).val(c.toFixed(2));
+                    });
+                    $(percents).each(function (i, ele) {
+                        $(ele).val(e.toFixed(2) + "%");
+                    })
+                }
+            } else {
+                $(percents).each(function (i, ele) {
+                    var t = parseFloat($(values).eq(i).val());
+                    if (!isNaN(t)) {
+                        var e = 100 - (total - t) / total * 100;
+                        $(ele).val(e.toFixed(2) + "%");
+                        $(values).eq(i).val(t.toFixed(2));
+                    }
+                });
+            }
+            $("#o_money").val(total.toFixed(2));
+        } else {
+            $(values).each(function (i, ele) {
+                $(ele).val("");
+            })
+            $(percents).each(function (i, ele) {
+                $(ele).val("");
+            })
+        }
+    }
+    function getBaseTR(index) {
+        var baseTr = '<tr><td class="icon"><i class="fa fa-remove"></i></td><td><select class="orderProject_month_' + index + '" name="project[' + index + '][month][]">';
+        var bm = JSON.parse(baseMonth);
+        var len = bm.length;
+        for (var i = 0; i < len; i++) {
+            baseTr += '<option value="+ ' + bm[i] + '">+' + bm[i] + '</option>';
+        }
+        baseTr += '<option value="0 M" selected>0 M</option>';
+        for (var i = (len - 1); i >= 0; i--) {
+            baseTr += '<option value="- ' + bm[i] + '">-' + bm[i] + '</option>';
+        }
+        baseTr += '</select></td><td><input type="text" class="orderProject_percent_' + index + '" readonly name="project[' + index + '][percent][]" value="" readonly/></td><td><input class="orderProject_value_' + index + '" name="project[' + index + '][value][]" type="text" value=""/></td></tr>';
+        return baseTr;
+    }
+</script>
 </body>
 
 </html>

@@ -1,6 +1,9 @@
 <?php
 namespace app\bo\controller;
 
+use app\bo\model\Chances;
+use app\bo\model\Circulation;
+use app\bo\model\Department;
 use app\bo\model\TagLink;
 use think\Controller;
 use think\Loader;
@@ -37,17 +40,28 @@ class Orders extends Controller
     public function operation($op = "add", $op_id = 0)
     {
         $tagModel = new TagLink();
+        $cModel = new Circulation();
+        $dModel = new Department();
+        $chancesModel = new Chances();
+        $cNameList = array();
+        $cIDList = array();
         $tagNameList = array();
         $tagIDList = array();
+        $baseMonth = getMonth();
         $order = $this->ordersModel->get($op_id);
         if ($op == "add") {
-            $title = "新建商机";
-        } elseif ($op_id != "" AND $op == "edit") {
+            $title = "新建订单";
+        } elseif (!empty($op_id) AND $op == "edit") {
             $title = "编辑" . $order->subject;
-            $tagNameList = $tagModel->getTagList($op_id, "orders");
-            foreach($tagNameList as $key=>$value){
+            $tmp = $tagModel->getTagList($op_id, "orders");
+            foreach($tmp as $key=>$value){
                 $tagNameList[] = $value->tl_name;
                 $tagIDList[] = $value->tl_id;
+            }
+            $tmp = $cModel->getCirculationList($op_id, "orders");
+            foreach($tmp as $key=>$value){
+                $cNameList[] = $value->m_name;
+                $cIDList[] = $value->m_id;
             }
         }
         $this->assign('order', $order);
@@ -58,6 +72,15 @@ class Orders extends Controller
         $this->assign('statusList', getStatusList());
         $this->assign('tagNameList', implode(" ", $tagNameList));
         $this->assign('tagIDList', implode(",", $tagIDList));
+        $this->assign('cNameList', implode(" ", $cNameList));
+        $this->assign('cIDList', implode(",", $cIDList));
+        $this->assign('baseMonth', json_encode($baseMonth));
+        $this->assign('dList', $dModel->all());
+        $this->assign('chancesList', $chancesModel->all());
         return $this->fetch("operation");
+    }
+
+    public function doOperation($op = "add", $op_id = 0){
+
     }
 }

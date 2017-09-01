@@ -210,3 +210,16 @@ table.list td:first-child{
 .pager li a{
 	color: white;
 }
+.search-block{
+	width: 47%;
+	padding-left: 2%;
+	float: left;
+	margin-bottom: 10px;
+}
+.search-block select{
+	width: 100px;
+	padding-left: 10px;
+}
+.search-block input{
+	width: 200px;
+}

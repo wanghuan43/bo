@@ -38,11 +38,20 @@ function getLieList($key = "")
     return $return;
 }
 
-
 function getStatusList($key = "")
 {
     Config::load(APP_PATH . "bo" . DS . "commonField.php", "", "commonField");
     $return = Config::get("status", "commonField");
+    if (!empty($key)) {
+        $return = $return[$key];
+    }
+    return $return;
+}
+
+function getMonth($key = "")
+{
+    Config::load(APP_PATH . "bo" . DS . "commonField.php", "", "commonField");
+    $return = Config::get("month", "commonField");
     if (!empty($key)) {
         $return = $return[$key];
     }
