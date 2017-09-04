@@ -20,13 +20,13 @@
         <tbody>
         <{volist name="lists" id="val" empty="$empty"}>
         <tr>
-            <td><input type="radio" name="selectContract" value="<{$val.c_id}>" /></td>
+            <td><input type="radio" class="selectContract" name="selectContract" value="<{$val.c_id}>" data="<{$val.c_no}>" /></td>
             <td><{$val.c_no}></td>
             <td><{$val.c_name}></td>
             <td><{$val.c_coname}></td>
-            <td><?php echo date($val.c_date, "Y-m-d"); ?></td>
+            <td><?php echo date("Y-m-d", $val['c_date']); ?></td>
             <td><{$val.c_money}></td>
-            <td><{$val.c_used}></td>
+            <td><{$val.c_noused}></td>
         </tr>
         <{/volist}>
         </tbody>

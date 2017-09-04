@@ -42,6 +42,9 @@ class Contract extends Controller
                 $this->assign("empty", '<tr><td colspan="7">暂无数据</td></tr>');
                 $content = $this->fetch("list");
             } else {
+                $list = $contractModel->getContractList(array(), $this->limit);
+                $this->assign("lists", $list);
+                $this->assign("empty", '<tr><td colspan="7">暂无数据</td></tr>');
                 $this->assign("searchable", $contractModel->getSearchable());
                 $content = $this->fetch("poplayer");
             }

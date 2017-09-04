@@ -9,3 +9,4 @@ composer.lock
 .idea/*
 .idea
 .DS_Store
+autoload.php
