@@ -216,6 +216,29 @@
             var table = $(this).parents("table");
             bindClick(table);
         });
+        $("#o_pname").keyup(function(){
+            var val = $(this).val();
+            $.ajax({
+                url: "<{:url("/contract/searchContract")}>",
+                dataType: "json",
+                method: "post",
+                success: function (data) {
+                    $("body").append(data.content);
+                    $(".save").click(function () {
+                        $("#o_cno").val($(".selectContract:checked").attr("data"));
+                        $("#o_cid").val($(".selectContract:checked").val());
+                        $(".f-layer").hide();
+                        $(".f-layer-back").hide();
+                    });
+                    $(".f-layer").show();
+                    $(".f-layer-back").show();
+                    $(".close").click(function () {
+                        $(".f-layer").hide();
+                        $(".f-layer-back").hide();
+                    });
+                }
+            });
+        });
         $(".fa-search").click(function () {
             if ($(".f-layer").length <= 0) {
                 $.ajax({
@@ -224,6 +247,12 @@
                     method: "post",
                     success: function (data) {
                         $("body").append(data.content);
+                        $(".save").click(function(){
+                            $("#o_cno").val($(".selectContract:checked").attr("data"));
+                            $("#o_cid").val($(".selectContract:checked").val());
+                            $(".f-layer").hide();
+                            $(".f-layer-back").hide();
+                        });
                         $(".f-layer").show();
                         $(".f-layer-back").show();
                         $(".close").click(function () {

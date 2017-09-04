@@ -6,8 +6,8 @@
     <div class="clearfix header">
         <h2>合同信息搜索条件:</h2>
         <div class="btn-pannel">
-            <button class="btn save">保存</button>
-            <button class="btn red close">取消</button>
+            <button class="btn save" type="button">保存</button>
+            <button class="btn red close" type="button">取消</button>
             <button class="btn search" type="submit">搜索</button>
         </div>
     </div>
@@ -28,31 +28,7 @@
     </div>
     </form>
     <div id="contractSearch">
-        <div class="clearfix header searchTitle" style="display: none;">
-            <h2></h2>
-            <div class="btn-pannel paginate">
-            </div>
-        </div>
-        <div class="search-result">
-            <table cellspacing="0" class="list">
-                <thead>
-                <tr>
-                    <th></th>
-                    <th>合同号</th>
-                    <th>合同名称</th>
-                    <th>对方名称</th>
-                    <th>签约日期</th>
-                    <th>合同金额</th>
-                    <th>未对应订单金额</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr>
-                    <td colspan="7">请设置条件,点击搜索</td>
-                </tr>
-                </tbody>
-            </table>
-        </div>
+        <{include file="contract/list" lists="$lists" empty="$empty"}>
     </div>
 </div>
 <!-- 弹窗 END -->
