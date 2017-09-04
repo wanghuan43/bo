@@ -10,15 +10,3 @@ composer.lock
 .idea
 .DS_Store
 autoload.php
-bin/
-composer/
-doctrine/
-phpdocumentor/
-phpoffice/
-phpspec/
-phpunit/
-sebastian/
-symfony/
-topthink/
-webmozart/
-workerman/
