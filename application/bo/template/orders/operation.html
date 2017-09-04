@@ -38,7 +38,7 @@
             <tr>
                 <td class="txt">订单号:</td>
                 <td colspan="3"><{$order.o_no}></td>
-                <td class="txt"><i class="fa fa-search"></i>对应合同号:</td>
+                <td class="txt"><i class="fa fa-search" data="contract"></i>对应合同号:</td>
                 <td>
                     <input type="text" name="o_cno" id="o_cno" value="<{$order.o_cno}>"/>
                     <input type="hidden" name="o_cid" id="o_cid" value="<{$order.o_cid}>"/>
@@ -47,7 +47,7 @@
                 <td><?php echo (empty($order['o_updatetime']) ? "" : date($order['o_updatetime'], "Y-m-d"));?></td>
             </tr>
             <tr>
-                <td class="txt">项目名称:</td>
+                <td class="txt"><i class="fa fa-search" data="project"></i>项目名称:</td>
                 <td colspan="5">
                     <input type="text" name="o_pname" id="o_pname" value="<{$order.o_pname}>"/>
                     <input type="hidden" name="o_pid" id="o_pid" value="<{$order.o_pid}>"/>
@@ -73,7 +73,7 @@
                 </td>
             </tr>
             <tr>
-                <td class="txt">对方名称:</td>
+                <td class="txt"><i class="fa fa-search" data="company"></i>对方名称:</td>
                 <td colspan="3">
                     <input name="o_coname" id="o_coname" type="text" value="<{$order.o_coname}>"/>
                     <input type="hidden" name="o_coid" id="o_coid" value="<{$order.o_coid}>"/>
@@ -140,14 +140,14 @@
                 </td>
             </tr>
             <tr>
-                <td class="txt">关键字/标签:</td>
+                <td class="txt"><i class="fa fa-search" data="tag"></i>关键字/标签:</td>
                 <td colspan="3">
-                    <input type="text" value="<{$tagNameList}>"/>
+                    <div class="divBlock">&nbsp;</div>
                     <input type="hidden" name="tagList" id="tagList" value="<{$tagIDList}>"/>
                 </td>
-                <td class="txt">传阅人:</td>
+                <td class="txt"><i class="fa fa-search" data="member"></i>传阅人:</td>
                 <td colspan="3">
-                    <input type="text" value="<{$cNameList}>"/>
+                    <div class="divBlock">&nbsp;</div>
                     <input type="hidden" name="cList" id="cList" value="<{$cIDList}>"/>
                 </td>
             </tr>
@@ -205,6 +205,13 @@
 <{load href="/static/js/jquery-3.2.1.min.js,/static/js/plugin/laydate/laydate.js"/}>
 <script>
     var baseMonth = '<{$baseMonth}>';
+    var baseUrl = {
+        contract: "<{:url(" / contract / searchContract")}>",
+        project: "<{:url(" / project / searchProject")}>",
+        member: "<{:url(" / member / searchMember")}>",
+        company: "<{:url(" / company / searchCompany")}>",
+        tag: "<{:url(" / tag / searchTag")}>",
+    }
     laydate.render({
         elem: '#o_date'
     });
@@ -216,54 +223,38 @@
             var table = $(this).parents("table");
             bindClick(table);
         });
-        $("#o_pname").keyup(function(){
-            var val = $(this).val();
-            $.ajax({
-                url: "<{:url("/contract/searchContract")}>",
-                dataType: "json",
-                method: "post",
-                success: function (data) {
-                    $("body").append(data.content);
-                    $(".save").click(function () {
-                        $("#o_cno").val($(".selectContract:checked").attr("data"));
-                        $("#o_cid").val($(".selectContract:checked").val());
-                        $(".f-layer").hide();
-                        $(".f-layer-back").hide();
-                    });
-                    $(".f-layer").show();
-                    $(".f-layer-back").show();
-                    $(".close").click(function () {
-                        $(".f-layer").hide();
-                        $(".f-layer-back").hide();
-                    });
-                }
-            });
-        });
         $(".fa-search").click(function () {
-            if ($(".f-layer").length <= 0) {
+            var type = $(this).attr("data");
+            var inputs = $(this).parent().next().find("input");
+            var cla = ".f-layer-" + type;
+            if ($(cla).length <= 0) {
                 $.ajax({
-                    url: "<{:url("/contract/searchContract")}>",
+                    url: baseUrl[type],
                     dataType: "json",
                     method: "post",
                     success: function (data) {
                         $("body").append(data.content);
-                        $(".save").click(function(){
-                            $("#o_cno").val($(".selectContract:checked").attr("data"));
-                            $("#o_cid").val($(".selectContract:checked").val());
-                            $(".f-layer").hide();
-                            $(".f-layer-back").hide();
+                        $(cla + " .save").click(function () {
+                            if ($(inputs).length > 1) {
+                                $(inputs).eq(0).val($(".selectRadio:checked").val());
+                                $(inputs).eq(1).val($(".selectRadio:checked").attr("data"));
+                            } else {
+                                $(inputs).eq(0).val($(".selectRadio:checked").val());
+                            }
+                            $(cla).hide();
+                            $(cla + "-back").hide();
                         });
-                        $(".f-layer").show();
-                        $(".f-layer-back").show();
-                        $(".close").click(function () {
-                            $(".f-layer").hide();
-                            $(".f-layer-back").hide();
+                        $(cla).show();
+                        $(cla + "-back").show();
+                        $(cla + " .close").click(function () {
+                            $(cla).hide();
+                            $(cla + "-back").hide();
                         });
                     }
                 });
-            }else{
-                $(".f-layer").show();
-                $(".f-layer-back").show();
+            } else {
+                $(cla).show();
+                $(cla + "-back").show();
             }
         });
     });

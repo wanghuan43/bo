@@ -11,7 +11,7 @@
  Target Server Version : 50505
  File Encoding         : utf-8
 
- Date: 09/04/2017 15:46:08 PM
+ Date: 09/04/2017 18:17:53 PM
 */
 
 SET NAMES utf8;
@@ -78,15 +78,14 @@ CREATE TABLE `kj_circulation` (
 DROP TABLE IF EXISTS `kj_column`;
 CREATE TABLE `kj_column` (
   `c_id` int(11) NOT NULL AUTO_INCREMENT,
-  `c_fid` int(11) NOT NULL,
-  `c_row` int(11) NOT NULL DEFAULT '1',
-  `c_col` int(11) NOT NULL DEFAULT '1',
-  `c_name` varchar(150) DEFAULT NULL,
-  `c_value` text,
-  `c_permission` text,
+  `c_fid` int(11) NOT NULL COMMENT '计划单ID',
+  `c_row` int(11) NOT NULL DEFAULT '1' COMMENT '行ID',
+  `c_col` int(11) NOT NULL DEFAULT '1' COMMENT '列ID',
+  `c_value` text COMMENT '列值',
+  `c_permission` text COMMENT '权限',
   PRIMARY KEY (`c_id`,`c_fid`),
   KEY `column_row_col_fid` (`c_fid`,`c_row`,`c_col`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='计划单行列值';
 
 -- ----------------------------
 --  Table structure for `kj_company`
@@ -154,11 +153,11 @@ CREATE TABLE `kj_favorite` (
 DROP TABLE IF EXISTS `kj_form`;
 CREATE TABLE `kj_form` (
   `f_id` int(11) NOT NULL AUTO_INCREMENT,
-  `f_name` varchar(150) NOT NULL,
-  `f_permission` text,
-  `f_gids` text,
+  `f_name` varchar(150) NOT NULL COMMENT '计划单名',
+  `f_permission` text COMMENT '计划单权限',
+  `f_gids` text COMMENT '计划单组合',
   PRIMARY KEY (`f_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='计划单';
 
 -- ----------------------------
 --  Table structure for `kj_group`
@@ -166,11 +165,11 @@ CREATE TABLE `kj_form` (
 DROP TABLE IF EXISTS `kj_group`;
 CREATE TABLE `kj_group` (
   `g_id` int(11) NOT NULL AUTO_INCREMENT,
-  `g_name` varchar(150) NOT NULL,
-  `g_fids` text,
-  `g_permission` text,
+  `g_name` varchar(150) NOT NULL COMMENT '计划单组合',
+  `g_fids` text COMMENT '计划单ID',
+  `g_permission` text COMMENT '计划单组合权限',
   PRIMARY KEY (`g_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='计划单组合';
 
 -- ----------------------------
 --  Table structure for `kj_invoice`
@@ -222,7 +221,21 @@ CREATE TABLE `kj_member` (
   `m_email` varchar(200) NOT NULL,
   PRIMARY KEY (`m_id`,`m_did`),
   KEY `t` (`m_name`,`m_email`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='主数据-人员';
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COMMENT='主数据-人员';
+
+-- ----------------------------
+--  Table structure for `kj_menu`
+-- ----------------------------
+DROP TABLE IF EXISTS `kj_menu`;
+CREATE TABLE `kj_menu` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `flag` varchar(100) NOT NULL,
+  `name` varchar(200) NOT NULL,
+  `url` varchar(200) NOT NULL,
+  `parent_id` int(11) NOT NULL DEFAULT '0',
+  `is_show` tinyint(1) NOT NULL DEFAULT '1' COMMENT '0:不显示；1：显示',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 --  Table structure for `kj_order_project`
@@ -287,6 +300,18 @@ CREATE TABLE `kj_orders` (
   PRIMARY KEY (`o_id`,`o_no`,`o_mid`,`o_pid`,`o_did`,`o_coid`,`o_csid`),
   KEY `orders_subject_money_status` (`o_subject`,`o_money`,`o_status`,`o_coname`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COMMENT='订单表';
+
+-- ----------------------------
+--  Table structure for `kj_permissions`
+-- ----------------------------
+DROP TABLE IF EXISTS `kj_permissions`;
+CREATE TABLE `kj_permissions` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `menu_id` int(11) NOT NULL,
+  `member_id` int(11) NOT NULL,
+  `opt` tinyint(1) NOT NULL DEFAULT '1' COMMENT '1:只读;2:读写',
+  PRIMARY KEY (`id`,`menu_id`,`member_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 --  Table structure for `kj_postil`

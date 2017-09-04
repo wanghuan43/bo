@@ -1,8 +1,8 @@
 <!-- 弹窗 START -->
-<div class="f-layer-back"
+<div class="f-layer-<{$type}>-back"
      style="display:none;background-color: black;opacity: 0.5;width: 100%;height: 100%;position: fixed;top: 0;"></div>
-<div class="f-layer" style="display: none;">
-    <form action="<{:url("/contract/searchContract")}>" id="searchForm">
+<div class="f-layer f-layer-<{$type}>" style="display: none;">
+    <form action="<{:url("/$type/search".ucfirst($type))}>" id="searchForm">
     <div class="clearfix header">
         <h2>合同信息搜索条件:</h2>
         <div class="btn-pannel">
@@ -27,8 +27,7 @@
         <{/for}>
     </div>
     </form>
-    <div id="contractSearch">
-        <{include file="contract/list" lists="$lists" empty="$empty"}>
+    <div id="searchList">
     </div>
 </div>
 <!-- 弹窗 END -->
@@ -54,17 +53,19 @@
         $('.fields').change();
         $("#searchForm").submit(function(){
             var data = $(this).serialize();
+            var url = $(this).attr("action");
             $.ajax({
-                url: "<{:url("/contract/searchContract")}>",
+                url: url,
                 dataType: "json",
                 method: "post",
                 data: data,
                 success: function (data) {
-                    $("#contractSearch").html(data.content);
+                    $("#searchList").html(data.content);
                 }
             });
             return false;
         });
+        $("#searchForm").submit();
     });
     function operatorsChange(ele){
         var opt = $(ele).val();
