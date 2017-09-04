@@ -11,7 +11,7 @@
  Target Server Version : 50505
  File Encoding         : utf-8
 
- Date: 08/23/2017 17:51:34 PM
+ Date: 09/04/2017 15:46:08 PM
 */
 
 SET NAMES utf8;
@@ -73,6 +73,22 @@ CREATE TABLE `kj_circulation` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='传阅人关系表';
 
 -- ----------------------------
+--  Table structure for `kj_column`
+-- ----------------------------
+DROP TABLE IF EXISTS `kj_column`;
+CREATE TABLE `kj_column` (
+  `c_id` int(11) NOT NULL AUTO_INCREMENT,
+  `c_fid` int(11) NOT NULL,
+  `c_row` int(11) NOT NULL DEFAULT '1',
+  `c_col` int(11) NOT NULL DEFAULT '1',
+  `c_name` varchar(150) DEFAULT NULL,
+  `c_value` text,
+  `c_permission` text,
+  PRIMARY KEY (`c_id`,`c_fid`),
+  KEY `column_row_col_fid` (`c_fid`,`c_row`,`c_col`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- ----------------------------
 --  Table structure for `kj_company`
 -- ----------------------------
 DROP TABLE IF EXISTS `kj_company`;
@@ -89,6 +105,8 @@ CREATE TABLE `kj_company` (
 DROP TABLE IF EXISTS `kj_contract`;
 CREATE TABLE `kj_contract` (
   `c_id` int(11) NOT NULL AUTO_INCREMENT COMMENT '合同主键',
+  `c_pid` int(11) NOT NULL,
+  `c_pname` varchar(255) NOT NULL,
   `c_no` char(50) NOT NULL COMMENT '合同号',
   `c_name` varchar(200) NOT NULL COMMENT '合同名称',
   `c_type` tinyint(1) NOT NULL DEFAULT '1' COMMENT '1:销售;2:采销',
@@ -100,11 +118,12 @@ CREATE TABLE `kj_contract` (
   `c_mid` int(11) NOT NULL COMMENT '责任人主键',
   `c_mname` varchar(200) DEFAULT NULL COMMENT '责任人名称',
   `c_bakup` text COMMENT '备注',
+  `c_date` int(10) NOT NULL,
   `c_createtime` int(10) NOT NULL COMMENT '创建时间',
   `c_updatetime` int(10) NOT NULL COMMENT '更新时间',
-  PRIMARY KEY (`c_id`,`c_no`,`c_coid`,`c_mid`),
+  PRIMARY KEY (`c_id`,`c_no`,`c_coid`,`c_mid`,`c_pid`),
   KEY `contract_name_type_` (`c_name`,`c_type`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='合同表';
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COMMENT='合同表';
 
 -- ----------------------------
 --  Table structure for `kj_department`
@@ -113,6 +132,7 @@ DROP TABLE IF EXISTS `kj_department`;
 CREATE TABLE `kj_department` (
   `d_id` int(11) NOT NULL,
   `d_name` varchar(200) NOT NULL,
+  `d_parent_id` int(11) DEFAULT '0',
   PRIMARY KEY (`d_id`),
   KEY `t` (`d_name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='主数据-部门';
@@ -127,6 +147,30 @@ CREATE TABLE `kj_favorite` (
   PRIMARY KEY (`f_oid`,`f_mid`),
   KEY `t` (`f_oid`,`f_mid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='收藏表';
+
+-- ----------------------------
+--  Table structure for `kj_form`
+-- ----------------------------
+DROP TABLE IF EXISTS `kj_form`;
+CREATE TABLE `kj_form` (
+  `f_id` int(11) NOT NULL AUTO_INCREMENT,
+  `f_name` varchar(150) NOT NULL,
+  `f_permission` text,
+  `f_gids` text,
+  PRIMARY KEY (`f_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+--  Table structure for `kj_group`
+-- ----------------------------
+DROP TABLE IF EXISTS `kj_group`;
+CREATE TABLE `kj_group` (
+  `g_id` int(11) NOT NULL AUTO_INCREMENT,
+  `g_name` varchar(150) NOT NULL,
+  `g_fids` text,
+  `g_permission` text,
+  PRIMARY KEY (`g_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 --  Table structure for `kj_invoice`
@@ -172,17 +216,19 @@ CREATE TABLE `kj_logs` (
 DROP TABLE IF EXISTS `kj_member`;
 CREATE TABLE `kj_member` (
   `m_id` int(11) NOT NULL AUTO_INCREMENT,
+  `m_did` int(11) NOT NULL,
+  `m_isLead` tinyint(1) NOT NULL DEFAULT '0',
   `m_name` varchar(200) NOT NULL,
   `m_email` varchar(200) NOT NULL,
-  PRIMARY KEY (`m_id`),
+  PRIMARY KEY (`m_id`,`m_did`),
   KEY `t` (`m_name`,`m_email`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='主数据-人员';
 
 -- ----------------------------
---  Table structure for `kj_orderProject`
+--  Table structure for `kj_order_project`
 -- ----------------------------
-DROP TABLE IF EXISTS `kj_orderProject`;
-CREATE TABLE `kj_orderProject` (
+DROP TABLE IF EXISTS `kj_order_project`;
+CREATE TABLE `kj_order_project` (
   `op_id` int(11) NOT NULL AUTO_INCREMENT COMMENT '主键',
   `op_oid` int(11) NOT NULL COMMENT '订单主键',
   `op_date` int(10) NOT NULL COMMENT '预计完成时间',
@@ -194,10 +240,10 @@ CREATE TABLE `kj_orderProject` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='订单计划表';
 
 -- ----------------------------
---  Table structure for `kj_orderUsed`
+--  Table structure for `kj_order_used`
 -- ----------------------------
-DROP TABLE IF EXISTS `kj_orderUsed`;
-CREATE TABLE `kj_orderUsed` (
+DROP TABLE IF EXISTS `kj_order_used`;
+CREATE TABLE `kj_order_used` (
   `ou_id` int(11) NOT NULL AUTO_INCREMENT COMMENT '主键',
   `ou_oid` int(11) NOT NULL COMMENT '订单主键',
   `ou_otid` int(11) NOT NULL COMMENT '关联主键',
@@ -240,7 +286,7 @@ CREATE TABLE `kj_orders` (
   `o_updatetime` int(10) NOT NULL COMMENT '更新时间',
   PRIMARY KEY (`o_id`,`o_no`,`o_mid`,`o_pid`,`o_did`,`o_coid`,`o_csid`),
   KEY `orders_subject_money_status` (`o_subject`,`o_money`,`o_status`,`o_coname`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='订单表';
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COMMENT='订单表';
 
 -- ----------------------------
 --  Table structure for `kj_postil`
@@ -263,6 +309,7 @@ CREATE TABLE `kj_postil` (
 DROP TABLE IF EXISTS `kj_project`;
 CREATE TABLE `kj_project` (
   `p_id` int(11) NOT NULL AUTO_INCREMENT,
+  `p_no` varchar(200) NOT NULL,
   `p_name` varchar(200) NOT NULL,
   PRIMARY KEY (`p_id`),
   KEY `t` (`p_name`)
@@ -291,17 +338,6 @@ CREATE TABLE `kj_received` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='回款表';
 
 -- ----------------------------
---  Table structure for `kj_tag_link`
--- ----------------------------
-DROP TABLE IF EXISTS `kj_tag_link`;
-CREATE TABLE `kj_tag_link` (
-  `ot_id` int(11) NOT NULL,
-  `tl_id` int(11) NOT NULL,
-  `model` char(50) NOT NULL,
-  PRIMARY KEY (`ot_id`,`tl_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='关键字关联表';
-
--- ----------------------------
 --  Table structure for `kj_taglib`
 -- ----------------------------
 DROP TABLE IF EXISTS `kj_taglib`;
@@ -311,5 +347,17 @@ CREATE TABLE `kj_taglib` (
   `tl_times` int(11) NOT NULL DEFAULT '0' COMMENT '使用次数',
   PRIMARY KEY (`tl_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COMMENT='标签表';
+
+-- ----------------------------
+--  Table structure for `kj_taglink`
+-- ----------------------------
+DROP TABLE IF EXISTS `kj_taglink`;
+CREATE TABLE `kj_taglink` (
+  `ot_id` int(11) NOT NULL,
+  `tl_id` int(11) NOT NULL,
+  `model` char(50) NOT NULL,
+  PRIMARY KEY (`ot_id`,`tl_id`),
+  KEY `tag_link_indexes` (`ot_id`,`model`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='关键字关联表';
 
 SET FOREIGN_KEY_CHECKS = 1;
