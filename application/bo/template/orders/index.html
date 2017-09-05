@@ -1,14 +1,3 @@
-<!DOCTYPE html>
-<html>
-
-<head>
-    <meta charset="UTF-8">
-    <title>订单信息管理.订单列表</title>
-    <link href="/static/css/font-awesome.min.css" rel="stylesheet"/>
-    <link href="/static/css/base.css" rel="stylesheet"/>
-</head>
-
-<body>
 <div class="clearfix header">
     <h2>订单信息管理（商机阶段）</h2>
     <div class="btn-pannel">
@@ -55,7 +44,7 @@
         <tr>
             <td><input type="checkbox" value="<{$vo.o_id}>"></td>
             <td><{$vo.o_type}></td>
-            <td><{$vo.o_no}></td>
+            <td><a href="<{:url("/orders/operation?op=edit&op_id=".$vo.o_id)}>" onclick="return false;" style="color:blue;"><{$vo.o_no}></a></td>
             <td><{$vo.o_pname}></td>
             <td><{$vo.o_subject}></td>
             <td><{$vo.o_status}></td>
@@ -68,6 +57,3 @@
         </tbody>
     </table>
 </div>
-</body>
-
-</html>

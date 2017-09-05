@@ -59,6 +59,10 @@ nav ul li a {
     text-decoration: none!important;
     position: relative;
 }
+nav ul li span {
+    font-weight: 400;
+    font-size: 14px;
+}
 nav ul ul{
 	margin: 0;
     display: none;
@@ -110,8 +114,19 @@ nav ul b {
     font-size: 11px;
     margin-top: 2px;
 }
+nav ul .active>a {
+    color: #fff!important;
+    position: relative;
+}
 b {
     font-weight: 700;
+}
+nav>ul>li:hover>ul::before,nav>ul>li:hover>ul>li::before {
+    border-color: #ACACAC!important
+}
+nav ul li a:hover {
+    color: #fff;
+    text-decoration: none
 }
 .badge {
     display: inline-block;

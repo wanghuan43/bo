@@ -52,7 +52,7 @@ class Orders extends Controller
         if ($op == "add") {
             $title = "新建订单";
         } elseif (!empty($op_id) AND $op == "edit") {
-            $title = "编辑" . $order->subject;
+            $title = "编辑" . $order->o_subject;
             $tmp = $tagModel->getTagList($op_id, "orders");
             foreach($tmp as $key=>$value){
                 $tagNameList[] = $value->tl_name;

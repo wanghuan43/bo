@@ -1,13 +1,3 @@
-<!DOCTYPE HTML>
-<html>
-
-<head>
-    <meta charset="utf-8"/>
-    <title><{$title}></title>
-    <{load href="/static/css/base.css,/static/css/font-awesome.min.css"/}>
-</head>
-
-<body>
 <div class="clearfix header">
     <h2>订单信息管理（商机阶段）</h2>
     <div class="btn-pannel">
@@ -40,22 +30,22 @@
                 <td colspan="3"><{$order.o_no}></td>
                 <td class="txt"><i class="fa fa-search" data="contract"></i>对应合同号:</td>
                 <td>
-                    <input type="text" name="o_cno" id="o_cno" value="<{$order.o_cno}>"/>
+                    <input type="text" name="o_cno" id="o_cno" value="<{$order.o_cno}>" readonly/>
                     <input type="hidden" name="o_cid" id="o_cid" value="<{$order.o_cid}>"/>
                 </td>
                 <td class="txt">最后更新日期:</td>
-                <td><?php echo (empty($order['o_updatetime']) ? "" : date($order['o_updatetime'], "Y-m-d"));?></td>
+                <td><?php echo (empty($order['o_updatetime']) ? "" : date("Y-m-d", $order['o_updatetime']));?></td>
             </tr>
             <tr>
                 <td class="txt"><i class="fa fa-search" data="project"></i>项目名称:</td>
                 <td colspan="5">
-                    <input type="text" name="o_pname" id="o_pname" value="<{$order.o_pname}>"/>
+                    <input type="text" name="o_pname" id="o_pname" value="<{$order.o_pname}>" readonly/>
                     <input type="hidden" name="o_pid" id="o_pid" value="<{$order.o_pid}>"/>
                 </td>
                 <td class="txt">订单责任人</td>
                 <td>
                     <{$order.o_mname}>
-                    <input type="text" name="o_mname" id="o_mname" value="<{$order.o_mname}>"/>
+                    <input type="hidden" name="o_mname" id="o_mname" value="<{$order.o_mname}>"/>
                     <input type="hidden" name="o_mid" id="o_mid" value="<{$order.o_mid}>"/>
                 </td>
             </tr>
@@ -75,7 +65,7 @@
             <tr>
                 <td class="txt"><i class="fa fa-search" data="company"></i>对方名称:</td>
                 <td colspan="3">
-                    <input name="o_coname" id="o_coname" type="text" value="<{$order.o_coname}>"/>
+                    <input name="o_coname" id="o_coname" type="text" value="<{$order.o_coname}>" readonly/>
                     <input type="hidden" name="o_coid" id="o_coid" value="<{$order.o_coid}>"/>
                 </td>
                 <td class="txt">外部/内部:</td>
@@ -202,20 +192,22 @@
     </div>
 </div>
 
-<{load href="/static/js/jquery-3.2.1.min.js,/static/js/plugin/laydate/laydate.js"/}>
 <script>
     var baseMonth = '<{$baseMonth}>';
     var baseUrl = {
-        contract: "<{:url(" / contract / searchContract")}>",
-        project: "<{:url(" / project / searchProject")}>",
-        member: "<{:url(" / member / searchMember")}>",
-        company: "<{:url(" / company / searchCompany")}>",
-        tag: "<{:url(" / tag / searchTag")}>",
+        contract: "<{:url("/contract/searchContract")}>",
+        project: "<{:url("/project/searchProject")}>",
+        member: "<{:url("/member/searchMember")}>",
+        company: "<{:url("/company/searchCompany")}>",
+        tag: "<{:url("/tag/searchTag")}>",
     }
-    laydate.render({
-        elem: '#o_date'
-    });
     $(document).ready(function () {
+        laydate.render({
+            elem: '#o_date'
+        });
+        $("#o_cno,#o_pname,#o_coname").focus(function(){
+            $(this).parents("tr").find("i").click();
+        });
         $("#o_money").change(function () {
             calculateAll();
         });
@@ -359,6 +351,3 @@
         return baseTr;
     }
 </script>
-</body>
-
-</html>

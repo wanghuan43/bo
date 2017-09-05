@@ -15,9 +15,9 @@ class Project extends Controller
         $post = Request::instance()->param();
         $search = array();
         if (count($post) > 0) {
-            foreach ($post['fields'] as $key => $value) {
-                $val = count($post['values'][$key]) > 1 ? $post['values'][$key] : trim($post['values'][$key][0]);
-                $opt = trim($post['operators'][$key]);
+            foreach ($post['fields']['project'] as $key => $value) {
+                $val = count($post['values']['project'][$key]) > 1 ? $post['values']['project'][$key] : trim($post['values']['project'][$key][0]);
+                $opt = trim($post['operators']['project'][$key]);
                 if (!empty($val)) {
                     if ($opt == "between") {
                         $val = is_array($val) ? $val : explode(" ~ ", $val);

@@ -2,9 +2,9 @@
 <div class="f-layer-<{$type}>-back"
      style="display:none;background-color: black;opacity: 0.5;width: 100%;height: 100%;position: fixed;top: 0;"></div>
 <div class="f-layer f-layer-<{$type}>" style="display: none;">
-    <form action="<{:url("/$type/search".ucfirst($type))}>" id="searchForm">
+    <form action="<{:url("/$type/search".ucfirst($type))}>" id="<{$type}>Form">
     <div class="clearfix header">
-        <h2>合同信息搜索条件:</h2>
+        <h2>搜索条件:</h2>
         <div class="btn-pannel">
             <button class="btn save" type="button">保存</button>
             <button class="btn red close" type="button">取消</button>
@@ -14,20 +14,20 @@
     <div class="search-condition">
         <{for start="0" end="$searchable.length"}>
         <div class="search-block">
-            <select class="fields" name="fields[<{$i}>]">
+            <select class="fields" name="fields[<{$type}>][<{$i}>]">
                 <?php $ii=0;foreach($searchable['fields'] as $key=>$value): ?>
                 <option value="<{$key}>" <{eq name="$ii" value="$i"}>selected<{/eq}> data="<{$value.type}>"><{$value.name}></option>
                 <?php $ii++; ?>
                 <?php endforeach ?>
             </select>
-            <select class="operators" name="operators[<{$i}>]">
+            <select class="operators" name="operators[<{$type}>][<{$i}>]">
             </select>
-            <input type="text" id="<?php echo "tmp",mt_rand(1000,100000); ?>" name="values[<{$i}>][]" value=""/>
+            <input type="text" id="<?php echo "tmp",mt_rand(1000,100000); ?>" name="values[<{$type}>][<{$i}>][]" value=""/>
         </div>
         <{/for}>
     </div>
     </form>
-    <div id="searchList">
+    <div id="<{$type}>List">
     </div>
 </div>
 <!-- 弹窗 END -->
@@ -51,7 +51,7 @@
             operatorsChange(this);
         });
         $('.fields').change();
-        $("#searchForm").submit(function(){
+        $("#<{$type}>Form").submit(function(){
             var data = $(this).serialize();
             var url = $(this).attr("action");
             $.ajax({
@@ -60,12 +60,12 @@
                 method: "post",
                 data: data,
                 success: function (data) {
-                    $("#searchList").html(data.content);
+                    $("#<{$type}>List").html(data.content);
                 }
             });
             return false;
         });
-        $("#searchForm").submit();
+        $("#<{$type}>Form").submit();
     });
     function operatorsChange(ele){
         var opt = $(ele).val();

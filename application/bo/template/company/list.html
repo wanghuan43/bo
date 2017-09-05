@@ -1,0 +1,30 @@
+<div class="clearfix header searchTitle">
+    <h2></h2>
+    <div class="btn-pannel paginate">
+        <{$lists->render()}>
+    </div>
+</div>
+<div class="search-result">
+    <table cellspacing="0" class="list">
+        <thead>
+        <tr>
+            <th></th>
+            <th>公司代码</th>
+            <th>公司名称</th>
+            <th>公司类型</th>
+            <th>内部/外部</th>
+        </tr>
+        </thead>
+        <tbody>
+        <{volist name="lists" id="val" empty="$empty"}>
+        <tr>
+            <td><input type="radio" class="selectRadio" name="selectRadio" value="<{$val.c_id}>" data="<{$val.c_no}>" /></td>
+            <td><{$val.co_code}></td>
+            <td><{$val.co_name}></td>
+            <td><{$val.co_type==1?"供应商":"客户"}></td>
+            <td><{empty($val.co_internal_flag)?"内部":"外部"}></td>
+        </tr>
+        <{/volist}>
+        </tbody>
+    </table>
+</div>

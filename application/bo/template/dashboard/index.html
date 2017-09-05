@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <title>商机管理管理</title>
-    <{load href="/static/css/font-awesome.min.css,/static/css/base.css,/static/css/frame.css"/}>
+    <{load href="/static/css/font-awesome.min.css,/static/css/base.css,/static/css/frame.css,/static/js/jquery-3.2.1.min.js,/static/js/plugin/laydate/laydate.js"/}>
 </head>
 
 <body>
@@ -15,15 +15,15 @@
     <nav>
         <ul>
             <{volist name="menuList" id="menu"}>
-            <li class="active open">
-                <a href="<{$menu['url']}>"><i class="fa fa-lg fa-fw <{$menu['flag']}>"></i> <span
+            <li>
+                <a href="#<{$menu['url']}>"><i class="fa fa-lg fa-fw <{$menu['flag']}>"></i> <span
                         class="menu-item-parent"><{$menu['name']}></span><b class="collapse-sign"><em
-                        class="fa fa-minus-square-o"></em></b></a>
+                        class="fa fa-plus-square-o"></em></b></a>
                 <{if condition="count($menu['childrenList']) > 0"}>
-                <ul style="display: block;">
+                <ul>
                     <{volist name="$menu['childrenList']" id="children"}>
-                    <li class="active">
-                        <a href="<{$children['url']}>"><{$children['name']}></a>
+                    <li>
+                        <a href="<{$children['url']}>" onclick="return false;"><{$children['name']}></a>
                     </li>
                     <{/volist}>
                 </ul>
@@ -33,19 +33,63 @@
         </ul>
     </nav>
 </aside>
-<div id="main-container">
+<div id="main-container" style="margin-left: 230px;margin-right: 10px;">
 </div>
 <footer>
 </footer>
-<{load href="/static/js/jquery-3.2.1.min.js,/static/js/plugin/laydate/laydate.js"/}>
 <script>
     $(document).ready(function () {
-        $("#left-pannel li").click(function () {
-            var ele = $(this);
+        $("#left-pannel a").each(function (index, ele) {
+            var childen = $(ele).next();
+            if(childen.length == 1){
+                $(ele).find(".fa-minus-square-o").show();
+            }else{
+                $(ele).find(".fa-minus-square-o").hide();
+            }
+            $(childen).hide();
         });
-        $("#left-pannel a").click(function () {
-            var ele = $(this);
-            return false;
+        $("#left-pannel a").click(function(){
+            var e = this;
+            var c = $(e).next("ul");
+            var p = $(e).parent("li");
+            $("#left-pannel li").attr("class", "");
+            if($(c).is(":hidden")){
+                $(p).find("em").attr("class", "fa fa-minus-square-o");
+                $(c).show();
+            }else{
+                $(p).find("em").attr("class", "fa fa-plus-square-o");
+                $(c).hide();
+            }
+            if($(e).parents("ul").parent("li").length == 1){
+                $(e).parents("ul").parent("li").attr("class", "open");
+                $(e).parent("li").attr("class", "active");
+            }else{
+                $(p).attr("class", "open");
+            }
+            var href = $(e).attr("href");
+            if(href != "" && href != "#"){
+                href = href.replace("#", "/");
+                $.ajax({
+                    method:"get",
+                    url:href,
+                    success:function(data){
+                        $("#main-container").html(data);
+                        $("#main-container a").click(function(){
+                            var hrefs = $(this).attr("href");
+                            if(hrefs != "" && hrefs != "#") {
+                                hrefs = hrefs.replace("#", "/");
+                                $.ajax({
+                                    method: "get",
+                                    url: hrefs,
+                                    success: function (data) {
+                                        $("#main-container").html(data);
+                                    }
+                                });
+                            }
+                        });
+                    }
+                });
+            }
         });
     })
 </script>
