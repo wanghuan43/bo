@@ -1,0 +1,26 @@
+<div class="clearfix header searchTitle">
+    <h2></h2>
+    <div class="btn-pannel paginate">
+        <{$lists->render()}>
+    </div>
+</div>
+<div class="search-result">
+    <table cellspacing="0" class="list">
+        <thead>
+        <tr>
+            <th></th>
+            <th>项目号</th>
+            <th>项目名称</th>
+        </tr>
+        </thead>
+        <tbody>
+        <{volist name="lists" id="val" empty="$empty"}>
+        <tr>
+            <td><input type="radio" class="selectRadio" name="selectRadio" value="<{$val.p_id}>" data="<{$val.p_no}>" /></td>
+            <td><{$val.p_no}></td>
+            <td><{$val.p_name}></td>
+        </tr>
+        <{/volist}>
+        </tbody>
+    </table>
+</div>
