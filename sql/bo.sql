@@ -93,11 +93,28 @@ CREATE TABLE `kj_column` (
 -- ----------------------------
 DROP TABLE IF EXISTS `kj_company`;
 CREATE TABLE `kj_company` (
-  `co_id` int(11) NOT NULL AUTO_INCREMENT,
-  `co_name` varchar(200) NOT NULL,
-  PRIMARY KEY (`co_id`),
-  KEY `t` (`co_name`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='主数据-公司表';
+  `co_id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  `co_code` varchar(20) NOT NULL COMMENT '编码',
+  `co_name` varchar(200) NOT NULL COMMENT '公司名称',
+  `co_type` tinyint(1) NOT NULL DEFAULT 1 COMMENT '1 => 供应商，2 => 客户',
+  `co_internal_flag` tinyint(1) NOT NULL DEFAULT 0 COMMENT '0 => 不是内部的供应商/客户，1=>内部的',
+  `co_mnemonic_code` varchar(10) DEFAULT NULL COMMENT '助记码',
+  `co_industry` varchar(50) DEFAULT NULL COMMENT '行业',
+  `co_address` varchar(255) DEFAULT NULL COMMENT '地址',
+  `co_tax_id` varchar(30) DEFAULT NULL COMMENT '税务登记号',
+  `co_reg_id` varchar(30) DEFAULT NULL COMMENT '工商注册号',
+  `co_lr` varchar(30) DEFAULT NULL COMMENT '法人代表',
+  `co_status` tinyint(1) DEFAULT 1 COMMENT '0=>禁用，1=>核准',
+  `co_internal_name` varchar(255) DEFAULT NULL COMMENT '集团内公司名称',
+  `co_flag` tinyint(1) DEFAULT NULL COMMENT '委外商:0=>否,1=>是',
+  `co_create_org` varchar(255) DEFAULT NULL COMMENT '创建管理单元/创建组织',
+  `co_create_time` int(10) DEFAULT NULL COMMENT '创建时间',
+  `co_remark` varchar(255) DEFAULT NULL COMMENT '备注/简称',
+  KEY `t` (`co_name`),
+  KEY `code` (`co_code`),
+  KEY `m_code` (`co_mnemonic_code`),
+  UNIQUE KEY `co_name_type` (`co_name`,`co_type`,`co_status`,`co_code`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='主数据-公司表';
 
 -- ----------------------------
 --  Table structure for `kj_contract`
@@ -115,15 +132,15 @@ CREATE TABLE `kj_contract` (
   `c_noused` decimal(18,2) unsigned NOT NULL DEFAULT '0.00',
   `c_coid` int(11) NOT NULL COMMENT '公司主键',
   `c_coname` varchar(200) NOT NULL COMMENT '公司名称',
-  `c_mid` int(11) NOT NULL COMMENT '责任人主键',
+  `c_mid` int(11) DEFAULT NULL COMMENT '责任人主键',
   `c_mname` varchar(200) DEFAULT NULL COMMENT '责任人名称',
   `c_bakup` text COMMENT '备注',
   `c_date` int(10) NOT NULL,
   `c_createtime` int(10) NOT NULL COMMENT '创建时间',
   `c_updatetime` int(10) NOT NULL COMMENT '更新时间',
-  PRIMARY KEY (`c_id`,`c_no`,`c_coid`,`c_mid`,`c_pid`),
-  KEY `contract_name_type_` (`c_name`,`c_type`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COMMENT='合同表';
+  PRIMARY KEY (`c_id`,`c_no`,`c_coid`,`c_pid`),
+  KEY `contract_name_type_` (`c_name`,`c_type`,`c_mid`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='合同表';
 
 -- ----------------------------
 --  Table structure for `kj_department`
@@ -286,7 +303,7 @@ CREATE TABLE `kj_orders` (
   `o_updatetime` int(10) NOT NULL COMMENT '更新时间',
   PRIMARY KEY (`o_id`,`o_no`,`o_mid`,`o_pid`,`o_did`,`o_coid`,`o_csid`),
   KEY `orders_subject_money_status` (`o_subject`,`o_money`,`o_status`,`o_coname`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COMMENT='订单表';
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='订单表';
 
 -- ----------------------------
 --  Table structure for `kj_postil`
@@ -346,7 +363,7 @@ CREATE TABLE `kj_taglib` (
   `tl_name` varchar(200) NOT NULL COMMENT 'tag名字',
   `tl_times` int(11) NOT NULL DEFAULT '0' COMMENT '使用次数',
   PRIMARY KEY (`tl_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COMMENT='标签表';
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='标签表';
 
 -- ----------------------------
 --  Table structure for `kj_taglink`
