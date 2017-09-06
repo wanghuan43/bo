@@ -38,7 +38,6 @@
     $(document).ready(function(){
         $('.fields').change(function(){
             var val = $(this).val();
-            var ts = this;
             var lists = eval("operators."+val);
             var opt = "";
             for(var i in lists){
@@ -51,18 +50,32 @@
             operatorsChange(this);
         });
         $('.fields').change();
-        $("#<{$type}>Form").submit(function(){
+        $("#<{$type}>Form").submit(function() {
             var data = $(this).serialize();
             var url = $(this).attr("action");
-            $.ajax({
+            var tt = {
                 url: url,
                 dataType: "json",
                 method: "post",
                 data: data,
-                success: function (data) {
+                success:function(data){
                     $("#<{$type}>List").html(data.content);
+                    $("#<{$type}>List a").click(function(){
+                        var href = $(this).attr("href");
+                        if(href != "" && href != "#"){
+                            href = href.replace("#", "/");
+                            var tts = {
+                                url: href,
+                                method: "get",
+                                dataType:"json"
+                            }
+                            contentAjax(href, "<{$type}>List", tts);
+                        }
+                        return false;
+                    });
                 }
-            });
+            };
+            contentAjax(url, "<{$type}>List", tt);
             return false;
         });
         $("#<{$type}>Form").submit();

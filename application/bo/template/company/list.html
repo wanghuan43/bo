@@ -18,7 +18,7 @@
         <tbody>
         <{volist name="lists" id="val" empty="$empty"}>
         <tr>
-            <td><input type="radio" class="selectRadio" name="selectRadio" value="<{$val.c_id}>" data="<{$val.c_no}>" /></td>
+            <td><input type="radio" class="selectRadio" name="selectRadio" value="<{$val.co_id}>" data="<{$val.co_name}>" /></td>
             <td><{$val.co_code}></td>
             <td><{$val.co_name}></td>
             <td><{$val.co_type==1?"供应商":"客户"}></td>

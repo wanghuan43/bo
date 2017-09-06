@@ -3,6 +3,7 @@ namespace app\bo\controller;
 
 use think\Controller;
 use think\Request;
+use think\Session;
 
 class Project extends Controller
 {
@@ -12,7 +13,9 @@ class Project extends Controller
     {
         $projectModel = new \app\bo\model\Project();
         $this->assign("type", "project");
-        $post = Request::instance()->param();
+        $post = Request::instance()->post();
+        $session = Session::get("projectSearch");
+        $page = Request::instance()->get("page");
         $search = array();
         if (count($post) > 0) {
             foreach ($post['fields']['project'] as $key => $value) {
@@ -31,12 +34,15 @@ class Project extends Controller
                     );
                 }
             }
+            Session::set("projectSearch", $search);
+        }elseif(count($session) > 0){
+            $search = $session;
         }
         $list = $projectModel->getProjectList($search, $this->limit);
         $this->assign("lists", $list);
         $this->assign("empty", '<tr><td colspan="3">暂无数据</td></tr>');
         if (Request::instance()->isAjax()) {
-            if (count($post) > 0) {
+            if (count($post) > 0 OR Request::instance()->has("page", "get")) {
                 $content = $this->fetch("list");
             } else {
                 $this->assign("searchable", $projectModel->getSearchable());

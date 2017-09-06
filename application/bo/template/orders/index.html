@@ -20,6 +20,9 @@
             <li>
                 <a href="#"><i class="fa fa-trash"></i>删除</a>
             </li>
+            <li>
+                <a href="#"><i class="fa fa-file-text-o"></i>新建</a>
+            </li>
         </ul>
     </div>
 </div>
@@ -44,7 +47,7 @@
         <tr>
             <td><input type="checkbox" value="<{$vo.o_id}>"></td>
             <td><{$vo.o_type}></td>
-            <td><a href="<{:url("/orders/operation?op=edit&op_id=".$vo.o_id)}>" onclick="return false;" style="color:blue;"><{$vo.o_no}></a></td>
+            <td><a href="#orders/operation?op=edit&op_id=<{$vo.o_id}>" style="color:blue;"><{$vo.o_no}></a></td>
             <td><{$vo.o_pname}></td>
             <td><{$vo.o_subject}></td>
             <td><{$vo.o_status}></td>

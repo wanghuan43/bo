@@ -109,7 +109,7 @@ td.holder {
 }
 
 .fa-trash {
-    color: #486dad;
+    color: red;
 }
 
 .fa-tags {
@@ -136,6 +136,9 @@ td.holder {
 
 .fa-remove {
     color: #f20d13;
+}
+.fa-file-text-o{
+    color: #486dad;
 }
 
 .fa-search {

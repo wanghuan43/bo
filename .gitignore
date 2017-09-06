@@ -10,3 +10,4 @@ composer.lock
 .idea
 .DS_Store
 autoload.php
+think

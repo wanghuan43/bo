@@ -47,7 +47,7 @@ class Bootstrap extends Paginator
         }
 
         $url = $this->url($this->currentPage() + 1);
-
+        $url = substr_replace($url, "#", 0, 1);
         return $this->getPageLinkWrapper($url, $text);
     }
 

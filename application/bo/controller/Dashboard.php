@@ -4,6 +4,7 @@ namespace app\bo\controller;
 use app\bo\model\Menu;
 use app\bo\model\Permissions;
 use think\Controller;
+use think\Request;
 
 class Dashboard extends Controller
 {

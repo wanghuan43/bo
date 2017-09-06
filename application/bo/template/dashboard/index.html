@@ -23,7 +23,7 @@
                 <ul>
                     <{volist name="$menu['childrenList']" id="children"}>
                     <li>
-                        <a href="<{$children['url']}>" onclick="return false;"><{$children['name']}></a>
+                        <a href="#<{$children['url']}>"><{$children['name']}></a>
                     </li>
                     <{/volist}>
                 </ul>
@@ -39,15 +39,13 @@
 </footer>
 <script>
     $(document).ready(function () {
-        $("#left-pannel a").each(function (index, ele) {
-            var childen = $(ele).next();
-            if(childen.length == 1){
-                $(ele).find(".fa-minus-square-o").show();
-            }else{
-                $(ele).find(".fa-minus-square-o").hide();
-            }
-            $(childen).hide();
-        });
+        var lh = location.href;
+        var i = lh.indexOf("#");
+        var bak = "";
+        if(i > 0){
+            bak = lh.substr(i);
+        }
+
         $("#left-pannel a").click(function(){
             var e = this;
             var c = $(e).next("ul");
@@ -63,35 +61,56 @@
             if($(e).parents("ul").parent("li").length == 1){
                 $(e).parents("ul").parent("li").attr("class", "open");
                 $(e).parent("li").attr("class", "active");
+                $(e).parents("ul").parent("li").find("em").attr("class", "fa fa-minus-square-o");
+                $(e).parents("ul").parent("li").find("ul").show();
             }else{
                 $(p).attr("class", "open");
             }
             var href = $(e).attr("href");
             if(href != "" && href != "#"){
                 href = href.replace("#", "/");
-                $.ajax({
-                    method:"get",
-                    url:href,
-                    success:function(data){
-                        $("#main-container").html(data);
-                        $("#main-container a").click(function(){
-                            var hrefs = $(this).attr("href");
-                            if(hrefs != "" && hrefs != "#") {
-                                hrefs = hrefs.replace("#", "/");
-                                $.ajax({
-                                    method: "get",
-                                    url: hrefs,
-                                    success: function (data) {
-                                        $("#main-container").html(data);
-                                    }
-                                });
-                            }
-                        });
-                    }
-                });
+                var data = {
+                    url: href,
+                    method: "get",
+                };
+                contentAjax(href,"main-container",data);
+            }
+        });
+        $("#left-pannel a").each(function (index, ele) {
+            var childen = $(ele).next();
+            if(childen.length == 1){
+                $(ele).find(".fa-minus-square-o").show();
+            }else{
+                $(ele).find(".fa-minus-square-o").hide();
+            }
+            $(childen).hide();
+            if(bak == $(ele).attr("href")){
+                $(ele).click();
             }
         });
     })
+    function contentAjax(href,id,data){
+        if(data.success == undefined){
+            data.success = function(data){
+                if(data.content != undefined){
+                    $("#"+id).html(data.content);
+                }else{
+                    $("#"+id).html(data);
+                }
+                $("#"+id+" a,button[type='button']").unbind("click");
+                $("#"+id+" a,button[type='button']").click(function(){
+                    var hrefs = $(this).attr("href");
+                    if(hrefs != "" && hrefs != "#") {
+                        hrefs = hrefs.replace("#", "/");
+                        delete data.success;
+                        contentAjax(hrefs,id,data)
+                    }
+                    return false;
+                });
+            };
+        }
+        $.ajax(data);
+    }
 </script>
 </body>
 </html>
