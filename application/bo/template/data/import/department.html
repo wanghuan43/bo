@@ -1,0 +1,40 @@
+<div id="department-import" class="data-import">
+	<h2>
+		部门导入&nbsp;&nbsp;&nbsp;&nbsp;<a href="/download/xlsx/1.html">Excel样本下载</a>
+	</h2>
+	<form action="/data/import/type/department" id="form-department-import" enctype="multipart/form-data" method="POST">
+		<div class="form-group">
+			<label for="input-import-file">请选择要导入的Excel文件</label><br/>
+			<input type="file" id="input-import-file" name="file" />
+			<p class="help-block"></p>
+		</div>	
+	</form>
+	<button class="btn btn-default" id="btn-department-import">确认</button>
+	<div id="import-msg">
+	</div>
+</div>
+<script>
+	$("#btn-department-import").click(function(){
+		var fd = new FormData( document.getElementById("form-department-import") );
+		var $_this = $(this);
+		var $_msg = $("#import-msg");
+		if( $("#input-import-file").val() ){
+			$_this.prop("disabled","disabled");
+			$_msg.html("<i class='loading'>Loading ...</i>");
+			$.ajax({
+				url:"/data/import/type/department",
+				type:'POST',
+				data:fd,
+	            contentType: false,  
+	            processData: false,
+				success:function(res){
+					$("#input-import-file").val("");
+					$_this.removeAttr("disabled");
+					$_msg.html(res);
+				}
+			});
+		}else{
+			alert("请选择要导入的文件！");	
+		}	
+	});
+</script>

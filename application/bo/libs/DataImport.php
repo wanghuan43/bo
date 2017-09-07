@@ -39,14 +39,14 @@ class DataImport
         $db = db($tableSuffix);
         
         Db::startTrans();
-        
+       
         try{
             foreach( $res as $key => $row ){
                 if( $key === 0 ) continue;
                 if( $tableSuffix == 'project'){
                     if( trim( $row[3] ) == '项目编号' )
                         $list[] = [ 'p_no'=>trim($row[1]),'p_name'=>trim($row[2]) ];
-                }elseif( $tableSuffix == 'contract' ){
+                }elseif( $tableSuffix == 'contract' ){ 
                     $data = [
                         'c_pname' => trim($row[6]),
                         'c_no' => trim( $row[1] ),
@@ -55,6 +55,11 @@ class DataImport
                         'c_date' => strtotime(trim($row[9])),
                         'c_coname' => trim( $row[4] )
                     ];
+                    if( $data['c_date'] == false && !!trim($row[9]) ){
+                        $arr = explode('-', trim($row[9]));
+                        $data['c_date'] = strtotime('20'.$arr[2].'/'.$arr[0].'/'.$arr[1]);
+                    }
+
                     $data['c_type'] = 1;
                     if( trim($row[7])=='采购合同' ){
                         $data['c_type'] = 2;
@@ -63,17 +68,25 @@ class DataImport
                         $data['c_pid'] = $pArr[trim($row[5])] ;    
                     }else{
                         $proj = db('project')->where('p_no',trim($row[5]))->field('p_id')->find();
-                        if( empty($proj) ) continue;
+                        if( empty($proj) ){
+                            echo 'Project ID 为空.';
+                            var_dump( $data );
+                            continue;
+                        }
                         $data['c_pid'] = $pArr[trim($row[5])] = $proj['p_id'];
                     }
                     $data['c_coname'] = $companyName = trim( $row[4] );
-                    if( isset($companys[$companyName]) ){
-                        $data['c_coid'] = $companys[$companyName];
-                    }else{
-                        $co = db('company')->where('co_name',$companyName)->field('co_id')->find();
-                        if( empty($co) ) continue;
-                        $data['c_coid'] = $companys[$companyName] = $co['co_id'];
+                    
+                    $co_type = $data['c_type'] == 2 ? 1 : 2;
+
+                    $co = db('company')->where(['co_name'=>$companyName,'co_type'=>$co_type,'co_status'=>1])->field('co_id')->find();
+                    if( empty($co) ){
+                        echo 'Company ID 为空';
+                        var_dump( $data );
+                        continue;
                     }
+                    $data['c_coid'] = $co['co_id'];
+                    
                     $data['c_createtime'] = $data['c_updatetime'] = $data['c_date'];
                     $list[] = $data;
                 }elseif ($tableSuffix=='company'){
@@ -116,17 +129,53 @@ class DataImport
                         ];    
                     }
                     $list[] = $data;
+                }elseif($tableSuffix=='department'){
+                    $list[] = [
+                            'd_name' => trim($row[0]),
+                            'd_code' => trim($row[1]),
+                            'm_name' => trim($row[2]),
+                            'm_code' => trim($row[3])
+                    ];    
+                }elseif( $tableSuffix == 'member' ){
+                    $data = [
+                            'm_code' => trim($row[1]),
+                            'm_department' => trim($row[3]),
+                            'm_office' => trim($row[4]),
+                            'm_name' => trim($row[5]),
+                            'm_phone' => trim($row[6]),
+                            'm_email' => trim($row[7]),
+                            'm_is_lead' => trim($row[8]) == '否'?0:1
+                    ];
+                    $dp = db('department')->where('d_name',$data['m_department'])->field('d_id')->find();
+                    if( empty($dp) )
+                        $dp = db('department')->where('d_name',$data['m_department'].'-'.$data['m_office'])->field('d_id')->find();
+                    
+                    if( empty($dp['d_id']) ){
+                        var_dump( $data );
+                        continue;
+                    }                    
+                    $data['m_did'] = $dp['d_id'];
+                    
+                    if( $data['m_is_lead'] === 1 ){
+                        db('department')->where('d_name',trim($row[8]))->update(['m_name'=>$data['m_name'],'m_code'=>$data['m_code']]);
+                    }
+                    
+                    $list[] = $data;
                 }else{
                     return FALSE;
                 }
-            
-                if( $key%1000 == 0 ){
+                
+                if( count($list)>900 ){
                     $db->insertAll( $list );
                     $list = [];
-                }elseif( $key == count($res)-1 ){
-                    $db->insertAll( $list );
                 }
+                
             }
+            
+            if( count($list)>0 ){
+                $db->insertAll( $list );
+            }
+           
             // 提交事务
             Db::commit();
         } catch (\Exception $e) {
