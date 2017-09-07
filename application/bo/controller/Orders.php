@@ -4,7 +4,10 @@ namespace app\bo\controller;
 use app\bo\model\Chances;
 use app\bo\model\Circulation;
 use app\bo\model\Department;
-use app\bo\model\TagLink;
+use app\bo\model\Member;
+use app\bo\model\OrderProject;
+use app\bo\model\Taglib;
+use app\bo\model\Taglink;
 use think\Controller;
 use think\Loader;
 use think\Request;
@@ -39,29 +42,28 @@ class Orders extends Controller
 
     public function operation($op = "add", $op_id = 0)
     {
-        $tagModel = new TagLink();
+        $tagLinkModel = new Taglink();
+        $tagListModel = new Taglib();
         $cModel = new Circulation();
         $dModel = new Department();
         $chancesModel = new Chances();
-        $cNameList = array();
+        $opm = new OrderProject();
         $cIDList = array();
-        $tagNameList = array();
         $tagIDList = array();
+        $memberModel = new Member();
         $baseMonth = getMonth();
         $order = $this->ordersModel->get($op_id);
         if ($op == "add") {
             $title = "新建订单";
         } elseif (!empty($op_id) AND $op == "edit") {
             $title = "编辑" . $order->o_subject;
-            $tmp = $tagModel->getTagList($op_id, "orders");
+            $tmp = $tagLinkModel->getTagList($op_id, "orders");
             foreach($tmp as $key=>$value){
-                $tagNameList[] = $value->tl_name;
-                $tagIDList[] = $value->tl_id;
+                $tagIDList[$value->tl_id] = $value->tl_id;
             }
             $tmp = $cModel->getCirculationList($op_id, "orders");
             foreach($tmp as $key=>$value){
-                $cNameList[] = $value->m_name;
-                $cIDList[] = $value->m_id;
+                $cIDList[$value->m_id] = $value->m_id;
             }
         }
         $this->assign('order', $order);
@@ -70,17 +72,43 @@ class Orders extends Controller
         $this->assign('taxList', getTaxList());
         $this->assign('lieList', getLieList());
         $this->assign('statusList', getStatusList());
-        $this->assign('tagNameList', implode(" ", $tagNameList));
-        $this->assign('tagIDList', implode(",", $tagIDList));
-        $this->assign('cNameList', implode(" ", $cNameList));
-        $this->assign('cIDList', implode(",", $cIDList));
+        $this->assign('tagIDList', $tagIDList);
+        $this->assign('cIDList', $cIDList);
         $this->assign('baseMonth', json_encode($baseMonth));
         $this->assign('dList', $dModel->all());
         $this->assign('chancesList', $chancesModel->all());
+        $this->assign('memberList', $memberModel->all());
+        $this->assign('tagList', $tagListModel->all());
+        $this->assign('opject', $opm->getOrderProject($op_id));
+        $this->assign('op', $op);
+        $this->assign('op_id', $op_id);
         return $this->fetch("operation");
     }
 
-    public function doOperation($op = "add", $op_id = 0){
-
+    public function doOperation($op = "add", $op_id=""){
+        $post = Request::instance()->post();
+        $ordersModel = new \app\bo\model\Orders();
+        $tlm = new Taglink();
+        $clm = new Circulation();
+        $opm = new OrderProject();
+        $tagList = !empty($post['tagList']) ? $post['tagList'] : array();
+        $cList = !empty($post['cList']) ? $post['cList'] : array();
+        $pj = !empty($post['project']) ? $post['project'] : array();
+        unset($post['tagList']);
+        unset($post['cList']);
+        unset($post['project']);
+        $post['o_date'] = strtotime($post['o_date']);
+        $where = [];
+        if($op == "edit"){
+            $ordersModel = $ordersModel->get($op_id);
+            $where = ['o_id'=>$op_id];
+        }else{
+            $post['o_no'] = $ordersModel->getOrderNO($post['o_pid']);
+        }
+        $ordersModel->save($post, $where);
+        $o_id = $ordersModel->o_id;
+        $tlm->setTagLink($o_id, $tagList, "orders");
+        $clm->setCirculation($o_id, $cList, "orders");
+        $opm->setOrderProject($o_id, $post['o_date'], $pj);
     }
 }

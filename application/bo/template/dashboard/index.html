@@ -16,7 +16,7 @@
         <ul>
             <{volist name="menuList" id="menu"}>
             <li>
-                <a href="#<{$menu['url']}>"><i class="fa fa-lg fa-fw <{$menu['flag']}>"></i> <span
+                <a <{if condition="!empty($menu['url'])"}>href="#<{$menu['url']}>"<{/if}>><i class="fa fa-lg fa-fw <{$menu['flag']}>"></i> <span
                         class="menu-item-parent"><{$menu['name']}></span><b class="collapse-sign"><em
                         class="fa fa-plus-square-o"></em></b></a>
                 <{if condition="count($menu['childrenList']) > 0"}>
@@ -44,20 +44,30 @@
         var bak = "";
         if(i > 0){
             bak = lh.substr(i);
+            $("#left-pannel a").each(function(index, element){
+                if($(element).attr("href") == bak){
+                    $(element).click();
+                }
+            });
         }
 
         $("#left-pannel a").click(function(){
             var e = this;
             var c = $(e).next("ul");
             var p = $(e).parent("li");
-            $("#left-pannel li").attr("class", "");
-            if($(c).is(":hidden")){
-                $(p).find("em").attr("class", "fa fa-minus-square-o");
-                $(c).show();
+            if($(e).parents("ul").parent("li").length == 1){
+                if($(p).hasClass("active")){
+                    return false;
+                }
             }else{
-                $(p).find("em").attr("class", "fa fa-plus-square-o");
-                $(c).hide();
+                if($(e).parent("li").hasClass("open") && $(e).parent("li").hasClass("click")){
+                    return false;
+                }
             }
+            $("#left-pannel li").attr("class", "");
+            $("#left-pannel li>ul>li").attr("class", "");
+            $("#left-pannel li>ul").hide();
+            $("#left-pannel em").attr("class", "fa fa-plus-square-o");
             if($(e).parents("ul").parent("li").length == 1){
                 $(e).parents("ul").parent("li").attr("class", "open");
                 $(e).parent("li").attr("class", "active");
@@ -65,7 +75,17 @@
                 $(e).parents("ul").parent("li").find("ul").show();
             }else{
                 $(p).attr("class", "open");
+                if(!$(p).hasClass("click") && !$(c).find("li").hasClass("click")){
+                    if($(c).is(":hidden")){
+                        $(p).find("em").attr("class", "fa fa-minus-square-o");
+                        $(c).show();
+                    }else{
+                        $(p).find("em").attr("class", "fa fa-plus-square-o");
+                        $(c).hide();
+                    }
+                }
             }
+            $(p).addClass("click");
             var href = $(e).attr("href");
             if(href != "" && href != "#"){
                 href = href.replace("#", "/");
@@ -89,9 +109,9 @@
             }
         });
     })
-    function contentAjax(href,id,data){
-        if(data.success == undefined){
-            data.success = function(data){
+    function contentAjax(href,id,ajaxData){
+        if(ajaxData.success == undefined){
+            ajaxData.success = function(data){
                 if(data.content != undefined){
                     $("#"+id).html(data.content);
                 }else{
@@ -102,14 +122,15 @@
                     var hrefs = $(this).attr("href");
                     if(hrefs != "" && hrefs != "#") {
                         hrefs = hrefs.replace("#", "/");
-                        delete data.success;
-                        contentAjax(hrefs,id,data)
+                        delete ajaxData.success;
+                        ajaxData.url = hrefs;
+                        contentAjax(hrefs,id,ajaxData)
                     }
                     return false;
                 });
             };
         }
-        $.ajax(data);
+        $.ajax(ajaxData);
     }
 </script>
 </body>

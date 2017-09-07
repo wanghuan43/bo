@@ -3,9 +3,9 @@ namespace app\bo\model;
 
 use think\Model;
 
-class TagLink extends Model
+class Taglink extends Model
 {
-    public function getTagList($ot_id, $model)
+    public function getTagList($ot_id, $model = "orders")
     {
         $db = $this->db();
         $list = $db->table('__TAGLIB__')
@@ -15,5 +15,33 @@ class TagLink extends Model
             ->where('tk.model', $model)
             ->select();
         return $list;
+    }
+
+    public function setTagLink($ot_id, $list, $model = "orders")
+    {
+        $tl = array();
+        $tlm = new Taglib();
+        foreach ($list as $value) {
+            $value = trim($value);
+            if (is_numeric($value)) {
+                $tlm = Taglib::get($value);
+                $tlm->tl_times = intval($tlm->tl_times) + 1;
+            } else {
+                $tlm = $tlm->where("tl_name","=",$value)->find();
+                if (empty($tlm->tl_id)) {
+                    $tlm = new Taglib();
+                    $tlm->tl_times = 1;
+                    $tlm->tl_name = $value;
+                } else {
+                    $tlm->tl_times = intval($tlm->tl_times) + 1;
+                }
+            }
+            $tlm->save();
+            $tl[] = array("ot_id" => $ot_id, "tl_id" => $tlm->tl_id, "model" => $model);
+        }
+        $this->where("ot_id", "=", $ot_id)->where("model", "=", $model)->delete();
+        if (count($tl) > 0) {
+            $this->saveAll($tl);
+        }
     }
 }

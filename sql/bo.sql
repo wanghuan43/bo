@@ -263,6 +263,7 @@ CREATE TABLE `kj_order_project` (
   `op_oid` int(11) NOT NULL COMMENT '订单主键',
   `op_date` int(10) NOT NULL COMMENT '预计完成时间',
   `op_month` char(50) DEFAULT NULL COMMENT '提前/延期时间',
+  `op_percent` char(50) NOT NULL DEFAULT '0' COMMENT '占比',
   `op_used` decimal(18,2) NOT NULL DEFAULT '0.00' COMMENT '预计金额',
   `op_type` tinyint(1) NOT NULL DEFAULT '1' COMMENT '1:发票;2:验收单;3:回款',
   PRIMARY KEY (`op_id`,`op_oid`),

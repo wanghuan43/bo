@@ -56,7 +56,7 @@ td {
 }
 
 td.txt {
-    padding: 0;
+    padding-left: 10px;
 }
 
 td.holder {
@@ -109,7 +109,7 @@ td.holder {
 }
 
 .fa-trash {
-    color: red;
+    color: #486dad;
 }
 
 .fa-tags {
@@ -138,7 +138,7 @@ td.holder {
     color: #f20d13;
 }
 .fa-file-text-o{
-    color: #486dad;
+    color: #486dad
 }
 
 .fa-search {
