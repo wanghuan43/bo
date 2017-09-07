@@ -8,7 +8,7 @@ class Permissions extends Model
     protected $pk = "id";
 
     public function getMenuList($member_id=""){
-        $tmp = $this->field("m.*")->alias("p")->join("__MENU__ m","p.menu_id = m.id")
+        $tmp = $this->field("m.*")->alias("p")->join("__MENU__ m","p.menu_id = m.id","LEFT")
                 ->where("m.is_show", "=", "1")->order("m.id", "ASC")->select();
         $menus = array();
         foreach($tmp as $key=>$value){
