@@ -1,0 +1,17 @@
+<ul>
+<{notempty name="errors"}>
+<{volist name="errors" id="error"}>
+	<li class="error"><{$error}></li>
+<{/volist}>
+<{/notempty}>
+<{notempty name="warnings"}>
+<{volist name="warnings" id="warning"}>
+	<li class="warning"><{$warning}></li>
+<{/volist}>
+<{/notempty}>
+<{notempty name="msgs"}>
+<{volist name="msgs" id="msg"}>
+	<li class="msg"><{$msg}></li>
+<{/volist}>
+<{/notempty}>
+</ul>

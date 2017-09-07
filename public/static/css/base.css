@@ -298,3 +298,66 @@ table.list td:first-child {
     color: white;
     text-align: center;
 }
+.data-import{
+	padding:20px 20px 0 20px;
+}
+.data-import h2{
+	border-bottom:solid 1px #eee;
+	display:block;
+	padding:0.5em 0;
+	float:none;
+	margin-bottom:2em;
+	font-weight:700;
+}
+.data-import label{
+	font-weight:700;
+	display:inline-block;
+	margin-bottom:5px;
+	font-size:14px;
+}
+.data-import h2 a {
+	text-decoration:underline;
+	color:#00f;
+}
+.form-group{
+	margin-bottom:.8em;
+}
+.btn-default{
+	padding:6px 12px !important;
+	border-radius:4px;
+	cursor: pointer;
+}
+.btn-default:disabled{
+	background:#eee !important;
+}
+.loading{
+	padding-right:35px;
+	background:url(../images/loading.gif) top right/30px 30px no-repeat;
+	height:30px;
+	line-height:30px;
+	display:inline-block;
+}
+#import-msg{
+	border-top:solid 1px #eee;
+	padding:12px 0;
+	margin-top:2em;
+}
+#import-msg ul{
+	/*padding-left:2em;*/
+}
+#import-msg ul li{
+	display:block;
+	height:3em;
+	line-height:3em;
+	margin-bottom:2px;
+	padding-left:1.5em;
+}
+#import-msg ul li.error{
+	background:#f2dede;
+}
+#import-msg ul li.warning{
+	background:#fcf8e3;
+}
+#import-msg ul li.msg{
+	background:#dff0d8;
+}

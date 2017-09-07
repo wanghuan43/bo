@@ -25,14 +25,15 @@ class DataImport extends Command
     
     protected function execute(Input $input, Output $output)
     {
+        
         if( $fileName = $input->getArgument('file') ){
             $this->file = $fileName;
         }
         
-        if( $index = $input->getArgument('index') ){
-            $this->index = $index;
+        if( ($index = $input->getArgument('index')) >= 0 ){
+            $this->index = intval($index);
         }
-        
+       
         $tableName = $input->getArgument('table');
         
         $arg0 = $input->getArgument('arg0')?:FALSE;
