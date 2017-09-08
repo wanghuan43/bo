@@ -117,8 +117,8 @@
                 }else{
                     $("#"+id).html(data);
                 }
-                $("#"+id+" a,button[type='button']").unbind("click");
-                $("#"+id+" a,button[type='button']").click(function(){
+                $("#"+id+" a[target!='_blank'],button[type='button']").unbind("click");
+                $("#"+id+" a[target!='_blank'],button[type='button']").click(function(){
                     var hrefs = $(this).attr("href");
                     if(hrefs != "" && hrefs != "#") {
                         hrefs = hrefs.replace("#", "/");
