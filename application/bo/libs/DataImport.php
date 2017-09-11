@@ -157,7 +157,14 @@ class DataImport
                     $data['m_did'] = $dp['d_id'];
                     
                     if( $data['m_is_lead'] === 1 ){
-                        db('department')->where('d_name',trim($row[8]))->update(['m_name'=>$data['m_name'],'m_code'=>$data['m_code']]);
+                        $dp = db('department')->where('m_code',$data['m_code'])->field('d_id')->find();
+                        if( empty($dp['d_id']) ){
+                            var_dump($data);
+                            continue;
+                        }
+                        $data['m_ldid'] = $dp['d_id'];
+                    }else{
+                        $data['m_ldid'] = NULL;
                     }
                     
                     $list[] = $data;
