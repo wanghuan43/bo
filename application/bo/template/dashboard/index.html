@@ -62,15 +62,15 @@
                 if($(p).hasClass("active")){
                     return false;
                 }
-            }else{
-                if($(e).parent("li").hasClass("open") && $(e).parent("li").hasClass("click")){
-                    return false;
-                }
             }
             $("#left-pannel li").attr("class", "");
             $("#left-pannel li>ul>li").attr("class", "");
-            $("#left-pannel li>ul").hide();
-            $("#left-pannel em").attr("class", "fa fa-plus-square-o");
+            $("#left-pannel em").each(function(index, element){
+                if(!$(p).find("em").is($(element))){
+                    $(element).attr("class", "fa fa-plus-square-o");
+                    $(element).parents("a").next().hide();
+                }
+            });
             if($(e).parents("ul").parent("li").length == 1){
                 $(e).parents("ul").parent("li").attr("class", "open");
                 $(e).parent("li").attr("class", "active");
@@ -78,19 +78,17 @@
                 $(e).parents("ul").parent("li").find("ul").show();
             }else{
                 $(p).attr("class", "open");
-                if(!$(p).hasClass("click") && !$(c).find("li").hasClass("click")){
-                    if($(c).is(":hidden")){
-                        $(p).find("em").attr("class", "fa fa-minus-square-o");
-                        $(c).show();
-                    }else{
-                        $(p).find("em").attr("class", "fa fa-plus-square-o");
-                        $(c).hide();
-                    }
+                if($(c).is(":hidden")){
+                    $(p).find("em").attr("class", "fa fa-minus-square-o");
+                    $(c).show();
+                }else{
+                    $(p).find("em").attr("class", "fa fa-plus-square-o");
+                    $(c).hide();
                 }
             }
             $(p).addClass("click");
             var href = $(e).attr("href");
-            if(href != "" && href != "#"){
+            if(href != "" && href != "#" && href != "/" && href != undefined){
                 href = href.replace("#", "/");
                 var data = {
                     url: href,
