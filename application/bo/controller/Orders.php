@@ -53,10 +53,7 @@ class Orders extends Controller
         $memberModel = new Member();
         $baseMonth = getMonth();
         $order = $this->ordersModel->get($op_id);
-        if ($op == "add") {
-            $title = "新建订单";
-        } elseif (!empty($op_id) AND $op == "edit") {
-            $title = "编辑" . $order->o_subject;
+        if (!empty($op_id) AND $op == "edit") {
             $tmp = $tagLinkModel->getTagList($op_id, "orders");
             foreach($tmp as $key=>$value){
                 $tagIDList[$value->tl_id] = $value->tl_id;
@@ -67,7 +64,6 @@ class Orders extends Controller
             }
         }
         $this->assign('order', $order);
-        $this->assign('title', $title);
         $this->assign('typeList', getTypeList());
         $this->assign('taxList', getTaxList());
         $this->assign('lieList', getLieList());

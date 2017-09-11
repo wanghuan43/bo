@@ -46,11 +46,11 @@
         <{volist name="lists" id="vo" empty="$empty"}>
         <tr>
             <td><input type="checkbox" value="<{$vo.o_id}>"></td>
-            <td><{$vo.o_type}></td>
+            <td><?php echo getStatusList($vo['o_status']);?></td>
             <td><a href="#orders/operation?op=edit&op_id=<{$vo.o_id}>" style="color:blue;"><{$vo.o_no}></a></td>
             <td><{$vo.o_pname}></td>
             <td><{$vo.o_subject}></td>
-            <td><{$vo.o_status}></td>
+            <td><?php echo getTypeList($vo['o_type']);?></td>
             <td><{$vo.o_coname}></td>
             <td><{$vo.o_mname}></td>
             <td><?php echo date("Y-m-d", $vo['o_date']);?></td>

@@ -19,7 +19,7 @@ class Contract extends Controller
         $this->assign("type", "contract");
         $post = Request::instance()->param();
         $search = array();
-        if (count($post) > 0) {
+        if (isset($post['fields'])) {
             foreach ($post['fields']['contract'] as $key => $value) {
                 $val = count($post['values']['contract'][$key]) > 1 ? $post['values']['contract'][$key] : trim($post['values']['contract'][$key][0]);
                 $opt = trim($post['operators']['contract'][$key]);

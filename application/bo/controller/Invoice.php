@@ -4,26 +4,20 @@ namespace app\bo\controller;
 use think\Controller;
 use think\Request;
 
-class Company extends Controller
+class Invoice extends Controller
 {
-
     var $limit = 20;
 
-    function __construct(Request $request)
+    public function searchInvoice()
     {
-        parent::__construct($request);
-    }
-
-    public function searchCompany()
-    {
-        $companyModel = new \app\bo\model\Company();
-        $this->assign("type", "company");
+        $invoiceModel = new \app\bo\model\Invoice();
+        $this->assign("type", "invoice");
         $post = Request::instance()->param();
         $search = array();
         if (isset($post['fields'])) {
-            foreach ($post['fields']['company'] as $key => $value) {
-                $val = count($post['values']['company'][$key]) > 1 ? $post['values']['company'][$key] : trim($post['values']['company'][$key][0]);
-                $opt = trim($post['operators']['company'][$key]);
+            foreach ($post['fields']['invoice'] as $key => $value) {
+                $val = count($post['values']['invoice'][$key]) > 1 ? $post['values']['invoice'][$key] : trim($post['values']['invoice'][$key][0]);
+                $opt = trim($post['operators']['invoice'][$key]);
                 $val = is_array($val) ? ((empty($val['0']) AND empty($val['1'])) ? "" : $val) : $val;
                 if (!empty($val)) {
                     if ($opt == "between") {
@@ -39,25 +33,20 @@ class Company extends Controller
                 }
             }
         }
-        $search[] = array(
-            "field" => "co_status",
-            "opt" => "=",
-            "val" => "1"
-        );
-        $list = $companyModel->getCompanyList($search, $this->limit);
+        $list = $invoiceModel->getInvoiceList($search, $this->limit);
         $this->assign("lists", $list);
         $this->assign("empty", '<tr><td colspan="3">暂无数据</td></tr>');
         if (Request::instance()->isAjax()) {
             if (count($post) > 0) {
                 $content = $this->fetch("list");
             } else {
-                $this->assign("searchable", $companyModel->getSearchable());
-                $content = $this->fetch("common/poplayer");
+                $this->assign("searchable", $invoiceModel->getSearchable());
+                $content = $this->fetch("common/popused");
             }
             return array("content" => $content);
         } else {
-            $this->assign("searchable", $companyModel->getSearchable());
-            return $this->fetch("common/poplayer");
+            $this->assign("searchable", $invoiceModel->getSearchable());
+            return $this->fetch("common/popused");
         }
     }
 }

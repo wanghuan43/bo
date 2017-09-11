@@ -2,12 +2,34 @@
 <div class="f-layer-<{$type}>-back"
      style="display:none;background-color: black;opacity: 0.5;width: 100%;height: 100%;position: fixed;top: 0;"></div>
 <div class="f-layer f-layer-<{$type}>" style="display: none;">
+    <div class="clearfix">
+        <div style="margin-bottom: 10px;">
+            <p style="display: inline-block;font-size: 18px;font-weight: bold;">订单对应凭证金额</p>
+            <div style="float: right;">
+            <button class="btn moreSave" type="reset">保存</button>
+            <button class="btn red close" type="reset">取消</button>
+            </div>
+        </div>
+        <div>
+            <p style="width: 48%;height: 20px;display: inline-block;margin-bottom: 10px;">
+                <span>凭证号:</span><span class="on_class" style="width: 200px;display: inline-block;"></span>
+                <span>对方名称:</span><span class="cp_class"></span>
+            </p>
+            <p style="width: 48%;height: 20px;display: inline-block;margin-bottom: 10px;">
+                <span>金额:</span><span class="money_class"></span>
+            </p>
+            <p style="width: 48%;height: 20px;display: inline-block;margin-bottom: 10px;">
+                <span>本次对应金额:</span><input type="text" class="m_class" style="width: 300px;margin-left: 10px;">
+            </p>
+            <p style="width: 48%;height: 20px;display: inline-block;margin-bottom: 10px;">
+                <span>未对应余额:</span><span class="no_class"></span>
+            </p>
+        </div>
+    </div>
     <form action="<{:url("/$type/search".ucfirst($type))}>" id="<{$type}>Form">
     <div class="clearfix header">
         <h2>搜索条件:</h2>
         <div class="btn-pannel">
-            <button class="btn save" type="reset">保存</button>
-            <button class="btn red close" type="reset">取消</button>
             <button class="btn search" type="submit">搜索</button>
         </div>
     </div>

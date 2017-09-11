@@ -278,6 +278,7 @@ CREATE TABLE `kj_order_used` (
   `ou_id` int(11) NOT NULL AUTO_INCREMENT COMMENT '主键',
   `ou_oid` int(11) NOT NULL COMMENT '订单主键',
   `ou_otid` int(11) NOT NULL COMMENT '关联主键',
+  `ou_percent` char(50) NOT NULL DEFAULT '0' COMMENT '占比',
   `ou_used` decimal(18,2) NOT NULL DEFAULT '0.00' COMMENT '核销金额',
   `ou_type` tinyint(1) NOT NULL DEFAULT '1' COMMENT '1:发票;2:验收单;3:回款',
   PRIMARY KEY (`ou_id`,`ou_oid`,`ou_otid`),
