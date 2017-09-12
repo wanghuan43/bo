@@ -1,9 +1,9 @@
 <?php
 namespace app\bo\model;
 
-use think\Model;
+use app\bo\libs\BoModel;
 
-class Contract extends Model
+class Contract extends BoModel
 {
     protected $pk = "c_id";
 
@@ -46,7 +46,7 @@ class Contract extends Model
         ),
     );
 
-    public function getContractList($search, $limit){
+    public function getList($search, $limit){
         $db = $this->db();
         $searchModel = $db->table('__CONTRACT__');
         foreach($search as $key=>$value){

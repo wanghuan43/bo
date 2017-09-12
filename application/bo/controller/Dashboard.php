@@ -1,19 +1,16 @@
 <?php
 namespace app\bo\controller;
 
-use app\bo\model\Menu;
+use app\bo\libs\BoController;
 use app\bo\model\Permissions;
-use think\Controller;
 use think\Request;
 
-class Dashboard extends Controller
+class Dashboard extends BoController
 {
-
     public function index()
     {
         $permissionsModel = new Permissions();
-        $this->assign("menuList", $permissionsModel->getMenuList());
+        $this->assign("menuList", $permissionsModel->getList());
         return $this->fetch('index');
     }
-
 }

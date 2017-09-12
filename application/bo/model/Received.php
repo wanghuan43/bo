@@ -1,9 +1,9 @@
 <?php
 namespace app\bo\model;
 
-use think\Model;
+use app\bo\libs\BoModel;
 
-class Received extends Model
+class Received extends BoModel
 {
 
     protected $pk = "i_id";
@@ -45,7 +45,7 @@ class Received extends Model
         return array("fields" => $fields, "operators" => $operators, "length" => count($fields));
     }
 
-    public function getReceivedList($search, $limit)
+    public function getList($search, $limit)
     {
         $db = $this->db();
         $searchModel = $db->table('__RECEIVED__');

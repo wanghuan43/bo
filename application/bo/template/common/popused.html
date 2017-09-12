@@ -2,10 +2,10 @@
 <div class="f-layer-<{$type}>-back"
      style="display:none;background-color: black;opacity: 0.5;width: 100%;height: 100%;position: fixed;top: 0;"></div>
 <div class="f-layer f-layer-<{$type}>" style="display: none;">
-    <div class="clearfix">
+    <div class="clearfix header">
         <div style="margin-bottom: 10px;">
             <p style="display: inline-block;font-size: 18px;font-weight: bold;">订单对应凭证金额</p>
-            <div style="float: right;">
+            <div class="btn-pannel" style="float: right;">
             <button class="btn moreSave" type="reset">保存</button>
             <button class="btn red close" type="reset">取消</button>
             </div>
@@ -19,7 +19,7 @@
                 <span>金额:</span><span class="money_class"></span>
             </p>
             <p style="width: 48%;height: 20px;display: inline-block;margin-bottom: 10px;">
-                <span>本次对应金额:</span><input type="text" class="m_class" style="width: 300px;margin-left: 10px;">
+                <span>本次对应金额:</span><input type="text" class="m_class" max="0" value="0" style="width: 300px;margin-left: 10px;">
             </p>
             <p style="width: 48%;height: 20px;display: inline-block;margin-bottom: 10px;">
                 <span>未对应余额:</span><span class="no_class"></span>
@@ -82,6 +82,29 @@
                 data: data,
                 success:function(data){
                     $("#<{$type}>List").html(data.content);
+                    $("#invoiceList input").click(function(){
+                        var cla = ".f-layer-<{$type}>";
+                        if($(this).attr('c') == "true"){
+                            $(this).prop("checked", false);
+                            $(this).attr("c", "false");
+                            $(cla).find(".on_class").html("");
+                            $(cla).find(".cp_class").html("");
+                            $(cla).find(".money_class").html("");
+                            $(cla).find(".m_class").val("0");
+                            $(cla).find(".m_class").attr("max", "0");
+                            $(cla).find(".no_class").html("");
+                        }else{
+                            $(this).prop("checked", true);
+                            $(this).attr("c", "true");
+                            var jdata = JSON.parse(decodeURIComponent($(this).attr("json")));
+                            $(cla).find(".on_class").html(jdata.id);
+                            $(cla).find(".cp_class").html(jdata.coname);
+                            $(cla).find(".money_class").html(jdata.money);
+                            $(cla).find(".m_class").val(jdata.noused);
+                            $(cla).find(".m_class").attr("max", jdata.noused);
+                            $(cla).find(".no_class").html(jdata.noused);
+                        }
+                    });
                     $("#<{$type}>List a").click(function(){
                         var href = $(this).attr("href");
                         if(href != "" && href != "#"){

@@ -1,9 +1,9 @@
 <?php
 namespace app\bo\model;
 
-use think\Model;
+use app\bo\libs\BoModel;
 
-class Acceptance extends Model
+class Acceptance extends BoModel
 {
 
     protected $pk = "i_id";
@@ -31,21 +31,7 @@ class Acceptance extends Model
         ),
     );
 
-    /**
-     * @return array
-     */
-    public function getSearchable()
-    {
-        $fields = array();
-        $operators = array();
-        foreach ($this->searchable as $key => $value) {
-            $fields[$key] = array("name" => $value['name'], "type" => $value['type']);
-            $operators[$key] = $value['operators'];
-        }
-        return array("fields" => $fields, "operators" => $operators, "length" => count($fields));
-    }
-
-    public function getAcceptanceList($search, $limit)
+    public function getList($search, $limit)
     {
         $db = $this->db();
         $searchModel = $db->table('__ACCEPTANCE__');

@@ -1,9 +1,9 @@
 <?php
 namespace app\bo\model;
 
-use think\Model;
+use app\bo\libs\BoModel;
 
-class Invoice extends Model
+class Invoice extends BoModel
 {
     protected $pk = "i_id";
 
@@ -44,7 +44,7 @@ class Invoice extends Model
         return array("fields" => $fields, "operators" => $operators, "length" => count($fields));
     }
 
-    public function getInvoiceList($search, $limit){
+    public function getList($search, $limit){
         $db = $this->db();
         $searchModel = $db->table('__INVOICE__');
         foreach($search as $key=>$value){

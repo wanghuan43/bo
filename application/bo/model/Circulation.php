@@ -1,11 +1,11 @@
 <?php
 namespace app\bo\model;
 
-use think\Model;
+use app\bo\libs\BoModel;
 
-class Circulation extends Model
+class Circulation extends BoModel
 {
-    public function getCirculationList($ot_id, $model="orders")
+    public function getList($ot_id, $model="orders")
     {
         $db = $this->db();
         $list = $db->table('__CIRCULATION__')

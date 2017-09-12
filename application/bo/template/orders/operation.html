@@ -138,9 +138,13 @@
                 <td class="txt">关键字/标签:</td>
                 <td colspan="3">
                     <select class="mstag" multiple id="tagList" name="tagList[]">
-                        <{volist name="tagList" id="tl"}>
-                        <option value="<{$tl.tl_id}>" <{if condition="array_key_exists($tl.tl_id, $tagIDList)"}>selected<{/if}>><{$tl.tl_name}></option>
-                        <{/volist}>
+                        <{foreach name="tagList" item="tl" key="k"}>
+                        <optgroup label="<{$k}>">
+                            <{foreach name="$tl" item="l"}>
+                        <option value="<{$l.tl_id}>" <{if condition="array_key_exists($l.tl_id, $tagIDList)"}>selected<{/if}>><{$k}>:<{$l.tl_name}></option>
+                            <{/foreach}>
+                        </optgroup>
+                        <{/foreach}>
                     </select>
                 </td>
                 <td class="txt">传阅人:</td>
@@ -159,7 +163,7 @@
     <h3>已完成情况</h3>
     <div class="content table clearfix">
         <div class="col33">
-            <table data="1">
+            <table class="invoice_1" data="1">
                 <thead>
                 <tr>
                     <td><i class="fa fa-search" data="invoice"></i></td>
@@ -179,7 +183,7 @@
             </table>
         </div>
         <div class="col33">
-            <table data="2">
+            <table class="acceptance_2" data="2">
                 <thead>
                 <tr>
                     <td><i class="fa fa-search" data="acceptance"></i></td>
@@ -199,7 +203,7 @@
             </table>
         </div>
         <div class="col33">
-            <table data="3">
+            <table class="received_3" data="3">
                 <thead>
                 <tr>
                     <td><i class="fa fa-search" data="received"></i></td>
@@ -365,10 +369,7 @@
             $("#o_dname").val($("#o_did option:selected").html());
         });
         $("#o_did").change();
-        $(".mstag").select2({
-            tags: true,
-            tokenSeparators: [',', ' ']
-        });
+        $(".mstag").select2();
         $(".msmember").select2();
         $("#o_cno,#o_pname,#o_coname").focus(function(){
             if($(this).val() == ""){
@@ -480,26 +481,9 @@
                         $(cla + " .moreSave").click(function(){
                             var ci = $(cla + " .search-result input:checked");
                             var jdata = JSON.parse(decodeURIComponent($(ci).attr("json")));
-
-                        });
-                        $(cla + " .search-result input").click(function(){
-                            if($(this).is(":checked")){
-                                $(this).prop("checked", "false");
-                                $(cla + ".on_class").html("");
-                                $(cla + ".cp_class").html("");
-                                $(cla + ".money_class").html("");
-                                $(cla + ".m_class").val("");
-                                $(cla + ".no_class").html("");
-                            }else{
-                                $(this).prop("checked", "true");
-                                var jdata = JSON.parse(decodeURIComponent($(ci).attr("json")));
-                                $(cla + ".on_class").html(jdata.id);
-                                $(cla + ".cp_class").html(jdata.i_coname);
-                                $(cla + ".money_class").html(jdata.i_coname);
-                                $(cla + ".m_class").val(jdata.i_coname);
-                                $(cla + ".no_class").html(jdata.i_no);
-                            }
-
+                            baseUTR($(cla), jdata, type);
+                            $(cla).hide();
+                            $(cla + "-back").hide();
                         });
                         $(cla).show();
                         $(cla + "-back").show();
@@ -535,6 +519,36 @@
             }
         });
     });
+    function baseUTR(element,data,type){
+        var i = 1;
+        switch(type){
+            case "invoice":
+                i=1;
+                break;
+            case "acceptance":
+                i=2;
+                break;
+            case "received":
+                i=3;
+                break;
+        }
+        var cla = "."+type+"_"+i;
+        var total = parseFloat($("#o_money").val());
+        var val = $(element).find(".m_class").val();
+        var html = '<tr><td><i class="fa fa-minus-circle"></i></td>' +
+                '<td><?php echo date("Y-m-d"); ?></td>' +
+                '<td class="mony-'+type+'">'+val+'</td>' +
+                '<td><a href="/'+type+'/view/no/'+data.id+'" target="_blank" style="color: blue;">'+data.id+'</a></td></tr>';
+        $(cla).append(html);
+        var plus = 0;
+        $(cla).find(".mony-"+type).each(function(index, element){
+            plus += parseFloat($(element).html());
+        });
+        var persent = 100-((total-plus)/total*100);
+        console.log(persent);
+        $(cla).find("tr:first").find("td:eq(2)").html(parseFloat(plus).toFixed(2));
+        $(cla).find("tr:first").find("td:eq(3)").html(Math.round(persent)+"%");
+    }
     function bindClick(element) {
         var index = $(element).attr('data');
         var baseTR = getBaseTR($(element).attr('data'));

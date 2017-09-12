@@ -1,13 +1,13 @@
 <?php
 namespace app\bo\model;
 
-use think\Model;
+use app\bo\libs\BoModel;
 
-class Permissions extends Model
+class Permissions extends BoModel
 {
     protected $pk = "id";
 
-    public function getMenuList($member_id=""){
+    public function getList($member_id=""){
         $tmp = $this->field("m.*")->alias("p")->join("__MENU__ m","p.menu_id = m.id","LEFT")
                 ->where("m.is_show", "=", "1")->order("m.id", "ASC")->select();
         $menus = array();

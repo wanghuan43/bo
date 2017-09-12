@@ -1,11 +1,11 @@
 <?php
 namespace app\bo\controller;
 
-use think\Controller;
+use app\bo\libs\BoController;
 use think\Request;
 use app\bo\libs\DataImport;
 
-class Data extends Controller
+class Data extends BoController
 {
     
     protected $types = ['department','member','supplier','customer','project','contract'];

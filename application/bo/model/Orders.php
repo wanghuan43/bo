@@ -1,9 +1,9 @@
 <?php
 namespace app\bo\model;
 
-use think\Model;
+use app\bo\libs\BoModel;
 
-class Orders extends Model
+class Orders extends BoModel
 {
     protected $pk = 'o_id';
 

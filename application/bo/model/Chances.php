@@ -1,9 +1,9 @@
 <?php
 namespace app\bo\model;
 
-use think\Model;
+use app\bo\libs\BoModel;
 
-class Chances extends Model
+class Chances extends BoModel
 {
     protected $pk = 'cs_id';
 }

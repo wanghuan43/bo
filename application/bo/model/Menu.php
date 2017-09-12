@@ -1,9 +1,9 @@
 <?php
 namespace app\bo\model;
 
-use think\Model;
+use app\bo\libs\BoModel;
 
-class Menu extends Model
+class Menu extends BoModel
 {
     protected $pk = "id";
 

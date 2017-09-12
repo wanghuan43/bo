@@ -1,9 +1,9 @@
 <?php
 namespace app\bo\model;
 
-use think\Model;
+use app\bo\libs\BoModel;
 
-class Company extends Model
+class Company extends BoModel
 {
     protected $pk = 'c_id';
 
@@ -26,7 +26,7 @@ class Company extends Model
         )
     );
 
-    public function getCompanyList($search, $limit){
+    public function getList($search, $limit){
         $db = $this->db();
         $searchModel = $db->table('__COMPANY__');
         foreach($search as $key=>$value){

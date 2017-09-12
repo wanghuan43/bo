@@ -8,15 +8,13 @@ use app\bo\model\Member;
 use app\bo\model\OrderProject;
 use app\bo\model\Taglib;
 use app\bo\model\Taglink;
-use think\Controller;
+use app\bo\libs\BoController;
 use think\Loader;
 use think\Request;
 
-class Orders extends Controller
+class Orders extends BoController
 {
-    var $ordersModel;
-    var $limit=20;
-
+    private $ordersModel;
     function __construct(Request $request)
     {
         parent::__construct($request);
@@ -54,14 +52,20 @@ class Orders extends Controller
         $baseMonth = getMonth();
         $order = $this->ordersModel->get($op_id);
         if (!empty($op_id) AND $op == "edit") {
-            $tmp = $tagLinkModel->getTagList($op_id, "orders");
+            $tmp = $tagLinkModel->getList($op_id, "orders");
             foreach($tmp as $key=>$value){
                 $tagIDList[$value->tl_id] = $value->tl_id;
             }
-            $tmp = $cModel->getCirculationList($op_id, "orders");
+            $tmp = $cModel->getList($op_id, "orders");
             foreach($tmp as $key=>$value){
                 $cIDList[$value->m_id] = $value->m_id;
             }
+        }
+        $tmp = $tagListModel->all(function($query){$query->order('tl_name', 'asc');});
+        $tagList = array();
+        foreach($tmp as $value){
+            $f = getFirstCharter($value['tl_name']);
+            $tagList[$f][] = $value;
         }
         $this->assign('order', $order);
         $this->assign('typeList', getTypeList());
@@ -74,7 +78,7 @@ class Orders extends Controller
         $this->assign('dList', $dModel->all());
         $this->assign('chancesList', $chancesModel->all());
         $this->assign('memberList', $memberModel->all());
-        $this->assign('tagList', $tagListModel->all());
+        $this->assign('tagList', $tagList);
         $this->assign('opject', $opm->getOrderProject($op_id));
         $this->assign('op', $op);
         $this->assign('op_id', $op_id);

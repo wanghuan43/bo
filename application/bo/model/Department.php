@@ -1,9 +1,9 @@
 <?php
 namespace app\bo\model;
 
-use think\Model;
+use app\bo\libs\BoModel;
 
-class Department extends Model
+class Department extends BoModel
 {
     protected $pk = 'd_id';
 }

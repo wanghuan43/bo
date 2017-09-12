@@ -1,9 +1,9 @@
 <?php
 namespace app\bo\model;
 
-use think\Model;
+use app\bo\libs\BoModel;
 
-class Project extends Model
+class Project extends BoModel
 {
     protected $pk = 'p_id';
 
@@ -26,7 +26,7 @@ class Project extends Model
         ),
     );
 
-    public function getProjectList($search, $limit){
+    public function getList($search, $limit){
         $db = $this->db();
         $searchModel = $db->table('__PROJECT__');
         foreach($search as $key=>$value){
