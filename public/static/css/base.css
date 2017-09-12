@@ -245,11 +245,23 @@ th.icon {
     position: fixed;
     top: 100px;
     left: 5%;
-    z-index: 9999;
+    z-index: -9;
     background: #FFFFFF;
     padding: 15px 20px;
     box-shadow: 0px 0px 15px;
-    border-radius: 4px;
+    border-radius: 4px; 
+	-webkit-transform: scale(0.6);
+	-ms-transform: scale(0.6);
+	transform: scale(0.6);
+	opacity:0;
+	transition: all 0.3s;
+}
+.f-layer.show{
+	-webkit-transform: scale(1);
+	-ms-transform: scale(1);
+	transform: scale(1);
+	opacity: 1;
+	z-index:9999;	
 }
 
 .list th {
@@ -388,4 +400,34 @@ table.list td:first-child {
 }
 #import-msg ul li.msg{
 	background:#dff0d8;
+}
+
+#loading{
+	width:4%;
+	display:none;
+	z-index:111111;
+	position:fixed;
+	top:200px;
+	left:48%;
+}
+#loading img{
+	width:100%;
+}
+
+.treeview .list-group-item {
+	cursor: pointer;
+}
+
+.treeview span.indent {
+	margin-left: 10px;
+	margin-right: 10px;
+}
+.treeview span.icon {
+	width: 12px;
+	margin-right: 5px;
+}
+
+.treeview .node-disabled {
+	color: silver;
+	cursor: not-allowed;
 }
