@@ -1,0 +1,40 @@
+<form action="<{:url("/permissions/setPermissions/mid/".$mid)}>" method="post" id="opform">
+    <div class="clearfix header">
+        <h2>设置权限</h2>
+        <div class="btn-pannel">
+            <button type="submit" class="btn">保存</button>
+            <button type="button" href="#permissions" class="btn red">取消</button>
+        </div>
+        <div class="link-pannel">
+            <ul>
+            </ul>
+        </div>
+    </div>
+    <div class="main-pannel">
+        <h3>基本信息</h3>
+        <div class="content">
+            <aside id="left-pannel-permissions">
+                <nav>
+                    <ul>
+                        <{volist name="menuList" id="menu"}>
+                        <li>
+                            <a <{if condition="!empty($menu['url'])"}>href="#<{$menu['url']}>"<{/if}>><i class="fa fa-lg fa-fw <{$menu['flag']}>"></i> <span
+                                class="menu-item-parent"><{$menu['name']}></span><b class="collapse-sign"><em
+                                class="fa fa-plus-square-o"></em></b></a>
+                            <{if condition="count($menu['childrenList']) > 0"}>
+                            <ul>
+                                <{volist name="$menu['childrenList']" id="children"}>
+                                <li>
+                                    <a href="#<{$children['url']}>"><{$children['name']}></a>
+                                </li>
+                                <{/volist}>
+                            </ul>
+                            <{/if}>
+                        </li>
+                        <{/volist}>
+                    </ul>
+                </nav>
+            </aside>
+        </div>
+    </div>
+</form>

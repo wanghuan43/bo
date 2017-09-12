@@ -94,3 +94,9 @@ function getFirstCharter($str)
     if ($asc >= -11055 && $asc <= -10247) return 'Z';
     return null;
 }
+
+function getLoginMember()
+{
+    $mid = \think\Request::instance()->session("mid", false);
+    return $mid;
+}

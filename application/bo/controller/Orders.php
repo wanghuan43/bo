@@ -23,17 +23,16 @@ class Orders extends BoController
 
     public function index()
     {
-        $filters = Request::instance()->session('filters', array());
+        $filters = Request::instance()->session('filtersOrders', array());
         $params = Request::instance()->param();
-        $page = isset($params['page']) ? $params['page'] : 1;
         unset($params['page']);
         $params = array_merge($filters, $params);
         foreach($params as $key=>$value){
             $this->ordersModel->where($key, $value);
         }
+        session("filtersOrders", $params);
         $lists = $this->ordersModel->paginate($this->limit, true);
         $this->assign("lists", $lists);
-        $this->assign("page", $page);
         $this->assign("empty", '<tr><td colspan="10">暂时没有商机数据.</td></tr>');
         return $this->fetch("index");
     }
@@ -104,11 +103,12 @@ class Orders extends BoController
             $where = ['o_id'=>$op_id];
         }else{
             $post['o_no'] = $ordersModel->getOrderNO($post['o_pid']);
+            $ordersModel->save($post, $where);
+            $o_id = $ordersModel->o_id;
+            $tlm->setTagLink($o_id, $tagList, "orders");
+            $clm->setCirculation($o_id, $cList, "orders");
+            $opm->setOrderProject($o_id, $post['o_date'], $pj);
         }
-        $ordersModel->save($post, $where);
-        $o_id = $ordersModel->o_id;
-        $tlm->setTagLink($o_id, $tagList, "orders");
-        $clm->setCirculation($o_id, $cList, "orders");
-        $opm->setOrderProject($o_id, $post['o_date'], $pj);
+
     }
 }

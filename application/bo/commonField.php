@@ -50,4 +50,33 @@ return [
         "2 M",
         "1 M",
     ],
+    "baseKey" => md5("xzy"),
+    "permissionsMenu" => array(
+        array(
+            "name" => "权限",
+            "flag" => "fa-cogs",
+            "url" => "",
+            "childrenList" => array(
+                array(
+                    "name" => "设置权限",
+                    "url" => "permissions/index",
+                ),
+            ),
+        ),
+        array(
+            "name" => "菜单管理",
+            "flag" => "fa-list",
+            "url" => "",
+            "childrenList" => array(
+                array(
+                    "name" => "菜单列表",
+                    "url" => "menu/index",
+                ),
+                array(
+                    "name" => "添加菜单",
+                    "url" => "menu/add",
+                ),
+            ),
+        ),
+    )
 ];

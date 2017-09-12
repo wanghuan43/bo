@@ -8,6 +8,9 @@ class Permissions extends BoModel
     protected $pk = "id";
 
     public function getList($member_id=""){
+        if(!empty($member_id)){
+            $this->where("p.member_id", "=", $member_id);
+        }
         $tmp = $this->field("m.*")->alias("p")->join("__MENU__ m","p.menu_id = m.id","LEFT")
                 ->where("m.is_show", "=", "1")->order("m.id", "ASC")->select();
         $menus = array();

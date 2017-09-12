@@ -1,0 +1,35 @@
+<div class="clearfix header">
+    <h2>权限管理</h2>
+    <div class="link-pannel">
+        <ul>
+            <li>
+                <a href="#"><i class="fa fa-filter"></i>筛选</a>
+            </li>
+        </ul>
+    </div>
+</div>
+<div class="main-pannel">
+    <table class="list" cellspacing="0">
+        <thead>
+        <tr>
+            <th></th>
+            <th>用户名</th>
+            <th>邮箱</th>
+            <th>设置权限</th>
+        </tr>
+        </thead>
+        <tbody>
+        <{volist name="memberList" id="vo" empty="$empty"}>
+        <tr>
+            <td><input type="checkbox" value="<{$vo.m_id}>"></td>
+            <td><{$vo.m_name}></td>
+            <td><{$vo.m_email}></td>
+            <td><a href="<{:url("/permissions/setPermissions/mid/".$vo['m_id'])}>" style="color: blue;">设置权限</a></td>
+        </tr>
+        <{/volist}>
+        </tbody>
+    </table>
+</div>
+<div class="btn-pannel">
+    <{$memberList->render()}>
+</div>

@@ -148,3 +148,21 @@ nav ul li a:hover {
 .margin-right-13 {
     margin-right: 13px!important;
 }
+#left-pannel-permissions{
+    -webkit-transition: 250ms cubic-bezier(0.1,.57,.1,1);
+    transition: 250ms cubic-bezier(0.1,.57,.1,1);
+    -webkit-transform: translate(0px,0) translateZ(0px);
+    top: 0;
+    left: 0;
+    z-index: 904;
+    display: block;
+    background: #3a3633;
+    background: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/Pgo8c3ZnIHhtbG5zPSJod…BoZWlnaHQ9IjEiIGZpbGw9InVybCgjZ3JhZC11Y2dnLWdlbmVyYXRlZCkiIC8+Cjwvc3ZnPg==);
+    background: -moz-linear-gradient(left,#3a3633 93%,#2a2725 100%);
+    background: -webkit-gradient(linear,left top,right top,color-stop(93%,#3a3633),color-stop(100%,#2a2725));
+    background: -webkit-linear-gradient(left,#3a3633 93%,#2a2725 100%);
+    background: -o-linear-gradient(left,#3a3633 93%,#2a2725 100%);
+    background: -ms-linear-gradient(left,#3a3633 93%,#2a2725 100%);
+    background: linear-gradient(to right,#3a3633 93%,#2a2725 100%);
+    min-height: 100%;
+}

@@ -1,16 +1,29 @@
 <?php
 namespace app\bo\libs;
 
+use think\Config;
 use think\Controller;
 use think\Request;
+use think\Url;
 
 class BoController extends Controller
 {
     protected $limit = 20;
+    protected $mem;
+    protected $current = false;
 
+    /**
+     * BoController constructor.
+     * @param Request $request
+     */
     public function __construct(Request $request)
     {
         parent::__construct($request);
+        $nowAction = $request->action();
+        $this->current = getLoginMember();
+        if(!$this->current AND  $nowAction != "login"){
+            $this->redirect(Url::build('/dashboard/login', "", false));
+        }
     }
 
     protected function search($model, $file="common/poplayer", $colspan = "3")

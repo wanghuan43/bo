@@ -2,9 +2,16 @@
 namespace app\bo\libs;
 
 use think\Model;
+use think\Request;
 
 class BoModel extends Model
 {
+    public function isAdmin()
+    {
+        $member = Request::instance()->session("mid");
+        return $member->m_isAdmin;
+    }
+
     /**
      * @return array
      */

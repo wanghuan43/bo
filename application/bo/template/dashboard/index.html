@@ -11,7 +11,13 @@
 
 <body>
 <header>
-    <h1>新智云</h1>
+    <h1 style="padding: 5px;display: inline-block;">新智云</h1>
+    <div style="float: right;">
+        <p style="margin: 13px 0;">
+            <span style="font-size: 16px;margin-right: 20px;"><i class="fa fa-user-circle"></i><{$member.m_name}></span>
+            <a href="<{:url("/dashboard/logout")}>" style="color: blue;"><i class="fa fa-sign-out"></i>退出</a>
+        </p>
+    </div>
 </header>
 <aside id="left-pannel">
     <nav>

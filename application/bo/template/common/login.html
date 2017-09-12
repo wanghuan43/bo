@@ -1,0 +1,84 @@
+<html id="extr-page">
+<head>
+    <meta charset="UTF-8">
+    <title>商机管理管理</title>
+    <{load href="/static/css/font-awesome.min.css,/static/css/base.css,/static/css/login.css,/static/js/jquery-3.2.1.min.js"}>
+</head>
+<body class="animated fadeInDown  desktop-detected pace-done">
+<div id="main" role="main">
+    <!-- MAIN CONTENT -->
+    <div id="content" class="container">
+        <div class="row">
+            <div class="col-xs-12 col-sm-12 col-md-5 col-lg-4">
+                <div class="well no-padding">
+                    <form id="login-form" class="smart-form client-form" method="post">
+                        <header>
+                            登录
+                        </header>
+                        <fieldset>
+                            <section>
+                                <label class="label">邮箱</label>
+                                <label class="input"> <i class="icon-append fa fa-user"></i>
+                                    <input type="email" name="email" id="email">
+                                </label>
+                            </section>
+                            <section>
+                                <label class="label">密码</label>
+                                <label class="input"> <i class="icon-append fa fa-lock"></i>
+                                    <input type="password" name="password" id="password">
+                                    <!--<div class="note" style="display: none;">-->
+                                        <!--<a href="<{:url("/dashboard/login")}>">忘记密码</a>-->
+                                    <!--</div>-->
+                                </label>
+                            </section>
+                            <!--<section style="display: none;">-->
+                                <!--<label class="checkbox">-->
+                                    <!--<input type="checkbox" name="remember" value="1" checked="">-->
+                                    <!--<i></i>保持登录</label>-->
+                            <!--</section>-->
+                        </fieldset>
+                        <footer>
+                            <button type="submit" class="btn btn-primary">
+                                登录
+                            </button>
+                        </footer>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+$(document).ready(function(){
+    $("#login-form").submit(function(){
+        $("#login-form input").removeClass("invalid");
+        $("#login-form label").removeClass("state-error");
+        $("#login-form em").remove();
+        var r = true;
+        if($("#email").val() == ""){
+            r = false;
+            var html = '<em class="invalid">请输入邮箱地址</em>';
+            $("#email").addClass("invalid");
+            $("#email").parent().addClass("state-error");
+            $("#email").parents("section").append(html);
+        }
+        if($("#password").val() == ""){
+            r = false;
+            var html = '<em class="invalid">请输入密码</em>';
+            $("#password").addClass("invalid");
+            $("#password").parent().addClass("state-error");
+            $("#password").parents("section").append(html);
+        }
+        if($("#password").val().length < 6){
+            r = false;
+            var html = '<em class="invalid">密码长度不能短于6位</em>';
+            $("#password").addClass("invalid");
+            $("#password").parent().addClass("state-error");
+            $("#password").parents("section").append(html);
+        }
+        return r;
+    });
+})
+</script>
+</body>
+</html>
