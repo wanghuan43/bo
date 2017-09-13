@@ -26,27 +26,19 @@ class Project extends BoModel
         ),
     );
 
-    public function getList($search, $limit){
+    public function getList($search = array(), $limit = 20)
+    {
+        $member = $this->getCurrent();
         $db = $this->db();
-        $searchModel = $db->table('__PROJECT__');
-        foreach($search as $key=>$value){
-            $searchModel->where($value['field'], $value['opt'], $value['val']);
+        $searchModel = $db->table('__PROJECT__')
+            ->alias('p')
+            ->field("p.*")
+            ->join('__CIRCULATION__ C', "p.p_id = c.ci_otid AND c.ci_type = 'project'");
+        foreach ($search as $key => $value) {
+            $searchModel->where('p.' . $value['field'], $value['opt'], $value['val']);
         }
+        $searchModel->where("c.ci_mid", "=", $member->m_id);
         $list = $searchModel->paginate($limit, true);
         return $list;
-    }
-
-    /**
-     * @return array
-     */
-    public function getSearchable()
-    {
-        $fields = array();
-        $operators = array();
-        foreach ($this->searchable as $key => $value) {
-            $fields[$key] = array("name" => $value['name'], "type" => $value['type']);
-            $operators[$key] = $value['operators'];
-        }
-        return array("fields" => $fields, "operators" => $operators, "length" => count($fields));
     }
 }

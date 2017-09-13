@@ -4,6 +4,7 @@ namespace app\bo\controller;
 use app\bo\model\Chances;
 use app\bo\model\Circulation;
 use app\bo\model\Department;
+use app\bo\model\Logs;
 use app\bo\model\Member;
 use app\bo\model\OrderProject;
 use app\bo\model\Taglib;
@@ -15,6 +16,7 @@ use think\Request;
 class Orders extends BoController
 {
     private $ordersModel;
+
     function __construct(Request $request)
     {
         parent::__construct($request);
@@ -27,7 +29,7 @@ class Orders extends BoController
         $params = Request::instance()->param();
         unset($params['page']);
         $params = array_merge($filters, $params);
-        foreach($params as $key=>$value){
+        foreach ($params as $key => $value) {
             $this->ordersModel->where($key, $value);
         }
         session("filtersOrders", $params);
@@ -52,17 +54,19 @@ class Orders extends BoController
         $order = $this->ordersModel->get($op_id);
         if (!empty($op_id) AND $op == "edit") {
             $tmp = $tagLinkModel->getList($op_id, "orders");
-            foreach($tmp as $key=>$value){
+            foreach ($tmp as $key => $value) {
                 $tagIDList[$value->tl_id] = $value->tl_id;
             }
             $tmp = $cModel->getList($op_id, "orders");
-            foreach($tmp as $key=>$value){
+            foreach ($tmp as $key => $value) {
                 $cIDList[$value->m_id] = $value->m_id;
             }
         }
-        $tmp = $tagListModel->all(function($query){$query->order('tl_name', 'asc');});
+        $tmp = $tagListModel->all(function ($query) {
+            $query->order('tl_name', 'asc');
+        });
         $tagList = array();
-        foreach($tmp as $value){
+        foreach ($tmp as $value) {
             $f = getFirstCharter($value['tl_name']);
             $tagList[$f][] = $value;
         }
@@ -84,9 +88,9 @@ class Orders extends BoController
         return $this->fetch("operation");
     }
 
-    public function doOperation($op = "add", $op_id=""){
+    public function doOperation($op = "add", $op_id = "")
+    {
         $post = Request::instance()->post();
-        $ordersModel = new \app\bo\model\Orders();
         $tlm = new Taglink();
         $clm = new Circulation();
         $opm = new OrderProject();
@@ -98,17 +102,22 @@ class Orders extends BoController
         unset($post['project']);
         $post['o_date'] = strtotime($post['o_date']);
         $where = [];
-        if($op == "edit"){
-            $ordersModel = $ordersModel->get($op_id);
-            $where = ['o_id'=>$op_id];
-        }else{
-            $post['o_no'] = $ordersModel->getOrderNO($post['o_pid']);
-            $ordersModel->save($post, $where);
-            $o_id = $ordersModel->o_id;
+        if ($op == "edit") {
+            $logModel = new Logs();
+            $result = $logModel->saveLogs($post, $op_id, "orders");
+        } else {
+            $post['o_no'] = $this->ordersModel->getOrderNO($post['o_pid']);
+            $result = $this->ordersModel->save($post, $where);
+            $o_id = $this->ordersModel->o_id;
             $tlm->setTagLink($o_id, $tagList, "orders");
             $clm->setCirculation($o_id, $cList, "orders");
             $opm->setOrderProject($o_id, $post['o_date'], $pj);
         }
+        return array("status" => $result, "message" => "");
+    }
+
+    public function pandingLog()
+    {
 
     }
 }

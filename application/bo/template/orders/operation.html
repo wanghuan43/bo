@@ -440,7 +440,11 @@
                 data:par,
                 success:function(data){
                     $(this).prop("disabled", "false");
-                    alert();
+                    if(data.status){
+                        alert("保存成功");
+                    }else{
+                        alert("保存失败");
+                    }
                 }
             });
             return false;
@@ -542,7 +546,9 @@
         var html = '<tr><td><i class="fa fa-minus-circle"></i></td>' +
                 '<td><?php echo date("Y-m-d"); ?></td>' +
                 '<td class="mony-'+type+'">'+val+'</td>' +
-                '<td><a href="/'+type+'/view/no/'+data.id+'" target="_blank" style="color: blue;">'+data.id+'</a></td></tr>';
+                '<td><a href="/'+type+'/view/no/'+data.id+'" target="_blank" style="color: blue;">'+data.id+'</a>' +
+                '<input type="hidden" name="used[value][]" value="'+val+'">' +
+                '<input type="hidden" name="used[ot_id][]" value="'+data.id+'"></td></tr>';
         $(cla).append(html);
         var plus = 0;
         $(cla).find(".mony-"+type).each(function(index, element){

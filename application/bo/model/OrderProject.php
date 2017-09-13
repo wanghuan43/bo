@@ -11,15 +11,15 @@ class OrderProject extends BoModel
     {
         $lists = $this->where("op_oid", "=", $op_id)->select();
         $tmp = array();
-        foreach($lists as $value){
+        foreach ($lists as $value) {
             $tmp[$value['op_type']][] = array(
-                "op_id"=>$value->op_id,
-                "op_oid"=>$value->op_oid,
-                "op_date"=>$value->op_date,
-                "op_month"=>$value->op_month,
-                "op_percent"=>$value->op_percent,
-                "op_used"=>$value->op_used,
-                "op_type"=>$value->op_type
+                "op_id" => $value->op_id,
+                "op_oid" => $value->op_oid,
+                "op_date" => $value->op_date,
+                "op_month" => $value->op_month,
+                "op_percent" => $value->op_percent,
+                "op_used" => $value->op_used,
+                "op_type" => $value->op_type
             );
         }
         $tmp[1] = isset($tmp[1]) ? $tmp[1] : array();

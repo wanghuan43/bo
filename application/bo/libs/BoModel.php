@@ -6,10 +6,9 @@ use think\Request;
 
 class BoModel extends Model
 {
-    public function isAdmin()
+    public function getCurrent()
     {
-        $member = Request::instance()->session("mid");
-        return $member->m_isAdmin;
+        return getLoginMember();
     }
 
     /**

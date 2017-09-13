@@ -31,27 +31,18 @@ class Received extends BoModel
         ),
     );
 
-    /**
-     * @return array
-     */
-    public function getSearchable()
+    public function getList($search = array(), $limit = 20)
     {
-        $fields = array();
-        $operators = array();
-        foreach ($this->searchable as $key => $value) {
-            $fields[$key] = array("name" => $value['name'], "type" => $value['type']);
-            $operators[$key] = $value['operators'];
-        }
-        return array("fields" => $fields, "operators" => $operators, "length" => count($fields));
-    }
-
-    public function getList($search, $limit)
-    {
+        $member = $this->getCurrent();
         $db = $this->db();
-        $searchModel = $db->table('__RECEIVED__');
+        $searchModel = $db->table('__RECEIVED__')
+            ->alias('r')
+            ->field("r.*")
+            ->join('__CIRCULATION__ C', "r.r_id = c.ci_otid AND c.ci_type = 'received'");
         foreach ($search as $key => $value) {
-            $searchModel->where($value['field'], $value['opt'], $value['val']);
+            $searchModel->where("r." . $value['field'], $value['opt'], $value['val']);
         }
+        $searchModel->where("c.ci_mid", "=", $member->m_id);
         $list = $searchModel->paginate($limit, true);
         return $list;
     }

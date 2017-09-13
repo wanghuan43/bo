@@ -15,6 +15,7 @@
             <th></th>
             <th>用户名</th>
             <th>邮箱</th>
+            <th>管理员</th>
             <th>设置权限</th>
         </tr>
         </thead>
@@ -24,6 +25,7 @@
             <td><input type="checkbox" value="<{$vo.m_id}>"></td>
             <td><{$vo.m_name}></td>
             <td><{$vo.m_email}></td>
+            <td><{$vo.m_isAdmin?"是":"否"}></td>
             <td><a href="<{:url("/permissions/setPermissions/mid/".$vo['m_id'])}>" style="color: blue;">设置权限</a></td>
         </tr>
         <{/volist}>
