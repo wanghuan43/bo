@@ -24,6 +24,8 @@
         //弹出层定位层级
         hasMask: false,
         //是否显示遮罩层
+        maskClose: true,
+        //遮罩层点击是否关闭
         hasClose: false,
         //是否显示关闭按钮
         hasBtn: false,
@@ -380,7 +382,8 @@
 
             $('.dialog-box-close,#dialog-box-mask,.dialog-btn-cancel,.dialog-btn-confirm').on('click',
                     function() {
-                        that.hide($this);
+            			if( $(this).attr("id") != "dialog-box-mask" || that.settings.maskClose )
+            				that.hide($this);
                     });
 
             $(document).keyup(function(event) {
