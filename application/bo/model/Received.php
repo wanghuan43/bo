@@ -38,7 +38,7 @@ class Received extends BoModel
         $searchModel = $db->table('__RECEIVED__')
             ->alias('r')
             ->field("r.*")
-            ->join('__CIRCULATION__ C', "r.r_id = c.ci_otid AND c.ci_type = 'received'");
+            ->join('__CIRCULATION__ c', "r.r_id = c.ci_otid AND c.ci_type = 'received'");
         foreach ($search as $key => $value) {
             $searchModel->where("r." . $value['field'], $value['opt'], $value['val']);
         }

@@ -37,7 +37,7 @@ class Invoice extends BoModel
         $searchModel = $db->table('__INVOICE__')
             ->alias('i')
             ->field("i.*")
-            ->join('__CIRCULATION__ C', "i.i_id = c.ci_otid AND c.ci_type = 'invoice'");
+            ->join('__CIRCULATION__ c', "i.i_id = c.ci_otid AND c.ci_type = 'invoice'");
         foreach ($search as $key => $value) {
             $searchModel->where("i." . $value['field'], $value['opt'], $value['val']);
         }

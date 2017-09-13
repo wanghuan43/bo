@@ -38,7 +38,7 @@ class Acceptance extends BoModel
         $searchModel = $db->table('__ACCEPTANCE__')
             ->alias('a')
             ->field("a.*")
-            ->join('__CIRCULATION__ C', "a.a_id = c.ci_otid AND c.ci_type = 'acceptance'");
+            ->join('__CIRCULATION__ c', "a.a_id = c.ci_otid AND c.ci_type = 'acceptance'");
         foreach ($search as $key => $value) {
             $searchModel->where('a.' . $value['field'], $value['opt'], $value['val']);
         }

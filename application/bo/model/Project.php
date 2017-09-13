@@ -33,7 +33,7 @@ class Project extends BoModel
         $searchModel = $db->table('__PROJECT__')
             ->alias('p')
             ->field("p.*")
-            ->join('__CIRCULATION__ C', "p.p_id = c.ci_otid AND c.ci_type = 'project'");
+            ->join('__CIRCULATION__ c', "p.p_id = c.ci_otid AND c.ci_type = 'project'");
         foreach ($search as $key => $value) {
             $searchModel->where('p.' . $value['field'], $value['opt'], $value['val']);
         }

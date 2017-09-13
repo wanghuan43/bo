@@ -14,7 +14,7 @@ class Department extends BoModel
         $searchModel = $db->table('__DEPARTMENT__')
             ->alias('d')
             ->field("d.*")
-            ->join('__CIRCULATION__ C', "d.d_id = c.ci_otid AND c.ci_type = 'project'");
+            ->join('__CIRCULATION__ c', "d.d_id = c.ci_otid AND c.ci_type = 'project'");
         foreach ($search as $key => $value) {
             $searchModel->where('d.' . $value['field'], $value['opt'], $value['val']);
         }

@@ -27,7 +27,7 @@ class Taglink extends BoModel
                 $tlm = Taglib::get($value);
                 $tlm->tl_times = intval($tlm->tl_times) + 1;
             } else {
-                $tlm = $tlm->where("tl_name","=",$value)->find();
+                $tlm = $tlm->where("tl_name", "=", $value)->find();
                 if (empty($tlm->tl_id)) {
                     $tlm = new Taglib();
                     $tlm->tl_times = 1;

@@ -33,7 +33,7 @@ class Company extends BoModel
         $searchModel = $db->table('__COMPANY__')
             ->alias('co')
             ->field("co.*")
-            ->join('__CIRCULATION__ C', "co.co_id = c.ci_otid AND c.ci_type = 'company'");
+            ->join('__CIRCULATION__ c', "co.co_id = c.ci_otid AND c.ci_type = 'company'");
         foreach ($search as $key => $value) {
             $searchModel->where("co." . $value['field'], $value['opt'], $value['val']);
         }

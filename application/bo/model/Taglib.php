@@ -14,7 +14,7 @@ class Taglib extends BoModel
         $searchModel = $db->table('__TAGLIB__')
             ->alias('t')
             ->field("t.*")
-            ->join('__CIRCULATION__ C', "t.tl_id = c.ci_otid AND c.ci_type = 'taglib'");
+            ->join('__CIRCULATION__ c', "t.tl_id = c.ci_otid AND c.ci_type = 'taglib'");
         foreach ($search as $key => $value) {
             $searchModel->where("t." . $value['field'], $value['opt'], $value['val']);
         }

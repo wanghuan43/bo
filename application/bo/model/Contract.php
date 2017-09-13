@@ -53,7 +53,7 @@ class Contract extends BoModel
         $searchModel = $db->table('__CONTRACT__')
             ->alias('ct')
             ->field("ct.*")
-            ->join('__CIRCULATION__ C', "ct.c_id = c.ci_otid AND c.ci_type = 'contract'");
+            ->join('__CIRCULATION__ c', "ct.c_id = c.ci_otid AND c.ci_type = 'contract'");
         foreach ($search as $key => $value) {
             $searchModel->where("ct." . $value['field'], $value['opt'], $value['val']);
         }
