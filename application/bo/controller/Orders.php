@@ -10,32 +10,32 @@ use app\bo\model\OrderProject;
 use app\bo\model\Taglib;
 use app\bo\model\Taglink;
 use app\bo\libs\BoController;
-use think\Loader;
 use think\Request;
+use think\Session;
 
 class Orders extends BoController
 {
     private $ordersModel;
+    protected $title;
 
     function __construct(Request $request)
     {
         parent::__construct($request);
-        $this->ordersModel = Loader::model("orders");
+        $this->ordersModel = new \app\bo\model\Orders();
     }
 
-    public function index()
+    public function index($type = "")
     {
-        $filters = Request::instance()->session('filtersOrders', array());
+        $filters = Session::get('filtersOrders');
         $params = Request::instance()->param();
+        $filters = empty($filters) ? array() : $filters;
         unset($params['page']);
         $params = array_merge($filters, $params);
-        foreach ($params as $key => $value) {
-            $this->ordersModel->where($key, $value);
-        }
+        $this->setType($type, $params);
         session("filtersOrders", $params);
         $lists = $this->ordersModel->paginate($this->limit, true);
         $this->assign("lists", $lists);
-        $this->assign("empty", '<tr><td colspan="10">暂时没有商机数据.</td></tr>');
+        $this->assign("empty", '<tr><td colspan="10">无数据.</td></tr>');
         return $this->fetch("index");
     }
 
@@ -91,33 +91,62 @@ class Orders extends BoController
     public function doOperation($op = "add", $op_id = "")
     {
         $post = Request::instance()->post();
-        $tlm = new Taglink();
-        $clm = new Circulation();
-        $opm = new OrderProject();
-        $tagList = !empty($post['tagList']) ? $post['tagList'] : array();
-        $cList = !empty($post['cList']) ? $post['cList'] : array();
-        $pj = !empty($post['project']) ? $post['project'] : array();
-        unset($post['tagList']);
-        unset($post['cList']);
-        unset($post['project']);
         $post['o_date'] = strtotime($post['o_date']);
         $where = [];
+        $message = "保存成功";
         if ($op == "edit") {
             $logModel = new Logs();
-            $result = $logModel->saveLogs($post, $op_id, "orders");
+            $old = $this->ordersModel->getOrderById($op_id);
+            $result = $logModel->saveLogs($post, $old, $op_id, "orders");
         } else {
+            unset($post['tagList']);
+            unset($post['cList']);
+            unset($post['project']);
             $post['o_no'] = $this->ordersModel->getOrderNO($post['o_pid']);
             $result = $this->ordersModel->save($post, $where);
-            $o_id = $this->ordersModel->o_id;
-            $tlm->setTagLink($o_id, $tagList, "orders");
-            $clm->setCirculation($o_id, $cList, "orders");
-            $opm->setOrderProject($o_id, $post['o_date'], $pj);
         }
-        return array("status" => $result, "message" => "");
+        if (!$result) {
+            $message = "保存失败";
+        }
+        return array("status" => $result, "message" => $message);
     }
 
-    public function pandingLog()
+    public function pandingLog($opId = "")
     {
+        $loglist = Logs::all(["l_model" => "orders", "l_mid" => $this->current->m_id, "l_otid" => $opId]);
+        echo 1;
+        var_dump($loglist);
+    }
 
+    private function setType($type, $params)
+    {
+        unset($params['type']);
+        switch ($type) {
+            case "contract":
+                $this->ordersModel->where("o_status", "=", "6");
+                $this->ordersModel->where("o_mid", "=", $this->current->m_id);
+                $this->title = "我的合同";
+                break;
+            case "favourite":
+                $this->title = "我的收藏";
+                $this->ordersModel->alias("o");
+                $this->ordersModel->join("__FAVORITE__ f", "o.o_id = f.f_oid", "LEFT");
+                $this->ordersModel->where("f.f_mid", "=", $this->current->m_id);
+                break;
+            case "circulate":
+                $this->title = "我的传阅";
+                $this->ordersModel->alias("o");
+                $this->ordersModel->join("__CIRCULATION__ c", "o.o_id = c.ci_otid AND c.ci_type = 'orders'", "LEFT");
+                $this->ordersModel->where("c.ci_mid", "=", $this->current->m_id);
+                break;
+            default:
+                $this->title = "我的订单";
+                foreach ($params as $key => $value) {
+                    $this->ordersModel->where($key, $value);
+                }
+                $this->ordersModel->where("o_status", "<>", "6");
+                $this->ordersModel->where("o_mid", "=", $this->current->m_id);
+                break;
+        }
     }
 }

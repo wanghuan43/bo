@@ -56,7 +56,7 @@ return [
             "name" => "权限",
             "flag" => "fa-cogs",
             "url" => "",
-            "childrenList" => array(
+            "children" => array(
                 array(
                     "name" => "设置权限",
                     "url" => "permissions/index",
@@ -67,7 +67,7 @@ return [
             "name" => "菜单管理",
             "flag" => "fa-list",
             "url" => "",
-            "childrenList" => array(
+            "children" => array(
                 array(
                     "name" => "菜单列表",
                     "url" => "menu/index",

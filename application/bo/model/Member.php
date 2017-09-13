@@ -11,6 +11,7 @@ class Member extends BoModel
     public function loginMember($data)
     {
         $permissionsModel = new Permissions();
+        $menuModel = new Menu();
         Config::load(APP_PATH . "bo" . DS . "commonField.php", "", "commonField");
         $key = Config::get("baseKey", "commonField");
         $data['email'] = strtoupper($data['email']);
@@ -22,7 +23,7 @@ class Member extends BoModel
                 if (empty($member->m_isAdmin)) {
                     $member->menu = $permissionsModel->getList($member->m_id);
                 } else {
-                    $menus = $permissionsModel->getList();
+                    $menus = $menuModel->getList();
                     Config::load(APP_PATH . "bo" . DS . "commonField.php", "", "commonField");
                     $return = Config::get("permissionsMenu", "commonField");
                     foreach ($return as $v) {

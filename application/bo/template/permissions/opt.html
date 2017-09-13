@@ -21,9 +21,9 @@
                             <a <{if condition="!empty($menu['url'])"}>href="#<{$menu['url']}>"<{/if}>><i class="fa fa-lg fa-fw <{$menu['flag']}>"></i> <span
                                 class="menu-item-parent"><{$menu['name']}></span><b class="collapse-sign"><em
                                 class="fa fa-plus-square-o"></em></b></a>
-                            <{if condition="count($menu['childrenList']) > 0"}>
+                            <{if condition="count($menu['children']) > 0"}>
                             <ul>
-                                <{volist name="$menu['childrenList']" id="children"}>
+                                <{volist name="$menu['children']" id="children"}>
                                 <li>
                                     <a href="#<{$children['url']}>"><{$children['name']}></a>
                                 </li>

@@ -9,7 +9,6 @@ use think\Url;
 class BoController extends Controller
 {
     protected $limit = 20;
-    protected $mem;
     protected $current = false;
 
     /**
