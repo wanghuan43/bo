@@ -485,17 +485,21 @@
                             $(cla).hide();
                             $(cla + "-back").hide();
                         });
-                        $(cla).show();
+                        window.cla = cla;
+                        setTimeout('$(cla).addClass("show")',500);
+                        //$(cla).show();
                         $(cla + "-back").show();
                         $(cla + " .close").click(function () {
-                            $(cla).hide();
+                            //$(cla).hide();
+                            $(cla).removeClass("show");
                             $(cla + "-back").hide();
                             return false;
                         });
                     }
                 });
             } else {
-                $(cla).show();
+                //$(cla).show();
+                $(cla).addClass("show");
                 $(cla + "-back").show();
             }
         });
