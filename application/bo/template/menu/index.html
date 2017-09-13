@@ -1,0 +1,79 @@
+<div class="page-header">
+  <h2>所有菜单</h2>
+</div>
+
+<div id="menu-tree">
+	<ul id="menu-tree-data">
+		<{foreach name="tree" item="node"}>	
+			<li>
+					<span class="col1"><{$node.list_order}></span>
+					<span class="col2"><{$node.id}></span>
+					<span class="col3"><{$node.url}></span>
+					<span class="col4"><{$node.name}></span>
+					<span class="col5"><{$node.is_show}></span>				
+			<{if condition="isset($node['childrenList'])"}>
+			<ul>
+			<{foreach name="$node['childrenList']" item="subNode"}>
+				<li>
+					<span class="col1"><{$subNode.list_order}></span>
+					<span class="col2"><{$subNode.id}></span>
+					<span class="col3"><{$subNode.url}></span>
+					<span class="col4"><{$subNode.name}></span>
+					<span class="col5"><{$subNode.is_show}></span>
+				</li>				
+			<{/foreach}>
+			</ul>
+			<{/if}>
+			</li>
+		<{/foreach}>
+	</ul>
+</div>
+<script>
+	$(function(){
+		$("#menu-tree").fancytree();	
+	});
+</script>
+<table class="table table-bordered">
+	<thead>
+		<tr>
+			<th>排序</th>
+			<th>ID</th>
+			<th>URL</th>
+			<th>名称</th>
+			<th>状态</th>
+			<th>操作</th>
+		</tr>
+	</thead>
+	<tbody>
+		<{foreach name="tree" item="node"}>
+			<tr>
+				<td><{$node.list_order}></td>
+				<td><{$node.id}></td>
+				<td><{$node.url}></td>
+				<td><{$node.name}></td>
+				<td><{$node.is_show}></td>
+			</tr>
+			<{if condition="isset($node['childrenList'])"}>
+			<{foreach name="$node['childrenList']" item="subNode"}>
+				<tr>
+					<td><{$subNode.list_order}></td>
+					<td><{$subNode.id}></td>
+					<td><{$subNode.url}></td>
+					<td><{$subNode.name}></td>
+					<td><{$subNode.is_show}></td>
+				</tr>				
+			<{/foreach}>
+			<{/if}>
+		<{/foreach}>
+	</tbody>
+	<tfoot>
+		<tr>
+			<th>排序</th>
+			<th>ID</th>
+			<th>URL</th>
+			<th>名称</th>
+			<th>状态</th>
+			<th>操作</th>		
+		</tr>
+	</tfoot>
+</table>
