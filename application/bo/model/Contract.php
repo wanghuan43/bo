@@ -7,7 +7,7 @@ class Contract extends BoModel
 {
     protected $pk = "c_id";
 
-    private $searchable = array(
+    protected $searchable = array(
         "c_name" => array(
             "name" => "合同名称",
             "type" => "text",

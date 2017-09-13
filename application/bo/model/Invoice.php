@@ -7,7 +7,7 @@ class Invoice extends BoModel
 {
     protected $pk = "i_id";
 
-    private $searchable = array(
+    protected $searchable = array(
         "i_date" => array(
             "name" => "发票日期",
             "type" => "date",

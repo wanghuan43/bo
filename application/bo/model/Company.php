@@ -7,7 +7,7 @@ class Company extends BoModel
 {
     protected $pk = 'c_id';
 
-    private $searchable = array(
+    protected $searchable = array(
         "co_name" => array(
             "name" => "公司名称",
             "type" => "text",

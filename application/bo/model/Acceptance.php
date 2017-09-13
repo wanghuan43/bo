@@ -8,7 +8,7 @@ class Acceptance extends BoModel
 
     protected $pk = "i_id";
 
-    private $searchable = array(
+    protected $searchable = array(
         "a_date" => array(
             "name" => "验收日期",
             "type" => "date",

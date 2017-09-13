@@ -7,7 +7,7 @@ class Project extends BoModel
 {
     protected $pk = 'p_id';
 
-    private $searchable = array(
+    protected $searchable = array(
         "p_no" => array(
             "name" => "项目编号",
             "type" => "text",

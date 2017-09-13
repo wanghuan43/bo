@@ -8,7 +8,7 @@ class Received extends BoModel
 
     protected $pk = "i_id";
 
-    private $searchable = array(
+    protected $searchable = array(
         "r_date" => array(
             "name" => "付款日期",
             "type" => "date",

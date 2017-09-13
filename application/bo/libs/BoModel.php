@@ -6,6 +6,8 @@ use think\Request;
 
 class BoModel extends Model
 {
+    protected $searchable;
+
     public function getCurrent()
     {
         return getLoginMember();
