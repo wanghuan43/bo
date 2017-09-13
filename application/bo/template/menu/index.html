@@ -1,79 +1,168 @@
 <div class="page-header">
   <h2>所有菜单</h2>
 </div>
+  <table id="tree">
+        <colgroup>
+        <col width="300px">
+        <col width="50px">
+        <col width="150px">
+        <col width="150px">
+        <col width="50px">
+        <col width="100px">
+        </colgroup>
+        <thead class="alignCenter">
+            <tr>
+            	<th>菜单</th>
+            	<th>排序</th>
+            	<th>名称</th> 
+            	<th>URL</th> 
+            	<th>是否显示</th>
+            	<th>操作</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Define a row template for all invariant markup: -->
+            <tr>
+                <td></td>
+                <td><input name="list_order" type="input"/></td>
+                <td><input name="name" type="input"></td>
+                <td><input name="url" type="input"></td>
+                <td class="alignCenter"><input name="is_show" type="checkbox" value="1" /></td>
+                <td class="alignCenter">
+					 
+                </td>
+            </tr>
+        </tbody>
+    </table>
+<script type="text/javascript">
+var CLIPBOARD = null;
 
-<div id="menu-tree">
-	<ul id="menu-tree-data">
-		<{foreach name="tree" item="node"}>	
-			<li>
-					<span class="col1"><{$node.list_order}></span>
-					<span class="col2"><{$node.id}></span>
-					<span class="col3"><{$node.url}></span>
-					<span class="col4"><{$node.name}></span>
-					<span class="col5"><{$node.is_show}></span>				
-			<{if condition="isset($node['childrenList'])"}>
-			<ul>
-			<{foreach name="$node['childrenList']" item="subNode"}>
-				<li>
-					<span class="col1"><{$subNode.list_order}></span>
-					<span class="col2"><{$subNode.id}></span>
-					<span class="col3"><{$subNode.url}></span>
-					<span class="col4"><{$subNode.name}></span>
-					<span class="col5"><{$subNode.is_show}></span>
-				</li>				
-			<{/foreach}>
-			</ul>
-			<{/if}>
-			</li>
-		<{/foreach}>
-	</ul>
-</div>
-<script>
-	$(function(){
-		$("#menu-tree").fancytree();	
+SOURCE = <{$source}>;
+
+
+$(function(){
+
+	$("#tree").fancytree({
+		titlesTabbable: true,     // Add all node titles to TAB chain
+		quicksearch: true,        // Jump to nodes when pressing first character
+		source: SOURCE,
+		//source: { url: "ajax-tree-products.json"},
+
+		extensions: ["edit", "dnd", "table", "gridnav"],
+
+		dnd: {
+			preventVoidMoves: true,
+			preventRecursiveMoves: true,
+			autoExpandMS: 400,
+			dragStart: function(node, data) {
+				return true;
+			},
+			dragEnter: function(node, data) {
+				// return ["before", "after"];
+				return true;
+			},
+			dragDrop: function(node, data) {
+				data.otherNode.moveTo(node, data.hitMode);
+			}
+		},
+		edit: {
+			triggerStart: ["f2", "shift+click", "mac+enter"],
+			close: function(event, data) {
+				if( data.save && data.isNew ){
+					// Quick-enter: add new nodes until we hit [enter] on an empty title
+					$("#tree").trigger("nodeCommand", {cmd: "addSibling"});
+				}
+			}
+		},
+		table: {
+			indentation: 20,
+			//nodeColumnIdx: 2,
+			//checkboxColumnIdx: 0
+		},
+		gridnav: {
+			autofocusInput: false,
+			handleCursorKeys: true
+		},
+        createNode: function(event, data) {
+            var node = data.node,
+                $tdList = $(node.tr).find(">td");
+            
+            var lastTd = $(node.tr).find(">td:last-child");
+            
+            lastTd.append("<button class='btn btn-info action-save' data-id='"+node.data.id+"'>保存</button>");
+
+            // Span the remaining columns if it's a folder.
+            // We can do this in createNode instead of renderColumns, because
+            // the `isFolder` status is unlikely to change later
+            if( node.isFolder() ) {
+                $tdList.find("input[name='url']").parent().css("background","#fcf8e3").find("input").remove();
+                lastTd.append("<a href='#menu/add/pid/"+node.data.id+"' class='btn btn-info' style='margin-left:.5em'>添加</a>");
+            }
+          
+        },		
+		renderColumns: function(event, data) {
+			var node = data.node,
+				$tdList = $(node.tr).find(">td");
+
+			// (Index #0 is rendered by fancytree by adding the checkbox)
+			// Set column #1 info from node data:
+			//$tdList.eq(1).text(node.getIndexHier());
+			// (Index #2 is rendered by fancytree)
+			// Set column #3 info from node data:
+			$tdList.find("input[name='name']").val(node.data.name);
+			$tdList.find("input[name='list_order']").val(node.data.list_order);
+			$tdList.find("input[name='url']").val(node.data.url);
+			if( node.data.is_show == 1 ){
+				$tdList.find("input[name='is_show']").attr("checked","checked");	
+			}
+
+			// Static markup (more efficiently defined as html row template):
+			// $tdList.eq(3).html("<input type='input' value='" + "" + "'>");
+			// ...
+		}
 	});
+	
+	$("#tree input[name='name']").change(function(){
+		var val = $(this).val();
+		$(this).parent().parent().find(".fancytree-title").html( val );
+	});
+	
+	$("#tree .action-save").click(function(){
+		var tr = $(this).parent().parent();
+		var url = tr.find("input[name='url']").val();
+		var isShow = tr.find("input[name='is_show']:checked").val();
+		if( url == undefined ){
+			url = '';
+		}
+		if( isShow == undefined ){
+			isShow = 0;
+		}
+		var data = {
+				'id':$(this).attr("data-id"),
+				'url':url,
+				'is_show':isShow,
+				'list_order':tr.find("input[name='list_order']").val(),
+				'name':tr.find("input[name='name']").val()
+		};
+		$.ajax({
+			url:"/menu/update",	
+			method:"POST",
+			data:data,
+			dataType:'json',
+			success:function(res){
+				var params = {
+					hasClose:true,
+					hasMask:true,
+					title:'新智云',
+					content:res.msg
+				};	
+				$("#dialog-box").dialogBox(params);
+			}
+		});
+	});
+
+	/*
+	 * Context menu (https://github.com/mar10/jquery-ui-contextmenu)
+	 */
+});
 </script>
-<table class="table table-bordered">
-	<thead>
-		<tr>
-			<th>排序</th>
-			<th>ID</th>
-			<th>URL</th>
-			<th>名称</th>
-			<th>状态</th>
-			<th>操作</th>
-		</tr>
-	</thead>
-	<tbody>
-		<{foreach name="tree" item="node"}>
-			<tr>
-				<td><{$node.list_order}></td>
-				<td><{$node.id}></td>
-				<td><{$node.url}></td>
-				<td><{$node.name}></td>
-				<td><{$node.is_show}></td>
-			</tr>
-			<{if condition="isset($node['childrenList'])"}>
-			<{foreach name="$node['childrenList']" item="subNode"}>
-				<tr>
-					<td><{$subNode.list_order}></td>
-					<td><{$subNode.id}></td>
-					<td><{$subNode.url}></td>
-					<td><{$subNode.name}></td>
-					<td><{$subNode.is_show}></td>
-				</tr>				
-			<{/foreach}>
-			<{/if}>
-		<{/foreach}>
-	</tbody>
-	<tfoot>
-		<tr>
-			<th>排序</th>
-			<th>ID</th>
-			<th>URL</th>
-			<th>名称</th>
-			<th>状态</th>
-			<th>操作</th>		
-		</tr>
-	</tfoot>
-</table>

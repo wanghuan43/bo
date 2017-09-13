@@ -2,4 +2,14 @@
 	background:#fff;
 	padding-right:.3em;
 }
-
+.alignCenter{
+	text-align:center;
+}
+table.fancytree-ext-table thead th{
+	border:solid 1px #ededed;
+	background:#d2f0ff;
+	text-align:center;
+}
+table.fancytree-ext-table input[type=input]{
+	width:100%;
+}
