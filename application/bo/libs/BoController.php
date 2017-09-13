@@ -53,7 +53,7 @@ class BoController extends Controller
         }
         $list = $model->getList($search, $this->limit);
         $this->assign("lists", $list);
-        $this->assign("empty", '<tr><td colspan="' + $colspan + '">暂无数据</td></tr>');
+        $this->assign("empty", '<tr><td colspan="' . $colspan . '">暂无数据</td></tr>');
         if (Request::instance()->isAjax()) {
             if (count($post) > 0) {
                 $content = $this->fetch("list");
