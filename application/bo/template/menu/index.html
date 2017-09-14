@@ -4,8 +4,8 @@
   <table id="tree">
         <colgroup>
         <col width="300px">
-        <col width="50px">
-        <col width="150px">
+        <col width="20px">
+        <col width="80px">
         <col width="150px">
         <col width="50px">
         <col width="100px">
@@ -25,11 +25,10 @@
             <tr>
                 <td></td>
                 <td><input name="list_order" type="input"/></td>
-                <td><input name="name" type="input"></td>
+                <td><input name="name" type="input" onchange="Menu.changeName(this);"></td>
                 <td><input name="url" type="input"></td>
                 <td class="alignCenter"><input name="is_show" type="checkbox" value="1" /></td>
-                <td class="alignCenter">
-					 
+                <td class="alignCenter">					 
                 </td>
             </tr>
         </tbody>
@@ -87,17 +86,18 @@ $(function(){
             var node = data.node,
                 $tdList = $(node.tr).find(">td");
             
-            var lastTd = $(node.tr).find(">td:last-child");
-            
-            lastTd.append("<button class='btn btn-info action-save' data-id='"+node.data.id+"'>保存</button>");
+            var lastTd = $(node.tr).find(">td:last-child");  
 
             // Span the remaining columns if it's a folder.
             // We can do this in createNode instead of renderColumns, because
             // the `isFolder` status is unlikely to change later
             if( node.isFolder() ) {
                 $tdList.find("input[name='url']").parent().css("background","#fcf8e3").find("input").remove();
-                lastTd.append("<a href='#menu/add/pid/"+node.data.id+"' class='btn btn-info' style='margin-left:.5em'>添加</a>");
+                lastTd.append("<a href='#menu/add' data-id='"+node.data.id+"' style='color:#0070c0' onclick='return Menu.add(this);'>添加子菜单</a>&nbsp;|&nbsp;");
             }
+            
+            lastTd.append("<a href='javascript:;' class='action-save' data-id='"+node.data.id+"' style='color:#0070C0' onclick='Menu.update(this)'>保存</a>&nbsp;|&nbsp;");
+            lastTd.append("<a href='javascript:;' class='action-delete' data-id='"+node.data.id+"' style='color:#0070C0' onclick='Menu.remove(this)'>删除</a>");
           
         },		
 		renderColumns: function(event, data) {
@@ -121,48 +121,7 @@ $(function(){
 			// ...
 		}
 	});
-	
-	$("#tree input[name='name']").change(function(){
-		var val = $(this).val();
-		$(this).parent().parent().find(".fancytree-title").html( val );
-	});
-	
-	$("#tree .action-save").click(function(){
-		var tr = $(this).parent().parent();
-		var url = tr.find("input[name='url']").val();
-		var isShow = tr.find("input[name='is_show']:checked").val();
-		if( url == undefined ){
-			url = '';
-		}
-		if( isShow == undefined ){
-			isShow = 0;
-		}
-		var data = {
-				'id':$(this).attr("data-id"),
-				'url':url,
-				'is_show':isShow,
-				'list_order':tr.find("input[name='list_order']").val(),
-				'name':tr.find("input[name='name']").val()
-		};
-		$.ajax({
-			url:"/menu/update",	
-			method:"POST",
-			data:data,
-			dataType:'json',
-			success:function(res){
-				var params = {
-					hasClose:true,
-					hasMask:true,
-					title:'新智云',
-					content:res.msg
-				};	
-				$("#dialog-box").dialogBox(params);
-			}
-		});
-	});
 
-	/*
-	 * Context menu (https://github.com/mar10/jquery-ui-contextmenu)
-	 */
 });
 </script>
+

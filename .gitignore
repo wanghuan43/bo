@@ -12,3 +12,4 @@ composer.lock
 autoload.php
 think
 uploads/xlsx/*
+public/index.php

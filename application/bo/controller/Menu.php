@@ -25,18 +25,26 @@ class Menu extends Controller
     
     public function add( $pid = 0 )
     {
-        return $this->fetch();    
+        if( $this->request->isPost() ){
+ 
+            return $this->doAdd();
+            
+        }else{
+            $pid = $this->request->get('pid')?:$pid;
+            $this->assign('tree',$this->model->getList());
+            $this->assign('pid',$pid);
+            return $this->fetch();  
+        }
     }
     
     public function update( $id = false ){
         
-        if( $_POST['id'] ){
-            $id = $_POST['id'];
-        }
-        $url = trim($_POST['url']);
-        $isShow = trim($_POST['is_show']);
-        $listOrder = intval(trim($_POST['list_order']));
-        $name = trim($_POST['name']);
+        $id = trim($this->request->post('id'))?:$id;
+        $url = trim($this->request->post('url'));
+        $isShow = $this->request->post('is_show');
+        $listOrder = intval(trim($this->request->post('list_order')));
+        $name = trim($this->request->post('name'));
+        
         $msg = [];
         if( $listOrder < 0 ){
             $msg[] = '排序只能为非零整数';
@@ -62,9 +70,7 @@ class Menu extends Controller
                     'name' => $name
             ];
             
-            $res = $this->model->save($data, [
-                    'id' => $id
-            ]);
+            $res = $this->model->save($data, ['id' => $id]);
             
             if ($res == 1) {
                 $ret = [
@@ -81,6 +87,68 @@ class Menu extends Controller
         
         return $ret;
         
+    }
+    
+    public function delete($id=FALSE,$isAjax=TRUE){
+        
+        $id = $this->request->post('id')?:$id;
+        
+        $ret = [];
+        
+        if( empty($id) ){
+            $ret = ['flag'=>0,'msg'=>'ID为空'];
+        }else{
+            $res = $this->model->isUpdate(true,'id = '.$id.' OR parent_id = '.$id)->delete();
+            if( $res > 0 ){
+                $ret = ['flag'=>1,'msg'=>'删除成功'];
+            }else{
+                $ret = ['flag'=>0, 'msg'=>'发生错误，删除失败'];
+            }
+        }
+        
+        return $ret;
+        
+    }
+    
+    protected function doAdd($isAjax=true)
+    {
+        $data = [
+                'parent_id' => $this->request->post('parent_id'),
+                'name' => trim($this->request->post('name')),
+                'url' => trim($this->request->post('url')),
+                'list_order' => trim($this->request->post('list_order')),
+                'is_show' => $this->request->post('is_show')?:0
+        ];
+        
+        if( $data['parent_id'] == 0 ){
+            $data['url'] = '';
+        }
+        
+        $ret = [];
+        
+        if( empty($data['name']) ){
+            $ret = [
+                    'flag' => 0,
+                    'msg' => '菜单名称不能为空'
+            ];    
+        }elseif( intval($data['list_order']) < 0 ){
+            $ret =[
+                    'flag' => 0,
+                    'msg' => '排序只能是非负整数'
+            ];
+        }elseif( $this->model->save($data) == 1 ){
+            $ret =[
+                    'flag' => 1,
+                    'msg'  => '添加成功'
+            ];
+        }else{
+            $ret = [
+                    'flag' => 0,
+                    'msg'  => '添加失败'
+            ]; 
+        }  
+        
+        return $ret;
     }
     
 }

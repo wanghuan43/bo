@@ -1,3 +1,76 @@
 <div class="page-header">
-  <h2>添加菜单</h2>
+	<h2>添加菜单</h2>
 </div>
+
+<form class="form-horizontal" style="margin-top: 4em; max-width: 400px" id="form-add-menu" onsubmit="return false;">
+	<div class="form-group">
+		<label class="col-sm-2 control-label" for="sel-parent-id">上级</label>
+		<div class="col-sm-10">
+			<select name="parent_id" class="form-control" id="sel-parent-id">
+				<option value="0"<{if $pid==0}> selected<{/if}>>作为顶级菜单</option> 
+				<{foreach $tree as $node}>
+					<option value="<{$node.id}>"<{if $pid==$node.id}> selected<{/if}>><{$node.name}></option>
+				<{/foreach}>
+			</select>
+		</div>
+	</div>
+	<div class="form-group">
+		<label for="inputEmail3" class="col-sm-2 control-label">名称</label>
+		<div class="col-sm-10">
+			<input type="text" class="form-control" id="inputEmail3" name="name">
+		</div>
+	</div>
+	<div class="form-group">
+		<label for="inputUrl" class="col-sm-2 control-label">URL</label>
+		<div class="col-sm-10">
+			<input type="text" class="form-control" id="inputUrl" name="url">
+		</div>
+	</div>
+	<div class="form-group">
+		<label for="inputOrder" class="col-sm-2 control-label">排序</label>
+		<div class="col-sm-10">
+			<input type="text" class="form-control" id="inputOrder" name="list_order" value="0">
+		</div>
+	</div>
+	<div class="form-group">
+		<div class="col-sm-offset-2 col-sm-10">
+			<div class="checkbox">
+				<label> <input type="checkbox" value="1" name="is_show" checked>是否显示
+				</label>
+			</div>
+		</div>
+	</div>
+	<div class="form-group">
+		<div class="col-sm-offset-2 col-sm-10">
+			<button class="btn btn-default" id="btn-add-menu">确认</button>
+			<{if $pid != 0 }>
+			<button class="btn btn-default" onclick="Menu.back()">返回</button>
+			<{/if}>
+		</div>
+	</div>
+</form>
+<script>
+(function($){
+	
+	$("#btn-add-menu").click(function(){
+		
+        $.ajax({
+            type: 'POST', 
+            url: '/menu/add', 
+            dataType:"json",
+            data: $("#form-add-menu").serialize(),
+            success: function( res ) {
+				var params = {
+						hasClose:true,
+						hasMask:true,
+						title:'新智云',
+						content:res.msg
+					};	
+				$("#dialog-box").dialogBox(params);
+				$("#form-add-menu").resetForm();
+            }
+        });
+        
+	});
+})(jQuery);
+</script>

@@ -10,6 +10,7 @@
     <{load href="/static/css/menu.css"}>
     <{load href="/static/js/plugin/dialog/loading.js"}>
     <{load href="/static/js/jquery-ui.custom.js,/static/fancytree/jquery.fancytree.min.js,/static/fancytree/jquery.fancytree-all.min.js,/static/fancytree/skin-win8/ui.fancytree.min.css"}>
+    <{load href="/static/js/menu.js"}>
 </head>
 
 <body>
@@ -121,6 +122,7 @@
         });
     })
     function contentAjax(id,ajaxData){
+    	loading.show();
         if(ajaxData.success == undefined){
             ajaxData.success = function(data){
                 if(data.content != undefined){
@@ -128,6 +130,7 @@
                 }else{
                     $("#"+id).html(data);
                 }
+                loading.hide();
                 $("#"+id+" a[target!='_blank'],button[type='button']").unbind("click");
                 $("#"+id+" a[target!='_blank'],button[type='button']").click(function(){
                     var hrefs = $(this).attr("href");
@@ -140,6 +143,12 @@
                     return false;
                 });
             }
+        }else{
+        	var succ = ajaxData.success ;
+        	ajaxData.success = function(){
+        		loading.hide();
+        		succ();
+        	}
         }
         $.ajax(ajaxData);
     }
