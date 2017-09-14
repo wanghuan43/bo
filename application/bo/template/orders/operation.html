@@ -327,6 +327,7 @@
         acceptance: "<{:url("/acceptance/searchAcceptance")}>",
         received:"<{:url("/received/searchReceived")}>",
     }
+    var focus1 = false;
     $(document).ready(function () {
         laydate.render({
             elem: '#o_date'
@@ -373,7 +374,12 @@
         $("#o_did").change();
         $(".mstag").select2();
         $(".msmember").select2();
-        $("#o_cno,#o_pname,#o_coname").focus(function(){
+        $("#o_cno,#o_pname,#o_coname").parent().click(function(){
+            if(focus1){
+                return false;
+            }else{
+                focus1
+            }
             if($(this).val() == ""){
                 $(this).parents("tr").find("i:eq(0)").click();
             }else{
@@ -454,6 +460,7 @@
             return false;
         });
         $(".fa-search").click(function () {
+            console.log(123);
             var type = $(this).attr("data");
             var thisEle = this;
             var inputs = $(this).parent().next().find("input");

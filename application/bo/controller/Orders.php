@@ -10,7 +10,6 @@ use app\bo\model\OrderProject;
 use app\bo\model\Taglib;
 use app\bo\model\Taglink;
 use app\bo\libs\BoController;
-use think\Log;
 use think\Request;
 use think\Session;
 
@@ -134,6 +133,28 @@ class Orders extends BoController
         $this->assign("title", "日志");
         $this->assign("empty", '<tr><td colspan="6">无数据.</td></tr>');
         return $this->fetch("orders/loglist");
+    }
+
+    public function viewLog($opId = "")
+    {
+        $log = Logs::get($opId)->toArray();
+        $log['l_new'] = unserialize($log['l_new']);
+        $log['l_old'] = unserialize($log['l_old']);
+        if (isset($log['l_new']['tagList']) AND is_array($log['l_new']['tagList'])) {
+            $t = implode(",", $log['l_new']['tagList']);
+            $m = new Taglib();
+            $log['l_new']['tagList'] = $m->where("tl_id", "in", "(".$t.")")->select();
+        }
+        if (isset($log['l_new']['cList']) AND is_array($log['l_new']['cList'])) {
+            $t = implode(",", $log['l_new']['cList']);
+            $m = new Member();
+            $log['l_new']['cList'] = $m->where("m_id", "in", "(".$t.")")->select();
+        }
+        echo "<pre>";
+        print_r($log);
+        exit;
+        $this->assign("log", $log);
+        return $this->fetch("orders/viewLog");
     }
 
     private function setType($type, $params)

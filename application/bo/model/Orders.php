@@ -24,8 +24,8 @@ class Orders extends BoModel
         $order = $this->find($id)->toArray();
         $order['project'] = $orderProjectModel->getOrderProject($id);
         $order['used'] = $orderUsedModel->getOrderUesd($id);
-        $order['tagList'] = $tagLibModel->getList($id);
-        $order['cList'] = $circulationModel->getList($id);
+        $order['tagList'] = $tagLibModel->getList($id, "orders", true);
+        $order['cList'] = $circulationModel->getList($id, "orders", true);
         return $order;
     }
 

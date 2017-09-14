@@ -5,7 +5,7 @@ use app\bo\libs\BoModel;
 
 class Taglink extends BoModel
 {
-    public function getList($ot_id, $model = "orders")
+    public function getList($ot_id, $model = "orders", $isArray = false)
     {
         $db = $this->db();
         $list = $db->table('__TAGLIB__')
@@ -14,6 +14,11 @@ class Taglink extends BoModel
             ->where('tk.ot_id', $ot_id)
             ->where('tk.model', $model)
             ->select();
+        if($isArray){
+            foreach($list as $key=>$value){
+                $list[$key] = $value->toArray();
+            }
+        }
         return $list;
     }
 

@@ -5,7 +5,7 @@ use app\bo\libs\BoModel;
 
 class Circulation extends BoModel
 {
-    public function getList($ot_id, $model = "orders")
+    public function getList($ot_id, $model = "orders", $isArray = false)
     {
         $db = $this->db();
         $list = $db->table('__CIRCULATION__')
@@ -14,6 +14,11 @@ class Circulation extends BoModel
             ->where('kc.ci_otid', $ot_id)
             ->where('kc.ci_type', $model)
             ->select();
+        if($isArray){
+            foreach($list as $key=>$value){
+                $list[$key] = $value->toArray();
+            }
+        }
         return $list;
     }
 

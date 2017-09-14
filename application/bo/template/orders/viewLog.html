@@ -3,8 +3,8 @@
     <div class="clearfix header">
         <h2>订单日志</h2>
         <div class="btn-pannel">
-            <button type="submit" class="btn">同意</button>
-            <button type="button" href="#orders" class="btn red">不同意</button>
+            <button type="submit" name="l_panding" value="1" class="btn">同意</button>
+            <button type="submit" name="l_panding" value="2" href="#orders" class="btn red">不同意</button>
             <button type="button" href="#orders" class="btn">取消</button>
         </div>
         <div class="link-pannel">
@@ -24,11 +24,14 @@
                         <i class="fa fa-minus-square" style="color: red;display: none;" data="contract"></i>
                         对应合同号:</td>
                     <td>
-                        <input type="text" name="o_cno" id="o_cno" value="<{$order.o_cno}>" readonly/>
-                        <input type="hidden" name="o_cid" id="o_cid" value="<{$order.o_cid}>"/>
+                        <{if condition="$log['l_old']['o_cno'] != $log['l_new']['o_cno']"}>
+                        <span><{$log['l_old']['o_cno']}></span> <- <span style="color: red"><{$log['l_new']['o_cno']}></span>
+                        <{else}>
+                        <span><{$log['l_old']['o_cno']}></span>
+                        <{/if}>
                     </td>
                     <td class="txt">最后更新日期:</td>
-                    <td><?php echo (empty($order['o_updatetime']) ? date("Y-m-d") : date("Y-m-d", $order['o_updatetime']));?></td>
+                    <td><?php echo date("Y-m-d", $log['l_createtime']);?></td>
                 </tr>
                 <tr>
                     <td class="txt">
@@ -36,14 +39,15 @@
                         <i class="fa fa-minus-square" style="color: red;display: none;" data="project"></i>
                         项目名称:</td>
                     <td colspan="5">
-                        <input type="text" name="o_pname" id="o_pname" value="<{$order.o_pname}>" readonly/>
-                        <input type="hidden" name="o_pid" id="o_pid" value="<{$order.o_pid}>"/>
+                        <{if condition="$log['l_old']['o_pname'] != $log['l_new']['o_pname']"}>
+                        <span><{$log['l_old']['o_pname']}></span> <- <span style="color: red"><{$log['l_new']['o_pname']}></span>
+                        <{else}>
+                        <span><{$log['l_old']['o_pname']}></span>
+                        <{/if}>
                     </td>
                     <td class="txt">订单责任人</td>
                     <td>
                         <{$order.o_mname}>
-                        <input type="hidden" name="o_mname" id="o_mname" value="<{$order.o_mname}>"/>
-                        <input type="hidden" name="o_mid" id="o_mid" value="<{$order.o_mid}>"/>
                     </td>
                 </tr>
                 <tr>
@@ -51,11 +55,11 @@
                     <td colspan="5"><input type="text" name="o_subject" id="o_subject" value="<{$order.o_subject}>"/></td>
                     <td class="txt">销售/采销:</td>
                     <td>
-                        <select name="o_type" id="o_type">
-                            <{volist name="typeList" id="tl" key="k"}>
-                            <option value="<{$k}>" <{eq name="$k" value="$order.o_type"}>selected<{/eq}>><{$tl}></option>
-                            <{/volist}>
-                        </select>
+                        <{if condition="$log['l_old']['o_type'] != $log['l_new']['o_type']"}>
+                        <span><{$log['l_old']['o_type']}></span> <- <span style="color: red"><{$log['l_new']['o_type']}></span>
+                        <{else}>
+                        <span><{$log['l_old']['o_type']}></span>
+                        <{/if}>
                     </td>
                 </tr>
                 <tr>
@@ -64,91 +68,105 @@
                         <i class="fa fa-minus-square" style="color: red;display: none;" data="company"></i>
                         对方名称:</td>
                     <td colspan="3">
-                        <input name="o_coname" id="o_coname" type="text" value="<{$order.o_coname}>" readonly/>
-                        <input type="hidden" name="o_coid" id="o_coid" value="<{$order.o_coid}>"/>
+                        <{if condition="$log['l_old']['o_coname'] != $log['l_new']['o_coname']"}>
+                        <span><{$log['l_old']['o_coname']}></span> <- <span style="color: red"><{$log['l_new']['o_coname']}></span>
+                        <{else}>
+                        <span><{$log['l_old']['o_coname']}></span>
+                        <{/if}>
                     </td>
                     <td class="txt">外部/内部:</td>
                     <td>
-                        <select name="o_lie" id="o_lie">
-                            <{volist name="lieList" id="ll" key="k"}>
-                            <option value="<{$k}>" <{eq name="$k" value="$order.o_lie"}>selected<{/eq}>><{$ll}></option>
-                            <{/volist}>
-                        </select>
+                        <{if condition="$log['l_old']['o_lie'] != $log['l_new']['o_lie']"}>
+                        <span><{$log['l_old']['o_lie']}></span> <- <span style="color: red"><{$log['l_new']['o_lie']}></span>
+                        <{else}>
+                        <span><{$log['l_old']['o_lie']}></span>
+                        <{/if}>
                     </td>
                     <td class="txt">部门:</td>
                     <td>
-                        <select name="o_did" id="o_did">
-                            <{volist name="dList" id="dl"}>
-                            <option value="<{$dl.d_id}>" <{eq name="$dl.d_id" value="$order.o_did"}>selected<{/eq}>><{$dl.d_name}></option>
-                            <{/volist}>
-                        </select>
-                        <input type="hidden" name="o_dname" id="o_dname" value="<{$order.o_dname}>"/>
+                        <{if condition="$log['l_old']['o_did'] != $log['l_new']['o_did']"}>
+                        <span><{$log['l_old']['o_dname']}></span> <- <span style="color: red"><{$log['l_new']['o_dname']}></span>
+                        <{else}>
+                        <span><{$log['l_old']['o_dname']}></span>
+                        <{/if}>
                     </td>
                 </tr>
                 <tr>
                     <td class="txt"><{if condition="$op=='add'"}>预计日期:<{else /}>合同日期:<{/if}></td>
-                    <td><input type="text" name="o_date" id="o_date" value="<?php echo (empty($order['o_date']) ? "" : date("Y-m-d", $order['o_date'])) ?>"/></td>
+                    <td>
+                        <{if condition="$log['l_old']['o_date'] != $log['l_new']['o_date']"}>
+                        <span><?php echo date("Y-m-d", $log['l_old']['o_date']);?></span> <- <span style="color: red"><?php echo date("Y-m-d", $log['l_new']['o_date']);?></span>
+                        <{else}>
+                        <span><?php echo date("Y-m-d", $log['l_old']['o_date']);?></span>
+                        <{/if}>
+                    </td>
                     <td class="txt"><{if condition="$op=='add'"}>预计金额:<{else /}>合同金额:<{/if}></td>
-                    <td><input type="text" name="o_money" id="o_money" value="<{$order.o_money}>"/></td>
+                    <td>
+                        <{if condition="$log['l_old']['o_money'] != $log['l_new']['o_money']"}>
+                        <span><{$log['l_old']['o_money']}></span> <- <span style="color: red"><{$log['l_new']['o_money']}></span>
+                        <{else}>
+                        <span><{$log['l_old']['o_money']}></span>
+                        <{/if}>
+                    </td>
                     <td class="txt">订单数量:</td>
-                    <td><input type="text" name="o_num" id="o_num" value="<{$order.o_num}>"/></td>
+                    <td>
+                        <{if condition="$log['l_old']['o_num'] != $log['l_new']['o_num']"}>
+                        <span><{$log['l_old']['o_num']}></span> <- <span style="color: red"><{$log['l_new']['o_num']}></span>
+                        <{else}>
+                        <span><{$log['l_old']['o_num']}></span>
+                        <{/if}>
+                    </td>
                     <td class="txt">税率:</td>
                     <td>
-                        <select name="o_tax" id="o_tax">
-                            <{volist name="taxList" id="ll" key="k"}>
-                            <option value="<{$k}>" <{eq name="$k" value="$order.o_tax"}>selected<{/eq}>><{$ll}></option>
-                            <{/volist}>
-                        </select>
+                        <{if condition="$log['l_old']['o_num'] != $log['l_new']['o_tax']"}>
+                        <span><{$log['l_old']['o_tax']}></span> <- <span style="color: red"><{$log['l_new']['o_tax']}></span>
+                        <{else}>
+                        <span><{$log['l_old']['o_tax']}></span>
+                        <{/if}>
                     </td>
                 </tr>
                 <tr>
                     <td class="txt">成交机会:</td>
                     <td>
-                        <select name="o_deal" id="o_deal">
-                            <{volist name="chancesList" id="cl"}>
-                            <option value="<{$cl.cs_id}>" <{eq name="$cl.cs_id" value="$order.o_deal"}>selected<{/eq}>><{$cl.cs_name}></option>
-                            <{/volist}>
-                        </select>
+                        <{if condition="$log['l_old']['o_deal'] != $log['l_new']['o_deal']"}>
+                        <span><{$log['l_old']['o_deal']}></span> <- <span style="color: red"><{$log['l_new']['o_deal']}></span>
+                        <{else}>
+                        <span><{$log['l_old']['o_deal']}></span>
+                        <{/if}>
                     </td>
                     <td class="txt">商机状态:</td>
                     <td>
-                        <select name="o_status" id="o_status">
-                            <{volist name="statusList" id="ll" key="k"}>
-                            <option value="<{$k}>" <{eq name="$k" value="$order.o_status"}>selected<{/eq}>><{$ll}></option>
-                            <{/volist}>
-                        </select>
+                        <{if condition="$log['l_old']['o_status'] != $log['l_new']['o_status']"}>
+                        <span><{$log['l_old']['o_status']}></span> <- <span style="color: red"><{$log['l_new']['o_status']}></span>
+                        <{else}>
+                        <span><{$log['l_old']['o_status']}></span>
+                        <{/if}>
                     </td>
                     <td class="txt">利润率:</td>
                     <td>
-                        <input type="text" name="o_profits" id="o_profits" value="<{$order.o_profits}>"/>
+                        <{if condition="$log['l_old']['o_profits'] != $log['l_new']['o_profits']"}>
+                        <span><{$log['l_old']['o_profits']}></span> <- <span style="color: red"><{$log['l_new']['o_profits']}></span>
+                        <{else}>
+                        <span><{$log['l_old']['o_profits']}></span>
+                        <{/if}>
                     </td>
                 </tr>
                 <tr>
                     <td class="txt">关键字/标签:</td>
                     <td colspan="3">
                         <select class="mstag" multiple id="tagList" name="tagList[]">
-                            <{foreach name="tagList" item="tl" key="k"}>
-                            <optgroup label="<{$k}>">
-                                <{foreach name="$tl" item="l"}>
-                                <option value="<{$l.tl_id}>" <{if condition="array_key_exists($l.tl_id, $tagIDList)"}>selected<{/if}>><{$k}>:<{$l.tl_name}></option>
-                                <{/foreach}>
-                            </optgroup>
-                            <{/foreach}>
                         </select>
                     </td>
                     <td class="txt">传阅人:</td>
                     <td colspan="3">
                         <select class="msmember" multiple id="cList" name="cList[]">
-                            <{volist name="memberList" id="ml"}>
-                            <option value="<{$ml.m_id}>" <{if condition="array_key_exists($ml.m_id, $cIDList)"}>selected<{/if}>><{$ml.m_department}>-<{$ml.m_name}></option>
-                            <{/volist}>
                         </select>
                     </td>
                 </tr>
             </table>
         </div>
     </div>
-    <div class="main-pannel" <{if condition="$order['o_status'] != '6'"}>style="display:none;"<{/if}>>
+    <div class="main-pannel">
     <h3>已完成情况</h3>
     <div class="content table clearfix">
         <div class="col33">
