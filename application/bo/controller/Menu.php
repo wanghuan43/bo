@@ -3,7 +3,6 @@ namespace app\bo\controller;
 
 use think\Controller;
 use app\bo\model\Menu as Model;
-
 class Menu extends Controller
 {
     protected $model;
@@ -136,17 +135,25 @@ class Menu extends Controller
                     'flag' => 0,
                     'msg' => '排序只能是非负整数'
             ];
-        }elseif( $this->model->save($data) == 1 ){
-            $ret =[
-                    'flag' => 1,
-                    'msg'  => '添加成功'
-            ];
         }else{
-            $ret = [
-                    'flag' => 0,
-                    'msg'  => '添加失败'
-            ]; 
-        }  
+            
+            $res = $this->model->where('parent_id','=',$data['parent_id'])->where('name','=',$data['name'])->find();
+            if( $res ){
+                $ret = [
+                        'flag' => 0,
+                        'msg' => '菜单名重复'
+                ];              
+            }else{
+                $res = $this->model->save($data);              
+                if( $res ){
+                    $ret = [ 'flag'=>1,'msg'=>'添加成功'];
+                }else{
+                    $ret = ['flag'=>0,'msg'=>'添加失败'];
+                }
+            }
+            
+        }
+            
         
         return $ret;
     }
