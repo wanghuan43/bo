@@ -114,13 +114,13 @@
                                 method: "get",
                                 dataType:"json"
                             }
-                            contentAjax(href, "<{$type}>List", tts);
+                            contentAjax("<{$type}>List", tts);
                         }
                         return false;
                     });
                 }
             };
-            contentAjax(url, "<{$type}>List", tt);
+            contentAjax("<{$type}>List", tt);
             return false;
         });
         $("#<{$type}>Form").submit();

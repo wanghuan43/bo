@@ -1,0 +1,55 @@
+<div class="clearfix header">
+    <h2><{$title}></h2>
+    <div class="btn-pannel">
+        <{$loglist->render()}>
+    </div>
+    <div class="link-pannel">
+        <ul>
+
+        </ul>
+    </div>
+</div>
+<div class="main-pannel">
+    <table class="list" cellspacing="0">
+        <thead>
+        <tr>
+            <th style="width:150px;text-align:center;">时间</th>
+            <th>操作人</th>
+            <th>审核</th>
+            <th>操作</th>
+            <th>回滚</th>
+            <th>查看</th>
+        </tr>
+        </thead>
+        <tbody>
+        <{volist name="loglist" id="vo" empty="$empty"}>
+        <tr>
+            <td><?php echo date("Y-m-d H:i:s", $vo['l_createtime'])?></td>
+            <td><{$vo.l_mname}></td>
+            <td>
+                <{switch name="$vo.l_panding"}>
+                <{case value="0" break="1"}>未审核<{/case}>
+                <{case value="1" break="1"}>已审核<{/case}>
+                <{case value="2" break="1"}>审核不通过<{/case}>
+                <{/switch}>
+            </td>
+            <td>
+                <{switch name="$vo.l_opt"}>
+                <{case value="add" break="1"}>新增<{/case}>
+                <{case value="edit" break="1"}>修改<{/case}>
+                <{case value="delete" break="1"}>删除<{/case}>
+                <{/switch}>
+            </td>
+            <td>
+                <{switch name="$vo.l_rollback"}>
+                <{case value="0" break="0"}><{/case}>
+                <{case value="2" break="1"}><a href="<{:url("/orders/rollback/opId/".$vo['l_id'])}>" style="color:blue">回滚</a><{/case}>
+                <{case value="1" break="1"}>回滚成功<{/case}>
+                <{/switch}>
+            </td>
+            <td><a href="<{:url("/orders/viewLog/opId/".$vo['l_id'])}>" style="color:blue">查看</a></td>
+        </tr>
+        <{/volist}>
+        </tbody>
+    </table>
+</div>

@@ -104,7 +104,7 @@
                     url: href,
                     method: "get",
                 };
-                contentAjax(href,"main-container",data);
+                contentAjax("main-container",data);
             }
         });
         $("#left-pannel a").each(function (index, ele) {
@@ -120,7 +120,7 @@
             }
         });
     })
-    function contentAjax(href,id,ajaxData){
+    function contentAjax(id,ajaxData){
         if(ajaxData.success == undefined){
             ajaxData.success = function(data){
                 if(data.content != undefined){
@@ -135,11 +135,11 @@
                         hrefs = hrefs.replace("#", "/");
                         delete ajaxData.success;
                         ajaxData.url = hrefs;
-                        contentAjax(hrefs,id,ajaxData)
+                        contentAjax(id,ajaxData);
                     }
                     return false;
                 });
-            };
+            }
         }
         $.ajax(ajaxData);
     }

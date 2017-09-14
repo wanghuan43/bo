@@ -10,6 +10,7 @@ use app\bo\model\OrderProject;
 use app\bo\model\Taglib;
 use app\bo\model\Taglink;
 use app\bo\libs\BoController;
+use think\Log;
 use think\Request;
 use think\Session;
 
@@ -35,6 +36,7 @@ class Orders extends BoController
         session("filtersOrders", $params);
         $lists = $this->ordersModel->paginate($this->limit, true);
         $this->assign("lists", $lists);
+        $this->assign("title", $this->title);
         $this->assign("empty", '<tr><td colspan="10">无数据.</td></tr>');
         return $this->fetch("index");
     }
@@ -90,18 +92,30 @@ class Orders extends BoController
 
     public function doOperation($op = "add", $op_id = "")
     {
+        $logModel = new Logs();
         $post = Request::instance()->post();
         $post['o_date'] = strtotime($post['o_date']);
         $where = [];
         $message = "保存成功";
         if ($op == "edit") {
-            $logModel = new Logs();
+            $search = [
+                "l_otid" => $op_id,
+                "l_mid" => $this->current->m_id,
+                "l_model" => "orders",
+                "l_panding" => "0",
+            ];
+            $check = Logs::get($search);
+            if ($check) {
+                return array("status" => 0, "message" => "已有还未审核的修改,请等待上一次提交的审核.");
+            }
             $old = $this->ordersModel->getOrderById($op_id);
-            $result = $logModel->saveLogs($post, $old, $op_id, "orders");
+            $logModel->saveLogs($post, $old, $op_id, "orders", "edit");
+            return array("status" => 1, "message" => "以保存此次提交,请等待审核");
         } else {
             unset($post['tagList']);
             unset($post['cList']);
             unset($post['project']);
+            $logModel->saveLogs($post, array(), "", "orders", "add");
             $post['o_no'] = $this->ordersModel->getOrderNO($post['o_pid']);
             $result = $this->ordersModel->save($post, $where);
         }
@@ -111,42 +125,45 @@ class Orders extends BoController
         return array("status" => $result, "message" => $message);
     }
 
-    public function pandingLog($opId = "")
+    public function myLogList($opId = "")
     {
-        $loglist = Logs::all(["l_model" => "orders", "l_mid" => $this->current->m_id, "l_otid" => $opId]);
-        echo 1;
-        var_dump($loglist);
+        $logModel = new Logs();
+        $logModel->where("l_model", "=", "orders")->where("l_mid", "=", $this->current->m_id)->where("l_otid", "=", $opId);
+        $loglist = $logModel->paginate($this->limit, true);
+        $this->assign("loglist", $loglist);
+        $this->assign("title", "日志");
+        $this->assign("empty", '<tr><td colspan="6">无数据.</td></tr>');
+        return $this->fetch("orders/loglist");
     }
 
     private function setType($type, $params)
     {
         unset($params['type']);
+        $this->ordersModel->alias("o");
         switch ($type) {
             case "contract":
-                $this->ordersModel->where("o_status", "=", "6");
-                $this->ordersModel->where("o_mid", "=", $this->current->m_id);
                 $this->title = "我的合同";
+                $this->ordersModel->where("o.o_status", "=", "6");
+                $this->ordersModel->where("o.o_mid", "=", $this->current->m_id);
                 break;
             case "favourite":
                 $this->title = "我的收藏";
-                $this->ordersModel->alias("o");
                 $this->ordersModel->join("__FAVORITE__ f", "o.o_id = f.f_oid", "LEFT");
                 $this->ordersModel->where("f.f_mid", "=", $this->current->m_id);
                 break;
             case "circulate":
                 $this->title = "我的传阅";
-                $this->ordersModel->alias("o");
                 $this->ordersModel->join("__CIRCULATION__ c", "o.o_id = c.ci_otid AND c.ci_type = 'orders'", "LEFT");
                 $this->ordersModel->where("c.ci_mid", "=", $this->current->m_id);
                 break;
             default:
                 $this->title = "我的订单";
-                foreach ($params as $key => $value) {
-                    $this->ordersModel->where($key, $value);
-                }
-                $this->ordersModel->where("o_status", "<>", "6");
-                $this->ordersModel->where("o_mid", "=", $this->current->m_id);
+                $this->ordersModel->where("o.o_status", "<>", "6");
+                $this->ordersModel->where("o.o_mid", "=", $this->current->m_id);
                 break;
+        }
+        foreach ($params as $key => $value) {
+            $this->ordersModel->where("o." . $key, $value['op'], $value['val']);
         }
     }
 }

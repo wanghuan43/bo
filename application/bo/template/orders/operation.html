@@ -10,7 +10,7 @@
         <ul>
             <{if condition="$op != 'add'"}>
             <li>
-                <a href="<{:url("/orders/pandingLog/opId/".$op_id)}>"><i class="fa fa-calendar-check-o"></i>日志</a>
+                <a href="<{:url("/orders/myLogList/opId/".$op_id)}>"><i class="fa fa-calendar-check-o"></i>日志</a>
             </li>
             <li>
                 <a href="#"><i class="fa fa-pencil"></i>批注</a>
@@ -448,11 +448,7 @@
                 data:par,
                 success:function(data){
                     $(this).prop("disabled", "false");
-                    if(data.status){
-                        alert("保存成功");
-                    }else{
-                        alert("保存失败");
-                    }
+                    alert(data.message);
                 }
             });
             return false;
