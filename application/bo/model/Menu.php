@@ -14,7 +14,7 @@ class Menu extends BoModel
 
     public function getList()
     {
-        $tmp = $this->order('list_order', 'ASC')->select();
+        $tmp = $this->order('parent_id', 'ASC')->order('list_order', 'ASC')->select();
         $menus = array();
         foreach ($tmp as $key => $value) {
             $value = $value->toArray();
