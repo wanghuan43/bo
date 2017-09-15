@@ -20,11 +20,15 @@ class Menu extends BoModel
             $value = $value->toArray();
             $value['title'] = $value['name'];
             if (empty($value['parent_id'])) {
-                $value['children'] = array();
-                $value['folder'] = true;
-                $value['expanded'] = false;
+                if(isset($menus[$value['id']])){
+                    $value['children'] = $menus[$value['id']]['children'];
+                }else{
+                    $value['children'] = array();
+                    $value['folder'] = true;
+                    $value['expanded'] = false;
+                }
                 $menus[$value['id']] = $value;
-            } elseif (isset($menus[$value['parent_id']])) {
+            } else {
                 $menus[$value['parent_id']]['children'][] = $value;
             }
         }
