@@ -14481,7 +14481,7 @@ var widgetsSelectmenu = $.widget( "ui.selectmenu", [ $.ui.formResetMixin, {
 //>>css.theme: ../../themes/base/theme.css
 
 
-
+/*
 var widgetsSlider = $.widget( "ui.slider", $.ui.mouse, {
 	version: "1.12.1",
 	widgetEventPrefix: "slide",
@@ -15196,7 +15196,7 @@ var widgetsSlider = $.widget( "ui.slider", $.ui.mouse, {
 		}
 	}
 } );
-
+*/
 
 /*!
  * jQuery UI Sortable 1.12.1

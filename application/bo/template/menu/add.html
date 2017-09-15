@@ -1,8 +1,9 @@
+<{load href="/static/js/menu.js"}>
 <div class="page-header">
 	<h2>添加菜单</h2>
 </div>
 
-<form class="form-horizontal" style="margin-top: 4em; max-width: 400px" id="form-add-menu" onsubmit="return false;">
+<form class="form-horizontal form-default" id="form-add-menu" onsubmit="return false;">
 	<div class="form-group">
 		<label class="col-sm-2 control-label" for="sel-parent-id">上级</label>
 		<div class="col-sm-10">
@@ -67,7 +68,10 @@
 						content:res.msg
 					};	
 				$("#dialog-box").dialogBox(params);
-				//$("#form-add-menu").resetForm();
+				if( res.flag == 1 ) {
+                	$("#form-add-menu input[type='text']").val("");
+					$("#form-add-menu option").removeAttr("selected");
+                }
             }
         });
         
