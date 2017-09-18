@@ -1,4 +1,5 @@
 <?php
+
 namespace app\bo\model;
 
 use app\bo\libs\BoModel;
@@ -12,13 +13,15 @@ class Taglib extends BoModel
         $member = $this->getCurrent();
         $db = $this->db();
         $searchModel = $db->table('__TAGLIB__')
-            ->alias('t')
-            ->field("t.*")
-            ->join('__CIRCULATION__ c', "t.tl_id = c.ci_otid AND c.ci_type = 'taglib'");
+            ->alias('t');
+        if (!$member->m_isAdmin) {
+            $searchModel->join('__CIRCULATION__ c', "t.tl_id = c.ci_otid AND c.ci_type = 'taglib'");
+            $searchModel->where("c.ci_mid", "=", $member->m_id);
+        }
+        $searchModel->field("t.*");
         foreach ($search as $key => $value) {
             $searchModel->where("t." . $value['field'], $value['opt'], $value['val']);
         }
-        $searchModel->where("c.ci_mid", "=", $member->m_id);
         $list = $searchModel->paginate($limit, true);
         return $list;
     }

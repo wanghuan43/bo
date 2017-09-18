@@ -1,4 +1,5 @@
 <?php
+
 namespace app\bo\model;
 
 use app\bo\libs\BoModel;
@@ -36,13 +37,15 @@ class Received extends BoModel
         $member = $this->getCurrent();
         $db = $this->db();
         $searchModel = $db->table('__RECEIVED__')
-            ->alias('r')
-            ->field("r.*")
-            ->join('__CIRCULATION__ c', "r.r_id = c.ci_otid AND c.ci_type = 'received'");
+            ->alias('r');
+        if (!$member->m_isAdmin) {
+            $searchModel->join('__CIRCULATION__ c', "r.r_id = c.ci_otid AND c.ci_type = 'received'");
+            $searchModel->where("c.ci_mid", "=", $member->m_id);
+        }
+        $searchModel->field("r.*");
         foreach ($search as $key => $value) {
             $searchModel->where("r." . $value['field'], $value['opt'], $value['val']);
         }
-        $searchModel->where("c.ci_mid", "=", $member->m_id);
         $list = $searchModel->paginate($limit, true);
         return $list;
     }

@@ -5,6 +5,8 @@ use app\bo\libs\BoModel;
 
 class Logs extends BoModel
 {
+    protected $pk = "l_id";
+
     public function saveLogs($new, $old, $id, $model, $opt="add")
     {
         $member = $this->getCurrent();

@@ -1,10 +1,9 @@
 <{load href="/static/css/select.min.css,/static/css/bootstrap-slider.min.css"/}>
-<form action="/orders/doOperation?op=<{$op}>&op_id=<{$op_id}>" method="post" id="opform">
     <div class="clearfix header">
         <h2>订单日志</h2>
         <div class="btn-pannel">
-            <button type="submit" name="l_panding" value="1" class="btn">同意</button>
-            <button type="submit" name="l_panding" value="2" href="#orders" class="btn red">不同意</button>
+            <button type="button" name="l_panding" value="1" class="btn">同意</button>
+            <button type="button" name="l_panding" value="2" href="#orders" class="btn red">不同意</button>
             <button type="button" href="#orders" class="btn">取消</button>
         </div>
         <div class="link-pannel">
@@ -18,10 +17,8 @@
             <table>
                 <tr>
                     <td class="txt">订单号:</td>
-                    <td colspan="3"><{$order.o_no}></td>
+                    <td colspan="3"><{$log['l_old']['o_no']}></td>
                     <td class="txt">
-                        <i class="fa fa-search" data="contract"></i>
-                        <i class="fa fa-minus-square" style="color: red;display: none;" data="contract"></i>
                         对应合同号:</td>
                     <td>
                         <{if condition="$log['l_old']['o_cno'] != $log['l_new']['o_cno']"}>
@@ -35,8 +32,6 @@
                 </tr>
                 <tr>
                     <td class="txt">
-                        <i class="fa fa-search" data="project"></i>
-                        <i class="fa fa-minus-square" style="color: red;display: none;" data="project"></i>
                         项目名称:</td>
                     <td colspan="5">
                         <{if condition="$log['l_old']['o_pname'] != $log['l_new']['o_pname']"}>
@@ -47,12 +42,18 @@
                     </td>
                     <td class="txt">订单责任人</td>
                     <td>
-                        <{$order.o_mname}>
+                        <{$log['l_old']['o_mname']}>
                     </td>
                 </tr>
                 <tr>
                     <td class="txt">订单主题:</td>
-                    <td colspan="5"><input type="text" name="o_subject" id="o_subject" value="<{$order.o_subject}>"/></td>
+                    <td colspan="5">
+                        <{if condition="$log['l_old']['o_subject'] != $log['l_new']['o_subject']"}>
+                        <span><{$log['l_old']['o_subject']}></span> <- <span style="color: red"><{$log['l_new']['o_subject']}></span>
+                        <{else}>
+                        <span><{$log['l_old']['o_subject']}></span>
+                        <{/if}>
+                    </td>
                     <td class="txt">销售/采销:</td>
                     <td>
                         <{if condition="$log['l_old']['o_type'] != $log['l_new']['o_type']"}>
@@ -64,8 +65,6 @@
                 </tr>
                 <tr>
                     <td class="txt">
-                        <i class="fa fa-search" data="company"></i>
-                        <i class="fa fa-minus-square" style="color: red;display: none;" data="company"></i>
                         对方名称:</td>
                     <td colspan="3">
                         <{if condition="$log['l_old']['o_coname'] != $log['l_new']['o_coname']"}>
@@ -92,7 +91,7 @@
                     </td>
                 </tr>
                 <tr>
-                    <td class="txt"><{if condition="$op=='add'"}>预计日期:<{else /}>合同日期:<{/if}></td>
+                    <td class="txt">日期:</td>
                     <td>
                         <{if condition="$log['l_old']['o_date'] != $log['l_new']['o_date']"}>
                         <span><?php echo date("Y-m-d", $log['l_old']['o_date']);?></span> <- <span style="color: red"><?php echo date("Y-m-d", $log['l_new']['o_date']);?></span>
@@ -100,7 +99,7 @@
                         <span><?php echo date("Y-m-d", $log['l_old']['o_date']);?></span>
                         <{/if}>
                     </td>
-                    <td class="txt"><{if condition="$op=='add'"}>预计金额:<{else /}>合同金额:<{/if}></td>
+                    <td class="txt">金额:</td>
                     <td>
                         <{if condition="$log['l_old']['o_money'] != $log['l_new']['o_money']"}>
                         <span><{$log['l_old']['o_money']}></span> <- <span style="color: red"><{$log['l_new']['o_money']}></span>
@@ -118,7 +117,7 @@
                     </td>
                     <td class="txt">税率:</td>
                     <td>
-                        <{if condition="$log['l_old']['o_num'] != $log['l_new']['o_tax']"}>
+                        <{if condition="$log['l_old']['o_tax'] != $log['l_new']['o_tax']"}>
                         <span><{$log['l_old']['o_tax']}></span> <- <span style="color: red"><{$log['l_new']['o_tax']}></span>
                         <{else}>
                         <span><{$log['l_old']['o_tax']}></span>
@@ -128,10 +127,10 @@
                 <tr>
                     <td class="txt">成交机会:</td>
                     <td>
-                        <{if condition="$log['l_old']['o_deal'] != $log['l_new']['o_deal']"}>
-                        <span><{$log['l_old']['o_deal']}></span> <- <span style="color: red"><{$log['l_new']['o_deal']}></span>
+                        <{if condition="$log['l_old']['o_deal']['cs_id'] != $log['l_new']['o_deal']['cs_id']"}>
+                        <span><{$log['l_old']['o_deal']['cs_name']}></span> <- <span style="color: red"><{$log['l_new']['o_deal']['cs_name']}></span>
                         <{else}>
-                        <span><{$log['l_old']['o_deal']}></span>
+                        <span><{$log['l_old']['o_deal']['cs_name']}></span>
                         <{/if}>
                     </td>
                     <td class="txt">商机状态:</td>
@@ -154,171 +153,242 @@
                 <tr>
                     <td class="txt">关键字/标签:</td>
                     <td colspan="3">
-                        <select class="mstag" multiple id="tagList" name="tagList[]">
-                        </select>
+                        <?php echo '<span>',implode(",", $log['l_old']['tagList']),'</span> <- <span style="color:red;">',implode(",",$log['l_new']['tagList']),'</span>'; ?>
                     </td>
                     <td class="txt">传阅人:</td>
                     <td colspan="3">
-                        <select class="msmember" multiple id="cList" name="cList[]">
-                        </select>
+                        <?php echo '<span>',implode(",", $log['l_old']['cList']),'</span> <- <span style="color:red;">',implode(",",$log['l_new']['cList']),'</span>'; ?>
                     </td>
                 </tr>
             </table>
         </div>
     </div>
-    <div class="main-pannel">
-    <h3>已完成情况</h3>
+<div class="main-pannel" <{if condition="$order['o_status'] != '6'"}>style="display:none;"<{/if}>>
+<h3>已完成情况</h3>
+<div class="content table clearfix">
+    <div class="col33">
+        <table class="invoice_1" data="1">
+            <thead>
+            <tr>
+                <td><i class="fa fa-search" data="invoice"></i></td>
+                <td>&#931;已交付</td>
+                <td>0</td>
+                <td>0%</td>
+            </tr>
+            <tr class="thead">
+                <td></td>
+                <td>开票日期</td>
+                <td>金额</td>
+                <td>凭证</td>
+            </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+    </div>
+    <div class="col33">
+        <table class="acceptance_2" data="2">
+            <thead>
+            <tr>
+                <td><i class="fa fa-search" data="acceptance"></i></td>
+                <td>&#931;已交付</td>
+                <td>0</td>
+                <td>0%</td>
+            </tr>
+            <tr class="thead">
+                <td></td>
+                <td>交付日期</td>
+                <td>金额</td>
+                <td>凭证</td>
+            </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+    </div>
+    <div class="col33">
+        <table class="received_3" data="3">
+            <thead>
+            <tr>
+                <td><i class="fa fa-search" data="received"></i></td>
+                <td>&#931;已交付</td>
+                <td>0</td>
+                <td>0%</td>
+            </tr>
+            <tr class="thead">
+                <td></td>
+                <td>付款日期</td>
+                <td>金额</td>
+                <td>凭证</td>
+            </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+    </div>
+</div>
+</div>
+<div class="main-pannel">
+    <h3>预计执行计划</h3>
     <div class="content table clearfix">
         <div class="col33">
-            <table class="invoice_1" data="1">
+            <table data="1" style="border-collapse: separate;border-spacing: 0px 10px;">
                 <thead>
                 <tr>
-                    <td><i class="fa fa-search" data="invoice"></i></td>
-                    <td>&#931;已交付</td>
-                    <td>0</td>
-                    <td>0%</td>
-                </tr>
-                <tr class="thead">
-                    <td></td>
-                    <td>开票日期</td>
-                    <td>金额</td>
-                    <td>凭证</td>
+                    <th>开票月</th>
+                    <th>比例</th>
+                    <th>金额</th>
                 </tr>
                 </thead>
-                <tbody>
+                <{volist name="opject[1]" id="value" key="k"}>
+                <tr>
+                    <td>
+                        <{$value.op_month}>
+                    </td>
+                    <td>
+                        <{$value.op_percent}>
+                    </td>
+                    <td>
+                        <{$value.op_used}>
+                    </td>
+                </tr>
+                <{/volist}>
                 </tbody>
             </table>
         </div>
         <div class="col33">
-            <table class="acceptance_2" data="2">
+            <table data="1" style="border-collapse: separate;border-spacing: 0px 10px;color: red;">
                 <thead>
                 <tr>
-                    <td><i class="fa fa-search" data="acceptance"></i></td>
-                    <td>&#931;已交付</td>
-                    <td>0</td>
-                    <td>0%</td>
+                    <th>开票月</th>
+                    <th>比例</th>
+                    <th>金额</th>
                 </tr>
-                <tr class="thead">
-                    <td></td>
-                    <td>交付日期</td>
-                    <td>金额</td>
-                    <td>凭证</td>
+                </thead>
+                <{volist name="opject[1]" id="value" key="k"}>
+                <tr>
+                    <td>
+                        <{$value.op_month}>
+                    </td>
+                    <td>
+                        <{$value.op_percent}>
+                    </td>
+                    <td>
+                        <{$value.op_used}>
+                    </td>
+                </tr>
+                <{/volist}>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="content table clearfix">
+        <div class="col33">
+            <table data="2" style="border-collapse: separate;border-spacing: 0px 10px;">
+                <thead>
+                <tr>
+                    <th>交付月</th>
+                    <th>比例</th>
+                    <th>金额</th>
                 </tr>
                 </thead>
                 <tbody>
+                <{volist name="opject[2]" id="value" key="k"}>
+                <tr>
+                    <td>
+                        <{$value.op_month}>
+                    </td>
+                    <td>
+                        <{$value.op_percent}>
+                    </td>
+                    <td>
+                        <{$value.op_used}>
+                    </td>
+                </tr>
+                <{/volist}>
                 </tbody>
             </table>
         </div>
         <div class="col33">
-            <table class="received_3" data="3">
+            <table data="2" style="border-collapse: separate;border-spacing: 0px 10px;color: red;">
                 <thead>
                 <tr>
-                    <td><i class="fa fa-search" data="received"></i></td>
-                    <td>&#931;已交付</td>
-                    <td>0</td>
-                    <td>0%</td>
-                </tr>
-                <tr class="thead">
-                    <td></td>
-                    <td>付款日期</td>
-                    <td>金额</td>
-                    <td>凭证</td>
+                    <th>交付月</th>
+                    <th>比例</th>
+                    <th>金额</th>
                 </tr>
                 </thead>
                 <tbody>
+                <{volist name="opject[2]" id="value" key="k"}>
+                <tr>
+                    <td>
+                        <{$value.op_month}>
+                    </td>
+                    <td>
+                        <{$value.op_percent}>
+                    </td>
+                    <td>
+                        <{$value.op_used}>
+                    </td>
+                </tr>
+                <{/volist}>
                 </tbody>
             </table>
         </div>
     </div>
-    </div>
-    <div class="main-pannel">
-        <h3>预计执行计划</h3>
-        <div class="content table clearfix">
-            <div class="col33">
-                <table data="1" style="border-collapse: separate;border-spacing: 0px 10px;">
-                    <thead>
-                    <tr>
-                        <th class="icon"><i class="fa fa-plus"></i></th>
-                        <th>开票月</th>
-                        <th>比例</th>
-                        <th>金额</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <{volist name="opject[1]" id="value" key="k"}>
-                    <tr>
-                        <td class="icon"><i class="fa fa-remove"></i></td>
-                        <td>
-                            <select class="orderProject_month_1" name="project[1][month][]">
-                                <option value="<{$value.op_month}>" selected><{$value.op_month}></option>
-                            </select>
-                        </td>
-                        <td style="padding: 0 10px;">
-                            <input class="orderProject_percent_1 sliderPercent" name="project[1][percent][]" type="text" value="<{$value.op_used}>">
-                        </td>
-                        <td><input type="text" class="orderProject_value_1" name="project[1][value][]" value="<{$value.op_used}>" readonly/></td>
-                    </tr>
-                    <{/volist}>
-                    </tbody>
-                </table>
-            </div>
-            <div class="col33">
-                <table data="2" style="border-collapse: separate;border-spacing: 0px 10px;">
-                    <thead>
-                    <tr>
-                        <th class="icon"><i class="fa fa-plus"></i></th>
-                        <th>交付月</th>
-                        <th>比例</th>
-                        <th>金额</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <{volist name="opject[2]" id="value" key="k"}>
-                    <tr>
-                        <td class="icon"><i class="fa fa-remove"></i></td>
-                        <td>
-                            <select class="orderProject_month_2" name="project[2][month][]">
-                                <option value="<{$value.op_month}>" selected><{$value.op_month}></option>
-                            </select>
-                        </td>
-                        <td style="padding: 0 10px;">
-                            <input class="orderProject_percent_2 sliderPercent" name="project[2][percent][]" type="text" value="<{$value.op_used}>">
-                        </td>
-                        <td><input type="text" class="orderProject_value_2" name="project[2][value][]" value="<{$value.op_used}>" readonly/></td>
-                    </tr>
-                    <{/volist}>
-                    </tbody>
-                </table>
-            </div>
-            <div class="col33">
-                <table data="3" style="border-collapse: separate;border-spacing: 0px 10px;">
-                    <thead>
-                    <tr>
-                        <th class="icon"><i class="fa fa-plus"></i></th>
-                        <th>付款月</th>
-                        <th>比例</th>
-                        <th>金额</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <{volist name="opject[3]" id="value" key="k"}>
-                    <tr>
-                        <td class="icon"><i class="fa fa-remove"></i></td>
-                        <td>
-                            <select class="orderProject_month_3" name="project[3][month][]">
-                                <option value="<{$value.op_month}>" selected><{$value.op_month}></option>
-                            </select>
-                        </td>
-                        <td style="padding: 0 10px;">
-                            <input class="orderProject_percent_3 sliderPercent"  name="project[3][percent][]" type="text" value="<{$value.op_used}>">
-                        </td>
-                        <td><input type="text" class="orderProject_value_3" name="project[3][value][]" value="<{$value.op_used}>" readonly/></td>
-                    </tr>
-                    <{/volist}>
-                    </tbody>
-                </table>
-            </div>
+    <div class="content table clearfix">
+        <div class="col33">
+            <table data="3" style="border-collapse: separate;border-spacing: 0px 10px;">
+                <thead>
+                <tr>
+                    <th>付款月</th>
+                    <th>比例</th>
+                    <th>金额</th>
+                </tr>
+                </thead>
+                <tbody>
+                <{volist name="opject[3]" id="value" key="k"}>
+                <tr>
+                    <td>
+                        <{$value.op_month}>
+                    </td>
+                    <td>
+                        <{$value.op_percent}>
+                    </td>
+                    <td>
+                        <{$value.op_used}>
+                    </td>
+                </tr>
+                <{/volist}>
+                </tbody>
+            </table>
+        </div>
+        <div class="col33">
+            <table data="3" style="border-collapse: separate;border-spacing: 0px 10px;">
+                <thead>
+                <tr>
+                    <th>付款月</th>
+                    <th>比例</th>
+                    <th>金额</th>
+                </tr>
+                </thead>
+                <tbody>
+                <{volist name="opject[3]" id="value" key="k"}>
+                <tr>
+                    <td>
+                        <{$value.op_month}>
+                    </td>
+                    <td>
+                        <{$value.op_percent}>
+                    </td>
+                    <td>
+                        <{$value.op_used}>
+                    </td>
+                </tr>
+                <{/volist}>
+                </tbody>
+            </table>
         </div>
     </div>
-</form>
+</div>
 <{load href="/static/js/plugin/select/select.min.js,/static/js/plugin/slider/bootstrap-slider.min.js"/}>

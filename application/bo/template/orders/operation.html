@@ -240,6 +240,7 @@
                 </tr>
                 </thead>
                 <tbody>
+                <{if condition="count($opject[1]) >= 1"}>
                 <{volist name="opject[1]" id="value" key="k"}>
                 <tr>
                     <td class="icon"><i class="fa fa-remove"></i></td>
@@ -251,9 +252,22 @@
                     <td style="padding: 0 10px;">
                         <input class="orderProject_percent_1 sliderPercent" name="project[1][percent][]" type="text" value="<{$value.op_used}>">
                     </td>
-                    <td><input type="text" class="orderProject_value_1" name="project[1][value][]" value="<{$value.op_used}>" readonly/></td>
+                    <td><input type="text" class="orderProject_value_1 sliderValue" name="project[1][value][]" value="<{$value.op_used}>"/></td>
                 </tr>
                 <{/volist}>
+                <{else /}>
+                <tr>
+                    <td class="icon"><i class="fa fa-remove"></i></td>
+                    <td>
+                        <select class="orderProject_month_1" name="project[1][month][]">
+                        </select>
+                    </td>
+                    <td style="padding: 0 10px;">
+                        <input class="orderProject_percent_1 sliderPercent" name="project[1][percent][]" type="text" value="0">
+                    </td>
+                    <td><input type="text" class="orderProject_value_1 sliderValue" name="project[1][value][]" value="0"/></td>
+                </tr>
+                <{/if}>
                 </tbody>
             </table>
         </div>
@@ -268,6 +282,7 @@
                 </tr>
                 </thead>
                 <tbody>
+                <{if condition="count($opject[2]) >= 1"}>
                 <{volist name="opject[2]" id="value" key="k"}>
                 <tr>
                     <td class="icon"><i class="fa fa-remove"></i></td>
@@ -279,9 +294,22 @@
                     <td style="padding: 0 10px;">
                         <input class="orderProject_percent_2 sliderPercent" name="project[2][percent][]" type="text" value="<{$value.op_used}>">
                     </td>
-                    <td><input type="text" class="orderProject_value_2" name="project[2][value][]" value="<{$value.op_used}>" readonly/></td>
+                    <td><input type="text" class="orderProject_value_2 sliderValue" name="project[2][value][]" value="<{$value.op_used}>" readonly/></td>
                 </tr>
                 <{/volist}>
+                <{else /}>
+                <tr>
+                    <td class="icon"><i class="fa fa-remove"></i></td>
+                    <td>
+                        <select class="orderProject_month_2" name="project[2][month][]">
+                        </select>
+                    </td>
+                    <td style="padding: 0 10px;">
+                        <input class="orderProject_percent_2 sliderPercent" name="project[2][percent][]" type="text" value="0">
+                    </td>
+                    <td><input class="orderProject_value_2 sliderValue" name="project[2][value][]" type="text" value="0"/></td>
+                </tr>
+                <{/if}>
                 </tbody>
             </table>
         </div>
@@ -296,6 +324,7 @@
                 </tr>
                 </thead>
                 <tbody>
+                <{if condition="count($opject[3]) >= 1"}>
                 <{volist name="opject[3]" id="value" key="k"}>
                 <tr>
                     <td class="icon"><i class="fa fa-remove"></i></td>
@@ -305,11 +334,24 @@
                         </select>
                     </td>
                     <td style="padding: 0 10px;">
-                        <input class="orderProject_percent_3 sliderPercent"  name="project[3][percent][]" type="text" value="<{$value.op_used}>">
+                        <input class="orderProject_percent_3 sliderPercent"  name="project[3][percent][]" value="<{$value.op_used}>">
                     </td>
-                    <td><input type="text" class="orderProject_value_3" name="project[3][value][]" value="<{$value.op_used}>" readonly/></td>
+                    <td><input type="text" class="orderProject_value_3 sliderValue" name="project[3][value][]" value="<{$value.op_used}>" readonly/></td>
                 </tr>
                 <{/volist}>
+                <{else /}>
+                <tr>
+                    <td class="icon"><i class="fa fa-remove"></i></td>
+                    <td>
+                        <select class="orderProject_month_3" name="project[3][month][]">
+                        </select>
+                    </td>
+                    <td style="padding: 0 10px;">
+                        <input class="orderProject_percent_3 sliderPercent" name="project[3][percent][]" type="text" value="0">
+                    </td>
+                    <td><input type="text" class="orderProject_value_3 sliderValue" name="project[3][value][]" value="0"/></td>
+                </tr>
+                <{/if}>
                 </tbody>
             </table>
         </div>
@@ -327,26 +369,30 @@
         acceptance: "<{:url("/acceptance/searchAcceptance")}>",
         received:"<{:url("/received/searchReceived")}>",
     }
-    var focus1 = false;
     $(document).ready(function () {
         laydate.render({
             elem: '#o_date'
         });
-
+        $("table[data='1']:eq(1),table[data='2']:eq(1),table[data='3']:eq(1)").each(function(index, element){
+            if($(element).find("tr").length == 2){
+                $(element).find(".fa-remove").remove();
+            }
+        });
         if($("#o_status option:selected").val() == 6){
             $("#o_status option").prop("disabled", true);
             $("#o_status option:last").prop("disabled", false);
         }
         $(".content.table .sliderPercent").each(function(index, element){
             var total = $("#o_money").val() == "" ? 0 : parseFloat($("#o_money").val());
-            var val = parseFloat($(element).val());
+            var val = parseFloat($(element).parent().next().find("input").val());
+            $(element).slider().data("slider").destroy();
             $(element).slider({
-                value: val,
                 max: total,
                 formatter: function (value) {
-                    return formatValue(value)
+                    return formatValue(value, element);
                 },
             });
+            $(element).slider().data("slider").setValue(val);
             $(element).on('slideStop', function (ele) {
                 sliderChange(ele, this)
             });
@@ -359,7 +405,7 @@
             for (var i = 0; i < len; i++) {
                 html += '<option value="+' + bm[i] + '" ' + (option=="+"+bm[i] ? "selected" : "") + '>+ ' + bm[i] + '</option>';
             }
-            html += '<option value="0 M" ' + (option=="0 M" ? "selected" : "") + '>0 M</option>';
+            html += '<option value="0 M" ' + (option=="0 M" ? "selected" : (option == undefined ? "selected" : "")) + '>0 M</option>';
             for (var i = (len - 1); i >= 0; i--) {
                 html += '<option value="-' + bm[i] + '" ' + (option=="-"+bm[i] ? "selected" : "") + '>- ' + bm[i] + '</option>';
             }
@@ -374,31 +420,17 @@
         $("#o_did").change();
         $(".mstag").select2();
         $(".msmember").select2();
-        $("#o_cno,#o_pname,#o_coname").parent().click(function(){
-            if(focus1){
-                return false;
-            }else{
-                focus1
-            }
-            if($(this).val() == ""){
-                $(this).parents("tr").find("i:eq(0)").click();
-            }else{
-                $(this).parents("tr").find("i:eq(0)").hide();
-                $(this).parents("tr").find("i:eq(1)").show();
-            }
-        });
-        $("#o_cno,#o_pname,#o_coname").each(function(index, element){
-            if($(this).val() != ""){
-                $(this).parents("tr").find("i:eq(0)").hide();
-                $(this).parents("tr").find("i:eq(1)").show();
-            }
-        });
         $("#o_money").change(function () {
             calculateAll();
         });
         $(".fa-plus").click(function () {
             var table = $(this).parents("table");
             bindClick(table);
+        });
+        $(".sliderValue").each(function(index, element){
+            $(element).change(function(){
+                valueChange(this);
+            });
         });
         $("#opform").submit(function(){
             var o_pname = $("#o_pname");
@@ -460,10 +492,15 @@
             return false;
         });
         $(".fa-search").click(function () {
-            console.log(123);
             var type = $(this).attr("data");
             var thisEle = this;
             var inputs = $(this).parent().next().find("input");
+            var valss = $(inputs).val();
+            if(valss != "" && valss != undefined){
+                $(this).hide();
+                $(this).next().show();
+                return false;
+            }
             var cla = ".f-layer-" + type;
             if ($(cla).length <= 0) {
                 $.ajax({
@@ -479,17 +516,32 @@
                             } else {
                                 $(inputs).eq(0).val($(cla+" .selectRadio:checked").val());
                             }
-                            $(cla).hide();
+                            $(cla).removeClass("show");
                             $(cla + "-back").hide();
                             $(thisEle).next().show();
                             $(thisEle).hide();
                             $(thisEle).parent().next().find("input:eq(0)").unbind("focus");
-                            if(type == "contract"){
+                            if(type == "contract" && $(inputs).length > 1){
                                 $("#o_status option").prop("selected", false);
                                 $("#o_status option").prop("disabled", true);
                                 $("#o_status option:last").prop("selected", true);
                                 $("#o_status option:last").prop("disabled", false);
                                 $("#o_status").prop("", true);
+                                if($("#o_pname").val() != "" && $("#o_coname").val() != ""){
+                                    var json = JSON.parse(decodeURIComponent($(cla + " .selectRadio:checked").attr("data-value")));
+                                    var ts = parseInt(json.c_type) - 1;
+                                    var tss = parseInt(json.co_type) - 1;
+                                    $("#o_pname").val(json.c_pname);
+                                    $("#o_pname").click();
+                                    $("#o_pid").val(json.c_pid);
+                                    $("#o_coname").val(json.c_coname);
+                                    $("#o_coname").click();
+                                    $("#o_coid").val(json.c_coid);
+                                    $("#o_type option").prop("selected", false);
+                                    $("#o_type option:eq(" + ts + ")").prop("selected", true);
+                                    $("#o_lie option").prop("selected", false);
+                                    $("#o_lie option:eq(" + tss + ")").prop("selected", true);
+                                }
                             }
                             return false;
                         });
@@ -513,7 +565,6 @@
                     }
                 });
             } else {
-                //$(cla).show();
                 $(cla).addClass("show");
                 $(cla + "-back").show();
             }
@@ -535,6 +586,11 @@
                 $("#o_status option").prop("disabled", false);
                 $("#o_status option").prop("selected", false);
                 $("#o_status option:first").prop("selected", true);
+            }
+        });
+        $("#o_cno,#o_pname,#o_coname").each(function(index, element){
+            if($(element).val() != ""){
+                $(element).parent().prev().find("i:eq(0)").click();
             }
         });
     });
@@ -566,43 +622,50 @@
             plus += parseFloat($(element).html());
         });
         var persent = 100-((total-plus)/total*100);
-        console.log(persent);
         $(cla).find("tr:first").find("td:eq(2)").html(parseFloat(plus).toFixed(2));
         $(cla).find("tr:first").find("td:eq(3)").html(Math.round(persent)+"%");
     }
     function bindClick(element) {
         var index = $(element).attr('data');
         var baseTR = getBaseTR($(element).attr('data'));
-        var total = parseFloat($("#o_money").val());
+        var total = $("#o_money").val() == "" ? 0 : parseFloat($("#o_money").val());
         $(element).append(baseTR);
         if($(".orderProject_percent_"+index).length == 1){
-            $(".orderProject_percent_"+index+":eq(0)").slider('destroy');
+            $(".orderProject_percent_"+index+":eq(0)").slider().data("slider").destroy();
             $(".orderProject_percent_"+index+":eq(0)").slider({
-                value: total,
                 max: total,
                 formatter: function (value) {
                     return formatValue(value, $(".orderProject_percent_"+index+":eq(0)"))
                 },
             });
+            $(".orderProject_percent_"+index+":eq(0)").slider().data("slider").setValue(total);
             $(".orderProject_percent_"+index+":eq(0)").on('slideStop', function (ele) {
                 sliderChange(ele, this)
             });
+            $(".fa-remove").eq(0).remove();
         }else {
-            $(".orderProject_percent_" + index).each(function (index, ele) {
+            $(".orderProject_value_" + index).each(function (index, ele) {
+                var sl = $(ele).parent().prev().find("input");
                 var val = parseFloat($(ele).val());
-                $(ele).slider('destroy');
-                $(ele).slider({
-                    value: val,
+                $(sl).slider().data("slider").destroy();
+                $(sl).slider({
                     max: total,
                     formatter: function (value) {
-                        return formatValue(value, ele);
+                        return formatValue(value, sl);
                     },
                 });
-                $(ele).on('slideStop', function (ele) {
+                if(val > 0){
+                    $(sl).slider().data("slider").setValue(val);
+                }
+                $(sl).on('slideStop', function (ele) {
                     sliderChange(ele, this)
                 });
             });
         }
+        $(".orderProject_value_" + index).unbind("change");
+        $(".orderProject_value_" + index).change(function(){
+            valueChange(this);
+        });
         $(".fa-remove").unbind("click");
         $(".fa-remove").click(function () {
             $(this).parents("tr").remove();
@@ -610,9 +673,19 @@
     }
     function formatValue(value, ele){
         value = parseFloat(value);
+        if(value == 5){
+            $(ele).parent().next().find("input").val("0");
+            $(ele).val("0");
+            return "0%";
+        }
+        if(value == "" || value <= 0){
+            $(ele).parent().next().find("input").val("0");
+            return "0%";
+        }
         var total = parseFloat($("#o_money").val());
+        var persent = Math.round(100 - (total - value) / total * 100)+"%";
         $(ele).parent().next().find("input").val(value.toFixed(2));
-        return Math.round(100 - (total - value) / total * 100)+"%";
+        return persent;
     }
     function sliderChange(e, ele){
         var val = parseFloat(e.value);
@@ -626,9 +699,11 @@
         });
         if(total < now){
             $(ele).slider().data("slider").setValue(0);
+            $(ele).val(0);
         }else if((total-now) < val){
             val = total-now;
             $(ele).slider().data("slider").setValue(val);
+            $(ele).val(val);
         }
     }
     function calculateAll() {
@@ -640,20 +715,30 @@
     function calculate(index) {
         var values = $(".orderProject_value_" + index);
         var percents = $(".orderProject_percent_" + index);
+        if(values.length < 1){
+            return false;
+        }
         var cal = 0;
         var total = parseFloat($("#o_money").val());
         $(values).each(function (i, ele) {
-            var tmp = parseFloat($(ele).val());
-            tmp = isNaN(tmp) ? 0 : tmp;
+            var tmp = $(ele).val() == "" ? 0 : parseFloat($(ele).val());
             cal = cal + tmp;
         });
         $(percents).each(function(i, ele){
-            var val = parseFloat($(values).eq(i).val());
+            var val = $(values).eq(i).val() == "" ? 0 : parseFloat($(values).eq(i).val());
+            val = $(percents).length == 1 ? total : val;
+            $(ele).slider().data("slider").destroy();
             $(ele).slider({
-                value:val,
-                max:total
+                val:val,
+                max:total,
+                formatter: function (value) {
+                    return formatValue(value, ele);
+                },
             });
-            $(ele).slider().data("slider").relayout();
+            $(ele).slider().data("slider").setValue(val);
+            $(ele).on('slideStop', function (ele) {
+                sliderChange(ele, this)
+            });
         });
         if (!isNaN(total) && total > 0) {
             if (cal > total) {
@@ -715,7 +800,28 @@
         for (var i = (len - 1); i >= 0; i--) {
             baseTr += '<option value="-' + bm[i] + '">- ' + bm[i] + '</option>';
         }
-        baseTr += '</select></td><td style="padding: 0 10px;"><input type="text" class="orderProject_percent_' + index + ' sliderPercent" name="project[' + index + '][percent][]" value=""/></td><td><input class="orderProject_value_' + index + '" name="project[' + index + '][value][]" type="text" value="" readonly/></td></tr>';
+        baseTr += '</select></td><td style="padding: 0 10px;"><input type="text" class="orderProject_percent_' + index + ' sliderPercent" name="project[' + index + '][percent][]" value="0"/></td><td><input class="orderProject_value_' + index + ' sliderValue" name="project[' + index + '][value][]" type="text" value="0"/></td></tr>';
         return baseTr;
+    }
+    function valueChange(em){
+        var parentSlider = $(em).parent().prev().find("input");
+        var val = parseFloat($(em).val());
+        var total = parseFloat($("#o_money").val());
+        var classs = $(parentSlider).attr("class").split(" ");
+        var now = 0;
+        $("."+classs[0]).each(function(index, element){
+            if(!$(element).is($(parentSlider))){
+                now = now + parseFloat($(element).slider().data("slider").getValue());
+            }
+        });
+        if(total < now){
+            $(parentSlider).slider().data("slider").setValue(0);
+            $(parentSlider).val(0);
+        }else if((total-now) < val){
+            val = total-now;
+            $(parentSlider).slider().data("slider").setValue(val);
+            $(parentSlider).val(val);
+        }
+        $(parentSlider).slider().data("slider").setValue(val);
     }
 </script>

@@ -31,13 +31,15 @@ class Project extends BoModel
         $member = $this->getCurrent();
         $db = $this->db();
         $searchModel = $db->table('__PROJECT__')
-            ->alias('p')
-            ->field("p.*")
-            ->join('__CIRCULATION__ c', "p.p_id = c.ci_otid AND c.ci_type = 'project'");
+            ->alias('p');
+        if (!$member->m_isAdmin) {
+            $searchModel->join('__CIRCULATION__ c', "p.p_id = c.ci_otid AND c.ci_type = 'project'");
+            $searchModel->where("c.ci_mid", "=", $member->m_id);
+        }
+        $searchModel->field("p.*");
         foreach ($search as $key => $value) {
             $searchModel->where('p.' . $value['field'], $value['opt'], $value['val']);
         }
-        $searchModel->where("c.ci_mid", "=", $member->m_id);
         $list = $searchModel->paginate($limit, true);
         return $list;
     }

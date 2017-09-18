@@ -40,6 +40,9 @@ class Orders extends BoModel
         $tagList = !empty($data['tagList']) ? $data['tagList'] : array();
         $cList = !empty($data['cList']) ? $data['cList'] : array();
         $pj = !empty($data['project']) ? $data['project'] : array();
+        unset($data['tagList']);
+        unset($data['cList']);
+        unset($data['project']);
         $tlm = new Taglink();
         $clm = new Circulation();
         $opm = new OrderProject();

@@ -36,13 +36,15 @@ class Acceptance extends BoModel
         $member = $this->getCurrent();
         $db = $this->db();
         $searchModel = $db->table('__ACCEPTANCE__')
-            ->alias('a')
-            ->field("a.*")
-            ->join('__CIRCULATION__ c', "a.a_id = c.ci_otid AND c.ci_type = 'acceptance'");
+            ->alias('a');
+        if (!$member->m_isAdmin) {
+            $searchModel->join('__CIRCULATION__ c', "a.a_id = c.ci_otid AND c.ci_type = 'acceptance'");
+            $searchModel->where("c.ci_mid", "=", $member->m_id);
+        }
+        $searchModel->field("a.*");
         foreach ($search as $key => $value) {
             $searchModel->where('a.' . $value['field'], $value['opt'], $value['val']);
         }
-        $searchModel->where("c.ci_mid", "=", $member->m_id);
         $list = $searchModel->paginate($limit, true);
         return $list;
     }

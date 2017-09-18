@@ -1,4 +1,5 @@
 <?php
+
 namespace app\bo\model;
 
 use app\bo\libs\BoModel;
@@ -35,13 +36,15 @@ class Invoice extends BoModel
         $member = $this->getCurrent();
         $db = $this->db();
         $searchModel = $db->table('__INVOICE__')
-            ->alias('i')
-            ->field("i.*")
-            ->join('__CIRCULATION__ c', "i.i_id = c.ci_otid AND c.ci_type = 'invoice'");
+            ->alias('i');
+        if (!$member->m_isAdmin) {
+            $searchModel->join('__CIRCULATION__ c', "i.i_id = c.ci_otid AND c.ci_type = 'invoice'");
+            $searchModel->where("c.ci_mid", "=", $member->m_id);
+        }
+        $searchModel->field("i.*");
         foreach ($search as $key => $value) {
             $searchModel->where("i." . $value['field'], $value['opt'], $value['val']);
         }
-        $searchModel->where("c.ci_mid", "=", $member->m_id);
         $list = $searchModel->paginate($limit, true);
         return $list;
     }

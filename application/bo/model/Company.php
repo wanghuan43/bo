@@ -1,4 +1,5 @@
 <?php
+
 namespace app\bo\model;
 
 use app\bo\libs\BoModel;
@@ -31,13 +32,15 @@ class Company extends BoModel
         $member = $this->getCurrent();
         $db = $this->db();
         $searchModel = $db->table('__COMPANY__')
-            ->alias('co')
-            ->field("co.*")
-            ->join('__CIRCULATION__ c', "co.co_id = c.ci_otid AND c.ci_type = 'company'");
+            ->alias('co');
+        if (!$member->m_isAdmin) {
+            $searchModel->join('__CIRCULATION__ c', "co.co_id = c.ci_otid AND c.ci_type = 'company'");
+            $searchModel->where("c.ci_mid", "=", $member->m_id);
+        }
+            $searchModel->field("co.*");
         foreach ($search as $key => $value) {
             $searchModel->where("co." . $value['field'], $value['opt'], $value['val']);
         }
-        $searchModel->where("c.ci_mid", "=", $member->m_id);
         $list = $searchModel->paginate($limit, true);
         return $list;
     }
