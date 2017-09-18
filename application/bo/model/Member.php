@@ -8,6 +8,41 @@ class Member extends BoModel
 {
     protected $pk = 'm_id';
 
+    protected $searchable = array(
+        "m_code" => array(
+            "name" => "用户编号",
+            "type" => "text",
+            "operators" => array(
+                "like" => "包含",
+                "=" => "等于",
+            ),
+        ),
+        "m_name" => array(
+            "name" => "用户名",
+            "type" => "text",
+            "operators" => array(
+                "like" => "包含",
+                "=" => "等于",
+            ),
+        ),
+        "m_email" => array(
+            "name" => "用户邮箱",
+            "type" => "text",
+            "operators" => array(
+                "like" => "包含",
+                "=" => "等于",
+            ),
+        ),
+        "m_department" => array(
+            "name" => "用户部门",
+            "type" => "text",
+            "operators" => array(
+                "like" => "包含",
+                "=" => "等于",
+            ),
+        ),
+    );
+
     public function loginMember($data)
     {
         $permissionsModel = new Permissions();
