@@ -2,7 +2,18 @@
 <div class="f-layer-<{$type}>-back"
      style="display:none;background-color: black;opacity: 0.5;width: 100%;height: 100%;position: fixed;top: 0;"></div>
 <div class="f-layer f-layer-<{$type}>" style="display: block;">
-    <form action="<{:url("/$type/search".ucfirst($type))}>" id="<{$type}>Form">
+    <{if empty($Request.get)}>
+        <{assign name="str" value=""}>
+    <{else}>
+        <{assign name="str" value="?"}>
+        <{foreach $Request.get as $key=>$val}>
+            <{if $str != '?'}>
+                <{assign name="str" value="$str.'&'"}>
+            <{/if}>
+            <{assign name="str" value="$str.$key.'='.$val"}>
+        <{/foreach}>
+    <{/if}>
+    <form action="<{:url("/$type/search".ucfirst($type)).$str}>" id="<{$type}>Form">
     <div class="clearfix header">
         <h2>搜索条件:</h2>
         <div class="btn-pannel">
