@@ -2,6 +2,7 @@
 namespace app\bo\controller;
 
 use app\bo\libs\BoController;
+use think\Request;
 
 class Member extends BoController
 {
@@ -10,7 +11,7 @@ class Member extends BoController
         parent::__construct($request);
     }
 
-    public function searchCompany()
+    public function searchMember()
     {
         $memberModel = new \app\bo\model\Member();
         $this->assign("type", "member");

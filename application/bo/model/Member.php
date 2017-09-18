@@ -75,4 +75,14 @@ class Member extends BoModel
         }
         return $array;
     }
+
+    public function getList($search = array(), $limit = 10)
+    {
+        $limit = 10;
+        foreach( $search as $key => $value ){
+            $this->where($value['field'],$value['opt'],$value['val']);
+        }
+        $list = $this->paginate($limit);
+        return $list;
+    }
 }

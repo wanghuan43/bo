@@ -1,16 +1,21 @@
 <?php
 namespace app\bo\controller;
 
-use think\Controller;
+use app\bo\libs\BoController;
 use app\bo\model\Menu as Model;
-class Menu extends Controller
+use think\Request;
+
+class Menu extends BoController
 {
     protected $model;
-    
-    public function __construct()
+
+    /**
+     * Menu constructor.
+     */
+    public function __construct(Request $request)
     {
         $this->model = new Model();
-        parent::__construct();
+        parent::__construct($request);
     }
     
     public function index()

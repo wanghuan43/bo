@@ -6,7 +6,7 @@ use app\bo\libs\BoModel;
 class Acceptance extends BoModel
 {
 
-    protected $pk = "i_id";
+    protected $pk = "a_id";
 
     protected $searchable = array(
         "a_date" => array(

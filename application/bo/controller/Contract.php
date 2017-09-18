@@ -17,4 +17,19 @@ class Contract extends BoController
         $this->assign("type", "contract");
         return $this->search($contractModel);
     }
+
+    public function add()
+    {
+        if( $this->request->isPost() ){
+
+        }else{
+            return $this->fetch();
+        }
+    }
+
+    public function all()
+    {
+        return '<h2>所有合同</h2>';
+    }
+
 }

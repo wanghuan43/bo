@@ -1,0 +1,35 @@
+<div class="clearfix">
+    <nav aria-label="Page navigation">
+        <{$lists->render()}>
+    </nav>
+    <{assign name="type" value="$Request.get.type" /}>
+    <div class="main-pannel">
+        <table class="list" cellspacing="0">
+            <thead>
+            <tr>
+                <{if empty($type)}>
+                <th style="min-width: 50px;text-align:center;padding-right:4px;"><input type="checkbox" id="list-all-member" value="all"/></th>
+                <{else}>
+                <th style="min-width: 50px;text-align:center;padding-right:4px;"></th>
+                <{/if}>
+                <th>编号</th>
+            </tr>
+            </thead>
+            <tbody>
+            <{volist name="lists" id="vo" empty="$empty"}>
+            <tr>
+                <{if empty($type)}>
+                <td><input type="checkbox" value="<{$vo.m_id}>" class="member-ids"></td>
+                <{else}>
+                <td><input type="radio" value="<{$vo.m_id}>" class="member-ids" name="member-id"></td>
+                <{/if}>
+                <td><{$vo.m_name}></td>
+            </tr>
+            <{/volist}>
+            </tbody>
+        </table>
+    </div>
+    <nav aria-label="Page navigation">
+        <{$lists->render()}>
+    </nav>
+</div>

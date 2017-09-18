@@ -2,7 +2,7 @@
 namespace app\bo\controller;
 
 use app\bo\libs\BoController;
-use think\Request;
+
 use app\bo\libs\DataImport;
 
 class Data extends BoController

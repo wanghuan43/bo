@@ -431,3 +431,7 @@ table.list td:first-child {
 	color: silver;
 	cursor: not-allowed;
 }
+.form-default{
+    margin-top: 4em;
+    max-width: 500px
+}

@@ -11,6 +11,8 @@ class BoController extends Controller
     protected $limit = 20;
     protected $current = false;
 
+    protected $model;
+
     /**
      * BoController constructor.
      * @param Request $request
@@ -27,7 +29,7 @@ class BoController extends Controller
 
     protected function search($model, $file="common/poplayer", $colspan = "3")
     {
-        $post = Request::instance()->param();
+        $post = Request::instance()->post();
         $name = get_class($model);
         $name = strtolower(substr($name, strripos($name, "\\")+1));
         $search = array();
@@ -67,4 +69,55 @@ class BoController extends Controller
         }
         return "";
     }
+
+
+    public function add()
+    {
+        if($this->request->isPost()){
+            return $this->doAdd();
+        }else{
+            return $this->fetch();
+        }
+    }
+
+    public function all()
+    {
+        if( empty($this->model) ){
+            $ret = '<h2>Error Page!</h2>';
+        }else {
+            $list = $this->model->paginate($this->limit);
+            $this->assign('lists', $list);
+            $ret = $this->fetch();
+        }
+        return $ret;
+    }
+
+    public function del()
+    {
+        if(empty($this->model)){
+            $ret = ['flag'=>0,'msg'=>'发生错误'];
+        }else {
+            $ids = $this->request->post('ids/a');
+
+            if (is_array($ids) && count($ids) > 0) {
+
+                $res = $this->model->whereIn($this->model->getPk() , $ids)->delete();
+
+                if ($res) {
+                    $ret = ['flag' => 1, 'msg' => '删除成功'];
+                } else {
+                    $ret = ['flag' => 0, 'msg' => '删除失败'];
+                }
+            } else {
+                $ret = ['flag' => 0, 'msg' => '参数错误'];
+            }
+        }
+
+        return $ret;
+    }
+
+    protected function doAdd(){
+        return ['flag'=>0,'msg'=>'发生错误'];
+    }
+
 }
