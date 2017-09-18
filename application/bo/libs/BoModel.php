@@ -28,5 +28,8 @@ abstract class BoModel extends Model
         return array("fields" => $fields, "operators" => $operators, "length" => count($fields));
     }
 
-    abstract public function getList($search = array(), $limit = 20);
+    public function getList()
+    {
+        return $this->paginate();
+    }
 }
