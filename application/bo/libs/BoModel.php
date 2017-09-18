@@ -1,4 +1,5 @@
 <?php
+
 namespace app\bo\libs;
 
 use think\Model;
@@ -26,4 +27,6 @@ class BoModel extends Model
         }
         return array("fields" => $fields, "operators" => $operators, "length" => count($fields));
     }
+
+    abstract public function getList($search = array(), $limit = 20);
 }
