@@ -183,7 +183,9 @@ class Orders extends BoController
         $log['project'][3] = isset($log['project'][3]) ? (is_array($log['project'][3]) ? $log['project'][3] : array()) : array();
         $project = array();
         foreach($log['project'][1] as $value){
-
+            $tmp = [
+                ""
+            ];
         }
         $log['l_old']['o_tax'] = getTaxList($log['l_old']['o_tax']);
         $log['l_new']['o_tax'] = getTaxList($log['l_new']['o_tax']);

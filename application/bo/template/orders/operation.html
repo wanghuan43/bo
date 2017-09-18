@@ -1,4 +1,4 @@
-<{load href="/static/css/select.min.css,/static/css/bootstrap-slider.min.css"/}>
+<{load href="/static/css/select.min.css,/static/css/jquery-ui.min.css"/}>
 <form action="/orders/doOperation?op=<{$op}>&op_id=<{$op_id}>" method="post" id="opform">
 <div class="clearfix header">
     <h2>订单信息管理（商机阶段）</h2>
@@ -249,8 +249,10 @@
                             <option value="<{$value.op_month}>" selected><{$value.op_month}></option>
                         </select>
                     </td>
-                    <td style="padding: 0 10px;">
-                        <input class="orderProject_percent_1 sliderPercent" name="project[1][percent][]" type="text" value="<{$value.op_used}>">
+                    <td style="width: 200px;">
+                        <div class="slider" style="margin: 0 20px;">
+                        </div>
+                        <input class="orderProject_percent_1 sliderPercent" name="project[1][percent][]" type="text" style="display: none;" value="<{$value.op_used}>">
                     </td>
                     <td><input type="text" class="orderProject_value_1 sliderValue" name="project[1][value][]" value="<{$value.op_used}>"/></td>
                 </tr>
@@ -258,14 +260,16 @@
                 <{else /}>
                 <tr>
                     <td class="icon"><i class="fa fa-remove"></i></td>
-                    <td>
+                    <td style="padding: 0 10px;">
                         <select class="orderProject_month_1" name="project[1][month][]">
                         </select>
                     </td>
-                    <td style="padding: 0 10px;">
-                        <input class="orderProject_percent_1 sliderPercent" name="project[1][percent][]" type="text" value="0">
+                    <td style="width: 200px;">
+                        <div class="slider">
+                        </div>
+                        <input class="orderProject_percent_1 sliderPercent" name="project[1][percent][]" style="display: none;" type="text" value="0">
                     </td>
-                    <td><input type="text" class="orderProject_value_1 sliderValue" name="project[1][value][]" value="0"/></td>
+                    <td style="padding: 0 10px;"><input type="text" class="orderProject_value_1 sliderValue" name="project[1][value][]" value="0"/></td>
                 </tr>
                 <{/if}>
                 </tbody>
@@ -291,8 +295,10 @@
                             <option value="<{$value.op_month}>" selected><{$value.op_month}></option>
                         </select>
                     </td>
-                    <td style="padding: 0 10px;">
-                        <input class="orderProject_percent_2 sliderPercent" name="project[2][percent][]" type="text" value="<{$value.op_used}>">
+                    <td style="padding: 0 10px;width: 200px;">
+                        <div class="slider">
+                        </div>
+                        <input class="orderProject_percent_2 sliderPercent" name="project[2][percent][]" style="display: none;" type="text" value="<{$value.op_used}>">
                     </td>
                     <td><input type="text" class="orderProject_value_2 sliderValue" name="project[2][value][]" value="<{$value.op_used}>" readonly/></td>
                 </tr>
@@ -304,8 +310,10 @@
                         <select class="orderProject_month_2" name="project[2][month][]">
                         </select>
                     </td>
-                    <td style="padding: 0 10px;">
-                        <input class="orderProject_percent_2 sliderPercent" name="project[2][percent][]" type="text" value="0">
+                    <td style="padding: 0 10px;width: 200px;">
+                        <div class="slider">
+                        </div>
+                        <input class="orderProject_percent_2 sliderPercent" name="project[2][percent][]" style="display: none;" type="text" value="0">
                     </td>
                     <td><input class="orderProject_value_2 sliderValue" name="project[2][value][]" type="text" value="0"/></td>
                 </tr>
@@ -333,8 +341,10 @@
                             <option value="<{$value.op_month}>" selected><{$value.op_month}></option>
                         </select>
                     </td>
-                    <td style="padding: 0 10px;">
-                        <input class="orderProject_percent_3 sliderPercent"  name="project[3][percent][]" value="<{$value.op_used}>">
+                    <td style="padding: 0 10px;width: 200px;">
+                        <div class="slider">
+                        </div>
+                        <input class="orderProject_percent_3 sliderPercent"  name="project[3][percent][]" style="display: none;" value="<{$value.op_used}>">
                     </td>
                     <td><input type="text" class="orderProject_value_3 sliderValue" name="project[3][value][]" value="<{$value.op_used}>" readonly/></td>
                 </tr>
@@ -346,8 +356,10 @@
                         <select class="orderProject_month_3" name="project[3][month][]">
                         </select>
                     </td>
-                    <td style="padding: 0 10px;">
-                        <input class="orderProject_percent_3 sliderPercent" name="project[3][percent][]" type="text" value="0">
+                    <td style="padding: 0 10px;width: 200px;">
+                        <div class="slider">
+                        </div>
+                        <input class="orderProject_percent_3 sliderPercent" name="project[3][percent][]" style="display: none;" type="text" value="0">
                     </td>
                     <td><input type="text" class="orderProject_value_3 sliderValue" name="project[3][value][]" value="0"/></td>
                 </tr>
@@ -358,7 +370,7 @@
     </div>
 </div>
 </form>
-<{load href="/static/js/plugin/select/select.min.js,/static/js/plugin/slider/bootstrap-slider.min.js"/}>
+<{load href="/static/js/plugin/select/select.min.js,/static/js/jquery-ui.custom.js"/}>
 <script>
     var baseMonth = '<{$baseMonth}>';
     var baseUrl = {
@@ -382,19 +394,35 @@
             $("#o_status option").prop("disabled", true);
             $("#o_status option:last").prop("disabled", false);
         }
-        $(".content.table .sliderPercent").each(function(index, element){
+        $(".content.table .slider").each(function(index, element){
             var total = $("#o_money").val() == "" ? 0 : parseFloat($("#o_money").val());
-            var val = parseFloat($(element).parent().next().find("input").val());
-            $(element).slider().data("slider").destroy();
+            var val = $(element).parent().next().find("input").val() != "" ? parseFloat($(element).parent().next().find("input").val()) : 0;
+            var handle = $(element).find(".custom-handle");
+            var persent = Math.round(100 - (total - val) / total * 100)+"%";
             $(element).slider({
+                value: val,
                 max: total,
-                formatter: function (value) {
-                    return formatValue(value, element);
+                create: function(event) {
+                    $(event.target).next().val(persent);
+                    $(event.target).find("span").text(persent);
                 },
-            });
-            $(element).slider().data("slider").setValue(val);
-            $(element).on('slideStop', function (ele) {
-                sliderChange(ele, this)
+                slide: function( event, ui ) {
+                    try{
+                    sliderChange(ui, $(event.target).parent().next().find("input"));
+                    var p = Math.round(100 - (total - ui.value) / total * 100)+"%";
+                    $(ui.handle).text(p);
+                    $(event.target).next().val(p);
+                    $(event.target).parent().next().find("input").val(ui.value);
+                    }catch (err){
+
+                    }
+                },
+                change: function (event, ui) {
+                    var p = Math.round(100 - (total - ui.value) / total * 100)+"%";
+                    $(ui.handle).text(p);
+                    $(event.target).next().val(p);
+                    $(event.target).parent().next().find("input").val(ui.value);
+                }
             });
         });
         $(".content.table select").each(function(index, element){
@@ -631,34 +659,71 @@
         var total = $("#o_money").val() == "" ? 0 : parseFloat($("#o_money").val());
         $(element).append(baseTR);
         if($(".orderProject_percent_"+index).length == 1){
-            $(".orderProject_percent_"+index+":eq(0)").slider().data("slider").destroy();
+            $(".orderProject_percent_"+index+":eq(0)").slider("destroy");
             $(".orderProject_percent_"+index+":eq(0)").slider({
+                value:total,
                 max: total,
-                formatter: function (value) {
-                    return formatValue(value, $(".orderProject_percent_"+index+":eq(0)"))
+                create: function(event) {
+                    $(event.target).next().val("100%");
+                    $(event.target).find("span").text("100%");
                 },
-            });
-            $(".orderProject_percent_"+index+":eq(0)").slider().data("slider").setValue(total);
-            $(".orderProject_percent_"+index+":eq(0)").on('slideStop', function (ele) {
-                sliderChange(ele, this)
+                slide: function( event, ui ) {
+                    var r = true;
+                    try{
+                    sliderChange(ui, $(event.target).parent().next().find("input"));
+                    var p = Math.round(100 - (total - ui.value) / total * 100)+"%";
+                    $(ui.handle).text(p);
+                    $(event.target).next().val(p);
+                    $(event.target).parent().next().find("input").val(ui.value);
+                    }catch (err){
+                        r = false;
+                    }
+                    return r;
+                },
+                change: function (event, ui) {
+                    var p = Math.round(100 - (total - ui.value) / total * 100)+"%";
+                    $(ui.handle).text(p);
+                    $(event.target).next().val(p);
+                    $(event.target).parent().next().find("input").val(ui.value);
+                }
             });
             $(".fa-remove").eq(0).remove();
         }else {
             $(".orderProject_value_" + index).each(function (index, ele) {
-                var sl = $(ele).parent().prev().find("input");
+                var sl = $(ele).parent().prev().find(".slider");
                 var val = parseFloat($(ele).val());
-                $(sl).slider().data("slider").destroy();
-                $(sl).slider({
-                    max: total,
-                    formatter: function (value) {
-                        return formatValue(value, sl);
-                    },
-                });
-                if(val > 0){
-                    $(sl).slider().data("slider").setValue(val);
+                try {
+                    $(sl).slider("destroy");
+                }catch (err){
+
                 }
-                $(sl).on('slideStop', function (ele) {
-                    sliderChange(ele, this)
+                $(sl).slider({
+                    value:val,
+                    max: total,
+                    create: function(event) {
+                        var p = Math.round(100 - (total - val) / total * 100)+"%";
+                        $(event.target).next().val(p);
+                        $(event.target).find("span").text(p);
+                    },
+                    slide: function( event, ui ) {
+                        var r = true;
+                        try{
+                        sliderChange(ui, $(event.target).parent().next().find("input"));
+                        var p = Math.ceil(100 - (total - ui.value) / total * 100)+"%";
+                        $(ui.handle).text(p);
+                        $(event.target).next().val(p);
+                        $(event.target).parent().next().find("input").val(ui.value);
+                        }catch(err){
+                            r = false;
+                        }
+                        return r;
+                    },
+                    change: function (event, ui) {
+                        var p = Math.ceil(100 - (total - ui.value) / total * 100)+"%";
+                        $(ui.handle).text(p);
+                        $(event.target).next().val(p);
+                        $(event.target).parent().next().find("input").val(ui.value);
+                    }
                 });
             });
         }
@@ -687,23 +752,26 @@
         $(ele).parent().next().find("input").val(value.toFixed(2));
         return persent;
     }
-    function sliderChange(e, ele){
-        var val = parseFloat(e.value);
+    function sliderChange(ui, ele){
+        var val = parseFloat(ui.value);
         var total = parseFloat($("#o_money").val());
         var classs = $(ele).attr("class").split(" ");
+        var persent = $(ele).parent().prev().find(".slider");
         var now = 0;
         $("."+classs[0]).each(function(index, element){
             if(!$(element).is($(ele))){
-                now = now + parseFloat($(element).slider().data("slider").getValue());
+                now = now + parseFloat($(element).val());
             }
         });
-        if(total < now){
-            $(ele).slider().data("slider").setValue(0);
+        if(total <= now){
+            $("."+persent).slider( "value", 0 );
+            ui.value = 0;
             $(ele).val(0);
-        }else if((total-now) < val){
+        }else if((total-now) <= val){
             val = total-now;
-            $(ele).slider().data("slider").setValue(val);
             $(ele).val(val);
+            ui.value = val;
+            $("."+persent).slider( "value", val );
         }
     }
     function calculateAll() {
@@ -726,18 +794,40 @@
         });
         $(percents).each(function(i, ele){
             var val = $(values).eq(i).val() == "" ? 0 : parseFloat($(values).eq(i).val());
-            val = $(percents).length == 1 ? total : val;
-            $(ele).slider().data("slider").destroy();
-            $(ele).slider({
+            if($(percents).length == 1){
+                $(values).eq(i).val(total);
+                $(ele).val("100%");
+                val = total;
+            }
+            $(ele).prev().slider("destroy");
+            $(ele).prev().slider({
                 val:val,
                 max:total,
-                formatter: function (value) {
-                    return formatValue(value, ele);
+                create: function(event) {
+                    var p = Math.ceil(100 - (total - val) / total * 100)+"%";
+                    $(event.target).next().val(p);
+                    $(event.target).find("span").text(p);
+                    $(event.target).find("span").css("left", "100%");
                 },
-            });
-            $(ele).slider().data("slider").setValue(val);
-            $(ele).on('slideStop', function (ele) {
-                sliderChange(ele, this)
+                slide: function( event, ui ) {
+                    var r = true;
+                    try{
+                        sliderChange(ui, $(event.target).parent().next().find("input"));
+                        var p = Math.ceil(100 - (total - ui.value) / total * 100)+"%";
+                        $(ui.handle).text(p);
+                        $(event.target).next().val(p);
+                        $(event.target).parent().next().find("input").val(ui.value);
+                    }catch(err){
+                        r = false;
+                    }
+                    return r;
+                },
+                change: function (event, ui) {
+                    var p = Math.ceil(100 - (total - ui.value) / total * 100)+"%";
+                    $(ui.handle).text(p);
+                    $(event.target).next().val(p);
+                    $(event.target).parent().next().find("input").val(ui.value);
+                }
             });
         });
         if (!isNaN(total) && total > 0) {
@@ -800,28 +890,31 @@
         for (var i = (len - 1); i >= 0; i--) {
             baseTr += '<option value="-' + bm[i] + '">- ' + bm[i] + '</option>';
         }
-        baseTr += '</select></td><td style="padding: 0 10px;"><input type="text" class="orderProject_percent_' + index + ' sliderPercent" name="project[' + index + '][percent][]" value="0"/></td><td><input class="orderProject_value_' + index + ' sliderValue" name="project[' + index + '][value][]" type="text" value="0"/></td></tr>';
+        baseTr += '</select></td><td style="width: 200px;"><div class="slider" style="margin: 0 20px;"></div><input type="text" class="orderProject_percent_' + index + ' sliderPercent" style="display: none;" name="project[' + index + '][percent][]" value="0"/></td><td><input class="orderProject_value_' + index + ' sliderValue" name="project[' + index + '][value][]" type="text" value="0"/></td></tr>';
         return baseTr;
     }
     function valueChange(em){
         var parentSlider = $(em).parent().prev().find("input");
+        var persent = $(em).parent().prev().find(".slider");
         var val = parseFloat($(em).val());
         var total = parseFloat($("#o_money").val());
         var classs = $(parentSlider).attr("class").split(" ");
         var now = 0;
         $("."+classs[0]).each(function(index, element){
             if(!$(element).is($(parentSlider))){
-                now = now + parseFloat($(element).slider().data("slider").getValue());
+                now = now + parseFloat($(element).prev().slider("value"));
             }
         });
         if(total < now){
-            $(parentSlider).slider().data("slider").setValue(0);
+            $(persent).slider("value", 0);
             $(parentSlider).val(0);
         }else if((total-now) < val){
             val = total-now;
-            $(parentSlider).slider().data("slider").setValue(val);
+            $(persent).slider("value", val);
+            $(parentSlider).val(val);
+        }else{
+            $(persent).slider("value", val);
             $(parentSlider).val(val);
         }
-        $(parentSlider).slider().data("slider").setValue(val);
     }
 </script>

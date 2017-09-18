@@ -14481,7 +14481,7 @@ var widgetsSelectmenu = $.widget( "ui.selectmenu", [ $.ui.formResetMixin, {
 //>>css.theme: ../../themes/base/theme.css
 
 
-/*
+
 var widgetsSlider = $.widget( "ui.slider", $.ui.mouse, {
 	version: "1.12.1",
 	widgetEventPrefix: "slide",
@@ -14821,7 +14821,8 @@ var widgetsSlider = $.widget( "ui.slider", $.ui.mouse, {
 
 	value: function( newValue ) {
 		if ( arguments.length ) {
-			this.options.value = this._trimAlignValue( newValue );
+			var r = this._trimAlignValue( newValue );
+            this.options.value = this.options.max - r <= 1 ? this.options.max : r;
 			this._refreshValue();
 			this._change( null, 0 );
 			return;
@@ -15049,6 +15050,7 @@ var widgetsSlider = $.widget( "ui.slider", $.ui.mouse, {
 			this.handles.each( function( i ) {
 				valPercent = ( that.values( i ) - that._valueMin() ) / ( that._valueMax() -
 					that._valueMin() ) * 100;
+				valPercent = Math.round(valPercent);
 				_set[ that.orientation === "horizontal" ? "left" : "bottom" ] = valPercent + "%";
 				$( this ).stop( 1, 1 )[ animate ? "animate" : "css" ]( _set, o.animate );
 				if ( that.options.range === true ) {
@@ -15091,6 +15093,7 @@ var widgetsSlider = $.widget( "ui.slider", $.ui.mouse, {
 			valPercent = ( valueMax !== valueMin ) ?
 					( value - valueMin ) / ( valueMax - valueMin ) * 100 :
 					0;
+			valPercent = Math.round(valPercent);
 			_set[ this.orientation === "horizontal" ? "left" : "bottom" ] = valPercent + "%";
 			this.handle.stop( 1, 1 )[ animate ? "animate" : "css" ]( _set, o.animate );
 
@@ -15196,7 +15199,7 @@ var widgetsSlider = $.widget( "ui.slider", $.ui.mouse, {
 		}
 	}
 } );
-*/
+
 
 /*!
  * jQuery UI Sortable 1.12.1
