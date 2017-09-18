@@ -5,7 +5,7 @@ namespace app\bo\libs;
 use think\Model;
 use think\Request;
 
-class BoModel extends Model
+abstract class BoModel extends Model
 {
     protected $searchable;
 
