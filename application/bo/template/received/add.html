@@ -1,20 +1,13 @@
 <div class="page-header">
-    <h2>添加验收单</h2>
+    <h2>添加付款单</h2>
 </div>
 
-<form class="form-horizontal form-default" id="form-add-acceptance" action="/acceptance/add" method="post" onsubmit="return false;">
+<form class="form-horizontal form-default" id="form-add-received" action="/received/add" method="post" onsubmit="return false;">
 
     <div class="form-group">
-        <label for="inputNo" class="col-sm-2 control-label">验收单号</label>
+        <label for="inputNo" class="col-sm-2 control-label">付款单号</label>
         <div class="col-sm-10">
             <input type="text" class="form-control" id="inputNo"  name="no" />
-        </div>
-    </div>
-
-    <div class="form-group">
-        <label for="txtContent" class="col-sm-2 control-label">描述</label>
-        <div class="col-sm-10">
-            <textarea class="form-control" rows="3" name="content" id="txtContent"></textarea>
         </div>
     </div>
 
@@ -31,7 +24,7 @@
     </div>
 
     <div class="form-group">
-        <label class="col-sm-2 control-label">对方公司</label>
+        <label class="col-sm-2 control-label">公司</label>
         <div class="col-sm-10">
             <input type="text" class="form-control" name="coname" id="inputCompany" readonly/>
             <input type="hidden" name="coid" />
@@ -58,7 +51,7 @@
         </div>
     </div>
     <div class="form-group">
-        <label class="col-sm-2 control-label">验收时间</label>
+        <label class="col-sm-2 control-label">发生时间</label>
         <div class="col-sm-10">
             <input type="text" class="form-control" name="date" id="inputDate"/>
         </div>
@@ -74,7 +67,7 @@
 
     <div class="form-group">
         <div class="col-sm-offset-2 col-sm-10">
-            <button class="btn btn-default" id="btn-add-acceptance">确认</button>
+            <button class="btn btn-default" id="btn-add-received">确认</button>
         </div>
     </div>
 
@@ -118,8 +111,8 @@
             }
         });
 
-        $("#btn-add-acceptance").click(function(){
-            var form = $("#form-add-acceptance");
+        $("#btn-add-received").click(function(){
+            var form = $("#form-add-received");
             $.ajax({
                 url:form.attr("action"),
                 data:form.serialize(),
@@ -129,7 +122,7 @@
                     custom.alert(res.msg);
                 }
             });
-            //$("#form-add-acceptance");
+            //$("#form-add-received")
         });
         /*$("#inputName").click(function(){
             if( $(".f-layer-member").length>0){
