@@ -84,6 +84,7 @@
                     $("#<{$type}>List").html(data.content);
                     $("#invoiceList input").click(function(){
                         var cla = ".f-layer-<{$type}>";
+                        console.log(cla);
                         if($(this).attr('c') == "true"){
                             $(this).prop("checked", false);
                             $(this).attr("c", "false");
@@ -100,7 +101,7 @@
                             $(cla).find(".on_class").html(jdata.id);
                             $(cla).find(".cp_class").html(jdata.coname);
                             $(cla).find(".money_class").html(jdata.money);
-                            $(cla).find(".m_class").val(jdata.noused);
+//                            $(cla).find(".m_class").val(jdata.noused);
                             $(cla).find(".m_class").attr("max", jdata.noused);
                             $(cla).find(".no_class").html(jdata.noused);
                         }

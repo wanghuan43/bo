@@ -181,6 +181,23 @@
                 </tr>
                 </thead>
                 <tbody>
+                <{if condition="count($oused[1]) >= 1"}>
+                <{volist name="oused[1]" id="value" key="k"}>
+                <tr>
+                    <td>
+                        <i class="fa fa-minus-circle" data="<{$value['ou_id']}>"></i>
+                    </td>
+                    <td><?php echo date("Y-m-d", $value['ou_date']); ?></td>
+                    <td class="mony-invoice"><{$value['ou_used']}></td>
+                    <td>
+                        <a href="#" target="_blank" style="color: blue;"><{$value['ou_oid']}></a>
+                        <input type="hidden" name="used[1][date][]" value="<?php echo date("Y-m-d", $value['ou_date']); ?>">
+                        <input type="hidden" name="used[1][value][]" value="<{$value['ou_used']}>">
+                        <input type="hidden" name="used[1][ot_id][]" value="<{$value['ou_oid']}>">
+                    </td>
+                </tr>
+                <{/volist}>
+                <{/if}>
                 </tbody>
             </table>
         </div>
@@ -201,6 +218,23 @@
                 </tr>
                 </thead>
                 <tbody>
+                <{if condition="count($oused[2]) >= 1"}>
+                <{volist name="oused[2]" id="value" key="k"}>
+                <tr>
+                    <td>
+                        <i class="fa fa-minus-circle" data="<{$value['ou_id']}>"></i>
+                    </td>
+                    <td><?php echo date("Y-m-d", $value['ou_date']); ?></td>
+                    <td class="mony-invoice"><{$value['ou_used']}></td>
+                    <td>
+                        <a href="#" target="_blank" style="color: blue;"><{$value['ou_oid']}></a>
+                        <input type="hidden" name="used[2][date][]" value="<?php echo date("Y-m-d", $value['ou_date']); ?>">
+                        <input type="hidden" name="used[2][value][]" value="<{$value['ou_used']}>">
+                        <input type="hidden" name="used[2][ot_id][]" value="<{$value['ou_oid']}>">
+                    </td>
+                </tr>
+                <{/volist}>
+                <{/if}>
                 </tbody>
             </table>
         </div>
@@ -221,6 +255,23 @@
                 </tr>
                 </thead>
                 <tbody>
+                <{if condition="count($oused[3]) >= 1"}>
+                <{volist name="oused[3]" id="value" key="k"}>
+                <tr>
+                    <td>
+                        <i class="fa fa-minus-circle" data="<{$value['ou_id']}>"></i>
+                    </td>
+                    <td><?php echo date("Y-m-d", $value['ou_date']); ?></td>
+                    <td class="mony-invoice"><{$value['ou_used']}></td>
+                    <td>
+                        <a href="#" target="_blank" style="color: blue;"><{$value['ou_oid']}></a>
+                        <input type="hidden" name="used[3][date][]" value="<?php echo date("Y-m-d", $value['ou_date']); ?>">
+                        <input type="hidden" name="used[3][value][]" value="<{$value['ou_used']}>">
+                        <input type="hidden" name="used[3][ot_id][]" value="<{$value['ou_oid']}>">
+                    </td>
+                </tr>
+                <{/volist}>
+                <{/if}>
                 </tbody>
             </table>
         </div>
@@ -234,9 +285,9 @@
                 <thead>
                 <tr>
                     <th class="icon"><i class="fa fa-plus"></i></th>
-                    <th>开票月</th>
+                    <th style="width: 64px;">开票月</th>
                     <th>比例</th>
-                    <th>金额</th>
+                    <th style="width: 94px;">金额</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -249,27 +300,26 @@
                             <option value="<{$value.op_month}>" selected><{$value.op_month}></option>
                         </select>
                     </td>
-                    <td style="width: 200px;">
-                        <div class="slider" style="margin: 0 20px;">
-                        </div>
+                    <td>
+                        <div class="slider" style="margin: 0 10px;"></div>
                         <input class="orderProject_percent_1 sliderPercent" name="project[1][percent][]" type="text" style="display: none;" value="<{$value.op_used}>">
                     </td>
-                    <td><input type="text" class="orderProject_value_1 sliderValue" name="project[1][value][]" value="<{$value.op_used}>"/></td>
+                    <td><input type="text" class="orderProject_value_1 sliderValue" name="project[1][value][]" style="margin-left: 10px;" value="<{$value.op_used}>"/></td>
                 </tr>
                 <{/volist}>
                 <{else /}>
                 <tr>
                     <td class="icon"><i class="fa fa-remove"></i></td>
-                    <td style="padding: 0 10px;">
+                    <td>
                         <select class="orderProject_month_1" name="project[1][month][]">
                         </select>
                     </td>
-                    <td style="width: 200px;">
-                        <div class="slider">
+                    <td>
+                        <div class="slider" style="margin: 0 10px;">
                         </div>
                         <input class="orderProject_percent_1 sliderPercent" name="project[1][percent][]" style="display: none;" type="text" value="0">
                     </td>
-                    <td style="padding: 0 10px;"><input type="text" class="orderProject_value_1 sliderValue" name="project[1][value][]" value="0"/></td>
+                    <td><input type="text" class="orderProject_value_1 sliderValue" style="margin-left: 10px;" name="project[1][value][]" value="0"/></td>
                 </tr>
                 <{/if}>
                 </tbody>
@@ -280,9 +330,9 @@
                 <thead>
                 <tr>
                     <th class="icon"><i class="fa fa-plus"></i></th>
-                    <th>交付月</th>
+                    <th style="width: 64px;">交付月</th>
                     <th>比例</th>
-                    <th>金额</th>
+                    <th style="width: 94px;">金额</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -295,12 +345,12 @@
                             <option value="<{$value.op_month}>" selected><{$value.op_month}></option>
                         </select>
                     </td>
-                    <td style="padding: 0 10px;width: 200px;">
-                        <div class="slider">
+                    <td>
+                        <div class="slider" style="margin: 0 10px;">
                         </div>
                         <input class="orderProject_percent_2 sliderPercent" name="project[2][percent][]" style="display: none;" type="text" value="<{$value.op_used}>">
                     </td>
-                    <td><input type="text" class="orderProject_value_2 sliderValue" name="project[2][value][]" value="<{$value.op_used}>" readonly/></td>
+                    <td><input type="text" class="orderProject_value_2 sliderValue" name="project[2][value][]" style="margin-left: 10px;" value="<{$value.op_used}>"/></td>
                 </tr>
                 <{/volist}>
                 <{else /}>
@@ -310,12 +360,12 @@
                         <select class="orderProject_month_2" name="project[2][month][]">
                         </select>
                     </td>
-                    <td style="padding: 0 10px;width: 200px;">
-                        <div class="slider">
+                    <td>
+                        <div class="slider" style="margin: 0 10px;">
                         </div>
                         <input class="orderProject_percent_2 sliderPercent" name="project[2][percent][]" style="display: none;" type="text" value="0">
                     </td>
-                    <td><input class="orderProject_value_2 sliderValue" name="project[2][value][]" type="text" value="0"/></td>
+                    <td><input class="orderProject_value_2 sliderValue" name="project[2][value][]" style="margin-left: 10px;" type="text" value="0"/></td>
                 </tr>
                 <{/if}>
                 </tbody>
@@ -326,9 +376,9 @@
                 <thead>
                 <tr>
                     <th class="icon"><i class="fa fa-plus"></i></th>
-                    <th>付款月</th>
+                    <th style="width: 64px;">付款月</th>
                     <th>比例</th>
-                    <th>金额</th>
+                    <th style="width: 94px;">金额</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -341,12 +391,12 @@
                             <option value="<{$value.op_month}>" selected><{$value.op_month}></option>
                         </select>
                     </td>
-                    <td style="padding: 0 10px;width: 200px;">
-                        <div class="slider">
+                    <td>
+                        <div class="slider" style="margin: 0 10px;">
                         </div>
                         <input class="orderProject_percent_3 sliderPercent"  name="project[3][percent][]" style="display: none;" value="<{$value.op_used}>">
                     </td>
-                    <td><input type="text" class="orderProject_value_3 sliderValue" name="project[3][value][]" value="<{$value.op_used}>" readonly/></td>
+                    <td><input type="text" class="orderProject_value_3 sliderValue" name="project[3][value][]" style="margin-left: 10px;" value="<{$value.op_used}>"/></td>
                 </tr>
                 <{/volist}>
                 <{else /}>
@@ -356,12 +406,12 @@
                         <select class="orderProject_month_3" name="project[3][month][]">
                         </select>
                     </td>
-                    <td style="padding: 0 10px;width: 200px;">
-                        <div class="slider">
+                    <td>
+                        <div class="slider" style="margin: 0 10px;">
                         </div>
                         <input class="orderProject_percent_3 sliderPercent" name="project[3][percent][]" style="display: none;" type="text" value="0">
                     </td>
-                    <td><input type="text" class="orderProject_value_3 sliderValue" name="project[3][value][]" value="0"/></td>
+                    <td><input type="text" class="orderProject_value_3 sliderValue" name="project[3][value][]" style="margin-left: 10px;" value="0"/></td>
                 </tr>
                 <{/if}>
                 </tbody>
@@ -402,6 +452,7 @@
             $(element).slider({
                 value: val,
                 max: total,
+                step: 1,
                 create: function(event) {
                     $(event.target).next().val(persent);
                     $(event.target).find("span").text(persent);
@@ -555,7 +606,7 @@
                                 $("#o_status option:last").prop("selected", true);
                                 $("#o_status option:last").prop("disabled", false);
                                 $("#o_status").prop("", true);
-                                if($("#o_pname").val() != "" && $("#o_coname").val() != ""){
+                                if($("#o_pname").val() == "" && $("#o_coname").val() == ""){
                                     var json = JSON.parse(decodeURIComponent($(cla + " .selectRadio:checked").attr("data-value")));
                                     var ts = parseInt(json.c_type) - 1;
                                     var tss = parseInt(json.co_type) - 1;
@@ -576,8 +627,9 @@
                         $(cla + " .moreSave").click(function(){
                             var ci = $(cla + " .search-result input:checked");
                             var jdata = JSON.parse(decodeURIComponent($(ci).attr("json")));
+                            console.log(jdata);
                             baseUTR($(cla), jdata, type);
-                            $(cla).hide();
+                            $(cla).removeClass("show");
                             $(cla + "-back").hide();
                         });
                         window.cla = cla;
@@ -621,6 +673,9 @@
                 $(element).parent().prev().find("i:eq(0)").click();
             }
         });
+        $("#o_cno,#o_pname,#o_coname").click(function(){
+            $(this).parent().prev().find("i:eq(0)").click();
+        });
     });
     function baseUTR(element,data,type){
         var i = 1;
@@ -641,9 +696,10 @@
         var html = '<tr><td><i class="fa fa-minus-circle"></i></td>' +
                 '<td><?php echo date("Y-m-d"); ?></td>' +
                 '<td class="mony-'+type+'">'+val+'</td>' +
-                '<td><a href="/'+type+'/view/no/'+data.id+'" target="_blank" style="color: blue;">'+data.id+'</a>' +
-                '<input type="hidden" name="used[value][]" value="'+val+'">' +
-                '<input type="hidden" name="used[ot_id][]" value="'+data.id+'"></td></tr>';
+                '<td><a href="#" target="_blank" style="color: blue;">'+data.id+'</a>' +
+                '<input type="hidden" name="used['+i+'][value][]" value="'+val+'">' +
+                '<input type="hidden" name="used['+i+'][date][]" value="'+data.date+'">' +
+                '<input type="hidden" name="used['+i+'][ot_id][]" value="'+data.id+'"></td></tr>';
         $(cla).append(html);
         var plus = 0;
         $(cla).find(".mony-"+type).each(function(index, element){
@@ -663,6 +719,7 @@
             $(".orderProject_percent_"+index+":eq(0)").slider({
                 value:total,
                 max: total,
+                step: 1,
                 create: function(event) {
                     $(event.target).next().val("100%");
                     $(event.target).find("span").text("100%");
@@ -671,7 +728,7 @@
                     var r = true;
                     try{
                     sliderChange(ui, $(event.target).parent().next().find("input"));
-                    var p = Math.round(100 - (total - ui.value) / total * 100)+"%";
+                    var p = (100 - (total - ui.value) / total * 100).toFixed(2)+"%";
                     $(ui.handle).text(p);
                     $(event.target).next().val(p);
                     $(event.target).parent().next().find("input").val(ui.value);
@@ -700,23 +757,25 @@
                 $(sl).slider({
                     value:val,
                     max: total,
+                    min:0,
+                    step: 1,
                     create: function(event) {
                         var p = Math.round(100 - (total - val) / total * 100)+"%";
                         $(event.target).next().val(p);
                         $(event.target).find("span").text(p);
                     },
                     slide: function( event, ui ) {
-                        var r = true;
-                        try{
+//                        var r = true;
+//                        try{
                         sliderChange(ui, $(event.target).parent().next().find("input"));
                         var p = Math.ceil(100 - (total - ui.value) / total * 100)+"%";
                         $(ui.handle).text(p);
                         $(event.target).next().val(p);
                         $(event.target).parent().next().find("input").val(ui.value);
-                        }catch(err){
-                            r = false;
-                        }
-                        return r;
+//                        }catch(err){
+//                            r = false;
+//                        }
+//                        return r;
                     },
                     change: function (event, ui) {
                         var p = Math.ceil(100 - (total - ui.value) / total * 100)+"%";
@@ -803,11 +862,13 @@
             $(ele).prev().slider({
                 val:val,
                 max:total,
+                min:0,
+                step: 1,
                 create: function(event) {
                     var p = Math.ceil(100 - (total - val) / total * 100)+"%";
                     $(event.target).next().val(p);
                     $(event.target).find("span").text(p);
-                    $(event.target).find("span").css("left", "100%");
+                    $(event.target).find("span").css("left", p);
                 },
                 slide: function( event, ui ) {
                     var r = true;
@@ -890,7 +951,7 @@
         for (var i = (len - 1); i >= 0; i--) {
             baseTr += '<option value="-' + bm[i] + '">- ' + bm[i] + '</option>';
         }
-        baseTr += '</select></td><td style="width: 200px;"><div class="slider" style="margin: 0 20px;"></div><input type="text" class="orderProject_percent_' + index + ' sliderPercent" style="display: none;" name="project[' + index + '][percent][]" value="0"/></td><td><input class="orderProject_value_' + index + ' sliderValue" name="project[' + index + '][value][]" type="text" value="0"/></td></tr>';
+        baseTr += '</select></td><td><div class="slider" style="margin: 0 10px;width: 100%;"></div><input type="text" class="orderProject_percent_' + index + ' sliderPercent" style="display: none;" name="project[' + index + '][percent][]" value="0"/></td><td><input class="orderProject_value_' + index + ' sliderValue" name="project[' + index + '][value][]" style="margin-left: 10px;" type="text" value="0"/></td></tr>';
         return baseTr;
     }
     function valueChange(em){

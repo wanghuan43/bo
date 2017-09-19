@@ -1,16 +1,19 @@
-<{load href="/static/css/select.min.css,/static/css/bootstrap-slider.min.css"/}>
+
     <div class="clearfix header">
         <h2>订单日志</h2>
         <div class="btn-pannel">
-            <button type="button" name="l_panding" value="1" class="btn">同意</button>
-            <button type="button" name="l_panding" value="2" href="#orders" class="btn red">不同意</button>
-            <button type="button" href="#orders" class="btn">取消</button>
+            <{if condition="$admin"}>
+            <button type="submit" value="1" class="btn l_panding">同意</button>
+            <button type="submit" value="2" class="btn red l_panding">不同意</button>
+            <{/if}>
+            <button type="submit" href="#orders" class="btn">返回</button>
         </div>
         <div class="link-pannel">
             <ul>
             </ul>
         </div>
     </div>
+    <input type="hidden" id="id" value="<{$log['l_id']}>" >
     <div class="main-pannel">
         <h3>基本信息</h3>
         <div class="content">
@@ -163,84 +166,190 @@
             </table>
         </div>
     </div>
-<div class="main-pannel" <{if condition="$order['o_status'] != '6'"}>style="display:none;"<{/if}>>
+<div class="main-pannel">
 <h3>已完成情况</h3>
 <div class="content table clearfix">
-    <div class="col33">
+    <div class="col33 col50">
         <table class="invoice_1" data="1">
             <thead>
-            <tr>
-                <td><i class="fa fa-search" data="invoice"></i></td>
-                <td>&#931;已交付</td>
-                <td>0</td>
-                <td>0%</td>
-            </tr>
             <tr class="thead">
-                <td></td>
-                <td>开票日期</td>
-                <td>金额</td>
-                <td>凭证</td>
+                <th style="width: 20%">开票日期</th>
+                <th>金额</th>
+                <th>凭证</th>
             </tr>
             </thead>
             <tbody>
+            <{volist name="log['l_old']['used'][1]" id="value" key="k"}>
+            <tr>
+                <td>
+                    <{$value.op_month}>
+                </td>
+                <td>
+                    <{$value.op_percent}>
+                </td>
+                <td>
+                    <{$value.op_used}>
+                </td>
+            </tr>
+            <{/volist}>
             </tbody>
         </table>
     </div>
-    <div class="col33">
+    <div class="col33 col50">
+        <{if condition="isset($log['l_new']['used'][1]['date'])"}>
+        <table class="invoice_1" data="1" style="color: red">
+            <thead>
+            <tr class="thead">
+                <th style="width: 20%">开票日期</th>
+                <th>金额</th>
+                <th>凭证</th>
+            </tr>
+            </thead>
+            <tbody>
+            <{foreach name="log['l_new']['used'][1]['date']" item="value" key="k"}>
+            <tr>
+                <td>
+                    <{$value}>
+                </td>
+                <td>
+                    <?php echo isset($log['l_new']['used'][1]['value'][$k]) ? $log['l_new']['used'][1]['value'][$k] : "";?>
+                </td>
+                <td>
+                    <?php echo isset($log['l_new']['used'][1]['ot_id'][$k]) ? $log['l_new']['used'][1]['ot_id'][$k] : "";?>
+                </td>
+            </tr>
+            <{/foreach}>
+            </tbody>
+        </table>
+        <{/if}>
+    </div>
+</div>
+<div class="content table clearfix">
+    <div class="col33 col50">
         <table class="acceptance_2" data="2">
             <thead>
-            <tr>
-                <td><i class="fa fa-search" data="acceptance"></i></td>
-                <td>&#931;已交付</td>
-                <td>0</td>
-                <td>0%</td>
-            </tr>
             <tr class="thead">
-                <td></td>
-                <td>交付日期</td>
-                <td>金额</td>
-                <td>凭证</td>
+                <th style="width: 20%">交付日期</th>
+                <th>金额</th>
+                <th>凭证</th>
             </tr>
             </thead>
             <tbody>
+            <{volist name="log['l_old']['used'][2]" id="value" key="k"}>
+            <tr>
+                <td>
+                    <{$value.op_month}>
+                </td>
+                <td>
+                    <{$value.op_percent}>
+                </td>
+                <td>
+                    <{$value.op_used}>
+                </td>
+            </tr>
+            <{/volist}>
             </tbody>
         </table>
     </div>
-    <div class="col33">
-        <table class="received_3" data="3">
+    <div class="col33 col50">
+        <{if condition="isset($log['l_new']['used'][2]['date'])"}>
+        <table class="acceptance_2" data="2" style="color:red;">
             <thead>
-            <tr>
-                <td><i class="fa fa-search" data="received"></i></td>
-                <td>&#931;已交付</td>
-                <td>0</td>
-                <td>0%</td>
-            </tr>
             <tr class="thead">
-                <td></td>
-                <td>付款日期</td>
-                <td>金额</td>
-                <td>凭证</td>
+                <th style="width: 20%">交付日期</th>
+                <th>金额</th>
+                <th>凭证</th>
             </tr>
             </thead>
             <tbody>
+            <{foreach name="log['l_new']['used'][2]['date']" item="value" key="k"}>
+            <tr>
+                <td>
+                    <{$value}>
+                </td>
+                <td>
+                    <?php echo isset($log['l_new']['used'][2]['value'][$k]) ? $log['l_new']['used'][2]['value'][$k] : "";?>
+                </td>
+                <td>
+                    <?php echo isset($log['l_new']['used'][2]['ot_id'][$k]) ? $log['l_new']['used'][2]['ot_id'][$k] : "";?>
+                </td>
+            </tr>
+            <{/foreach}>
             </tbody>
         </table>
+        <{/if}>
+    </div>
+</div>
+<div class="content table clearfix">
+    <div class="col33 col50">
+        <table class="received_3" data="3">
+            <thead>
+            <tr class="thead">
+                <th style="width: 20%">付款日期</th>
+                <th>金额</th>
+                <th>凭证</th>
+            </tr>
+            </thead>
+            <tbody>
+            <{volist name="log['l_old']['used'][3]" id="value" key="k"}>
+            <tr>
+                <td>
+                    <{$value.op_month}>
+                </td>
+                <td>
+                    <{$value.op_percent}>
+                </td>
+                <td>
+                    <{$value.op_used}>
+                </td>
+            </tr>
+            <{/volist}>
+            </tbody>
+        </table>
+    </div>
+    <div class="col33 col50">
+        <{if condition="isset($log['l_new']['used'][3]['date'])"}>
+        <table class="received_3" data="3" style="color: red;">
+            <thead>
+            <tr class="thead">
+                <th style="width: 20%">付款日期</th>
+                <th>金额</th>
+                <th>凭证</th>
+            </tr>
+            </thead>
+            <tbody>
+            <{foreach name="log['l_new']['used'][3]['date']" item="value" key="k"}>
+            <tr>
+                <td>
+                    <{$value}>
+                </td>
+                <td>
+                    <?php echo isset($log['l_new']['used'][3]['value'][$k]) ? $log['l_new']['used'][3]['value'][$k] : "";?>
+                </td>
+                <td>
+                    <?php echo isset($log['l_new']['used'][3]['ot_id'][$k]) ? $log['l_new']['used'][3]['ot_id'][$k] : "";?>
+                </td>
+            </tr>
+            <{/foreach}>
+            </tbody>
+        </table>
+        <{/if}>
     </div>
 </div>
 </div>
 <div class="main-pannel">
     <h3>预计执行计划</h3>
     <div class="content table clearfix">
-        <div class="col33">
+        <div class="col33 col50">
             <table data="1" style="border-collapse: separate;border-spacing: 0px 10px;">
                 <thead>
                 <tr>
-                    <th>开票月</th>
+                    <th style="width: 20%">开票月</th>
                     <th>比例</th>
                     <th>金额</th>
                 </tr>
                 </thead>
-                <{volist name="opject[1]" id="value" key="k"}>
+                <{volist name="log['l_old']['project'][1]" id="value" key="k"}>
                 <tr>
                     <td>
                         <{$value.op_month}>
@@ -253,47 +362,49 @@
                     </td>
                 </tr>
                 <{/volist}>
-                </tbody>
             </table>
         </div>
-        <div class="col33">
+        <div class="col33 col50">
+            <{if condition="is_array($log['l_new']['project'][1]['month'])"}>
             <table data="1" style="border-collapse: separate;border-spacing: 0px 10px;color: red;">
                 <thead>
                 <tr>
-                    <th>开票月</th>
+                    <th style="width: 20%">付款月</th>
                     <th>比例</th>
                     <th>金额</th>
                 </tr>
                 </thead>
-                <{volist name="opject[1]" id="value" key="k"}>
+                <tbody>
+                <{foreach name="log['l_new']['project'][1]['month']" item="value" key="k"}>
                 <tr>
                     <td>
-                        <{$value.op_month}>
+                        <{$value}>
                     </td>
                     <td>
-                        <{$value.op_percent}>
+                        <?php echo isset($log['l_new']['project'][1]['percent'][$k]) ? $log['l_new']['project'][1]['percent'][$k] : "";?>
                     </td>
                     <td>
-                        <{$value.op_used}>
+                        <?php echo isset($log['l_new']['project'][1]['value'][$k]) ? $log['l_new']['project'][1]['value'][$k] : "";?>
                     </td>
                 </tr>
-                <{/volist}>
+                <{/foreach}>
                 </tbody>
             </table>
+            <{/if}>
         </div>
     </div>
     <div class="content table clearfix">
-        <div class="col33">
+        <div class="col33 col50">
             <table data="2" style="border-collapse: separate;border-spacing: 0px 10px;">
                 <thead>
                 <tr>
-                    <th>交付月</th>
+                    <th style="width: 20%">交付月</th>
                     <th>比例</th>
                     <th>金额</th>
                 </tr>
                 </thead>
                 <tbody>
-                <{volist name="opject[2]" id="value" key="k"}>
+                <{volist name="log['l_old']['project'][2]" id="value" key="k"}>
                 <tr>
                     <td>
                         <{$value.op_month}>
@@ -309,45 +420,47 @@
                 </tbody>
             </table>
         </div>
-        <div class="col33">
+        <div class="col33 col50">
+            <{if condition="is_array($log['l_new']['project'][2]['month'])"}>
             <table data="2" style="border-collapse: separate;border-spacing: 0px 10px;color: red;">
                 <thead>
                 <tr>
-                    <th>交付月</th>
+                    <th style="width: 20%">付款月</th>
                     <th>比例</th>
                     <th>金额</th>
                 </tr>
                 </thead>
                 <tbody>
-                <{volist name="opject[2]" id="value" key="k"}>
+                <{foreach name="log['l_new']['project'][2]['month']" item="value" key="k"}>
                 <tr>
                     <td>
-                        <{$value.op_month}>
+                        <{$value}>
                     </td>
                     <td>
-                        <{$value.op_percent}>
+                        <?php echo isset($log['l_new']['project'][2]['percent'][$k]) ? $log['l_new']['project'][2]['percent'][$k] : "";?>
                     </td>
                     <td>
-                        <{$value.op_used}>
+                        <?php echo isset($log['l_new']['project'][2]['value'][$k]) ? $log['l_new']['project'][2]['value'][$k] : "";?>
                     </td>
                 </tr>
-                <{/volist}>
+                <{/foreach}>
                 </tbody>
             </table>
+            <{/if}>
         </div>
     </div>
     <div class="content table clearfix">
-        <div class="col33">
+        <div class="col33 col50">
             <table data="3" style="border-collapse: separate;border-spacing: 0px 10px;">
                 <thead>
                 <tr>
-                    <th>付款月</th>
+                    <th style="width: 20%">付款月</th>
                     <th>比例</th>
                     <th>金额</th>
                 </tr>
                 </thead>
                 <tbody>
-                <{volist name="opject[3]" id="value" key="k"}>
+                <{volist name="log['l_old']['project'][3]" id="value" key="k"}>
                 <tr>
                     <td>
                         <{$value.op_month}>
@@ -363,32 +476,53 @@
                 </tbody>
             </table>
         </div>
-        <div class="col33">
-            <table data="3" style="border-collapse: separate;border-spacing: 0px 10px;">
+        <div class="col33 col50">
+            <{if condition="is_array($log['l_new']['project'][3]['month'])"}>
+            <table data="3" style="border-collapse: separate;border-spacing: 0px 10px;color: red;">
                 <thead>
                 <tr>
-                    <th>付款月</th>
+                    <th style="width: 20%">付款月</th>
                     <th>比例</th>
                     <th>金额</th>
                 </tr>
                 </thead>
                 <tbody>
-                <{volist name="opject[3]" id="value" key="k"}>
+                <{foreach name="log['l_new']['project'][3]['month']" item="value" key="k"}>
                 <tr>
                     <td>
-                        <{$value.op_month}>
+                        <{$value}>
                     </td>
                     <td>
-                        <{$value.op_percent}>
+                        <?php echo isset($log['l_new']['project'][3]['percent'][$k]) ? $log['l_new']['project'][3]['percent'][$k] : "";?>
                     </td>
                     <td>
-                        <{$value.op_used}>
+                        <?php echo isset($log['l_new']['project'][3]['value'][$k]) ? $log['l_new']['project'][3]['value'][$k] : "";?>
                     </td>
                 </tr>
-                <{/volist}>
+                <{/foreach}>
                 </tbody>
             </table>
+            <{/if}>
         </div>
     </div>
 </div>
-<{load href="/static/js/plugin/select/select.min.js,/static/js/plugin/slider/bootstrap-slider.min.js"/}>
+<script>
+    $(document).ready(function(){
+        $(".l_panding").click(function(){
+            var val = $(this).attr("value");
+            var id = $("#id").val();
+            $.ajax({
+                url:"<{:url("/orders/savePanding")}>",
+                data:{
+                    val: val,
+                    id: id
+                },
+                type:"json",
+                method:"post",
+                success:function(data){
+                    alert(data.message);
+                }
+            })
+        });
+    });
+</script>

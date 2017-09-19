@@ -53,15 +53,25 @@
 <script>
     $(document).ready(function () {
         var lh = location.href;
-        var i = lh.indexOf("#");
+        var i = lh.indexOf("/#");
         var bak = "";
         if(i > 0){
-            bak = lh.substr(i);
+            bak = lh.substr(i+1);
+            var click = false;
             $("#left-pannel a").each(function(index, element){
                 if($(element).attr("href") == bak){
+                    click = true;
                     $(element).click();
                 }
             });
+            if(!click){
+                bak = bak.replace("#", "/");
+                var data = {
+                    url: bak,
+                    method: "get",
+                };
+                contentAjax("main-container",data);
+            }
         }
 
         $("#left-pannel a").click(function(){
@@ -149,6 +159,12 @@
         		succ(data);
         	}
         }
+        var url = ajaxData.url;
+        if(url.indexOf("/") >= 0 || url.indexOf("#") >= 0){
+            url = url.substr(1);
+        }
+        url = "/#"+url;
+        location.href = url;
         $.ajax(ajaxData);
     }
 </script>

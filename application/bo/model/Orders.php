@@ -1,4 +1,5 @@
 <?php
+
 namespace app\bo\model;
 
 use app\bo\libs\BoModel;
@@ -29,6 +30,13 @@ class Orders extends BoModel
         return $order;
     }
 
+    public function getOrderDeparent($id)
+    {
+        $list = $this->field("m.m_did")->alias("o")->join("__MEMBER__ m", "o.o_mid = m.m_id", "left")
+            ->where("o.o_id", "=", $id)->find();
+        return Department::get($list->m_did);
+    }
+
     /**
      * @param array $data
      * @param array $where
@@ -40,16 +48,19 @@ class Orders extends BoModel
         $tagList = !empty($data['tagList']) ? $data['tagList'] : array();
         $cList = !empty($data['cList']) ? $data['cList'] : array();
         $pj = !empty($data['project']) ? $data['project'] : array();
+        $used = !empty($data['used']) ? $data['used'] : array();
         unset($data['tagList']);
         unset($data['cList']);
         unset($data['project']);
         $tlm = new Taglink();
         $clm = new Circulation();
         $opm = new OrderProject();
+        $oum = new OrderUsed();
         $result = parent::save($data, $where, $sequence);
         $tlm->setTagLink($this->o_id, $tagList, "orders");
         $clm->setCirculation($this->o_id, $cList, "orders");
         $opm->setOrderProject($this->o_id, $data['o_date'], $pj);
+        $oum->setOrderUsed($this->o_id, $used);
         return $result;
     }
 }

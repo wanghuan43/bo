@@ -49,4 +49,16 @@ class Received extends BoModel
         $list = $searchModel->paginate($limit, true);
         return $list;
     }
+
+    public function checkUsed($id, $money)
+    {
+        $tmp = $this->find($id)->toArray();
+        $return = true;
+        if ($tmp['r_noused'] - $money < 0) {
+            $return = false;
+        } else {
+            $this->save(['r_noused' => ($tmp['r_noused'] - $money), 'r_used' => ($tmp['r_used'] + $money)], $id);
+        }
+        return $return;
+    }
 }

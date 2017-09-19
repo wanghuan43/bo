@@ -1,4 +1,5 @@
 <?php
+
 namespace app\bo\model;
 
 use app\bo\libs\BoModel;
@@ -47,5 +48,17 @@ class Acceptance extends BoModel
         }
         $list = $searchModel->paginate($limit, true);
         return $list;
+    }
+
+    public function checkUsed($id, $money)
+    {
+        $tmp = $this->find($id)->toArray();
+        $return = true;
+        if ($tmp['a_noused'] - $money < 0) {
+            $return = false;
+        } else {
+            $this->save(['a_noused' => ($tmp['a_noused'] - $money), 'a_used' => ($tmp['a_used'] + $money)], $id);
+        }
+        return $return;
     }
 }

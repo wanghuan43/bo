@@ -8,6 +8,7 @@ use app\bo\model\Department;
 use app\bo\model\Logs;
 use app\bo\model\Member;
 use app\bo\model\OrderProject;
+use app\bo\model\OrderUsed;
 use app\bo\model\Taglib;
 use app\bo\model\Taglink;
 use app\bo\libs\BoController;
@@ -50,6 +51,7 @@ class Orders extends BoController
         $dModel = new Department();
         $chancesModel = new Chances();
         $opm = new OrderProject();
+        $oum = new OrderUsed();
         $cIDList = array();
         $tagIDList = array();
         $memberModel = new Member();
@@ -86,6 +88,7 @@ class Orders extends BoController
         $this->assign('memberList', $memberModel->all());
         $this->assign('tagList', $tagList);
         $this->assign('opject', $opm->getOrderProject($op_id));
+        $this->assign('oused', $oum->getOrderUesd($op_id));
         $this->assign('op', $op);
         $this->assign('op_id', $op_id);
         return $this->fetch("operation");
@@ -140,12 +143,18 @@ class Orders extends BoController
     {
         $chancesModle = new Chances();
         $log = Logs::get($opId)->toArray();
+        $depart = $this->ordersModel->getOrderDeparent($log['l_otid']);
+        if ($depart->m_code == $this->current->m_code OR $this->current->m_isAdmin) {
+            $this->assign("admin", true);
+        } else {
+            $this->assign("admin", false);
+        }
         $log['l_new'] = unserialize($log['l_new']);
         $log['l_old'] = unserialize($log['l_old']);
         if (isset($log['l_new']['tagList']) AND is_array($log['l_new']['tagList'])) {
             $t = implode(",", $log['l_new']['tagList']);
             $m = new Taglib();
-            $tmp = $m->where("tl_id", "in", "(" . $t . ")")->select();
+            $tmp = $m->where("tl_id", "in", $t)->select();
             foreach ($tmp as $key => $value) {
                 $tmp[$key] = $value->tl_name;
             }
@@ -156,7 +165,7 @@ class Orders extends BoController
         if (isset($log['l_new']['cList']) AND is_array($log['l_new']['cList'])) {
             $t = implode(",", $log['l_new']['cList']);
             $m = new Member();
-            $tmp = $m->where("m_id", "in", "(" . $t . ")")->select();
+            $tmp = $m->where("m_id", "in", $t)->select();
             foreach ($tmp as $key => $value) {
                 $tmp[$key] = $value->m_department . ' - ' . $value->m_name;
             }
@@ -178,15 +187,6 @@ class Orders extends BoController
         } else {
             $log['l_old']['cList'] = [];
         }
-        $log['project'][1] = isset($log['project'][1]) ? (is_array($log['project'][1]) ? $log['project'][1] : array()) : array();
-        $log['project'][2] = isset($log['project'][2]) ? (is_array($log['project'][2]) ? $log['project'][2] : array()) : array();
-        $log['project'][3] = isset($log['project'][3]) ? (is_array($log['project'][3]) ? $log['project'][3] : array()) : array();
-        $project = array();
-        foreach($log['project'][1] as $value){
-            $tmp = [
-                ""
-            ];
-        }
         $log['l_old']['o_tax'] = getTaxList($log['l_old']['o_tax']);
         $log['l_new']['o_tax'] = getTaxList($log['l_new']['o_tax']);
         $log['l_old']['o_deal'] = $chancesModle->getChanges($log['l_old']['o_deal']);
@@ -197,9 +197,26 @@ class Orders extends BoController
         $log['l_new']['o_lie'] = getLieList($log['l_new']['o_lie']);
         $log['l_old']['o_type'] = getLieList($log['l_old']['o_type']);
         $log['l_new']['o_type'] = getLieList($log['l_new']['o_type']);
-        echo "<pre>";print_r($log);exit;
         $this->assign("log", $log);
         return $this->fetch("orders/viewLog");
+    }
+
+    public function savePanding()
+    {
+        $post = Request::instance()->post();
+        $log = Logs::get($post['id']);
+        $data = unserialize($log['l_new']);
+        if ($post['val'] == "1") {
+            $log->l_panding = 2;
+            echo "<pre>";print_r($data);exit;
+            $this->ordersModel->save($data, $log->l_otid);
+            $message = "审核通过";
+        } else {
+            $log->l_panding = 1;
+            $message = "审核不通过";
+        }
+        $log->save();
+        return ["status"=>1, "message"=>$message];
     }
 
     private function setType($type, $params)

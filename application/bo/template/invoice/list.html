@@ -22,10 +22,11 @@
         <{volist name="lists" id="val" empty="$empty"}>
         <?php
             $json = array(
-                "id"=>$val['i_no'],
+                "id"=>$val['i_id'],
                 "coname"=>$val['i_coname'],
                 "money"=>$val['i_money'],
-                "noused"=>$val['i_noused']
+                "noused"=>$val['i_noused'],
+                "date"=>date("Y-m-d", $val['i_date']),
             );
          ?>
         <tr>

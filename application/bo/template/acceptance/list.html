@@ -9,24 +9,31 @@
         <thead>
         <tr>
             <th></th>
-            <th>合同号</th>
-            <th>合同名称</th>
+            <th>验收单号</th>
             <th>对方名称</th>
-            <th>签约日期</th>
-            <th>合同金额</th>
+            <th>验收日期</th>
+            <th>验收金额</th>
             <th>未对应订单金额</th>
         </tr>
         </thead>
         <tbody>
         <{volist name="lists" id="val" empty="$empty"}>
+        <?php
+            $json = array(
+                "id"=>$val['a_id'],
+                "coname"=>$val['a_coname'],
+                "money"=>$val['a_money'],
+                "noused"=>$val['a_noused'],
+                "date"=>date("Y-m-d", $val['a_date']),
+                );
+        ?>
         <tr>
-            <td><input type="radio" class="selectRadio" name="selectRadio" value="<{$val.c_id}>" data="<{$val.c_no}>" /></td>
-            <td><{$val.c_no}></td>
-            <td><{$val.c_name}></td>
-            <td><{$val.c_coname}></td>
-            <td><?php echo date("Y-m-d", $val['c_date']); ?></td>
-            <td><{$val.c_money}></td>
-            <td><{$val.c_noused}></td>
+            <td><input type="radio" class="selectRadio" name="selectRadio" value="<{$val.a_id}>" data="<{$val.a_no}>" json="<?php echo urlencode(json_encode($json)); ?>" /></td>
+            <td><{$val.a_no}></td>
+            <td><{$val.a_coname}></td>
+            <td><?php echo date("Y-m-d", $val['a_date']); ?></td>
+            <td><{$val.a_money}></td>
+            <td><{$val.a_noused}></td>
         </tr>
         <{/volist}>
         </tbody>

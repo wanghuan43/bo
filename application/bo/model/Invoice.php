@@ -48,4 +48,16 @@ class Invoice extends BoModel
         $list = $searchModel->paginate($limit, true);
         return $list;
     }
+
+    public function checkUsed($id, $money)
+    {
+        $tmp = $this->find($id)->toArray();
+        $return = true;
+        if ($tmp['i_noused'] - $money < 0) {
+            $return = false;
+        } else {
+            $this->save(['i_noused' => ($tmp['i_noused'] - $money), 'i_used' => ($tmp['i_used'] + $money)], $id);
+        }
+        return $return;
+    }
 }
