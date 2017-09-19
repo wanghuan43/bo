@@ -30,6 +30,7 @@ class BoController extends Controller
     protected function search($model, $file="common/poplayer", $colspan = "3")
     {
         $post = Request::instance()->post();
+        $page = Request::instance()->get("page", false);
         $name = get_class($model);
         $name = strtolower(substr($name, strripos($name, "\\")+1));
         $search = array();
@@ -56,7 +57,7 @@ class BoController extends Controller
         $this->assign("lists", $list);
         $this->assign("empty", '<tr><td colspan="' . $colspan . '">暂无数据</td></tr>');
         if (Request::instance()->isAjax()) {
-            if (count($post) > 0) {
+            if (count($post) > 0 OR $page) {
                 $content = $this->fetch("list");
             } else {
                 $this->assign("searchable", $model->getSearchable());
