@@ -35,7 +35,7 @@ class Acceptance extends BoController
         $data['a_type'] = $post['type'];
         $data['a_money'] = floatval(trim($post['money']));
         $data['a_used'] = floatval(trim($post['used']));
-        $data['a_noused'] = floatval(trim($post['noused']));
+        $data['a_noused'] = floatval(trim($post['noused']))?:$data['a_money'];
         $data['a_date'] = strtotime($post['date']);
         $data['a_coid'] = trim($post['coid']);
         $data['a_coname'] = trim($post['coname']);
@@ -49,7 +49,7 @@ class Acceptance extends BoController
             if( $res = $this->model->insert($data) ){
                 $ret = ['flag'=>1,'msg'=>'添加成功'];
             }else{
-                $ret = ['flag'=>0,'msg'=>'发生错误'];
+                $ret = ['flag'=>0,'msg'=>'添加失败'];
             }
         }else{
             $ret = ['flag'=>0,'msg'=>$validate->getError()];

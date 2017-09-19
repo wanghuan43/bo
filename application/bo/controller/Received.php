@@ -34,7 +34,7 @@ class Received extends BoController
         $data['r_type'] = $post['type'];
         $data['r_money'] = floatval(trim($post['money']));
         $data['r_used'] = floatval(trim($post['used']));
-        $data['r_noused'] = floatval(trim($post['noused']));
+        $data['r_noused'] = floatval(trim($post['noused']))?:$data['r_money'];
         $data['r_date'] = strtotime($post['date']);
         $data['r_coid'] = trim($post['coid']);
         $data['r_coname'] = trim($post['coname']);

@@ -36,7 +36,7 @@ class Invoice extends BoController
         $data['i_type'] = $post['type'];
         $data['i_money'] = floatval(trim($post['money']));
         $data['i_used'] = floatval(trim($post['used']));
-        $data['i_noused'] = floatval(trim($post['noused']));
+        $data['i_noused'] = floatval(trim($post['noused']))?:$data['i_money'];
         $data['i_date'] = strtotime($post['date']);
         $data['i_coid'] = trim($post['coid']);
         $data['i_coname'] = trim($post['coname']);

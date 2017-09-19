@@ -101,7 +101,7 @@ class BoController extends Controller
 
             if (is_array($ids) && count($ids) > 0) {
 
-                $res = $this->model->whereIn($this->model->getPk() , $ids)->delete();
+                $res = $this->model->whereIn($this->model->getPk(), $ids)->delete();
 
                 if ($res) {
                     $ret = ['flag' => 1, 'msg' => '删除成功'];

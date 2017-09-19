@@ -8,7 +8,6 @@ use think\Request;
 
 class Project extends BoController
 {
-    protected $model;
 
     public function __construct(Request $request)
     {
@@ -38,27 +37,32 @@ class Project extends BoController
         $no = trim($this->request->post('no'));
         $name = trim($this->request->post('name'));
 
-        $res = $this->model->whereOr('p_no','=',$no)->whereOr('p_name','=',$name)->find();
+        $validate = \validate('Project');
 
-        $ret = ['flag'=>0,'msg'=>''];
+        if( $validate->check(['p_no'=>$no,'p_name'=>$name]) ) {
 
-        if($res){
-            $data = $res->getData();
-            if( $no == $data['p_no'] && $name == $data['p_name'] ){
-                $ret['msg'] = '该项目已存在';
-            }elseif( $no == $data['p_no']){
-                $ret['msg'] = '该项目编号已存在';
-            }else{
-                $ret['msg'] = '该项目名已存在';
+            $res = $this->model->whereOr('p_no', '=', $no)->whereOr('p_name', '=', $name)->find();
+
+            if ($res) {
+                $data = $res->getData();
+                if ($no == $data['p_no'] && $name == $data['p_name']) {
+                    $ret['msg'] = '该项目已存在';
+                } elseif ($no == $data['p_no']) {
+                    $ret['msg'] = '该项目编号已存在';
+                } else {
+                    $ret['msg'] = '该项目名已存在';
+                }
+            } else {
+                $res = $this->model->insert(['p_no' => $no, 'p_name' => $name]);
+                if ($res) {
+                    $ret['flag'] = 1;
+                    $ret['msg'] = '添加成功';
+                } else {
+                    $ret['msg'] = '添加失败';
+                }
             }
         }else{
-            $res = $this->model->insert(['p_no'=>$no,'p_name'=>$name]);
-            if($res){
-                $ret['flag'] = 1;
-                $ret['msg'] = '添加成功';
-            }else{
-                $ret['msg'] = '添加失败';
-            }
+            $ret = ['flag'=>'0','msg'=>$validate->getError()];
         }
 
         return $ret;
