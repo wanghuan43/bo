@@ -22,7 +22,7 @@
             <button class="btn search" type="submit">搜索</button>
         </div>
     </div>
-    <div class="search-condition">
+    <div class="search-condition clearfix">
         <{for start="0" end="$searchable.length"}>
         <div class="search-block">
             <select class="fields" name="fields[<{$type}>][<{$i}>]">
@@ -38,6 +38,9 @@
         <{/for}>
     </div>
     </form>
+    <div id="checked-result">
+        <label for="sel-ids">已选择:</label><select name="ids" id="sel-ids" multiple></select>
+    </div>
     <div id="<{$type}>List">
     </div>
 </div>

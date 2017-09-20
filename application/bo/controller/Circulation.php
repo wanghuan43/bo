@@ -12,9 +12,16 @@ namespace app\bo\controller;
 use app\bo\libs\BoController;
 use think\Db;
 use think\Exception;
+use think\Request;
 
 class Circulation extends BoController
 {
+
+    public function __construct(Request $request)
+    {
+        $this->model = new \app\bo\model\Circulation();
+        parent::__construct($request);
+    }
 
     /**
      * @param bool $type
@@ -31,36 +38,31 @@ class Circulation extends BoController
         }else{
 
             $type = strtolower($type);
-
-            Db::startTrans();
-            try{
-
-                foreach ($mids as $mid){
-                    foreach ($ids as $id){
-                        $data = [
-                            'ci_mid'=>$mid,
-                            'ci_otid'=>$id,
-                            'ci_type' => $type
-                        ];
-                        $res = Db::table('__CIRCULATION__')->where($data)->find();
-
-                        if( empty($res) ){
-                            $res = Db::table('__CIRCULATION__')->insert($data);
-                        }
-                    }
-                }
-                Db::commit();
-                $ret = ['flag'=>1,'msg'=>'操作成功'];
-
-            }catch (Exception $e){
-                $ret = ['flag'=>0,'msg'=>$e->getMessage()];
-                Db::rollback();
+            foreach( $ids as $ot_id ){
+                $this->model->setCirculation($ot_id,$mids,$type);
             }
+
+            $ret = ['flag'=>1,'msg'=>'操作成功'];
 
         }
 
         return $ret;
 
+    }
+
+    public function list()
+    {
+        $params = $this->request->param();
+        $type = $params['type'];
+        $id = $params['id'];
+
+        if( $type && $id ){
+            $list = $this->model->where("ci_type","=",$type)->where('ci_otid','=',$id)->paginate($this->limit);
+        }else{
+            $list = $this->model->paginate($this->limit);
+        }
+        $this->assign('lists',$list);
+        return $this->fetch();
     }
 
 }

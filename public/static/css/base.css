@@ -468,3 +468,17 @@ table.list td:first-child {
     margin-top: 4em;
     max-width: 500px
 }
+table a{
+    color:#0070c0;
+}
+#checked-result{
+    padding-left:2%;
+    display: none;
+}
+#checked-result label{
+    font-weight: normal;
+    margin-right:.8em;
+}
+#checked-result select{
+    width:600px;
+}

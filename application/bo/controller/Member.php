@@ -8,6 +8,7 @@ class Member extends BoController
 {
     function __construct(Request $request)
     {
+        $this->model = new \app\bo\model\Member();
         parent::__construct($request);
     }
 

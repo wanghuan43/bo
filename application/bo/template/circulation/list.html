@@ -1,6 +1,6 @@
 <div class="clearfix header">
 
-    <h2>所有验收单</h2>
+    <h2>传阅列表</h2>
 
     <div class="link-pannel">
         <ul>
@@ -11,17 +11,8 @@
                 <a href="#"><i class="fa fa-filter"></i>筛选</a>
             </li>
             <li>
-                <a href="/circulation/add/type/received" id="btn-circulation" target="_blank" onclick="return false;"><i class="fa fa-users"></i>传阅<i class="fa fa-sort-desc"></i></a>
+                <a href="/acceptance/del" id="lists-delete" target="_blank" onclick="return false;"><i class="fa fa-trash"></i>删除</a>
             </li>
-            <!--li>
-                <a href="#"><i class="fa fa-tags"></i>标签<i class="fa fa-sort-desc"></i></a>
-            </li-->
-            <li>
-                <a href="/received/del" id="lists-delete" target="_blank" onclick="return false;"><i class="fa fa-trash"></i>删除</a>
-            </li>
-            <!--li>
-                <a href="/project/add"><i class="fa fa-file-text-o"></i>新建</a>
-            </li-->
         </ul>
     </div>
 </div>
@@ -35,6 +26,7 @@
             <th style="min-width: 50px;text-align:center;padding-right:4px;"><input type="checkbox" id="lists-all-checked" value="all"/></th>
             <th>验收单号</th>
             <th>责任人</th>
+            <th>描述</th>
             <th>类型</th>
             <th>对方公司</th>
             <th>总金额</th>
@@ -46,15 +38,16 @@
         <tbody>
         <{volist name="lists" id="vo" empty="$empty"}>
         <tr>
-            <td><input type="checkbox" value="<{$vo.r_id}>" class="lists-id"></td>
-            <td><{$vo.r_no}></td>
-            <td><{$vo.r_mname}></td>
-            <td><{if $vo.r_type==1}>销售<{else}>采销<{/if}></td>
-            <td><{$vo.r_coname}></td>
-            <td><{$vo.r_money}></td>
-            <td><{$vo.r_used}></td>
-            <td><{$vo.r_noused}></td>
-            <td><{$vo.r_date|date="Y-m-d",###}></td>
+            <td><input type="checkbox" value="<{$vo.a_id}>" class="lists-id"></td>
+            <td><{$vo.a_no}></td>
+            <td><{$vo.a_mname}></td>
+            <td><{$vo.a_content}></td>
+            <td><{if $vo.a_type==1}>销售<{else}>采销<{/if}></td>
+            <td><{$vo.a_coname}></td>
+            <td><{$vo.a_money}></td>
+            <td><{$vo.a_used}></td>
+            <td><{$vo.a_noused}></td>
+            <td><{$vo.a_date|date="Y-m-d",###}></td>
         </tr>
         <{/volist}>
         </tbody>
@@ -63,4 +56,5 @@
 <nav aria-label="Page navigation">
     <{$lists->render()}>
 </nav>
-<{load href="/static/js/plugin/select/select.min.js,/static/js/lists.js,/static/css/select.min.css"}>
+
+<script type="text/javascript" src="/static/js/lists.js?u=201709181615"></script>

@@ -12,7 +12,10 @@
                 <{else}>
                 <th style="min-width: 50px;text-align:center;padding-right:4px;"></th>
                 <{/if}>
+                <th>姓名</th>
                 <th>编号</th>
+                <th>部门</th>
+                <th>科室</th>
             </tr>
             </thead>
             <tbody>
@@ -24,6 +27,9 @@
                 <td><input type="radio" value="<{$vo.m_id}>" class="member-ids" name="member-id"></td>
                 <{/if}>
                 <td><{$vo.m_name}></td>
+                <td><{$vo.m_code}></td>
+                <td><{$vo.m_department}></td>
+                <td><{$vo.m_office}></td>
             </tr>
             <{/volist}>
             </tbody>
@@ -33,3 +39,28 @@
         <{$lists->render()}>
     </nav>
 </div>
+<script>
+    (function($){
+
+        $("#list-all-member").click(function(){
+            $this = $(this);
+            $(".member-ids").prop("checked",$this.prop("checked")).change();
+        });
+        $("input.member-ids[type='checkbox']").change(function(){
+            console.log("change");
+            var $this = $(this);
+            var option = $("#sel-ids").find("option[value='"+$this.val()+"']");
+            var html = "<option value='"+$this.val()+"' selected>"+$this.parent().parent().find("td:nth-child(2)").html()+"</option>";
+            if( $this.prop("checked") ){
+                if( option.length>0 && option.prop("selected") == false ){
+                    option.remove();
+                    $("#sel-ids").append(html);
+                }else if( option.length == 0 ){
+                    $("#sel-ids").append(html);
+                }
+            }else {
+                option.remove();
+            }
+        });
+    })(jQuery);
+</script>

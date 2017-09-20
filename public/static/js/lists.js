@@ -5,11 +5,6 @@
 //删除功能
 (function ($) {
 
-    $("#lists-all-checked").click(function () {
-        var $this = $(this);
-        $(".lists-id").prop("checked",$this.prop("checked"));
-    });
-
     $("#lists-delete").click(function () {
 
         var ids = new Array(),$this = $(this);
@@ -59,18 +54,14 @@
                             $(".f-layer-member-back").hide();
                             $(".f-layer-member").removeClass("show");
                         });
-                        $("#list-all-member").click(function(){
-                            $this = $(this);
-                            $(".member-ids").prop("checked",$this.prop("checked"));
-                        });
+                        $("#sel-ids").select2();
+                        $("#checked-result").show();
                         $(".f-layer-member .save").click(function() {
                             var url = $("#btn-circulation").attr("href"), ids = new Array(), mids = new Array();
                             $(".lists-id:checked").each(function () {
                                 ids.push($(this).val());
                             });
-                            $(".member-ids:checked").each(function () {
-                                mids.push($(this).val());
-                            });
+                            mids = $("#sel-ids").val();
                             if (mids.length > 0) {
                                 loading.show();
                                 $.ajax({
