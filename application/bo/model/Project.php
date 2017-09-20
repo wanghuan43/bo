@@ -43,4 +43,16 @@ class Project extends BoModel
         $list = $searchModel->paginate($limit, true);
         return $list;
     }
+
+
+    /**
+     * @param $id
+     * @return array
+     */
+    public function getCodeAndNameById($id )
+    {
+        $data = $this->getDataById($id);
+        return ['code'=>$data['p_no'],'name'=>$data['p_name']];
+    }
+
 }

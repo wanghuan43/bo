@@ -1,60 +1,48 @@
 <div class="clearfix header">
 
-    <h2>传阅列表</h2>
+    <h2><{$name}> - 传阅列表</h2>
 
     <div class="link-pannel">
         <ul>
             <li>
                 <a href="#"><i class="fa fa-file-excel-o"></i>导出</a>
             </li>
-            <li>
+            <!--li>
                 <a href="#"><i class="fa fa-filter"></i>筛选</a>
-            </li>
+            </li-->
             <li>
                 <a href="/acceptance/del" id="lists-delete" target="_blank" onclick="return false;"><i class="fa fa-trash"></i>删除</a>
             </li>
         </ul>
     </div>
 </div>
-<nav aria-label="Page navigation">
-    <{$lists->render()}>
-</nav>
 <div class="main-pannel">
     <table class="list" cellspacing="0">
         <thead>
         <tr>
             <th style="min-width: 50px;text-align:center;padding-right:4px;"><input type="checkbox" id="lists-all-checked" value="all"/></th>
-            <th>验收单号</th>
-            <th>责任人</th>
-            <th>描述</th>
-            <th>类型</th>
-            <th>对方公司</th>
-            <th>总金额</th>
-            <th>已使用金额</th>
-            <th>未使用金额</th>
-            <th>验收时间</th>
+            <th>编号</th>
+            <th>名称</th>
+            <th>员工编号</th>
+            <th>员工姓名</th>
+            <th>员工部门</th>
+            <th>员工科室</th>
         </tr>
         </thead>
         <tbody>
         <{volist name="lists" id="vo" empty="$empty"}>
         <tr>
-            <td><input type="checkbox" value="<{$vo.a_id}>" class="lists-id"></td>
-            <td><{$vo.a_no}></td>
-            <td><{$vo.a_mname}></td>
-            <td><{$vo.a_content}></td>
-            <td><{if $vo.a_type==1}>销售<{else}>采销<{/if}></td>
-            <td><{$vo.a_coname}></td>
-            <td><{$vo.a_money}></td>
-            <td><{$vo.a_used}></td>
-            <td><{$vo.a_noused}></td>
-            <td><{$vo.a_date|date="Y-m-d",###}></td>
+            <td><input type="checkbox" value="<{$vo.ci_id}>" class="lists-id"></td>
+            <td><{$code}></td>
+            <td><{$name}></td>
+            <td><{$vo.m_code}></td>
+            <td><{$vo.m_name}></td>
+            <td><{$vo.m_department}></td>
+            <td><{$vo.m_office}></td>
         </tr>
         <{/volist}>
         </tbody>
     </table>
 </div>
-<nav aria-label="Page navigation">
-    <{$lists->render()}>
-</nav>
 
 <script type="text/javascript" src="/static/js/lists.js?u=201709181615"></script>

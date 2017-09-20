@@ -1,0 +1,99 @@
+<div class="clearfix header">
+    <h2>合同管理.数据输入</h2>
+    <div class="btn-pannel">
+        <button type="submit" class="btn">保存</button>
+        <button type="button" href="#orders" class="btn red">取消</button>
+    </div>
+    <div class="link-pannel">
+        <ul>
+            <li>
+                <a href="#"><i class="fa fa-calendar-check-o"></i>日志</a>
+            </li>
+            <li>
+                <a href="#"><i class="fa fa-pencil"></i>批注</a>
+            </li>
+            <li>
+                <a href="#"><i class="fa fa-share-square-o"></i>分享</a>
+            </li>
+            <li>
+                <a href="#"><i class="fa fa-star"></i>收藏</a>
+            </li>
+        </ul>
+    </div>
+</div>
+<div class="main-pannel">
+    <h3>基本信息</h3>
+    <div class="content">
+        <table>
+            <tr>
+                <td width="64">合同号:</td>
+                <td><input type="text" value="<{$data.c_no}>" readonly/></td>
+                <td style="padding-left:20px;width:84px;">签约日期:</td>
+                <td><input type="text" value="<{$data.c_date}>" name="date"/></td>
+                <td style="padding-left:20px;width:84px">合同金额:</td>
+                <td><input type="text" value="<{$data.c_money}>" name="money" /></td>
+            </tr>
+            <tr>
+                <td>合同名称:</td>
+                <td colspan="3"><input type="text" name="name" value="<{$data.c_name}>"/> </td>
+                <td style="padding-left:20px;width:84px">销售/采销:</td>
+                <td>
+                    <select name="type">
+                        <option value="1"<{if $data.c_type == 1}> selected<{/if}>>销售</option>
+                        <option value="2"<{if $data.c_type == 2}> selected<{/if}>>采销</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>对方名称:</td>
+                <td><input type="text" value="<{$data.c_coname}>" name="coname"/><input type="hidden" name="coid" value="<{$data.c_coname}>"></td>
+                <td style="padding-left:20px;">责任人:</td>
+                <td colspan="3">
+                    <input type="text" value="<{$data.c_mname}>" name="mname"/>
+                    <input type="hidden" value="<{$data.c_mid}>" name="mid" />
+                </td>
+            </tr>
+        </table>
+    </div>
+</div>
+<div class="main-pannel">
+    <h3>已对应订单情况</h3>
+    <div class="content">
+        <table class="table2">
+            <tr>
+                <td style="width: 2em;"></td>
+                <td>已对应订单金额:</td>
+                <td>30000.00</td>
+                <td>未对应订单金额</td>
+                <td>0.00</td>
+            </tr>
+            <tr>
+                <th><i class="fa fa-plus"></i></th>
+                <th>订单号</th>
+                <th>订单金额</th>
+                <th>订单主题</th>
+                <th>对方名称</th>
+                <th>责任人</th>
+                <th>项目名称</th>
+            </tr>
+            <tr>
+                <td><i class="fa fa-minus"></i></td>
+                <td><a href="#">P1608024X-001</a></td>
+                <td>15170000.00</td>
+                <td>运维服务协议</td>
+                <td>新奥生态控股股份有限公司</td>
+                <td>韩朝辉</td>
+                <td>新奥生态股份有限公司</td>
+            </tr>
+            <tr>
+                <td><i class="fa fa-minus"></i></td>
+                <td><a href="#">P1608024X-001</a></td>
+                <td>15170000.00</td>
+                <td>运维服务协议</td>
+                <td>新奥生态控股股份有限公司</td>
+                <td>韩朝辉</td>
+                <td>新奥生态股份有限公司</td>
+            </tr>
+        </table>
+    </div>
+</div>

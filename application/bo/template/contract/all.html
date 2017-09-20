@@ -1,6 +1,6 @@
 <div class="clearfix header">
 
-    <h2>所有合同</h2>
+    <h2>合同管理.合同列表</h2>
 
     <div class="link-pannel">
         <ul>
@@ -49,7 +49,7 @@
         <{volist name="lists" id="vo" empty="$empty"}>
         <tr>
             <td><input type="checkbox" value="<{$vo.c_id}>" class="lists-id"></td>
-            <td><{$vo.c_no}></td>
+            <td><a href="/contract/detail?id=<{$vo.c_id}>"><{$vo.c_no}></a></td>
             <td><{$vo.c_name}></td>
             <td><{$vo.c_mname}></td>
             <td><{$vo.c_coname}></td>

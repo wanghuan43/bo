@@ -63,4 +63,11 @@ class Contract extends BoController
 
     }
 
+    public function detail($id)
+    {
+        $data = $this->model->getDataById($id);
+        $this->assign('data',$data);
+        return $this->fetch();
+    }
+
 }

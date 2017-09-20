@@ -482,3 +482,29 @@ table a{
 #checked-result select{
     width:600px;
 }
+.table2 th:first-child,
+.table2 td:first-child{
+    text-align: center;
+    background: #fff;
+}
+
+.table2 tr :first-child i{
+    background:#0431FF;
+    color: #ffffff;
+    display: inline-block;
+    width:1em;
+    height:1em;
+    text-align: center;
+    line-height:1em;
+    -webkit-border-radius: .7em;
+    -moz-border-radius: .7em;
+    border-radius: .7em;
+}
+
+.table2 tr:nth-child(2n){
+    background: #f2f2f2;
+}
+
+.table2 tr:nth-child(2){
+    background:#e0e0e0;
+}

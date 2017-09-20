@@ -2,21 +2,22 @@
 namespace app\bo\controller;
 
 use app\bo\libs\BoController;
+use app\bo\model\Invoice as ModelInvoice;
 use think\Request;
-use app\bo\model\Invoice as MInvoice;
+
 
 class Invoice extends BoController
 {
 
     public function __construct(Request $request)
     {
-        $this->model = new MInvoice();
+        $this->model = new ModelInvoice();
         parent::__construct($request);
     }
 
     public function searchInvoice()
     {
-        $invoiceModel = new \app\bo\model\Invoice();
+        $invoiceModel = new ModelInvoice();
         $this->assign("type", "invoice");
         return $this->search($invoiceModel, "common/popused");
     }
