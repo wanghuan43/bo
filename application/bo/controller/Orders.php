@@ -39,7 +39,7 @@ class Orders extends BoController
         $this->assign("lists", $lists);
         $this->assign("title", $this->title);
         $this->assign("type", $type);
-        $this->assign("empty", '<tr><td colspan="10">无数据.</td></tr>');
+        $this->assign("empty", '<tr><td colspan="11">无数据.</td></tr>');
         return $this->fetch("index");
     }
 
@@ -56,6 +56,7 @@ class Orders extends BoController
         $tagIDList = array();
         $memberModel = new Member();
         $baseMonth = getMonth();
+        $fmodel = new \app\bo\model\Favorite();
         $order = $this->ordersModel->get($op_id);
         if (!empty($op_id) AND $op == "edit") {
             $tmp = $tagLinkModel->getList($op_id, "orders");
@@ -91,6 +92,7 @@ class Orders extends BoController
         $this->assign('oused', $oum->getOrderUesd($op_id));
         $this->assign('op', $op);
         $this->assign('op_id', $op_id);
+        $this->assign("isFavorite", $fmodel->where("f_oid", "=", $op_id)->where("f_mid", "=", $this->current->m_id)->count());
         return $this->fetch("operation");
     }
 
@@ -126,6 +128,19 @@ class Orders extends BoController
             $message = "保存失败";
         }
         return array("status" => $result, "message" => $message);
+    }
+
+    public function delete($opID)
+    {
+        $orders = $this->ordersModel->where("o_id", "=", $opID)->find();
+        $oum = new OrderUsed();
+        $tmp = $oum->getOrderUesd($opID);
+        $ret = ["status"=>"false", "message"=>"订单删除失败，请先去除订单的关系数据。"];
+        if (count($tmp[1]) == 0 AND count($tmp[2]) == 0 AND count($tmp[3]) == 0 AND $orders->o_status != 6) {
+            $orders->delete();
+            $ret = ["status"=>"true", "message"=>"订单删除成功"];
+        }
+        return $ret;
     }
 
     public function myLogList($opId = "")

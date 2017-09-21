@@ -130,11 +130,11 @@
             }
         });
     })
-    function contentAjax(id,ajaxData){
+    function contentAjax(id,ajaxData,jump){
         if(ajaxData.url == "/historyBack"){
             historyBack();
             return false;
-        }else{
+        }else if(jump != "jump"){
             setHistoryBack();
         }
         loading.show();
@@ -170,7 +170,9 @@
             url = url.substr(1);
         }
         url = "/#"+url;
-        location.href = url;
+        if(jump != "jump") {
+            location.href = url;
+        }
         $.ajax(ajaxData);
     }
     function historyBack(){
@@ -183,7 +185,7 @@
         var ajaxData = {
             url : url
         }
-        contentAjax("main-container",ajaxData);
+        contentAjax("main-container",ajaxData, "jump");
     }
     function setHistoryBack(url) {
         var sessionStore = localStorage.historyBack;

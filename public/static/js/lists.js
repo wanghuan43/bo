@@ -88,6 +88,7 @@
         }else{
             custom.alert('请至少选择一项');
         }
+        return false;
     });
 
 })(jQuery);

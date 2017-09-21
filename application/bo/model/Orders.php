@@ -45,6 +45,11 @@ class   Orders extends BoModel
      */
     public function save($data = [], $where = [], $sequence = null)
     {
+        $tlm = new Taglink();
+        $clm = new Circulation();
+        $opm = new OrderProject();
+        $oum = new OrderUsed();
+        $con = new Contract();
         $tagList = !empty($data['tagList']) ? $data['tagList'] : array();
         $cList = !empty($data['cList']) ? $data['cList'] : array();
         $pj = !empty($data['project']) ? $data['project'] : array();
@@ -53,11 +58,13 @@ class   Orders extends BoModel
         unset($data['cList']);
         unset($data['project']);
         unset($data['used']);
-        $tlm = new Taglink();
-        $clm = new Circulation();
-        $opm = new OrderProject();
-        $oum = new OrderUsed();
         $result = parent::save($data, $where, $sequence);
+        if (!empty($data['o_cid'])) {
+            $c = $con->where("c_id", "=", $data['o_cid'])->find();
+            $c->c_used = $c->c_used + $data['o_money'];
+            $c->c_noused = $c->c_money - $c->c_used;
+            $c->save();
+        }
         $tlm->setTagLink($this->o_id, $tagList, "orders");
         $clm->setCirculation($this->o_id, $cList, "orders");
         $opm->setOrderProject($this->o_id, $data['o_date'], $pj);

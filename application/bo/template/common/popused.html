@@ -115,13 +115,13 @@
                                 method: "get",
                                 dataType:"json"
                             }
-                            contentAjax("<{$type}>List", tts);
+                            contentAjax("<{$type}>List", tts, 'jump');
                         }
                         return false;
                     });
                 }
             };
-            contentAjax("<{$type}>List", tt);
+            contentAjax("<{$type}>List", tt, 'jump');
             return false;
         });
         $("#<{$type}>Form").submit();

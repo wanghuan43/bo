@@ -13,13 +13,13 @@
                 <a href="<{:url("/orders/myLogList/opId/".$op_id)}>"><i class="fa fa-calendar-check-o"></i>日志</a>
             </li>
             <li>
-                <a href="#"><i class="fa fa-pencil"></i>批注</a>
+                <a href="<{:url("/postil/index/opID/".$op_id)}>"><i class="fa fa-pencil"></i>批注</a>
             </li>
             <li>
                 <a href="#"><i class="fa fa-share-square-o"></i>分享</a>
             </li>
             <li>
-                <a href="#"><i class="fa fa-star"></i>收藏</a>
+                <a href="#" id="favorite" data="<{$isFavorite}>"><i class="fa fa-star"></i><{if condition="empty($isFavorite)"}>收藏<{else/}>取消收藏<{/if}></a>
             </li>
             <{/if}>
         </ul>
@@ -432,6 +432,28 @@
         received:"<{:url("/received/searchReceived")}>",
     }
     $(document).ready(function () {
+        $("#favorite").click(function(){
+            var url = "<{:url("/favorite/saveFavorite/opID/".$op_id)}>"
+            var val = $(this).attr("data");
+            var ele = $(this);
+            $.ajax({
+                url: url,
+                data: "save="+val,
+                method: "post",
+                type: "json",
+                success: function (data) {
+                    if(val == "1"){
+                        ele.html('<i class="fa fa-star"></i>收藏');
+                        ele.attr("data", "0");
+                    }else{
+                        ele.html('<i class="fa fa-star"></i>取消收藏');
+                        ele.attr("data", "1");
+                    }
+                    custom.alert(data.message);
+                }
+            });
+            return false;
+        });
         laydate.render({
             elem: '#o_date'
         });
@@ -500,6 +522,14 @@
         $(".mstag").select2();
         $(".msmember").select2();
         $("#o_money").change(function () {
+            var max = $(this).attr("max");
+            if(max != undefined){
+                max = parseFloat(max);
+                if(max < $(this).val()){
+                    custom.alert("合同的可用额度不够，不能超过"+max.toFixed(2));
+                    $(this).val(max.toFixed(2));
+                }
+            }
             calculateAll();
         });
         $(".fa-plus").click(function () {
@@ -606,8 +636,18 @@
                                 $("#o_status option:last").prop("selected", true);
                                 $("#o_status option:last").prop("disabled", false);
                                 $("#o_status").prop("", true);
+                                var json = JSON.parse(decodeURIComponent($(cla + " .selectRadio:checked").attr("data-value")));
+                                if($("#o_money").val() == ""){
+                                    $("#o_money").val(json.c_noused);
+                                }else{
+                                    var nu = parseFloat(json.c_noused),mo = parseFloat($("#o_money").val());
+                                    if(nu < mo){
+                                        custom.alert("当前合同金额，超过合同的可用金额:"+nu.toFixed(2));
+                                        $("#o_money").val(nu.toFixed(2));
+                                    }
+                                }
+                                $("#o_money").attr("max",parseFloat(json.c_noused));
                                 if($("#o_pname").val() == "" && $("#o_coname").val() == ""){
-                                    var json = JSON.parse(decodeURIComponent($(cla + " .selectRadio:checked").attr("data-value")));
                                     var ts = parseInt(json.c_type) - 1;
                                     var tss = parseInt(json.co_type) - 1;
                                     $("#o_pname").val(json.c_pname);
