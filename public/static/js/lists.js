@@ -5,6 +5,11 @@
 //删除功能
 (function ($) {
 
+    $("#lists-all-checked").click(function(){
+        var _this = $(this);
+        $(".lists-id").prop("checked",_this.prop("checked"));
+    });
+
     $("#lists-delete").click(function () {
 
         var ids = new Array(),$this = $(this);
