@@ -50,14 +50,18 @@ class Received extends BoModel
         return $list;
     }
 
-    public function checkUsed($id, $money)
+    public function checkUsed($id, $money, $op = '-')
     {
         $tmp = $this->find($id)->toArray();
         $return = true;
-        if ($tmp['r_noused'] - $money < 0) {
-            $return = false;
+        if ($op == "-") {
+            if ($tmp['r_noused'] - $money < 0) {
+                $return = false;
+            } else {
+                $this->save(['r_noused' => ($tmp['r_noused'] - $money), 'r_used' => ($tmp['r_used'] + $money)], ["r_id" => $id]);
+            }
         } else {
-            $this->save(['r_noused' => ($tmp['r_noused'] - $money), 'r_used' => ($tmp['r_used'] + $money)], $id);
+            $this->save(['r_noused' => ($tmp['r_noused'] + $money), 'r_used' => ($tmp['r_used'] - $money)], ["r_id" => $id]);
         }
         return $return;
     }

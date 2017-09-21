@@ -8,6 +8,12 @@ class OrderUsed extends BoModel
 {
     protected $pk = "ou_id";
 
+    protected $ka = [
+        '1' => '\app\bo\model\Invoice',
+        '2' => '\app\bo\model\Acceptance',
+        '3' => '\app\bo\model\Received'
+    ];
+
     public function getOrderUesd($id)
     {
         $lists = $this->where("ou_oid", "=", $id)->select();
@@ -16,6 +22,7 @@ class OrderUsed extends BoModel
             $tmp[$value['ou_type']][] = array(
                 "ou_id" => $value->ou_id,
                 "ou_oid" => $value->ou_oid,
+                "ou_otid" => $value->ou_otid,
                 "ou_date" => $value->ou_date,
                 "ou_used" => $value->ou_used,
                 "ou_type" => $value->ou_type
@@ -27,19 +34,24 @@ class OrderUsed extends BoModel
         return $tmp;
     }
 
+    public function resetOrderUsed($id)
+    {
+        $list = $this->where("ou_oid", "=", $id)->select();
+        foreach ($list as $value) {
+            $table = $this->ka[$value['ou_type']];
+            $i = new $table();
+            $i->checkUsed($value['ou_otid'], $value['ou_used'], "+");
+        }
+    }
+
     public function setOrderUsed($id, $data)
     {
         $this->where("ou_oid", "=", $id)->delete();
         $array = array();
-        $ka = [
-            '1' => 'invoice',
-            '2' => 'acceptance',
-            '3' => 'received'
-        ];
         foreach ($data as $key => $value) {
-            $table = ucfirst($ka[$key]);
+            $table = $this->ka[$key];
             foreach ($value['date'] as $k => $val) {
-                $i = $table::get($id);
+                $i = new $table();
                 if ($i->checkUsed($value['ot_id'][$k], $value['value'][$k])) {
                     $tmp['ou_oid'] = $id;
                     $tmp['ou_date'] = strtotime($val);

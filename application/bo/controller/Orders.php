@@ -206,17 +206,19 @@ class Orders extends BoController
         $post = Request::instance()->post();
         $log = Logs::get($post['id']);
         $data = unserialize($log['l_new']);
+        $oum = new OrderUsed();
         if ($post['val'] == "1") {
             $log->l_panding = 2;
-            echo "<pre>";print_r($data);exit;
-            $this->ordersModel->save($data, $log->l_otid);
+            $data['o_id'] = $log->l_otid;
+            $oum->resetOrderUsed($log->l_otid);
+            $this->ordersModel->save($data, ["o_id" => $log->l_otid]);
             $message = "审核通过";
         } else {
             $log->l_panding = 1;
             $message = "审核不通过";
         }
         $log->save();
-        return ["status"=>1, "message"=>$message];
+        return ["status" => 1, "message" => $message];
     }
 
     private function setType($type, $params)

@@ -50,14 +50,18 @@ class Acceptance extends BoModel
         return $list;
     }
 
-    public function checkUsed($id, $money)
+    public function checkUsed($id, $money, $op = '-')
     {
         $tmp = $this->find($id)->toArray();
         $return = true;
-        if ($tmp['a_noused'] - $money < 0) {
-            $return = false;
+        if ($op == "-") {
+            if ($tmp['a_noused'] - $money < 0) {
+                $return = false;
+            } else {
+                $this->save(['a_noused' => ($tmp['a_noused'] - $money), 'a_used' => ($tmp['a_used'] + $money)], ["a_id" => $id]);
+            }
         } else {
-            $this->save(['a_noused' => ($tmp['a_noused'] - $money), 'a_used' => ($tmp['a_used'] + $money)], $id);
+            $this->save(['a_noused' => ($tmp['a_noused'] + $money), 'a_used' => ($tmp['a_used'] - $money)], ["a_id" => $id]);
         }
         return $return;
     }

@@ -4,7 +4,7 @@
     <h2>订单信息管理（商机阶段）</h2>
     <div class="btn-pannel">
         <button type="submit" class="btn">保存</button>
-        <button type="button" href="#orders" class="btn red">取消</button>
+        <button type="button" href="#historyBack" class="btn red">取消</button>
     </div>
     <div class="link-pannel">
         <ul>
@@ -190,7 +190,7 @@
                     <td><?php echo date("Y-m-d", $value['ou_date']); ?></td>
                     <td class="mony-invoice"><{$value['ou_used']}></td>
                     <td>
-                        <a href="#" target="_blank" style="color: blue;"><{$value['ou_oid']}></a>
+                        <a href="#" target="_blank" style="color: blue;"><{$value['ou_otid']}></a>
                         <input type="hidden" name="used[1][date][]" value="<?php echo date("Y-m-d", $value['ou_date']); ?>">
                         <input type="hidden" name="used[1][value][]" value="<{$value['ou_used']}>">
                         <input type="hidden" name="used[1][ot_id][]" value="<{$value['ou_oid']}>">
@@ -227,7 +227,7 @@
                     <td><?php echo date("Y-m-d", $value['ou_date']); ?></td>
                     <td class="mony-invoice"><{$value['ou_used']}></td>
                     <td>
-                        <a href="#" target="_blank" style="color: blue;"><{$value['ou_oid']}></a>
+                        <a href="#" target="_blank" style="color: blue;"><{$value['ou_otid']}></a>
                         <input type="hidden" name="used[2][date][]" value="<?php echo date("Y-m-d", $value['ou_date']); ?>">
                         <input type="hidden" name="used[2][value][]" value="<{$value['ou_used']}>">
                         <input type="hidden" name="used[2][ot_id][]" value="<{$value['ou_oid']}>">
@@ -264,7 +264,7 @@
                     <td><?php echo date("Y-m-d", $value['ou_date']); ?></td>
                     <td class="mony-invoice"><{$value['ou_used']}></td>
                     <td>
-                        <a href="#" target="_blank" style="color: blue;"><{$value['ou_oid']}></a>
+                        <a href="#" target="_blank" style="color: blue;"><{$value['ou_otid']}></a>
                         <input type="hidden" name="used[3][date][]" value="<?php echo date("Y-m-d", $value['ou_date']); ?>">
                         <input type="hidden" name="used[3][value][]" value="<{$value['ou_used']}>">
                         <input type="hidden" name="used[3][ot_id][]" value="<{$value['ou_oid']}>">

@@ -131,7 +131,13 @@
         });
     })
     function contentAjax(id,ajaxData){
-    	loading.show();
+        if(ajaxData.url == "/historyBack"){
+            historyBack();
+            return false;
+        }else{
+            setHistoryBack();
+        }
+        loading.show();
         if(ajaxData.success == undefined){
             ajaxData.success = function(data){
                 if(data.content != undefined){
@@ -166,6 +172,36 @@
         url = "/#"+url;
         location.href = url;
         $.ajax(ajaxData);
+    }
+    function historyBack(){
+        var sessionStore = JSON.parse(localStorage.historyBack);
+        var url = "/";
+        if(sessionStore.length > 0){
+            url = sessionStore.pop();
+            localStorage.historyBack = JSON.stringify(sessionStore);
+        }
+        var ajaxData = {
+            url : url
+        }
+        contentAjax("main-container",ajaxData);
+    }
+    function setHistoryBack(url) {
+        var sessionStore = localStorage.historyBack;
+        sessionStore = sessionStore == undefined ? [] : JSON.parse(sessionStore);
+        var tmp = url != "" && url != undefined ? url : location.href;
+        var i = tmp.indexOf("#");
+        if(i >= 0){
+            tmp = "/" + tmp.substr((i+1));
+            if(sessionStore.length == 0){
+                sessionStore.push(tmp);
+            }else{
+                var p = sessionStore.join(",") + ",";
+                if(p.indexOf(tmp+",") < 0){
+                    sessionStore.push(tmp);
+                }
+            }
+        }
+        localStorage.historyBack = JSON.stringify(sessionStore);
     }
 </script>
 </body>

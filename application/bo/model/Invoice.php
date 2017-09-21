@@ -49,14 +49,18 @@ class Invoice extends BoModel
         return $list;
     }
 
-    public function checkUsed($id, $money)
+    public function checkUsed($id, $money, $op = "-")
     {
         $tmp = $this->find($id)->toArray();
         $return = true;
-        if ($tmp['i_noused'] - $money < 0) {
-            $return = false;
-        } else {
-            $this->save(['i_noused' => ($tmp['i_noused'] - $money), 'i_used' => ($tmp['i_used'] + $money)], $id);
+        if ($op == "-") {
+            if ($tmp['i_noused'] - $money < 0) {
+                $return = false;
+            } else {
+                $this->save(['i_noused' => ($tmp['i_noused'] - $money), 'i_used' => ($tmp['i_used'] + $money)], ["i_id" => $id]);
+            }
+        }else{
+            $this->save(['i_noused' => ($tmp['i_noused'] + $money), 'i_used' => ($tmp['i_used'] - $money)], ["i_id" => $id]);
         }
         return $return;
     }

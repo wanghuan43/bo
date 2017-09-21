@@ -4,7 +4,7 @@ namespace app\bo\model;
 
 use app\bo\libs\BoModel;
 
-class Orders extends BoModel
+class   Orders extends BoModel
 {
     protected $pk = 'o_id';
 
@@ -52,6 +52,7 @@ class Orders extends BoModel
         unset($data['tagList']);
         unset($data['cList']);
         unset($data['project']);
+        unset($data['used']);
         $tlm = new Taglink();
         $clm = new Circulation();
         $opm = new OrderProject();
