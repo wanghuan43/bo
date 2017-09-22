@@ -46,7 +46,7 @@
         </tr>
         </thead>
         <tbody>
-        <{volist name="lists" id="vo" empty="$empty"}>
+        <{volist name="lists" id="vo" empty="<tr><td colspan='11'>暂无数据</td></tr>"}>
         <tr>
             <td><input type="checkbox" value="<{$vo.c_id}>" class="lists-id"></td>
             <td><a href="/contract/detail?id=<{$vo.c_id}>"><{$vo.c_no}></a></td>
@@ -58,7 +58,7 @@
             <td><{$vo.c_used}></td>
             <td><{$vo.c_noused}></td>
             <td><{$vo.c_date|date="Y-m-d",###}></td>
-            <td><a href="/circulation/list/type/project/id/<{$vo.c_id}>">传阅列表</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a href="/contract/detail?id=<{$vo.c_id}>">查看</a></td>
+            <td><a href="/circulation/list/type/contract/id/<{$vo.c_id}>">传阅列表</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a href="/contract/detail?id=<{$vo.c_id}>">查看</a></td>
         </tr>
         <{/volist}>
         </tbody>

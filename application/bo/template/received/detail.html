@@ -1,9 +1,9 @@
-<form action="/contract/update" method="post" onsubmit="return false" id="form-update">
+<form action="/received/update" method="post" onsubmit="return false" id="form-update">
     <div class="clearfix header">
-        <h2>合同管理.数据查看</h2>
+        <h2>付款单管理.数据查看</h2>
         <div class="btn-pannel">
             <button type="submit" class="btn">保存</button>
-            <button type="button" href="#contract/all" class="btn red">取消</button>
+            <button type="button" href="#received/all" class="btn red">取消</button>
         </div>
         <div class="link-pannel">
             <ul>
@@ -27,34 +27,30 @@
         <div class="content">
             <table>
                 <tr>
-                    <td width="64">合同号:</td>
-                    <td><input type="text" name="no" value="<{$data.c_no}>" class="no-border" readonly/><input type="hidden" name="id" value="<{$data.c_id}>"/> </td>
-                    <td style="padding-left:20px;width:84px;">签约日期:</td>
-                    <td><input type="text" name="date" value="<{$data.c_date|date='Y-m-d',###}>" name="date"/></td>
-                    <td style="padding-left:20px;width:84px">合同金额:</td>
-                    <td><input type="text" value="<{$data.c_money}>" name="money"<{if $orders}> class="no-border" readonly<{/if}>/></td>
+                    <td width="64">付款单号:</td>
+                    <td><input type="text" name="no" value="<{$data.r_no}>" class="no-border" readonly/><input type="hidden" name="id" value="<{$data.r_id}>"/> </td>
+                    <td style="padding-left:20px;width:84px;">验收日期:</td>
+                    <td><input type="text" name="date" value="<{$data.r_date|date='Y-m-d',###}>" name="date"/></td>
+                    <td style="padding-left:20px;width:84px">总金额:</td>
+                    <td><input type="text" value="<{$data.r_money}>" name="money"<{if $orders}> class="no-border" readonly<{/if}>/></td>
                 </tr>
                 <tr>
-                    <td>合同名称:</td>
-                    <td colspan="3"><input type="text" name="name" value="<{$data.c_name}>"/></td>
-                    <td style="padding-left:20px;width:84px">销售/采销:</td>
+                    <td>销售/采销:</td>
                     <td>
                         <select name="type">
-                            <option value="1"<{if $data.c_type == 1}> selected<{/if}>>销售</option>
-                            <option value="2"<{if $data.c_type == 2}> selected<{/if}>>采销</option>
+                            <option value="1"<{if $data.r_type == 1}> selected<{/if}>>销售</option>
+                            <option value="2"<{if $data.r_type == 2}> selected<{/if}>>采销</option>
                         </select>
                     </td>
-                </tr>
-                <tr>
-                    <td>对方名称:</td>
+                    <td style="padding-left:20px;">对方名称:</td>
                     <td>
-                        <input type="text" value="<{$data.c_coname}>" name="coname" id="ipt-company-name" readonly/>
-                        <input type="hidden" name="coid" value="<{$data.c_coid}>" id="ipt-company-id">
+                        <input type="text" value="<{$data.r_coname}>" name="coname" id="ipt-company-name" readonly/>
+                        <input type="hidden" name="coid" value="<{$data.r_coid}>" id="ipt-company-id">
                     </td>
                     <td style="padding-left:20px;">责任人:</td>
-                    <td colspan="3">
-                        <input type="text" value="<{$data.c_mname}>" name="mname" class="no-border" readonly/>
-                        <input type="hidden" value="<{$data.c_mid}>" name="mid"/>
+                    <td>
+                        <input type="text" value="<{$data.r_mname}>" name="mname" class="no-border" readonly/>
+                        <input type="hidden" value="<{$data.r_mid}>" name="mid"/>
                     </td>
                 </tr>
             </table>
@@ -67,24 +63,26 @@
                 <tr>
                     <!--td style="width: 2em;"></td-->
                     <td>已对应订单金额:</td>
-                    <td><input type="text" name="used" value="<{$data.c_used}>" class="no-border" readonly/></td>
+                    <td><input type="text" name="used" value="<{$data.r_used}>" class="no-border" readonly/></td>
                     <td>未对应订单金额</td>
-                    <td><input type="text" name="noused" value="<{$data.c_noused}>" class="no-border" readonly/></td>
+                    <td><input type="text" name="noused" value="<{$data.r_noused}>" class="no-border" readonly/></td>
                 </tr>
                 <tr>
                     <!--th id="btn-add-order"><i class="fa fa-plus-circle"></i></th-->
                     <th>订单号</th>
                     <th>订单金额</th>
+                    <th>对应金额</th>
                     <th>订单主题</th>
                     <th>对方名称</th>
                     <th>责任人</th>
                     <th>项目名称</th>
                 </tr>
-                <{volist name="orders" id="order" empty="<tr><td colspan='7' style='text-align: center'>暂无数据</td></tr>"}>
+                <{volist name="orders" id="order" empty="<tr><td colspan='8' style='text-align: center'>暂无数据</td></tr>"}>
                 <tr>
                     <!--td><i class="fa fa-minus-circle"></i><input type="hidden" name="oids[]" value="<{$order.o_id}>"</td-->
                     <td><a href="/orders/operation?op=edit&op_id=<{$order.o_id}>"><{$order.o_no}></a></td>
-                    <td><{$order.o_money}><input type="hidden" name="omoneys[]" value="<{$order.o_money}>"/></td>
+                    <td><{$order.o_money}></td>
+                    <td><{$order.ou_used}><input type="hidden" name="oused[]" value="<{$order.ou_used}>"</td>
                     <td><{$order.o_subject}></td>
                     <td><{$order.o_coname}></td>
                     <td><{$order.o_mname}></td>

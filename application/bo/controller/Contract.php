@@ -20,12 +20,6 @@ class Contract extends BoController
         return $this->search($contractModel);
     }
 
-    public function all()
-    {
-        $this->assign('empty','<tr><td colspan="10"></td></tr>');
-        return parent::all();
-    }
-
     protected function doAdd()
     {
 
@@ -91,7 +85,7 @@ class Contract extends BoController
         $data['c_used'] = floatval($post['used']);
         $data['c_noused'] = floatval($post['noused']);
 
-        if( empty($data['c_used']) && !!$post['oids'] ){
+        if( empty($data['c_used']) && !!$post['omoneys'] ){
             $modelOrders = new \app\bo\model\Orders();
             $orders = $modelOrders->getOrdersByContractId($id);
             $used = 0;

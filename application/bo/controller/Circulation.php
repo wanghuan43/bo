@@ -55,17 +55,24 @@ class Circulation extends BoController
      * @param bool $id
      */
     public function addMembers( $type=false, $id=false)
-    {die('aa');
+    {
         $mids = $this->request->post('mids/a');
-        $smids = $this->request->post('smids/a');
-        if( !$type || !$id || $mids ){
+
+        if( !$type || !$id || !$mids ){
             $ret = ['flag' => 0 , 'msg'=>'参数错误'];
         }else{
+            $res = $this->model->where('ci_otid','=',$id)->where("ci_type","=",$type)->field('ci_mid')->select();
+            $smids = [];
+            foreach( $res as $i ){
+                $smids[] = $i->ci_mid ;
+            }
             foreach ( $mids as $mid ){
                 if( !in_array($mid,$smids) )
                     $data[] = ['ci_mid' => $mid,'ci_otid'=>$id,'ci_type'=>$type];
             }
-            $this->model->saveAll($data);
+            if( !!$data ) {
+                $this->model->saveAll($data);
+            }
 
             $ret = ['flag' => 1, 'msg' => '操作成功'];
         }

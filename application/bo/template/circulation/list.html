@@ -3,7 +3,7 @@
     <h2><{$name}> - 传阅列表</h2>
 
     <div class="btn-pannel">
-        <button type="button" href="#historyBack" class="btn red">返回</button>
+        <button type="button" href="/<{$type}>/all" class="btn red">返回</button>
     </div>
 
     <div class="link-pannel">
@@ -12,7 +12,7 @@
                 <a href="#"><i class="fa fa-file-excel-o"></i>导出</a>
             </li-->
             <li>
-                <a href="/circulation/addmembers/type/<{$type}>/id/<{$id}>" id="btn-add-members" target="_blank" onclick="return false;"><i class="fa fa-user-plus"></i>新增</a>
+                <a href="/circulation/addmembers/type/<{$type}>/id/<{$id}>" data-type="<{$type}>" data-id="<{$id}>" id="btn-add-members" target="_blank" onclick="return false;"><i class="fa fa-user-plus"></i>新增</a>
             </li>
             <li>
                 <a href="/acceptance/del" id="lists-delete" target="_blank" onclick="return false;"><i class="fa fa-trash"></i>删除</a>
@@ -34,7 +34,7 @@
         </tr>
         </thead>
         <tbody>
-        <{volist name="lists" id="vo" empty="$empty"}>
+        <{volist name="lists" id="vo" empty="<tr><td colspan='7'>暂无数据</td></tr>"}>
         <tr>
             <td><input type="checkbox" value="<{$vo.ci_id}>" class="lists-id"></td>
             <td><{$vo.m_code}></td>

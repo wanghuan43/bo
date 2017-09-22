@@ -69,4 +69,32 @@ class Project extends BoController
 
     }
 
+    public function detail($id)
+    {
+        $data = $this->model->getDataById($id);
+        $this->assign('data',$data);
+        return $this->fetch();
+    }
+
+    public function update()
+    {
+
+        $post = $this->request->post();
+
+        $id = $post['id'];
+
+        $data['p_no'] = $post['no'];
+        $data['p_name'] = $post['name'];
+
+        $res = $this->model->save($data,['p_id'=>$id]);
+
+        if($res){
+            $ret = ['flag'=>1,'msg'=>'更新成功'];
+        }else{
+            $ret = ['flag'=>0,'msg'=>'更新失败'];
+        }
+
+        return $ret;
+    }
+
 }

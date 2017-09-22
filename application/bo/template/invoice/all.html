@@ -42,13 +42,14 @@
             <th>已使用金额</th>
             <th>未使用金额</th>
             <th>验收时间</th>
+            <th></th>
         </tr>
         </thead>
         <tbody>
-        <{volist name="lists" id="vo" empty="$empty"}>
+        <{volist name="lists" id="vo" empty="<tr><td colspan='11'></td></tr>"}>
         <tr>
             <td><input type="checkbox" value="<{$vo.i_id}>" class="lists-id"></td>
-            <td><{$vo.i_no}></td>
+            <td><a href="/invoice/detail?id=<{$vo.i_id}>"><{$vo.i_no}></a></td>
             <td><{$vo.i_mname}></td>
             <td><{$vo.i_content}></td>
             <td><{if $vo.i_type==1}>销售<{else}>采销<{/if}></td>
@@ -57,6 +58,7 @@
             <td><{$vo.i_used}></td>
             <td><{$vo.i_noused}></td>
             <td><{$vo.i_date|date="Y-m-d",###}></td>
+            <td><a href="/circulation/list/type/invoice/id/<{$vo.i_id}>">传阅列表</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a href="/invoice/detail?id=<{$vo.i_id}>">查看</a></td>
         </tr>
         <{/volist}>
         </tbody>

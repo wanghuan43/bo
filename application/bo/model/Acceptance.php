@@ -65,4 +65,11 @@ class Acceptance extends BoModel
         }
         return $return;
     }
+
+    public function getCodeAndNameById($id)
+    {
+        $data = $this->getDataById($id);
+        return ['code'=>$data['a_no'],'name'=>'验收单'.$data['a_no']];
+    }
+
 }

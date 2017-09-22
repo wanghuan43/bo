@@ -2,6 +2,7 @@
 namespace app\bo\controller;
 
 use app\bo\libs\BoController;
+use app\bo\model\OrderUsed;
 use think\Request;
 
 class Acceptance extends BoController
@@ -17,12 +18,6 @@ class Acceptance extends BoController
         $acceptanceModel = new \app\bo\model\Acceptance();
         $this->assign("type", "acceptance");
         return $this->search($acceptanceModel, "common/popused");
-    }
-
-    public function all()
-    {
-        $this->assign('empty','<tr><td colspan="10">没有数据</td></tr>');
-        return parent::all();
     }
 
     protected function doAdd()
@@ -53,6 +48,54 @@ class Acceptance extends BoController
             }
         }else{
             $ret = ['flag'=>0,'msg'=>$validate->getError()];
+        }
+
+        return $ret;
+
+    }
+
+    public function detail($id)
+    {
+        $data = $this->model->getDataById($id);
+        $modelOrderUsed = new OrderUsed();
+        $orders = $modelOrderUsed->getOrderUsedByOtid($id,1);
+        $this->assign('data',$data);
+        $this->assign('orders',$orders);
+        return $this->fetch();
+    }
+
+    public function update()
+    {
+        $post = $this->request->post();
+
+        $id = $post['id'];
+
+        $data['a_no'] = $post['no'];
+        $data['a_date'] = strtotime(trim($post['date']));
+        $data['a_money'] = floatval(trim($post['money']));
+        $data['a_type'] = intval($post['type']);
+        $data['a_coname'] = trim($post['coname']);
+        $data['a_coid'] = intval($post['coid']);
+        $data['a_mname'] = trim($post['mname']);
+        $data['a_mid'] = intval($post['mid']);
+        $data['a_used'] = floatval($post['used']);
+        $data['a_noused'] = floatval($post['noused']);
+
+        if( empty($data['a_used']) && !!$post['oused'] ){
+            $used = 0;
+            foreach( $post['oused'] as $oused){
+                $used += floatval($oused);
+            }
+            $data['a_used'] = $used;
+            $data['a_noused'] = $data['a_money'] - $used;
+        }
+
+        $res = $this->model->save($data,['a_id'=>$id]);
+
+        if($res){
+            $ret = ['flag'=>1,'msg'=>'更新成功'];
+        }else{
+            $ret = ['flag'=>0,'msg'=>'更新失败'];
         }
 
         return $ret;

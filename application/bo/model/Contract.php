@@ -66,4 +66,11 @@ class Contract extends BoModel
         $list = $searchModel->paginate($limit, true);
         return $list;
     }
+
+    public function getCodeAndNameById($id )
+    {
+        $data = $this->getDataById($id);
+        return ['code'=>$data['c_no'],'name'=>$data['c_name']];
+    }
+
 }

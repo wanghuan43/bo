@@ -64,4 +64,11 @@ class Invoice extends BoModel
         }
         return $return;
     }
+
+    public function getCodeAndNameById($id)
+    {
+        $data = $this->getDataById($id);
+        return ['code'=>$data['i_no'],'name'=>'发票'.$data['i_no']];
+    }
+
 }

@@ -3,6 +3,7 @@ namespace app\bo\controller;
 
 use app\bo\libs\BoController;
 use app\bo\model\Invoice as ModelInvoice;
+use app\bo\model\OrderUsed;
 use think\Request;
 
 
@@ -20,12 +21,6 @@ class Invoice extends BoController
         $invoiceModel = new ModelInvoice();
         $this->assign("type", "invoice");
         return $this->search($invoiceModel, "common/popused");
-    }
-
-    public function all()
-    {
-        $this->assign('empty','<tr><td colspan="10">没有数据</td></tr>');
-        return parent::all();
     }
 
     public function doAdd()
@@ -58,6 +53,54 @@ class Invoice extends BoController
         }
 
         return $ret;
+    }
+
+    public function detail($id)
+    {
+        $data = $this->model->getDataById($id);
+        $modelOrderUsed = new OrderUsed();
+        $orders = $modelOrderUsed->getOrderUsedByOtid($id,1);
+        $this->assign('data',$data);
+        $this->assign('orders',$orders);
+        return $this->fetch();
+    }
+
+    public function update()
+    {
+        $post = $this->request->post();
+
+        $id = $post['id'];
+
+        $data['i_no'] = $post['no'];
+        $data['i_date'] = strtotime(trim($post['date']));
+        $data['i_money'] = floatval(trim($post['money']));
+        $data['i_type'] = intval($post['type']);
+        $data['i_coname'] = trim($post['coname']);
+        $data['i_coid'] = intval($post['coid']);
+        $data['i_mname'] = trim($post['mname']);
+        $data['i_mid'] = intval($post['mid']);
+        $data['i_used'] = floatval($post['used']);
+        $data['i_noused'] = floatval($post['noused']);
+
+        if( empty($data['i_used']) && !!$post['oused'] ){
+            $used = 0;
+            foreach( $post['oused'] as $oused){
+                $used += floatval($oused);
+            }
+            $data['i_used'] = $used;
+            $data['i_noused'] = $data['i_money'] - $used;
+        }
+
+        $res = $this->model->save($data,['i_id'=>$id]);
+
+        if($res){
+            $ret = ['flag'=>1,'msg'=>'更新成功'];
+        }else{
+            $ret = ['flag'=>0,'msg'=>'更新失败'];
+        }
+
+        return $ret;
+
     }
 
 }

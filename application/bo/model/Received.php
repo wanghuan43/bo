@@ -7,7 +7,7 @@ use app\bo\libs\BoModel;
 class Received extends BoModel
 {
 
-    protected $pk = "i_id";
+    protected $pk = "r_id";
 
     protected $searchable = array(
         "r_date" => array(
@@ -65,4 +65,11 @@ class Received extends BoModel
         }
         return $return;
     }
+
+    public function getCodeAndNameById($id)
+    {
+        $data = $this->getDataById($id);
+        return ['code'=>$data['r_no'],'name'=>'付款单'.$data['r_no']];
+    }
+
 }

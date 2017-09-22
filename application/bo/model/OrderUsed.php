@@ -64,4 +64,13 @@ class OrderUsed extends BoModel
         }
         $this->saveAll($array);
     }
+
+    public function getOrderUsedByOtid( $otid,$type )
+    {
+        $res = $this->alias('ou')->join('__ORDERS__ o','ou.ou_oid = o.o_id')
+            ->where('ou_otid','=',$otid)
+            ->where('ou_type','=',$type)->select();
+        return $res;
+    }
+
 }

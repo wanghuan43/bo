@@ -42,13 +42,14 @@
             <th>已使用金额</th>
             <th>未使用金额</th>
             <th>验收时间</th>
+            <th></th>
         </tr>
         </thead>
         <tbody>
-        <{volist name="lists" id="vo" empty="$empty"}>
+        <{volist name="lists" id="vo" empty="<tr><td colspan='11'>暂无数据</td></tr>"}>
         <tr>
             <td><input type="checkbox" value="<{$vo.a_id}>" class="lists-id"></td>
-            <td><{$vo.a_no}></td>
+            <td><a href="/acceptance/detail?id=<{$vo.a_id}>"><{$vo.a_no}></a></td>
             <td><{$vo.a_mname}></td>
             <td><{$vo.a_content}></td>
             <td><{if $vo.a_type==1}>销售<{else}>采销<{/if}></td>
@@ -57,6 +58,7 @@
             <td><{$vo.a_used}></td>
             <td><{$vo.a_noused}></td>
             <td><{$vo.a_date|date="Y-m-d",###}></td>
+            <td><a href="/circulation/list/type/acceptance/id/<{$vo.a_id}>">传阅列表</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a href="/acceptance/detail?id=<{$vo.a_id}>">查看</a></td>
         </tr>
         <{/volist}>
         </tbody>

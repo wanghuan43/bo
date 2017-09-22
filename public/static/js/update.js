@@ -1,5 +1,8 @@
 (function($){
 
+    laydate.render({
+        elem:"input[name='date']"
+    });
 
     $("#form-update [type='submit']").click(function(){
         var form = $("#form-update");
@@ -47,57 +50,5 @@
         }
     });
 
-    /*$("#btn-add-order").click(function(){
-        if($(".f-layer-orders").length>0) {
-            $(".f-layer-orders-back").show();
-            $(".f-layer-orders").addClass("show");
-        }else {
-            $.ajax({
-                url: "/orders/searchOrders",
-                method: "post",
-                data:{
-                    'fields' : {
-                        'orders' : {
-                            '0' : 'o_cid',
-                            '1' : 'o_money'
-                        }
-                    },
-                    'operators' : {
-                        'orders' : {
-                            '0' : '=',
-                            '1' : '<='
-                        }
-                    },
-                    'values' :{
-                        'orders' : {
-                            '0' : new Array("0"),
-                            '1' : new Array($("input[name='noused']").val())
-                        }
-                    }
-                },
-                dataType: "json",
-                success: function (res) {
-                    $("body").append(res.content);
-                    $(".f-layer-orders .close").click(function () {
-                        $(".f-layer-orders-back").hide();
-                        $(".f-layer-orders").removeClass("show");
-                    });
-                    $(".f-layer-orders .save").click(function () {
-                        var radio = $("#ordersList .selectRadio:checked");
-                        if (radio.length > 0) {
-                            $("input[name='coid']").val(radio.val());
-                            $("input[name='coname']").val(radio.attr('data'));
-                            $(".f-layer-company .close").click();
-                        } else {
-                            custom.alert('请至少选择一项');
-                        }
-
-                    });
-                    $(".f-layer-orders-back").show();
-                    setTimeout('$(".f-layer-orders").addClass("show")', 500);
-                }
-            });
-        }
-    });*/
 
 })(jQuery);

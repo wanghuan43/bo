@@ -47,7 +47,6 @@
             $(".member-ids").prop("checked",$this.prop("checked")).change();
         });
         $("input.member-ids[type='checkbox']").change(function(){
-            console.log("change");
             var $this = $(this);
             var option = $("#sel-ids").find("option[value='"+$this.val()+"']");
             var html = "<option value='"+$this.val()+"' selected>"+$this.parent().parent().find("td:nth-child(2)").html()+"</option>";
