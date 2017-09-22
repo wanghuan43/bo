@@ -1,0 +1,33 @@
+<div class="clearfix header searchTitle">
+    <h2></h2>
+    <div class="btn-pannel paginate">
+        <{$lists->render()}>
+    </div>
+</div>
+<div class="search-result">
+    <table cellspacing="0" class="list">
+        <thead>
+        <tr>
+            <th></th>
+            <th>合同号</th>
+            <th>合同名称</th>
+            <th>对方名称</th>
+            <th>签约日期</th>
+            <th>合同金额</th>
+            <th>未对应订单金额</th>
+        </tr>
+        </thead>
+        <tbody>
+        <{volist name="lists" id="val" empty="$empty"}>
+        <tr>
+            <td><input type="radio" class="selectRadio" name="selectRadio" value="<{$val.o_id}>" data="<{$val.o_no}>" data-value="<?php echo urlencode(json_encode($val->toArray())) ?>" /></td>
+            <td><{$val.o_no}></td>
+            <td><{$val.o_subject}></td>
+            <td><{$val.o_coname}></td>
+            <td><?php echo date("Y-m-d", $val['o_date']); ?></td>
+            <td><{$val.o_money}></td>
+        </tr>
+        <{/volist}>
+        </tbody>
+    </table>
+</div>

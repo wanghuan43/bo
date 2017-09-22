@@ -8,6 +8,45 @@ class   Orders extends BoModel
 {
     protected $pk = 'o_id';
 
+    protected $searchable = [
+        'o_cid' => [
+            'name' => '合同ID',
+            'type' => 'text',
+            'operators' => [
+                "between" => "介于",
+                "=" => "等于",
+                "<" => "小于",
+                ">" => "大于",
+            ]
+        ],
+        'o_money' => [
+            'name' => '总金额',
+            'type' => 'price',
+            'operators' => [
+                "between" => "介于",
+                "=" => "等于",
+                "<=" => "小于等于",
+                ">=" => "大于等于",
+            ]
+        ]
+    ];
+
+    public function getList($search,$limit){
+        $member = $this->getCurrent();
+        $db = $this->db();
+        $searchModel = $db->table('__ORDERS__')->alias('o');
+        if (!$member->m_isAdmin) {
+            $searchModel->join('__CIRCULATION__ c', "o.o_id = c.ci_otid AND c.ci_type = 'orders'");
+            $searchModel->where("c.ci_mid", "=", $member->m_id);
+        }
+        $searchModel->field("o.*");
+        foreach ($search as $key => $value) {
+            $searchModel->where("o." . $value['field'], $value['opt'], $value['val']);
+        }
+        $list = $searchModel->paginate($limit, true);
+        return $list;
+    }
+
     public function getOrderNO($p_id)
     {
         $projectModel = new Project();
@@ -70,5 +109,10 @@ class   Orders extends BoModel
         $opm->setOrderProject($this->o_id, $data['o_date'], $pj);
         $oum->setOrderUsed($this->o_id, $used);
         return $result;
+    }
+
+    public function getOrdersByContractId( $cid )
+    {
+        return $this->where('o_cid','=',$cid)->select();
     }
 }

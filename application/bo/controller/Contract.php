@@ -66,8 +66,52 @@ class Contract extends BoController
     public function detail($id)
     {
         $data = $this->model->getDataById($id);
+        $modelOrders = new \app\bo\model\Orders();
+        $orders = $modelOrders->getOrdersByContractId($id);
         $this->assign('data',$data);
+        $this->assign('orders',$orders);
         return $this->fetch();
+    }
+
+    public function update()
+    {
+        $post = $this->request->post();
+
+        $id = $post['id'];
+
+        $data['c_no'] = $post['no'];
+        $data['c_date'] = strtotime(trim($post['date']));
+        $data['c_money'] = floatval(trim($post['money']));
+        $data['c_name'] = trim($post['name']);
+        $data['c_type'] = intval($post['type']);
+        $data['c_coname'] = trim($post['coname']);
+        $data['c_coid'] = intval($post['coid']);
+        $data['c_mname'] = trim($post['mname']);
+        $data['c_mid'] = intval($post['mid']);
+        $data['c_used'] = floatval($post['used']);
+        $data['c_noused'] = floatval($post['noused']);
+
+        if( empty($data['c_used']) && !!$post['oids'] ){
+            $modelOrders = new \app\bo\model\Orders();
+            $orders = $modelOrders->getOrdersByContractId($id);
+            $used = 0;
+            foreach( $orders as $order){
+                $used += floatval($order->o_money);
+            }
+            $data['c_used'] = $used;
+            $data['c_noused'] = $data['c_money'] - $used;
+        }
+
+        $res = $this->model->save($data,['c_id'=>$id]);
+
+        if($res){
+            $ret = ['flag'=>1,'msg'=>'更新成功'];
+        }else{
+            $ret = ['flag'=>0,'msg'=>'更新失败'];
+        }
+
+        return $ret;
+
     }
 
 }

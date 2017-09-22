@@ -22,6 +22,7 @@ class Circulation extends BoController
     }
 
     /**
+     * 批量添加
      * @param bool $type
      * @return array
      */
@@ -48,6 +49,29 @@ class Circulation extends BoController
 
     }
 
+    /**
+     * 增量增加
+     * @param bool $type
+     * @param bool $id
+     */
+    public function addMembers( $type=false, $id=false)
+    {die('aa');
+        $mids = $this->request->post('mids/a');
+        $smids = $this->request->post('smids/a');
+        if( !$type || !$id || $mids ){
+            $ret = ['flag' => 0 , 'msg'=>'参数错误'];
+        }else{
+            foreach ( $mids as $mid ){
+                if( !in_array($mid,$smids) )
+                    $data[] = ['ci_mid' => $mid,'ci_otid'=>$id,'ci_type'=>$type];
+            }
+            $this->model->saveAll($data);
+
+            $ret = ['flag' => 1, 'msg' => '操作成功'];
+        }
+        return $ret;
+    }
+
     public function list()
     {
         $params = $this->request->param();
@@ -62,6 +86,8 @@ class Circulation extends BoController
 
         $this->assign('code', $res['code']);
         $this->assign('name', $res['name']);
+        $this->assign('type',$type);
+        $this->assign('id',$id);
         $this->assign('empty','<tr><td colspan="7">没有数据</td></tr>');
 
         $this->assign('lists', $lists);

@@ -23,7 +23,7 @@ class Orders extends BoController
     function __construct(Request $request)
     {
         parent::__construct($request);
-        $this->ordersModel = new \app\bo\model\Orders();
+        $this->model = $this->ordersModel = new \app\bo\model\Orders();
     }
 
     public function index($type = "")
@@ -234,6 +234,12 @@ class Orders extends BoController
         }
         $log->save();
         return ["status" => 1, "message" => $message];
+    }
+
+    public function searchOrders()
+    {
+        $this->assign("type", "orders");
+        return $this->search($this->model);
     }
 
     private function setType($type, $params)

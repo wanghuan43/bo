@@ -2,14 +2,18 @@
 
     <h2><{$name}> - 传阅列表</h2>
 
+    <div class="btn-pannel">
+        <button type="button" href="#historyBack" class="btn red">返回</button>
+    </div>
+
     <div class="link-pannel">
         <ul>
-            <li>
-                <a href="#"><i class="fa fa-file-excel-o"></i>导出</a>
-            </li>
             <!--li>
-                <a href="#"><i class="fa fa-filter"></i>筛选</a>
+                <a href="#"><i class="fa fa-file-excel-o"></i>导出</a>
             </li-->
+            <li>
+                <a href="/circulation/addmembers/type/<{$type}>/id/<{$id}>" id="btn-add-members" target="_blank" onclick="return false;"><i class="fa fa-user-plus"></i>新增</a>
+            </li>
             <li>
                 <a href="/acceptance/del" id="lists-delete" target="_blank" onclick="return false;"><i class="fa fa-trash"></i>删除</a>
             </li>
@@ -21,28 +25,28 @@
         <thead>
         <tr>
             <th style="min-width: 50px;text-align:center;padding-right:4px;"><input type="checkbox" id="lists-all-checked" value="all"/></th>
-            <th>编号</th>
-            <th>名称</th>
             <th>员工编号</th>
             <th>员工姓名</th>
             <th>员工部门</th>
             <th>员工科室</th>
+            <th>编号</th>
+            <th>名称</th>
         </tr>
         </thead>
         <tbody>
         <{volist name="lists" id="vo" empty="$empty"}>
         <tr>
             <td><input type="checkbox" value="<{$vo.ci_id}>" class="lists-id"></td>
-            <td><{$code}></td>
-            <td><{$name}></td>
             <td><{$vo.m_code}></td>
             <td><{$vo.m_name}></td>
             <td><{$vo.m_department}></td>
             <td><{$vo.m_office}></td>
+            <td><{$code}></td>
+            <td><{$name}></td>
         </tr>
         <{/volist}>
         </tbody>
     </table>
 </div>
 
-<script type="text/javascript" src="/static/js/lists.js?u=201709181615"></script>
+<{load href="/static/js/plugin/select/select.min.js,/static/js/lists.js,/static/css/select.min.css"}>
