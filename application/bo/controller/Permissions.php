@@ -1,4 +1,5 @@
 <?php
+
 namespace app\bo\controller;
 
 use app\bo\libs\BoController;
@@ -29,8 +30,39 @@ class Permissions extends BoController
     {
         $menuModel = new Menu();
         $menuList = $menuModel->getList();
+        $memberList = \app\bo\model\Permissions::all(["member_id" => $mid]);
+        $tmp = [];
+        foreach ($memberList as $val) {
+            $tmp[] = $val['menu_id'];
+        }
         $this->assign("mid", $mid);
-        $this->assign("menuList", $menuList);
+        $this->assign("member", json_encode(Member::get(['m_id' => $mid])));
+        $this->assign("memberList", "," . implode(",", $tmp) . ",");
+        $this->assign("menuList", json_encode(array_values($menuList)));
         return $this->fetch("permissions/opt");
+    }
+
+    public function save()
+    {
+        $post = Request::instance()->post();
+        $post['ids'] = $post['ids'] == "del" ? array() : (is_array($post['ids']) ? $post['ids'] : array($post['ids']));
+        if (!empty($post['isAdmin'])) {
+            $post['ids'] = array();
+        }
+        Member::update(["m_isAdmin" => $post['isAdmin']], ["m_id" => $post['mid']]);
+        $data = array();
+        foreach ($post['ids'] as $val) {
+            $data[] = [
+                "menu_id" => $val,
+                "member_id" => $post['mid'],
+                "opt" => 1,
+            ];
+        }
+        $ps = new \app\bo\model\Permissions();
+        \app\bo\model\Permissions::destroy(["member_id" => $post['mid']]);
+        if(count($data) > 0){
+            $ps->saveAll($data);
+        }
+        return ["status" => true, "message" => "保存成功"];
     }
 }

@@ -1,40 +1,178 @@
-<form action="<{:url("/permissions/setPermissions/mid/".$mid)}>" method="post" id="opform">
-    <div class="clearfix header">
-        <h2>设置权限</h2>
-        <div class="btn-pannel">
-            <button type="submit" class="btn">保存</button>
-            <button type="button" href="#permissions" class="btn red">取消</button>
-        </div>
-        <div class="link-pannel">
-            <ul>
-            </ul>
-        </div>
+<{load href="/static/js/jquery-ui.custom.js,/static/fancytree/jquery.fancytree.min.js,/static/fancytree/jquery.fancytree-all.min.js,/static/fancytree/skin-win8/ui.fancytree.min.css"}>
+<{load href="/static/js/menu.js"}>
+<div class="page-header">
+    <h2>所有菜单</h2>
+</div>
+<table id="tree" style="width: 300px;margin: 0 10px;">
+    <colgroup>
+        <col width="100px">
+    </colgroup>
+    <thead class="alignCenter">
+    <tr>
+        <th><span style="display: inline-block;float: left;padding-left: 20px;"><input type="checkbox" id="checkAll"></span>菜单</th>
+    </tr>
+    </thead>
+    <tbody>
+    <!-- Define a row template for all invariant markup: -->
+    <tr>
+        <td></td>
+    </tr>
+    </tbody>
+</table>
+<div class="form-group" style="margin-top: 10px;">
+    <label for="p_content" class="col-sm-2 control-label">管理员</label>
+    <div class="col-sm-8">
+        <label class="radio-inline"><input type="radio" name="admin" class="admin" value="1">是</label>
+        <label class="radio-inline"><input type="radio" name="admin" class="admin" value="0">否</label>
     </div>
-    <div class="main-pannel">
-        <h3>基本信息</h3>
-        <div class="content">
-            <aside id="left-pannel-permissions">
-                <nav>
-                    <ul>
-                        <{volist name="menuList" id="menu"}>
-                        <li>
-                            <a <{if condition="!empty($menu['url'])"}>href="#<{$menu['url']}>"<{/if}>><i class="fa fa-lg fa-fw <{$menu['flag']}>"></i> <span
-                                class="menu-item-parent"><{$menu['name']}></span><b class="collapse-sign"><em
-                                class="fa fa-plus-square-o"></em></b></a>
-                            <{if condition="count($menu['children']) > 0"}>
-                            <ul>
-                                <{volist name="$menu['children']" id="children"}>
-                                <li>
-                                    <a href="#<{$children['url']}>"><{$children['name']}></a>
-                                </li>
-                                <{/volist}>
-                            </ul>
-                            <{/if}>
-                        </li>
-                        <{/volist}>
-                    </ul>
-                </nav>
-            </aside>
-        </div>
+</div>
+<div class="clearfix"></div>
+<div class="form-group">
+    <div class="col-sm-10">
+        <button class="btn btn-default" id="btn-add">确认</button>
+        <button onclick="historyBack();" class="btn btn-default">返回</button>
     </div>
-</form>
+</div>
+<input type="hidden" id="mid" value="<{$mid}>">
+<script type="text/javascript">
+
+    SOURCE =<{$menuList}>, member = <{$member}>, plist = '<{$memberList}>',tree="";
+
+    $(function () {
+        tree = $("#tree").fancytree({
+            checkbox: true,
+            titlesTabbable: true,     // Add all node titles to TAB chain
+            quicksearch: true,        // Jump to nodes when pressing first character
+            source: SOURCE,
+            //source: { url: "ajax-tree-products.json"},
+
+            extensions: ["edit", "dnd", "table", "gridnav"],
+
+            dnd: {
+                preventVoidMoves: true,
+                preventRecursiveMoves: true,
+                autoExpandMS: 400,
+                dragStart: function (node, data) {
+                    return true;
+                },
+                dragEnter: function (node, data) {
+                    // return ["before", "after"];
+                    return true;
+                },
+                dragDrop: function (node, data) {
+                    data.otherNode.moveTo(node, data.hitMode);
+                }
+            },
+            table: {
+                indentation: 20,
+                //nodeColumnIdx: 2,
+                //checkboxColumnIdx: 0
+            },
+            gridnav: {
+                autofocusInput: false,
+                handleCursorKeys: true
+            },
+            click: function (event, data) {
+                if(data.targetType != "checkbox"){
+                    return;
+                }
+                var selected = data.node.selected == undefined ? true : (data.node.selected == false ? true : false);
+                if(data.node.children != null){
+                    for (var i in data.node.children) {
+                        data.node.children[i].setSelected(selected);
+                    }
+                }else if(data.node.parent != null){
+                    data.node.parent.setSelected(selected);
+                }
+            },
+        });
+        tree = $("#tree").fancytree("getTree");
+        if(member.m_isAdmin == "1"){
+            for(var i in tree.rootNode.children){
+                tree.rootNode.children[i].setSelected(true);
+                if(tree.rootNode.children[i].children != null){
+                    for(var j in tree.rootNode.children[i].children){
+                        tree.rootNode.children[i].children[j].setSelected(true);
+                    }
+                }
+            }
+            tree.options.disabled = true;
+        }else{
+            for(var i in tree.rootNode.children){
+                if(plist.indexOf(','+tree.rootNode.children[i].data.id+',') >= 0){
+                    tree.rootNode.children[i].setSelected(true);
+                }
+                if(tree.rootNode.children[i].children != null){
+                    for(var j in tree.rootNode.children[i].children){
+                        if(plist.indexOf(','+tree.rootNode.children[i].children[j].data.id+',') >= 0){
+                            tree.rootNode.children[i].children[j].setSelected(true);
+                        }
+                    }
+                }
+            }
+        }
+        $("#btn-add").click(function () {
+            var nodes = tree.getSelectedNodes();
+            var ids = [];
+            if (nodes.length > 0) {
+                for (var i in nodes) {
+                    ids.push(nodes[i].data.id);
+                }
+            } else {
+                ids = "del";
+            }
+            var isAdmin = $(".admin:checked").val();
+            var form = {
+                ids : ids,
+                mid : $("#mid").val(),
+                isAdmin : isAdmin,
+            };
+            $.ajax({
+                url:"<{:url("/permissions/save")}>",
+                data:form,
+                method:"post",
+                type:"json",
+                success:function(data){
+                    console.log(data);
+                    custom.alert(data.message);
+                }
+            });
+        });
+        $(".admin").click(function(){
+            var val = $(this).val();
+            if(val == "1"){
+                for(var i in tree.rootNode.children){
+                    tree.rootNode.children[i].setSelected(true);
+                    if(tree.rootNode.children[i].children != null){
+                        for(var j in tree.rootNode.children[i].children){
+                            tree.rootNode.children[i].children[j].setSelected(true);
+                        }
+                    }
+                }
+                tree.options.disabled = true;
+            }else{
+                $("#checkAll").prop("disabled", false);
+                tree.options.disabled = false;
+            }
+        });
+        $("#checkAll").click(function(){
+            var c = $(this).prop("checked");
+            for(var i in tree.rootNode.children){
+                tree.rootNode.children[i].setSelected(c);
+                if(tree.rootNode.children[i].children != null){
+                    for(var j in tree.rootNode.children[i].children){
+                        tree.rootNode.children[i].children[j].setSelected(c);
+                    }
+                }
+            }
+        });
+        if(member.m_isAdmin == "1"){
+            $(".admin:eq(0)").prop("checked", true);
+            $("#checkAll").click();
+            $("#checkAll").prop("disabled", true);
+        }else{
+            $(".admin:eq(1)").prop("checked", true);
+            $("#checkAll").prop("disabled", false);
+        }
+    });
+</script>

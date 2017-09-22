@@ -76,6 +76,7 @@ class Orders extends BoController
             $f = getFirstCharter($value['tl_name']);
             $tagList[$f][] = $value;
         }
+        $isAdmin = $this->current->m_isAdmin ? true : ($this->current->m_id == $order->o_mid ? true : false);
         $this->assign('order', $order);
         $this->assign('typeList', getTypeList());
         $this->assign('taxList', getTaxList());
@@ -92,6 +93,7 @@ class Orders extends BoController
         $this->assign('oused', $oum->getOrderUesd($op_id));
         $this->assign('op', $op);
         $this->assign('op_id', $op_id);
+        $this->assign("isAdmin", $isAdmin);
         $this->assign("isFavorite", $fmodel->where("f_oid", "=", $op_id)->where("f_mid", "=", $this->current->m_id)->count());
         return $this->fetch("operation");
     }
