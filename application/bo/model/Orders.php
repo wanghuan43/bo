@@ -9,14 +9,12 @@ class   Orders extends BoModel
     protected $pk = 'o_id';
 
     protected $searchable = [
-        'o_cid' => [
-            'name' => '合同ID',
+        'o_cno' => [
+            'name' => '合同编号',
             'type' => 'text',
             'operators' => [
-                "between" => "介于",
+                "like" => "包含",
                 "=" => "等于",
-                "<" => "小于",
-                ">" => "大于",
             ]
         ],
         'o_money' => [
@@ -28,22 +26,39 @@ class   Orders extends BoModel
                 "<=" => "小于等于",
                 ">=" => "大于等于",
             ]
-        ]
+        ],
+        "o_date" => array(
+            "name" => "订单日期",
+            "type" => "date",
+            "operators" => array(
+                "between" => "介于",
+                "=" => "等于",
+                ">" => "大于",
+                "<" => "小于",
+            ),
+        ),
+        'o_coname' => [
+            'name' => '公司名称',
+            'type' => 'text',
+            'operators' => [
+                "like" => "包含",
+                "=" => "等于",
+            ]
+        ],
     ];
 
     public function getList($search,$limit){
         $member = $this->getCurrent();
-        $db = $this->db();
-        $searchModel = $db->table('__ORDERS__')->alias('o');
+        $this->alias('o');
         if (!$member->m_isAdmin) {
-            $searchModel->join('__CIRCULATION__ c', "o.o_id = c.ci_otid AND c.ci_type = 'orders'");
-            $searchModel->where("c.ci_mid", "=", $member->m_id);
+            $this->join('__CIRCULATION__ c', "o.o_id = c.ci_otid AND c.ci_type = 'orders'");
+            $this->where("c.ci_mid", "=", $member->m_id);
         }
-        $searchModel->field("o.*");
+        $this->field("o.*");
         foreach ($search as $key => $value) {
-            $searchModel->where("o." . $value['field'], $value['opt'], $value['val']);
+            $this->where("o." . $value['field'], $value['opt'], $value['val']);
         }
-        $list = $searchModel->paginate($limit, true);
+        $list = $this->paginate($limit, true);
         return $list;
     }
 

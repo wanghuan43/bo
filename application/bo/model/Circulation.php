@@ -7,9 +7,7 @@ class Circulation extends BoModel
 {
     public function getList($ot_id, $model = "orders", $isArray = false)
     {
-        $db = $this->db();
-        $list = $db->table('__CIRCULATION__')
-            ->alias('kc')
+        $list = $this->alias('kc')
             ->join('__MEMBER__ m', 'kc.ci_mid = m.m_id')
             ->where('kc.ci_otid', $ot_id)
             ->where('kc.ci_type', $model)

@@ -23,8 +23,8 @@ class Contract extends BoModel
             "operators" => array(
                 "between" => "介于",
                 "=" => "等于",
-                "<" => "大于",
-                ">" => "小于",
+                ">" => "大于",
+                "<" => "小于",
             ),
         ),
         "c_date" => array(
@@ -33,8 +33,8 @@ class Contract extends BoModel
             "operators" => array(
                 "between" => "介于",
                 "=" => "等于",
-                "<" => "大于",
-                ">" => "小于",
+                ">" => "大于",
+                "<" => "小于",
             ),
         ),
         "c_coname" => array(
@@ -50,20 +50,18 @@ class Contract extends BoModel
     public function getList($search, $limit)
     {
         $member = $this->getCurrent();
-        $db = $this->db();
-        $searchModel = $db->table('__CONTRACT__')
-            ->alias('ct');
+        $this->alias('ct');
         if (!$member->m_isAdmin) {
-            $searchModel->join('__CIRCULATION__ c', "ct.c_id = c.ci_otid AND c.ci_type = 'contract'")
+            $this->join('__CIRCULATION__ c', "ct.c_id = c.ci_otid AND c.ci_type = 'contract'")
                 ->where("c.ci_mid", "=", $member->m_id);
         }
-        $searchModel->field("ct.*,p.p_no,cp.co_type");
-        $searchModel->join('__PROJECT__ p', "ct.c_pid = p.p_id");
-        $searchModel->join('__COMPANY__ cp', "ct.c_coid = cp.co_id");
+        $this->field("ct.*,p.p_no,cp.co_type");
+        $this->join('__PROJECT__ p', "ct.c_pid = p.p_id");
+        $this->join('__COMPANY__ cp', "ct.c_coid = cp.co_id");
         foreach ($search as $key => $value) {
-            $searchModel->where("ct." . $value['field'], $value['opt'], $value['val']);
+            $this->where("ct." . $value['field'], $value['opt'], $value['val']);
         }
-        $list = $searchModel->paginate($limit, true);
+        $list = $this->paginate($limit, true);
         return $list;
     }
 

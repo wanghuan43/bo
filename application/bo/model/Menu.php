@@ -12,8 +12,11 @@ class Menu extends BoModel
         return $this->hasMany("Menu", "parent_id", "id")->field("id,name,url,parent_id,flag");
     }
 
-    public function getList()
+    public function getList($where = array())
     {
+        foreach($where as $value){
+            $this->where($value['filed'], $value['op'], $value['value']);
+        }
         $tmp = $this->order('parent_id', 'ASC')->order('list_order', 'ASC')->select();
         $menus = array();
         foreach ($tmp as $key => $value) {

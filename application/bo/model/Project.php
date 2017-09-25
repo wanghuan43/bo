@@ -29,18 +29,16 @@ class Project extends BoModel
     public function getList($search = array(), $limit = 20)
     {
         $member = $this->getCurrent();
-        $db = $this->db();
-        $searchModel = $db->table('__PROJECT__')
-            ->alias('p');
+        $this->alias('p');
         if (!$member->m_isAdmin) {
-            $searchModel->join('__CIRCULATION__ c', "p.p_id = c.ci_otid AND c.ci_type = 'project'");
-            $searchModel->where("c.ci_mid", "=", $member->m_id);
+            $this->join('__CIRCULATION__ c', "p.p_id = c.ci_otid AND c.ci_type = 'project'");
+            $this->where("c.ci_mid", "=", $member->m_id);
         }
-        $searchModel->field("p.*");
+        $this->field("p.*");
         foreach ($search as $key => $value) {
-            $searchModel->where('p.' . $value['field'], $value['opt'], $value['val']);
+            $this->where('p.' . $value['field'], $value['opt'], $value['val']);
         }
-        $list = $searchModel->paginate($limit, true);
+        $list = $this->paginate($limit, true);
         return $list;
     }
 

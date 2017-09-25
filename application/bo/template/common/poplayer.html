@@ -13,11 +13,13 @@
             <{assign name="str" value="$str.$key.'='.$val"}>
         <{/foreach}>
     <{/if}>
-    <form action="<{:url("/$type/search".ucfirst($type)).$str}>" id="<{$type}>Form">
+    <form action="<{:url("/$type/search".ucfirst($type)."/type/".$type.$str)}>" id="<{$type}>Form">
     <div class="clearfix header">
         <h2>搜索条件:</h2>
         <div class="btn-pannel">
+            <{if condition="empty($other)"}>
             <button class="btn save" type="reset">保存</button>
+            <{/if}>
             <button class="btn red close" type="reset">取消</button>
             <button class="btn search" type="submit">搜索</button>
         </div>
@@ -73,8 +75,8 @@
                 method: "post",
                 data: data,
                 success:function(data){
-                    $("#<{$type}>List").html(data.content);
-                    $("#<{$type}>List a").click(function(){
+                    $("#<{if condition="!empty($other)"}><{$other}><{else}><{$type}>List<{/if}>").html(data.content);
+                    $("#<{if condition="!empty($other)"}><{$other}><{else}><{$type}>List<{/if}>").click(function(){
                         var href = $(this).attr("href");
                         if(href != "" && href != "#"){
                             href = href.replace("#", "/");
@@ -83,16 +85,23 @@
                                 method: "get",
                                 dataType:"json"
                             }
-                            contentAjax("<{$type}>List", tts, 'jump');
+                            contentAjax("<{if condition="!empty($other)"}><{$other}><{else}><{$type}>List<{/if}>", tts, 'jump');
                         }
                         return false;
                     });
+                    <{if condition="!empty($other)"}>
+                    loading.hide();
+                    $(".f-layer-<{$type}>").removeClass("show");
+                    $(".f-layer-<{$type}>-back").hide();
+                    <{/if}>
                 }
             };
-            contentAjax("<{$type}>List", tt, 'jump');
+            contentAjax("<{if condition="!empty($other)"}><{$other}><{else}><{$type}>List<{/if}>", tt, 'jump');
             return false;
         });
+        <{if condition="empty($other)"}>
         $("#<{$type}>Form").submit();
+        <{/if}>
     });
     function operatorsChange(ele){
         var opt = $(ele).val();

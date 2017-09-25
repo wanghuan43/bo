@@ -1,33 +1,42 @@
-<div class="clearfix header searchTitle">
-    <h2></h2>
-    <div class="btn-pannel paginate">
-        <{$lists->render()}>
-    </div>
-</div>
+<nav aria-label="Page navigation">
+    <{$lists->render()}>
+</nav>
 <div class="search-result">
     <table cellspacing="0" class="list">
         <thead>
         <tr>
-            <th></th>
-            <th>合同号</th>
-            <th>合同名称</th>
+            <th style="text-align: center;padding-right: 4px;"><input type="checkbox" id="checkAll"></th>
+            <th>阶段</th>
+            <th>订单号</th>
+            <th>项目名称</th>
+            <th>订单标题</th>
+            <th>购销</th>
             <th>对方名称</th>
-            <th>签约日期</th>
-            <th>合同金额</th>
-            <th>未对应订单金额</th>
+            <th>责任人</th>
+            <th>发生日期</th>
+            <th>发生金额</th>
+            <th>操作</th>
         </tr>
         </thead>
         <tbody>
-        <{volist name="lists" id="val" empty="$empty"}>
+        <{volist name="lists" id="vo" empty="$empty"}>
         <tr>
-            <td><input type="radio" class="selectRadio" name="selectRadio" value="<{$val.o_id}>" data="<{$val.o_no}>" data-value="<?php echo urlencode(json_encode($val->toArray())) ?>" /></td>
-            <td><{$val.o_no}></td>
-            <td><{$val.o_subject}></td>
-            <td><{$val.o_coname}></td>
-            <td><?php echo date("Y-m-d", $val['o_date']); ?></td>
-            <td><{$val.o_money}></td>
+            <td><input type="checkbox" value="<{$vo.o_id}>" class="lists-id"></td>
+            <td><?php echo getStatusList($vo['o_status']);?></td>
+            <td><a href="#orders/operation?op=edit&op_id=<{$vo.o_id}>" style="color:blue;"><{$vo.o_no}></a></td>
+            <td><{$vo.o_pname}></td>
+            <td><{$vo.o_subject}></td>
+            <td><?php echo getTypeList($vo['o_type']);?></td>
+            <td><{$vo.o_coname}></td>
+            <td><{$vo.o_mname}></td>
+            <td><?php echo date("Y-m-d", $vo['o_date']);?></td>
+            <td><{$vo.o_money}></td>
+            <td><a href="<{:url("/orders/delete/opID/".$vo['o_id'])}>" target="_blank" class="deleteOrders" style="color: blue;">删除</a></td>
         </tr>
         <{/volist}>
         </tbody>
     </table>
 </div>
+<nav aria-label="Page navigation">
+    <{$lists->render()}>
+</nav>

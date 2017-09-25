@@ -16,8 +16,8 @@ class Acceptance extends BoModel
             "operators" => array(
                 "between" => "介于",
                 "=" => "等于",
-                "<" => "大于",
-                ">" => "小于",
+                ">" => "大于",
+                "<" => "小于",
             ),
         ),
         "a_money" => array(
@@ -26,8 +26,8 @@ class Acceptance extends BoModel
             "operators" => array(
                 "between" => "介于",
                 "=" => "等于",
-                "<" => "大于",
-                ">" => "小于",
+                ">" => "大于",
+                "<" => "小于",
             ),
         ),
     );
@@ -35,18 +35,16 @@ class Acceptance extends BoModel
     public function getList($search, $limit)
     {
         $member = $this->getCurrent();
-        $db = $this->db();
-        $searchModel = $db->table('__ACCEPTANCE__')
-            ->alias('a');
+        $this->alias('a');
         if (!$member->m_isAdmin) {
-            $searchModel->join('__CIRCULATION__ c', "a.a_id = c.ci_otid AND c.ci_type = 'acceptance'");
-            $searchModel->where("c.ci_mid", "=", $member->m_id);
+            $this->join('__CIRCULATION__ c', "a.a_id = c.ci_otid AND c.ci_type = 'acceptance'");
+            $this->where("c.ci_mid", "=", $member->m_id);
         }
-        $searchModel->field("a.*");
+        $this->field("a.*");
         foreach ($search as $key => $value) {
-            $searchModel->where('a.' . $value['field'], $value['opt'], $value['val']);
+            $this->where('a.' . $value['field'], $value['opt'], $value['val']);
         }
-        $list = $searchModel->paginate($limit, true);
+        $list = $this->paginate($limit, true);
         return $list;
     }
 
