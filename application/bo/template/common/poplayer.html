@@ -78,7 +78,7 @@
                     $("#<{if condition="!empty($other)"}><{$other}><{else}><{$type}>List<{/if}>").html(data.content);
                     $("#<{if condition="!empty($other)"}><{$other}><{else}><{$type}>List<{/if}>").click(function(){
                         var href = $(this).attr("href");
-                        if(href != "" && href != "#"){
+                        if(href != "" && href != "#" && href != undefined){
                             href = href.replace("#", "/");
                             var tts = {
                                 url: href,
