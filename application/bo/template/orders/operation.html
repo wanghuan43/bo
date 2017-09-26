@@ -434,6 +434,9 @@
         received:"<{:url("/received/searchReceived")}>",
     }
     $(document).ready(function () {
+        $("#o_profits").change(function(){
+            $(this).val($(this).val()+"%");
+        });
         $("#favorite").click(function(){
             var url = "<{:url("/favorite/saveFavorite/opID/".$op_id)}>"
             var val = $(this).attr("data");

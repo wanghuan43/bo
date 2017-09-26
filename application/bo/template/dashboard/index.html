@@ -78,11 +78,11 @@
             var e = this;
             var c = $(e).next("ul");
             var p = $(e).parent("li");
-            if($(e).parents("ul").parent("li").length == 1){
-                if($(p).hasClass("active")){
-                    return false;
-                }
-            }
+//            if($(e).parents("ul").parent("li").length == 1){
+//                if($(p).hasClass("active")){
+//                    return false;
+//                }
+//            }
             $("#left-pannel li").attr("class", "");
             $("#left-pannel li>ul>li").attr("class", "");
             $("#left-pannel em").each(function(index, element){
@@ -202,6 +202,14 @@
             }else{
                 var p = sessionStore.join(",") + ",";
                 if(p.indexOf(tmp+",") < 0){
+                    sessionStore.push(tmp);
+                }else{
+                    for(var i in sessionStore){
+                        if(sessionStore[i] == tmp){
+                            sessionStore.splice(i,1);
+                            break;
+                        }
+                    }
                     sessionStore.push(tmp);
                 }
             }
