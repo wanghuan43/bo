@@ -466,7 +466,7 @@ table.list td:first-child {
 
 .form-default {
     margin-top: 4em;
-    max-width: 500px
+    max-width: 580px
 }
 table a{
     color:#0070c0;
@@ -509,4 +509,9 @@ table a{
 }
 table .no-border{
     border-color:#fff;
+}
+
+input[type=checkbox],
+input[type=radio] {
+    margin-top:2px !important;
 }

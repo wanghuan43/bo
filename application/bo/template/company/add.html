@@ -2,19 +2,130 @@
     <h2>添加公司</h2>
 </div>
 
-<form class="form-horizontal form-default" id="form-add-project" action="/project/add" method="post" onsubmit="return false;">
+<form class="form-horizontal form-default form-add" id="form-company-add" action="/company/add" method="post" onsubmit="return false;">
 
     <div class="form-group">
-        <label for="inputNo" class="col-sm-2 control-label">编号</label>
+        <label class="col-sm-2 control-label">类型</label>
         <div class="col-sm-10">
-            <input type="text" class="form-control" id="inputNo" name="no">
+            <label class="radio-inline">
+                <input type="radio" name="type" value="1" id="radio-cotype-1" checked> 供应商
+            </label>
+            <label class="radio-inline">
+                <input type="radio" name="type" value="2" id="radio-cotype-2"> 客户
+            </label>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label for="inputNo" class="col-sm-2 control-label">编码</label>
+        <div class="col-sm-10">
+            <input type="text" class="form-control" id="inputNo" name="code"/>
         </div>
     </div>
 
     <div class="form-group">
         <label for="inputName" class="col-sm-2 control-label">名称</label>
         <div class="col-sm-10">
-            <input type="text" class="form-control" id="inputName" name="name">
+            <input type="text" class="form-control" id="inputName" name="name"/>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-sm-2 control-label">是否内部</label>
+        <div class="col-sm-10">
+            <label class="radio-inline">
+                <input type="radio" name="internal_flag" value="0" checked> 不是内部供应商/客户
+            </label>
+            <label class="radio-inline">
+                <input type="radio" name="internal_flag" value="1"> 内部供应商/客户
+            </label>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label for="inputRemark" class="col-sm-2 control-label">简称</label>
+        <div class="col-sm-10">
+            <input type="text" class="form-control" id="inputRemark" name="remark"/>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label for="inputCode" class="col-sm-2 control-label">助记码</label>
+        <div class="col-sm-10">
+            <input type="text" class="form-control" id="inputCode" name="mnemonic_code" />
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label for="inputIndustry" class="col-sm-2 control-label">行业</label>
+        <div class="col-sm-10">
+            <input type="text" class="form-control" id="inputIndustry" name="industry" />
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label for="inputAddress" class="col-sm-2 control-label">地址</label>
+        <div class="col-sm-10">
+            <input type="text" class="form-control" id="inputAddress" name="address" />
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label for="inputTaxId" class="col-sm-2 control-label">税务登记号</label>
+        <div class="col-sm-10">
+            <input type="text" class="form-control" id="inputTaxId" name="tax_id" />
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label for="inputRegId" class="col-sm-2 control-label">工商注册号</label>
+        <div class="col-sm-10">
+            <input type="text" class="form-control" id="inputRegId" name="reg_id" />
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label for="inputLr" class="col-sm-2 control-label">法人代表</label>
+        <div class="col-sm-10">
+            <input type="text" class="form-control" id="inputLr" name="lr" />
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-sm-2 control-label">状态</label>
+        <div class="col-sm-10">
+            <label class="radio-inline">
+                <input type="radio" name="status" value="1" checked> 核准
+            </label>
+            <label class="radio-inline">
+                <input type="radio" name="status" value="0"> 禁用
+            </label>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label for="inputInterName" class="col-sm-2 control-label">集团内名称</label>
+        <div class="col-sm-10">
+            <input type="text" class="form-control" id="inputInterName" name="internal_name" />
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-sm-2 control-label">委外商</label>
+        <div class="col-sm-10">
+            <label class="radio-inline">
+                <input type="radio" name="flag" value="0" checked> 否
+            </label>
+            <label class="radio-inline">
+                <input type="radio" name="flag" value="1"> 是
+            </label>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label for="inputCreateOrg" class="col-sm-2 control-label">创建组织</label>
+        <div class="col-sm-10">
+            <input type="text" class="form-control" id="inputCreateOrg" name="create_org" />
         </div>
     </div>
 

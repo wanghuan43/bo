@@ -50,5 +50,16 @@
         }
     });
 
+    $("#form-company-add input[name='type']").change(function(){
+
+        var p = $("#form-company-add [name='flag']").parents(".form-group");
+        if( $(this).val() == 2 ){
+            p.hide();
+        }else{
+            p.show();
+        }
+
+    });
+
 
 })(jQuery);
