@@ -61,5 +61,38 @@
 
     });
 
+    $("#inputDepartment").click(function(){
+        if($(".f-layer-department").length>0) {
+            $(".f-layer-department-back").show();
+            $(".f-layer-department").addClass("show");
+        }else {
+            $.ajax({
+                url: "/department/searchDepartment",
+                method: "post",
+                dataType: "json",
+                success: function (res) {
+                    $("body").append(res.content);
+                    $(".f-layer-department .close").click(function () {
+                        $(".f-layer-department-back").hide();
+                        $(".f-layer-department").removeClass("show");
+                    });
+                    $(".f-layer-department .save").click(function () {
+                        var radio = $(".f-layer-department .selectRadio:checked");
+                        if (radio.length > 0) {
+                            $("input[name='did']").val(radio.val());
+                            $("input[name='department']").val(radio.attr('data'));
+                            $(".f-layer-department .close").click();
+                        } else {
+                            custom.alert('请至少选择一项');
+                        }
+
+                    });
+                    $(".f-layer-department-back").show();
+                    setTimeout('$(".f-layer-department").addClass("show")', 500);
+                }
+            });
+        }
+    });
+
 
 })(jQuery);

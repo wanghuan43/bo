@@ -8,6 +8,25 @@ class Department extends BoModel
 {
     protected $pk = 'd_id';
 
+    protected $searchable = [
+        "d_name" => array(
+            "name" => "部门名称",
+            "type" => "text",
+            "operators" => array(
+                "like" => "包含",
+                "=" => "等于",
+            ),
+        ),
+        "d_code" => array(
+            "name" => "部门编码",
+            "type" => "text",
+            "operators" => array(
+                "like" => "包含",
+                "=" => "等于",
+            ),
+        )
+    ];
+
     public function getList($search = array(), $limit = 20)
     {
         $member = $this->getCurrent();

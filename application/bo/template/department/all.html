@@ -1,0 +1,61 @@
+<div class="clearfix header">
+
+    <h2>部门管理.部门列表</h2>
+
+    <div class="link-pannel">
+        <ul>
+            <li>
+                <a href="#"><i class="fa fa-file-excel-o"></i>导出</a>
+            </li>
+            <li>
+                <a href="#"><i class="fa fa-filter"></i>筛选</a>
+            </li>
+            <!--li>
+                <a href="/circulation/add/type/contract" id="btn-circulation" target="_blank" onclick="return false;"><i class="fa fa-users"></i>传阅<i class="fa fa-sort-desc"></i></a>
+            </li-->
+            <!--li>
+                <a href="#"><i class="fa fa-tags"></i>标签<i class="fa fa-sort-desc"></i></a>
+            </li-->
+            <li>
+                <a href="/department/del" id="lists-delete" target="_blank" onclick="return false;"><i class="fa fa-trash"></i>删除</a>
+            </li>
+            <!--li>
+                <a href="/project/add"><i class="fa fa-file-text-o"></i>新建</a>
+            </li-->
+        </ul>
+    </div>
+</div>
+<nav aria-label="Page navigation">
+    <{$lists->render()}>
+</nav>
+<div class="main-pannel">
+    <table class="list" cellspacing="0">
+        <thead>
+        <tr>
+            <th style="min-width: 50px;text-align:center;padding-right:4px;"><input type="checkbox" id="lists-all-checked" value="all"/></th>
+            <th>名称</th>
+            <th>成本中心编码</th>
+            <th>部门Leader</th>
+            <th>部门Leader编码</th>
+            <th style="width:8em;"></th>
+        </tr>
+        </thead>
+        <tbody>
+        <{volist name="lists" id="vo" empty="<tr><td colspan='11'>暂无数据</td></tr>"}>
+        <tr>
+            <td><input type="checkbox" value="<{$vo.d_id}>" class="lists-id"></td>
+            <td><a href="/department/detail?id=<{$vo.d_id}>"><{$vo.d_name}></a></td>
+            <td><{$vo.d_code}></td>
+            <td><{$vo.m_name}></td>
+            <td><{$vo.m_code}></td>
+            <td><a href="/department/detail?id=<{$vo.d_id}>">查看</a></td>
+        </tr>
+        <{/volist}>
+        </tbody>
+    </table>
+</div>
+<nav aria-label="Page navigation">
+    <{$lists->render()}>
+</nav>
+
+<{load href="/static/js/plugin/select/select.min.js,/static/js/lists.js,/static/css/select.min.css"}>

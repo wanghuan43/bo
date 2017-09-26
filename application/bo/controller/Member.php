@@ -18,4 +18,7 @@ class Member extends BoController
         $this->assign("type", "member");
         return $this->search($memberModel);
     }
+
+
+
 }
