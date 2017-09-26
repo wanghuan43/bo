@@ -15,8 +15,8 @@ class Invoice extends BoModel
             "operators" => array(
                 "between" => "介于",
                 "=" => "等于",
-                "<" => "大于",
-                ">" => "小于",
+                ">" => "大于",
+                "<" => "小于",
             ),
         ),
         "i_money" => array(
@@ -25,8 +25,8 @@ class Invoice extends BoModel
             "operators" => array(
                 "between" => "介于",
                 "=" => "等于",
-                "<" => "大于",
-                ">" => "小于",
+                ">" => "大于",
+                "<" => "小于",
             ),
         ),
     );
@@ -34,18 +34,16 @@ class Invoice extends BoModel
     public function getList($search, $limit)
     {
         $member = $this->getCurrent();
-        $db = $this->db();
-        $searchModel = $db->table('__INVOICE__')
-            ->alias('i');
+        $this->alias('i');
         if (!$member->m_isAdmin) {
-            $searchModel->join('__CIRCULATION__ c', "i.i_id = c.ci_otid AND c.ci_type = 'invoice'");
-            $searchModel->where("c.ci_mid", "=", $member->m_id);
+            $this->join('__CIRCULATION__ c', "i.i_id = c.ci_otid AND c.ci_type = 'invoice'");
+            $this->where("c.ci_mid", "=", $member->m_id);
         }
-        $searchModel->field("i.*");
+        $this->field("i.*");
         foreach ($search as $key => $value) {
-            $searchModel->where("i." . $value['field'], $value['opt'], $value['val']);
+            $this->where("i." . $value['field'], $value['opt'], $value['val']);
         }
-        $list = $searchModel->paginate($limit, true);
+        $list = $this->paginate($limit, true);
         return $list;
     }
 

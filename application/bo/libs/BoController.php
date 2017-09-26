@@ -1,4 +1,5 @@
 <?php
+
 namespace app\bo\libs;
 
 use think\Config;
@@ -12,6 +13,7 @@ class BoController extends Controller
     protected $current = false;
 
     protected $model;
+    protected $other = '';
 
     /**
      * BoController constructor.
@@ -22,17 +24,18 @@ class BoController extends Controller
         parent::__construct($request);
         $nowAction = $request->action();
         $this->current = getLoginMember();
-        if(!$this->current AND  $nowAction != "login"){
+        if (!$this->current AND $nowAction != "login") {
             $this->redirect(Url::build('/dashboard/login', "", false));
         }
     }
 
-    protected function search($model, $file="common/poplayer", $colspan = "3")
+    protected function search($model, $file = "common/poplayer", $colspan = "3")
     {
+
         $post = Request::instance()->post();
         $page = Request::instance()->get("page", false);
         $name = get_class($model);
-        $name = strtolower(substr($name, strripos($name, "\\")+1));
+        $name = strtolower(substr($name, strripos($name, "\\") + 1));
         $search = array();
         if (isset($post['fields'])) {
             foreach ($post['fields'][$name] as $key => $value) {
@@ -53,6 +56,7 @@ class BoController extends Controller
                 }
             }
         }
+        $this->assign("other", $this->other);
         $list = $model->getList($search, $this->limit);
         $this->assign("lists", $list);
         $this->assign("empty", '<tr><td colspan="' . $colspan . '">暂无数据</td></tr>');
@@ -74,18 +78,18 @@ class BoController extends Controller
 
     public function add()
     {
-        if($this->request->isPost()){
+        if ($this->request->isPost()) {
             return $this->doAdd();
-        }else{
+        } else {
             return $this->fetch();
         }
     }
 
     public function all()
     {
-        if( empty($this->model) ){
+        if (empty($this->model)) {
             $ret = '<h2>Error Page!</h2>';
-        }else {
+        } else {
             $list = $this->model->paginate($this->limit);
             $this->assign('lists', $list);
             $ret = $this->fetch();
@@ -95,9 +99,9 @@ class BoController extends Controller
 
     public function del()
     {
-        if(empty($this->model)){
-            $ret = ['flag'=>0,'msg'=>'发生错误'];
-        }else {
+        if (empty($this->model)) {
+            $ret = ['flag' => 0, 'msg' => '发生错误'];
+        } else {
             $ids = $this->request->post('ids/a');
 
             if (is_array($ids) && count($ids) > 0) {
@@ -117,8 +121,9 @@ class BoController extends Controller
         return $ret;
     }
 
-    protected function doAdd(){
-        return ['flag'=>0,'msg'=>'发生错误'];
+    protected function doAdd()
+    {
+        return ['flag' => 0, 'msg' => '发生错误'];
     }
 
 }

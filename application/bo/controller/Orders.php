@@ -26,7 +26,7 @@ class Orders extends BoController
         $this->model = $this->ordersModel = new \app\bo\model\Orders();
     }
 
-    public function index($type = "")
+    public function index($type = "orders")
     {
         $filters = Session::get('filtersOrders');
         $params = Request::instance()->param();
@@ -137,10 +137,10 @@ class Orders extends BoController
         $orders = $this->ordersModel->where("o_id", "=", $opID)->find();
         $oum = new OrderUsed();
         $tmp = $oum->getOrderUesd($opID);
-        $ret = ["status"=>"false", "message"=>"订单删除失败，请先去除订单的关系数据。"];
+        $ret = ["status" => "false", "message" => "订单删除失败，请先去除订单的关系数据。"];
         if (count($tmp[1]) == 0 AND count($tmp[2]) == 0 AND count($tmp[3]) == 0 AND $orders->o_status != 6) {
             $orders->delete();
-            $ret = ["status"=>"true", "message"=>"订单删除成功"];
+            $ret = ["status" => "true", "message" => "订单删除成功"];
         }
         return $ret;
     }
@@ -238,10 +238,12 @@ class Orders extends BoController
         return ["status" => 1, "message" => $message];
     }
 
-    public function searchOrders()
+    public function searchOrders($type = "orders")
     {
-        $this->assign("type", "orders");
-        return $this->search($this->model);
+        $this->setType($type, array());
+        $this->assign("type", $type);
+        $this->other = "main-pannel";
+        return $this->search($this->ordersModel, "common/poplayer", 11);
     }
 
     private function setType($type, $params)

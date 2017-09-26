@@ -1,17 +1,14 @@
 <div class="clearfix header">
     <h2><{$title}></h2>
-    <div class="btn-pannel">
-        <{$lists->render()}>
-    </div>
     <div class="link-pannel">
         <ul>
             <li>
                 <a href="#"><i class="fa fa-file-excel-o"></i>导出</a>
             </li>
             <li>
-                <a href="#"><i class="fa fa-filter"></i>筛选</a>
+                <a href="<{:url("/orders/searchOrders/type/".$type)}>" target="_blank" id="searchList"><i class="fa fa-filter"></i>筛选</a>
             </li>
-            <{if condition="in_array($type, array('contract', ''))"}>
+            <{if condition="in_array($type, array('contract', 'orders'))"}>
             <li>
                 <a href="<{:url("/circulation/add/type/orders")}>" target="_blank" id="btn-circulation"><i class="fa fa-users"></i>传阅<i class="fa fa-sort-desc"></i></a>
             </li>
@@ -25,7 +22,10 @@
         </ul>
     </div>
 </div>
-<div class="main-pannel">
+<div class="main-pannel" id="main-pannel">
+    <nav aria-label="Page navigation">
+        <{$lists->render()}>
+    </nav>
     <table class="list" cellspacing="0">
         <thead>
         <tr>
@@ -60,8 +60,11 @@
         <{/volist}>
         </tbody>
     </table>
+    <nav aria-label="Page navigation">
+        <{$lists->render()}>
+    </nav>
 </div>
-<{load href="/static/js/plugin/select/select.min.js,/static/js/lists.js,/static/css/select.min.css"}>
+<{load href="/static/js/plugin/select/select.min.js,/static/js/lists.js,/static/css/select.min.css,/static/js/search.js"}>
 <script>
     $("#checkAll").click(function(){
         var checked = $(this).prop("checked");
@@ -83,6 +86,36 @@
                 custom.alert(data.message);
             }
         });
+        return false;
+    });
+    $("#searchList").click(function(){
+        loading.show();
+        var cla = ".f-layer-orders";
+        var url = $(this).attr("href");
+        if ($(cla).length <= 0) {
+            $.ajax({
+                url: url,
+                dataType: "json",
+                method: "post",
+                success: function (data) {
+                    loading.hide();
+                    $("body").append(data.content);
+                    $(cla).addClass("show");
+                    //$(cla).show();
+                    $(cla + "-back").show();
+                    $(cla + " .close").click(function () {
+                        //$(cla).hide();
+                        $(cla).removeClass("show");
+                        $(cla + "-back").hide();
+                        return false;
+                    });
+                }
+            });
+        }else{
+            loading.hide();
+            $(cla).addClass("show");
+            $(cla + "-back").show();
+        }
         return false;
     });
 </script>
