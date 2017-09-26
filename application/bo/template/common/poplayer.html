@@ -76,19 +76,19 @@
                 data: data,
                 success:function(data){
                     $("#<{if condition="!empty($other)"}><{$other}><{else}><{$type}>List<{/if}>").html(data.content);
-//                    $("#<{$type}>List").submit(function(){
-//                        var href = $(this).attr("action");
-//                        if(href != "" && href != "#" && href != undefined){
-//                            href = href.replace("#", "/");
-//                            var tts = {
-//                                url: href,
-//                                method: "get",
-//                                dataType:"json"
-//                            }
-//                            contentAjax("<{if condition="!empty($other)"}><{$other}><{else}><{$type}>List<{/if}>", tts, 'jump');
-//                        }
-//                        return false;
-//                    });
+                    $("#<{if condition="!empty($other)"}><{$other}><{else}><{$type}>List<{/if}> a").click(function(){
+                        var href = $(this).attr("href");
+                        if(href != "" && href != "#" && href != undefined){
+                            href = href.replace("#", "/");
+                            var tts = {
+                                url: href,
+                                method: "get",
+                                dataType:"json"
+                            }
+                            contentAjax("<{if condition="!empty($other)"}><{$other}><{else}><{$type}>List<{/if}>", tts, 'jump');
+                        }
+                        return false;
+                    });
                     <{if condition="!empty($other)"}>
                     loading.hide();
                     $(".f-layer-<{$type}>").removeClass("show");
