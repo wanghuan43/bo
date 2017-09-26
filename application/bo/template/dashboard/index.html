@@ -14,7 +14,7 @@
 
 <body>
 <header>
-    <h1 style="padding: 5px;display: inline-block;">新智云</h1>
+    <h1 style="padding: 5px;display: inline-block;">新智超脑</h1>
     <div style="float: right;">
         <p style="margin: 13px 0;">
             <span style="font-size: 16px;margin-right: 20px;"><i class="fa fa-user-circle"></i><{$member.m_name}></span>
@@ -145,6 +145,9 @@
                 }else{
                     $("#"+id).html(data);
                 }
+
+                $("#left-pannel").css('height',$(document).height());
+
                 loading.hide();
                 $("#"+id+" a[target!='_blank'],button[type='button']").unbind("click");
                 $("#"+id+" a[target!='_blank'],button[type='button']").click(function(){
