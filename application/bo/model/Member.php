@@ -47,13 +47,11 @@ class Member extends BoModel
     {
         $permissionsModel = new Permissions();
         $menuModel = new Menu();
-        Config::load(APP_PATH . "bo" . DS . "commonField.php", "", "commonField");
-        $key = Config::get("baseKey", "commonField");
         $data['email'] = strtoupper($data['email']);
         $member = $this->where("m_email", "=", $data['email'])->find();
         $array = ["code" => 0, "member" => ""];
         if ($member) {
-            $pwd = md5($data['password'] . md5($key));
+            $pwd = encryptPassword($data['password']);
             if ($member->m_password == $pwd) {
                 if (empty($member->m_isAdmin)) {
                     $member->menu = $permissionsModel->getList($member->m_id);

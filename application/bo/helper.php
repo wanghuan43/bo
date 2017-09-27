@@ -100,3 +100,10 @@ function getLoginMember()
     $mid = \think\Request::instance()->session("mid", false);
     return $mid;
 }
+
+function encryptPassword($password)
+{
+    Config::load(APP_PATH . "bo" . DS . "commonField.php", "", "commonField");
+    $key = Config::get("baseKey", "commonField");
+    return md5($password.md5($key));
+}
