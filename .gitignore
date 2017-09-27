@@ -13,3 +13,4 @@ autoload.php
 think
 uploads/xlsx/*
 public/boindex.php
+public/attachment/*

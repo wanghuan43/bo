@@ -14,6 +14,10 @@ class BoController extends Controller
 
     protected $model;
     protected $other = '';
+    protected $maxSize = "20M";
+    protected $extAllowed = [
+        'xlsx', 'csv', 'xls', 'docx', 'png', 'gif', 'jpg', 'jpeg', 'doc', 'pdf', 'txt', 'pptx', 'ppt'
+    ];
 
     /**
      * BoController constructor.
@@ -46,7 +50,7 @@ class BoController extends Controller
                     if ($opt == "between") {
                         $val = is_array($val) ? $val : explode(" ~ ", $val);
                     } elseif ($opt == "like") {
-                        $val = "$val%";
+                        $val = "%$val%";
                     }
                     $search[] = array(
                         "field" => $value,
@@ -124,6 +128,56 @@ class BoController extends Controller
     protected function doAdd()
     {
         return ['flag' => 0, 'msg' => '发生错误'];
+    }
+
+    protected function saveFile($file)
+    {
+        $this->getMaxFileSize();
+        if (!is_array($file)) {
+            return array('status' => false, "message" => '参数错误');
+        }
+        if (!empty($file['error'])) {
+            return array('status' => false, "message" => '上传出错，请联系管理员');
+        }
+        $max = intval(str_ireplace('m', "", $this->maxSize)) * 1024 * 1024;
+        if ($file['size'] > $max) {
+            return array('status' => false, "message" => '上传文件大小大于限制,当前文件不能超过：' . $this->maxSize);
+        }
+        $exts = array_flip($this->extAllowed);
+        $tmp = explode(".", $file['name']);
+        $ext = strtolower($tmp[count($tmp) - 1]);
+        if (!array_key_exists($ext, $exts)) {
+            return array('status' => false, "message" => '上传文件类型不正确,当前只能只可以上传这些类型文件：' . implode(",", $this->extAllowed));
+        }
+        $filename = str_ireplace('.' . $ext, '', $file['name']) . '-' . uniqid(mt_rand(10, 1000)) . "." . $ext;
+        $data = [
+            'savePath' => $_SERVER['DOCUMENT_ROOT'] . "/attachment/" . $filename,
+            'path' => "/attachment/" . $filename,
+            'ext' => $ext,
+            'filename' => $filename,
+            'size' => $file['size'],
+        ];
+        $up = move_uploaded_file($file['tmp_name'], $data['savePath']);
+        $message = $up ? "上传成功" : "上传失败";
+        return ["status" => $up, "message" => $message, "data" => $data];
+    }
+
+    protected function batchFile()
+    {
+        $files = false;
+        foreach ($_FILES as $key => $value) {
+            $files[$key] = $this->saveFile($value);
+        }
+        return $files;
+    }
+
+    protected function getMaxFileSize()
+    {
+        $postSize = intval(str_ireplace('m', '', ini_get("post_max_size")));
+        $uploadSize = intval(str_ireplace('m', '', ini_get("upload_max_filesize")));
+        $max = intval(str_ireplace('m', '', $this->maxSize));
+        $this->maxSize = $postSize < $uploadSize ? ($postSize < $max ? $postSize : $max) : ($uploadSize < $max ? $uploadSize : $max);
+        return $this->maxSize . "M";
     }
 
 }

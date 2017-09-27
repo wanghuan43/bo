@@ -289,6 +289,15 @@ table.list tbody tr:nth-child(2n) {
     background: #F2F2F2;
 }
 
+table.list tr.eve {
+    background: #F2F2F2;
+}
+
+table.list tr.border {
+    border-left: 1px solid;
+    border-right: 1px solid;
+}
+
 table.list td:first-child {
     width: 2em;
     text-align: center;

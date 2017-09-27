@@ -66,7 +66,7 @@
                 <td colspan="5"><input type="text" name="o_subject" id="o_subject" value="<{$order.o_subject}>"/></td>
                 <td class="txt">销售/采销:</td>
                 <td>
-                    <select name="o_type" id="o_type">
+                    <select name="o_type" id="o_type" <{if condition="!empty($order.o_type)"}>disabled<{/if}>>
                         <{volist name="typeList" id="tl" key="k"}>
                         <option value="<{$k}>" <{eq name="$k" value="$order.o_type"}>selected<{/eq}>><{$tl}></option>
                         <{/volist}>
@@ -84,7 +84,7 @@
                 </td>
                 <td class="txt">外部/内部:</td>
                 <td>
-                    <select name="o_lie" id="o_lie">
+                    <select name="o_lie" id="o_lie" <{if condition="!empty($order.o_lie)"}>disabled<{/if}>>
                         <{volist name="lieList" id="ll" key="k"}>
                         <option value="<{$k}>" <{eq name="$k" value="$order.o_lie"}>selected<{/eq}>><{$ll}></option>
                         <{/volist}>

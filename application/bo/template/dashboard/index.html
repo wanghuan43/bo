@@ -179,11 +179,11 @@
         $.ajax(ajaxData);
     }
     function historyBack(){
-        var sessionStore = JSON.parse(localStorage.historyBack);
+        var sessionStore = JSON.parse(sessionStorage.historyBack);
         var url = "/";
         if(sessionStore.length > 0){
             url = sessionStore.pop();
-            localStorage.historyBack = JSON.stringify(sessionStore);
+            sessionStorage.historyBack = JSON.stringify(sessionStore);
         }
         var ajaxData = {
             url : url
@@ -191,7 +191,7 @@
         contentAjax("main-container",ajaxData, "jump");
     }
     function setHistoryBack(url) {
-        var sessionStore = localStorage.historyBack;
+        var sessionStore = sessionStorage.historyBack;
         sessionStore = sessionStore == undefined ? [] : JSON.parse(sessionStore);
         var tmp = url != "" && url != undefined ? url : location.href;
         var i = tmp.indexOf("#");
@@ -214,7 +214,7 @@
                 }
             }
         }
-        localStorage.historyBack = JSON.stringify(sessionStore);
+        sessionStorage.historyBack = JSON.stringify(sessionStore);
     }
 </script>
 </body>
