@@ -429,11 +429,17 @@
         contract: "<{:url("/contract/searchContract")}>",
         project: "<{:url("/project/searchProject")}>",
         company: "<{:url("/company/searchCompany")}>",
+        department: "<{:url("/department/searchDepartment")}>",
         invoice: "<{:url("/invoice/searchInvoice")}>",
         acceptance: "<{:url("/acceptance/searchAcceptance")}>",
         received:"<{:url("/received/searchReceived")}>",
     }
     $(document).ready(function () {
+        $("#o_type").change(function(){
+            var cla = ".f-layer-company";
+            $(cla).remove();
+            $(cla + "-back").remove();
+        })
         $("#o_profits").change(function(){
             $(this).val($(this).val()+"%");
         });
@@ -610,20 +616,39 @@
             var thisEle = this;
             var inputs = $(this).parent().next().find("input");
             var valss = $(inputs).val();
+            var otype = $("#o_type").val();
+            var olie = $("#o_lie").val();
+            var url = "";
             if(valss != "" && valss != undefined){
                 $(this).hide();
                 $(this).next().show();
                 return false;
             }
+            if(type == "contract" || type == "company"){
+                if(type == "company"){
+                    if(olie == "2" ){
+                        type = "department";
+                    }else{
+                        type = "company";
+                    }
+                }
+                url = baseUrl[type] + "?c_type="+otype;
+            }else{
+                url = baseUrl[type];
+            }
             var cla = ".f-layer-" + type;
             if ($(cla).length <= 0) {
                 $.ajax({
-                    url: baseUrl[type],
+                    url: url,
                     dataType: "json",
                     method: "post",
                     success: function (data) {
                         $("body").append(data.content);
                         $(cla + " .save").click(function () {
+                            if($(cla+" .selectRadio:checked").length == 0){
+                                custom.alert("请选择一个再保存！");
+                                return false;
+                            }
                             if ($(inputs).length > 1) {
                                 $(inputs).eq(0).val($(cla+" .selectRadio:checked").attr("data"));
                                 $(inputs).eq(1).val($(cla+" .selectRadio:checked").val());
@@ -652,19 +677,15 @@
                                     }
                                 }
                                 $("#o_money").attr("max",parseFloat(json.c_noused));
-                                if($("#o_pname").val() == "" && $("#o_coname").val() == ""){
-                                    var ts = parseInt(json.c_type) - 1;
-                                    var tss = parseInt(json.co_type) - 1;
+                                if($("#o_pname").val() == ""){
                                     $("#o_pname").val(json.c_pname);
                                     $("#o_pname").click();
                                     $("#o_pid").val(json.c_pid);
+                                }
+                                if($("#o_coname").val() == ""){
                                     $("#o_coname").val(json.c_coname);
                                     $("#o_coname").click();
                                     $("#o_coid").val(json.c_coid);
-                                    $("#o_type option").prop("selected", false);
-                                    $("#o_type option:eq(" + ts + ")").prop("selected", true);
-                                    $("#o_lie option").prop("selected", false);
-                                    $("#o_lie option:eq(" + tss + ")").prop("selected", true);
                                 }
                             }
                             return false;
@@ -703,15 +724,18 @@
             }
             $(this).prev().show();
             $(this).hide();
-            $(inputs).eq(0).focus(function(){
-                $(this).parents("tr").find("i").click();
-            });
             $(inputs).val("");
             if(type == "contract"){
                 $("#o_status option").prop("disabled", false);
                 $("#o_status option").prop("selected", false);
                 $("#o_status option:first").prop("selected", true);
             }
+        });
+        $("#o_lie").change(function(){
+            $("#o_coname").val("");
+            $("#o_coid").val("");
+            $("#o_coname").parent().prev().find("i").eq(0).show();
+            $("#o_coname").parent().prev().find("i").eq(1).hide();
         });
         $("#o_cno,#o_pname,#o_coname").each(function(index, element){
             if($(element).val() != ""){

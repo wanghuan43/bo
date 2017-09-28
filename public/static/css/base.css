@@ -258,8 +258,8 @@ th.icon {
 .f-layer {
     width: 90%;
     position: fixed;
-    top: 100px;
-    left: 5%;
+    top: 5%;
+    left: 6%;
     z-index: -9;
     background: #FFFFFF;
     padding: 15px 20px;

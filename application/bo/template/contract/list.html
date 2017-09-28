@@ -12,6 +12,7 @@
             <th>合同号</th>
             <th>合同名称</th>
             <th>对方名称</th>
+            <th>合同类型</th>
             <th>签约日期</th>
             <th>合同金额</th>
             <th>未对应订单金额</th>
@@ -24,6 +25,7 @@
             <td><{$val.c_no}></td>
             <td><{$val.c_name}></td>
             <td><{$val.c_coname}></td>
+            <td><{$val.c_type}></td>
             <td><?php echo date("Y-m-d", $val['c_date']); ?></td>
             <td><{$val.c_money}></td>
             <td><{$val.c_noused}></td>

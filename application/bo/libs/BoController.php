@@ -38,6 +38,7 @@ class BoController extends Controller
 
         $post = Request::instance()->post();
         $page = Request::instance()->get("page", false);
+        $c_type = Request::instance()->get("c_type", false);
         $name = get_class($model);
         $name = strtolower(substr($name, strripos($name, "\\") + 1));
         $search = array();
@@ -58,6 +59,21 @@ class BoController extends Controller
                         "val" => $val
                     );
                 }
+            }
+        }
+        if($c_type AND in_array($name, ["company","contract"])){
+            if($name == "company"){
+                $search[] = [
+                    "field" => "co_type",
+                    "opt" => "=",
+                    "val" => ($c_type == 1 ? 2 : 1),
+                ];
+            }else{
+                $search[] = [
+                    "field" => "c_type",
+                    "opt" => "=",
+                    "val" => $c_type
+                ];
             }
         }
         $this->assign("other", $this->other);

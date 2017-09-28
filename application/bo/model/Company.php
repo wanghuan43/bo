@@ -3,6 +3,7 @@
 namespace app\bo\model;
 
 use app\bo\libs\BoModel;
+use think\Request;
 
 class Company extends BoModel
 {
@@ -39,7 +40,7 @@ class Company extends BoModel
         foreach ($search as $key => $value) {
             $this->where("co." . $value['field'], $value['opt'], $value['val']);
         }
-        $list = $this->paginate($limit, true);
+        $list = $this->paginate($limit, true, array("query"=>["c_type"=>Request::instance()->get("c_type")]));
         return $list;
     }
 }

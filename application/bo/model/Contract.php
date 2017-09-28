@@ -3,6 +3,7 @@
 namespace app\bo\model;
 
 use app\bo\libs\BoModel;
+use think\Request;
 
 class Contract extends BoModel
 {
@@ -61,7 +62,7 @@ class Contract extends BoModel
         foreach ($search as $key => $value) {
             $this->where("ct." . $value['field'], $value['opt'], $value['val']);
         }
-        $list = $this->paginate($limit, true);
+        $list = $this->paginate($limit, true, array("query"=>["c_type"=>Request::instance()->get("c_type")]));
         return $list;
     }
 

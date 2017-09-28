@@ -22,7 +22,7 @@
             <td><{$val.co_code}></td>
             <td><{$val.co_name}></td>
             <td><{$val.co_type==1?"供应商":"客户"}></td>
-            <td><?php echo empty($val['co_internal_flag'])?"内部":"外部" ?></td>
+            <td><?php echo empty($val['co_internal_flag'])?"外部":"内部" ?></td>
         </tr>
         <{/volist}>
         </tbody>

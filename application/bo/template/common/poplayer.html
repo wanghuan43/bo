@@ -13,7 +13,7 @@
             <{assign name="str" value="$str.$key.'='.$val"}>
         <{/foreach}>
     <{/if}>
-    <form action="<{:url("/$type/search".ucfirst($type)."/type/".$type.$str)}>" id="<{$type}>Form">
+    <form action="<{:url("/$type/search".ucfirst($type)."/type/".$type).$str}>" id="<{$type}>Form">
     <div class="clearfix header">
         <h2>搜索条件:</h2>
         <div class="btn-pannel">
@@ -69,6 +69,15 @@
         $("#<{$type}>Form").submit(function() {
             var data = $(this).serialize();
             var url = $(this).attr("action");
+            if($("#o_type").length >= 1){
+//                if(url.indexOf("?") >= 0){
+//                    url.replace("&c_type="+$("#o_type").val(), "");
+//                    url = "&c_type="+$("#o_type").val();
+//                }else{
+//                    url.replace("?c_type="+$("#o_type").val(), "");
+//                    url = "?c_type="+$("#o_type").val();
+//                }
+            }
             var tt = {
                 url: url,
                 dataType: "json",
@@ -89,11 +98,11 @@
                         }
                         return false;
                     });
-                    <{if condition="!empty($other)"}>
+                <{if condition="!empty($other)"}>
                     loading.hide();
                     $(".f-layer-<{$type}>").removeClass("show");
                     $(".f-layer-<{$type}>-back").hide();
-                    <{/if}>
+                <{/if}>
                 }
             };
             contentAjax("<{if condition="!empty($other)"}><{$other}><{else}><{$type}>List<{/if}>", tt, 'jump');
@@ -172,7 +181,8 @@
             var tmp = laydate.render({
                 elem:id,
                 range:range,
-                value:val
+                value:val,
+                format: 'yyyy-MM-dd'
             });
             datePlugin[it] = tmp;
         }

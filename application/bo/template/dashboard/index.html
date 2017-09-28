@@ -131,11 +131,12 @@
         });
     })
     function contentAjax(id,ajaxData,jump){
+        sessionStorage.current = "/"+location.href.substr(location.href.indexOf("#")+1);
         if(ajaxData.url == "/historyBack"){
             historyBack();
             return false;
         }else if(jump != "jump"){
-            setHistoryBack();
+            setHistoryBack(ajaxData.url);
         }
         loading.show();
         if(ajaxData.success == undefined){
@@ -188,15 +189,22 @@
         var ajaxData = {
             url : url
         }
-        contentAjax("main-container",ajaxData, "jump");
+        if(url == sessionStorage.current){
+            historyBack();
+        }else{
+            contentAjax("main-container",ajaxData, "jump");
+        }
     }
     function setHistoryBack(url) {
         var sessionStore = sessionStorage.historyBack;
         sessionStore = sessionStore == undefined ? [] : JSON.parse(sessionStore);
         var tmp = url != "" && url != undefined ? url : location.href;
-        var i = tmp.indexOf("#");
+        var i = tmp.indexOf("/");
         if(i >= 0){
             tmp = "/" + tmp.substr((i+1));
+            if(sessionStorage.current == tmp && sessionStorage.current != undefined){
+                return false;
+            }
             if(sessionStore.length == 0){
                 sessionStore.push(tmp);
             }else{
