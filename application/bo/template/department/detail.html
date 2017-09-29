@@ -1,0 +1,29 @@
+<form action="/department/update" method="post" onsubmit="return false" id="form-update">
+    <div class="clearfix header">
+        <h2>员工管理.数据查看</h2>
+        <div class="btn-pannel">
+            <button type="submit" class="btn">保存</button>
+            <button type="button" href="#department/all" class="btn red">取消</button>
+        </div>
+    </div>
+    <div class="main-pannel">
+        <h3>基本信息</h3>
+        <div class="content">
+            <table class="detail">
+                <tr>
+                    <td>名称</td>
+                    <td><input type="text" name="name" value="<{$data.d_name}>"/><input type="hidden" name="id" value="<{$data.d_id}>"/></td>
+                    <td>编码:</td>
+                    <td><input type="text" name="code" value="<{$data.d_code}>"/></td>
+                </tr>
+                <tr>
+                    <td>部门领导</td>
+                    <td><input type="text" name="mname" value="<{$data.m_name}>"/></td>
+                    <td>部门领导编码</td>
+                    <td><input type="text" name="mcode" value="<{$data.m_code}>"/></td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</form>
+<{load file="/static/js/update.js"}}>

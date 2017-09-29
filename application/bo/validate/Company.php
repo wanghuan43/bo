@@ -13,11 +13,8 @@ class Company extends Validate
 {
 
     protected $rule = [
-
-    ];
-
-    protected $message = [
-
+        ['co_code','require','编码不能为空'],
+        ['co_name','require','名称不能为空']
     ];
 
 }

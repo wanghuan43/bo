@@ -17,6 +17,25 @@
         });
     });
 
+    $(".form-add [type='submit']").click(function(){
+
+        var form = $(".form-add:first");
+
+        $.ajax({
+            url:form.attr("action"),
+            method:form.attr("method"),
+            data:form.serialize(),
+            dataType:"json",
+            success:function(res) {
+                custom.alert(res.msg);
+                if(res.flag == 1){
+                    form.find("input[type='text']").val("");
+                }
+            }
+        })
+
+    });
+
     $("#ipt-company-name").click(function(){
         if($(".f-layer-company").length>0) {
             $(".f-layer-company-back").show();

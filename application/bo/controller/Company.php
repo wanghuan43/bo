@@ -35,7 +35,7 @@ class Company extends BoController
             $data['co_'.$item] = intval($post[$item]);
         }
 
-        if( $data['type'] == 2 ){
+        if( $data['co_type'] == 2 ){
             unset($data['co_flag']);
         }
 

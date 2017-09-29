@@ -1,0 +1,52 @@
+<form action="/member/update" method="post" onsubmit="return false" id="form-update">
+    <div class="clearfix header">
+        <h2>员工管理.数据查看</h2>
+        <div class="btn-pannel">
+            <button type="submit" class="btn">保存</button>
+            <button type="button" href="#member/all" class="btn red">取消</button>
+        </div>
+    </div>
+    <div class="main-pannel">
+        <h3>基本信息</h3>
+        <div class="content">
+            <table class="detail">
+                <tr>
+                    <td>姓名</td>
+                    <td><input type="text" name="name" value="<{$data.m_name}>"/></td>
+                    <td>Email:</td>
+                    <td><input type="text" name="email" value="<{$data.m_email}>"/><input type="hidden" name="id" value="<{$data.m_id}>"/></td>
+                    <td>Password:</td>
+                    <td><input type="password" name="password" value="" autocomplete="new-password"/></td>
+                </tr>
+                <tr>
+                    <td>编码:</td>
+                    <td><input type="text" name="code" value="<{$data.m_code}>"/></td>
+                    <td>电话:</td>
+                    <td><input type="text" name="phone" value="<{$data.m_phone}>"/></td>
+                    <td>部门:</td>
+                    <td><input type="text" readonly name="department" value="<{$data.m_department}>" id="inputDepartment"/> <input type="hidden" name="did" value="<{$data.m_did}>"/></td>
+                    <td>科室:</td>
+                    <td><input type="text" name="office" value="<{$data.m_office}>"/></td>
+                </tr>
+
+                <tr>
+                    <td>管理员:</td>
+                    <td>
+                        <label><input type="radio" name="isAdmin" value="0"<{if $data.m_isAdmin==0}> checked<{/if}>/>&nbsp;否</label>
+                        &nbsp;&nbsp;&nbsp;&nbsp;
+                        <label><input type="radio" name="isAdmin" value="1"<{if $data.m_isAdmin==1}> checked<{/if}>>&nbsp;是</label>
+                    </td>
+                    <td>部门领导:</td>
+                    <td>
+                        <label><input type="radio" name="is_lead" value="0"<{if $data.m_is_lead==0}> checked<{/if}>/>&nbsp;否</label>
+                        &nbsp;&nbsp;&nbsp;&nbsp;
+                        <label><input type="radio" name="is_lead" value="1"<{if $data.m_is_lead==1}> checked<{/if}>>&nbsp;是</label>
+                    </td>
+                    <td colspan="2"></td>
+
+                </tr>
+            </table>
+        </div>
+    </div>
+</form>
+<{load file="/static/js/update.js"}}>
