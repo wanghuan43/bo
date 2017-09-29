@@ -3,6 +3,7 @@
 namespace app\bo\model;
 
 use app\bo\libs\BoModel;
+use think\Request;
 
 class Department extends BoModel
 {

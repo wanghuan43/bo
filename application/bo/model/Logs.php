@@ -10,7 +10,7 @@ class Logs extends BoModel
     public function saveLogs($new, $old, $id, $model, $opt="add")
     {
         $member = $this->getCurrent();
-        if (empty($new) OR empty($old) OR empty($id) OR empty($model) OR !$member) {
+        if (empty($new) OR empty($id) OR empty($model) OR !$member) {
             return false;
         }
         $data = [

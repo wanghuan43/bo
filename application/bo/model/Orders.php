@@ -69,7 +69,7 @@ class   Orders extends BoModel
         $project = $projectModel->get($p_id);
         $str = "C";
         if ($otype == '1') {
-            $str = "x";
+            $str = "X";
         }
         $c = $this->where("o_pid", "=", $p_id)->where("o_type", "=", $otype)->count();
         return $project->p_no . "-" . $str . str_pad(($c + 1), 5, "0", STR_PAD_LEFT);

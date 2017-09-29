@@ -105,6 +105,7 @@
                 <td><input type="text" name="o_date" id="o_date" value="<?php echo (empty($order['o_date']) ? "" : date("Y-m-d", $order['o_date'])) ?>"/></td>
                 <td class="txt"><{if condition="$op=='add'"}>预计金额:<{else /}>合同金额:<{/if}></td>
                 <td><input type="text" name="o_money" id="o_money" value="<{$order.o_money}>"/></td>
+                <!--<td><input type="text" name="o_money" id="o_money" value="1233"/></td>-->
                 <td class="txt">订单数量:</td>
                 <td><input type="text" name="o_num" id="o_num" value="<{$order.o_num}>"/></td>
                 <td class="txt">税率:</td>
@@ -303,7 +304,7 @@
                         </select>
                     </td>
                     <td>
-                        <div class="slider" style="margin: 0 10px;"></div>
+                        <div class="slider" style="margin: 0 20px;"></div>
                         <input class="orderProject_percent_1 sliderPercent" name="project[1][percent][]" type="text" style="display: none;" value="<{$value.op_used}>">
                     </td>
                     <td><input type="text" class="orderProject_value_1 sliderValue" name="project[1][value][]" style="margin-left: 10px;" value="<{$value.op_used}>"/></td>
@@ -311,13 +312,13 @@
                 <{/volist}>
                 <{else /}>
                 <tr>
-                    <td class="icon"><i class="fa fa-remove"></i></td>
+                    <td class="icon"></td>
                     <td>
                         <select class="orderProject_month_1" name="project[1][month][]">
                         </select>
                     </td>
                     <td>
-                        <div class="slider" style="margin: 0 10px;">
+                        <div class="slider" style="margin: 0 20px;">
                         </div>
                         <input class="orderProject_percent_1 sliderPercent" name="project[1][percent][]" style="display: none;" type="text" value="0">
                     </td>
@@ -348,7 +349,7 @@
                         </select>
                     </td>
                     <td>
-                        <div class="slider" style="margin: 0 10px;">
+                        <div class="slider" style="margin: 0 20px;">
                         </div>
                         <input class="orderProject_percent_2 sliderPercent" name="project[2][percent][]" style="display: none;" type="text" value="<{$value.op_used}>">
                     </td>
@@ -357,13 +358,13 @@
                 <{/volist}>
                 <{else /}>
                 <tr>
-                    <td class="icon"><i class="fa fa-remove"></i></td>
+                    <td class="icon"></td>
                     <td>
                         <select class="orderProject_month_2" name="project[2][month][]">
                         </select>
                     </td>
                     <td>
-                        <div class="slider" style="margin: 0 10px;">
+                        <div class="slider" style="margin: 0 20px;">
                         </div>
                         <input class="orderProject_percent_2 sliderPercent" name="project[2][percent][]" style="display: none;" type="text" value="0">
                     </td>
@@ -394,7 +395,7 @@
                         </select>
                     </td>
                     <td>
-                        <div class="slider" style="margin: 0 10px;">
+                        <div class="slider" style="margin: 0 20px;">
                         </div>
                         <input class="orderProject_percent_3 sliderPercent"  name="project[3][percent][]" style="display: none;" value="<{$value.op_used}>">
                     </td>
@@ -403,13 +404,13 @@
                 <{/volist}>
                 <{else /}>
                 <tr>
-                    <td class="icon"><i class="fa fa-remove"></i></td>
+                    <td class="icon"></td>
                     <td>
                         <select class="orderProject_month_3" name="project[3][month][]">
                         </select>
                     </td>
                     <td>
-                        <div class="slider" style="margin: 0 10px;">
+                        <div class="slider" style="margin: 0 20px;">
                         </div>
                         <input class="orderProject_percent_3 sliderPercent" name="project[3][percent][]" style="display: none;" type="text" value="0">
                     </td>
@@ -478,36 +479,8 @@
             $("#o_status option:last").prop("disabled", false);
         }
         $(".content.table .slider").each(function(index, element){
-            var total = $("#o_money").val() == "" ? 0 : parseFloat($("#o_money").val());
             var val = $(element).parent().next().find("input").val() != "" ? parseFloat($(element).parent().next().find("input").val()) : 0;
-            var handle = $(element).find(".custom-handle");
-            var persent = Math.round(100 - (total - val) / total * 100)+"%";
-            $(element).slider({
-                value: val,
-                max: total,
-                step: 1,
-                create: function(event) {
-                    $(event.target).next().val(persent);
-                    $(event.target).find("span").text(persent);
-                },
-                slide: function( event, ui ) {
-                    try{
-                    sliderChange(ui, $(event.target).parent().next().find("input"));
-                    var p = Math.round(100 - (total - ui.value) / total * 100)+"%";
-                    $(ui.handle).text(p);
-                    $(event.target).next().val(p);
-                    $(event.target).parent().next().find("input").val(ui.value);
-                    }catch (err){
-
-                    }
-                },
-                change: function (event, ui) {
-                    var p = Math.round(100 - (total - ui.value) / total * 100)+"%";
-                    $(ui.handle).text(p);
-                    $(event.target).next().val(p);
-                    $(event.target).parent().next().find("input").val(ui.value);
-                }
-            });
+            sliderElement(element, val);
         });
         $(".content.table select").each(function(index, element){
             var option = $(element).find("option:selected").val();
@@ -563,50 +536,52 @@
             var url = $(this).attr("action");
             var par = $(this).serialize();
             if($(o_pname).val() == ""){
-                alert('项目不能为空');
+                custom.alert('项目不能为空');
                 return false;
             }
             if($(o_subject).val() == ""){
-                alert('订单标题不能为空');
+                custom.alert('订单标题不能为空');
                 return false;
             }
             if($(o_coname).val() == ""){
-                alert('对方名称不能为空');
+                custom.alert('对方名称不能为空');
                 return false;
             }
             if($(o_date).val() == ""){
-                alert('日期不能为空');
+                custom.alert('日期不能为空');
                 return false;
             }
             if($(o_money).val() == ""){
-                alert('金额不能为空');
+                custom.alert('金额不能为空');
                 return false;
             }
             if(isNaN($(o_money).val())){
-                alert('金额必须是数字');
+                custom.alert('金额必须是数字');
                 return false;
             }
             if($(o_num).val() == ""){
-                alert('数量不能为空');
+                custom.alert('数量不能为空');
                 return false;
             }
             if(isNaN($(o_num).val())){
-                alert('数量必须是数字');
+                custom.alert('数量必须是数字');
                 return false;
             }
             if($(o_profits).val() == ""){
-                alert('利润率不能为空');
+                custom.alert('利润率不能为空');
                 return false;
             }
             $(this).prop("disabled", "true");
+            loading.show();
             $.ajax({
                 url:url,
                 dataType: "json",
                 method: "post",
                 data:par,
                 success:function(data){
+                    loading.hide();
                     $(this).prop("disabled", "false");
-                    alert(data.message);
+                    custom.alert(data.message);
                 }
             });
             return false;
@@ -693,7 +668,6 @@
                         $(cla + " .moreSave").click(function(){
                             var ci = $(cla + " .search-result input:checked");
                             var jdata = JSON.parse(decodeURIComponent($(ci).attr("json")));
-                            console.log(jdata);
                             baseUTR($(cla), jdata, type);
                             $(cla).removeClass("show");
                             $(cla + "-back").hide();
@@ -781,78 +755,18 @@
     function bindClick(element) {
         var index = $(element).attr('data');
         var baseTR = getBaseTR($(element).attr('data'));
-        var total = $("#o_money").val() == "" ? 0 : parseFloat($("#o_money").val());
         $(element).append(baseTR);
         if($(".orderProject_percent_"+index).length == 1){
-            $(".orderProject_percent_"+index+":eq(0)").slider("destroy");
-            $(".orderProject_percent_"+index+":eq(0)").slider({
-                value:total,
-                max: total,
-                step: 1,
-                create: function(event) {
-                    $(event.target).next().val("100%");
-                    $(event.target).find("span").text("100%");
-                },
-                slide: function( event, ui ) {
-                    var r = true;
-                    try{
-                    sliderChange(ui, $(event.target).parent().next().find("input"));
-                    var p = (100 - (total - ui.value) / total * 100).toFixed(2)+"%";
-                    $(ui.handle).text(p);
-                    $(event.target).next().val(p);
-                    $(event.target).parent().next().find("input").val(ui.value);
-                    }catch (err){
-                        r = false;
-                    }
-                    return r;
-                },
-                change: function (event, ui) {
-                    var p = Math.round(100 - (total - ui.value) / total * 100)+"%";
-                    $(ui.handle).text(p);
-                    $(event.target).next().val(p);
-                    $(event.target).parent().next().find("input").val(ui.value);
-                }
-            });
             $(".fa-remove").eq(0).remove();
-        }else {
+        }else{
+            var tmp = 0;
+            $(".orderProject_value_" + index).each(function (index, ele) {
+                tmp += parseFloat($(ele).val());
+            });
             $(".orderProject_value_" + index).each(function (index, ele) {
                 var sl = $(ele).parent().prev().find(".slider");
                 var val = parseFloat($(ele).val());
-                try {
-                    $(sl).slider("destroy");
-                }catch (err){
-
-                }
-                $(sl).slider({
-                    value:val,
-                    max: total,
-                    min:0,
-                    step: 1,
-                    create: function(event) {
-                        var p = Math.round(100 - (total - val) / total * 100)+"%";
-                        $(event.target).next().val(p);
-                        $(event.target).find("span").text(p);
-                    },
-                    slide: function( event, ui ) {
-//                        var r = true;
-//                        try{
-                        sliderChange(ui, $(event.target).parent().next().find("input"));
-                        var p = Math.ceil(100 - (total - ui.value) / total * 100)+"%";
-                        $(ui.handle).text(p);
-                        $(event.target).next().val(p);
-                        $(event.target).parent().next().find("input").val(ui.value);
-//                        }catch(err){
-//                            r = false;
-//                        }
-//                        return r;
-                    },
-                    change: function (event, ui) {
-                        var p = Math.ceil(100 - (total - ui.value) / total * 100)+"%";
-                        $(ui.handle).text(p);
-                        $(event.target).next().val(p);
-                        $(event.target).parent().next().find("input").val(ui.value);
-                    }
-                });
+                sliderElement(sl, val);
             });
         }
         $(".orderProject_value_" + index).unbind("change");
@@ -864,43 +778,21 @@
             $(this).parents("tr").remove();
         });
     }
-    function formatValue(value, ele){
+    function formatValue(value, ele) {
         value = parseFloat(value);
-        if(value == 5){
+        if (value == 5) {
             $(ele).parent().next().find("input").val("0");
             $(ele).val("0");
             return "0%";
         }
-        if(value == "" || value <= 0){
+        if (value == "" || value <= 0) {
             $(ele).parent().next().find("input").val("0");
             return "0%";
         }
         var total = parseFloat($("#o_money").val());
-        var persent = Math.round(100 - (total - value) / total * 100)+"%";
+        var persent = Math.round(100 - (total - value) / total * 100) + "%";
         $(ele).parent().next().find("input").val(value.toFixed(2));
         return persent;
-    }
-    function sliderChange(ui, ele){
-        var val = parseFloat(ui.value);
-        var total = parseFloat($("#o_money").val());
-        var classs = $(ele).attr("class").split(" ");
-        var persent = $(ele).parent().prev().find(".slider");
-        var now = 0;
-        $("."+classs[0]).each(function(index, element){
-            if(!$(element).is($(ele))){
-                now = now + parseFloat($(element).val());
-            }
-        });
-        if(total <= now){
-            $("."+persent).slider( "value", 0 );
-            ui.value = 0;
-            $(ele).val(0);
-        }else if((total-now) <= val){
-            val = total-now;
-            $(ele).val(val);
-            ui.value = val;
-            $("."+persent).slider( "value", val );
-        }
     }
     function calculateAll() {
         $(".fa-plus").each(function (i, e) {
@@ -920,46 +812,13 @@
             var tmp = $(ele).val() == "" ? 0 : parseFloat($(ele).val());
             cal = cal + tmp;
         });
-        $(percents).each(function(i, ele){
-            var val = $(values).eq(i).val() == "" ? 0 : parseFloat($(values).eq(i).val());
-            if($(percents).length == 1){
-                $(values).eq(i).val(total);
-                $(ele).val("100%");
-                val = total;
-            }
-            $(ele).prev().slider("destroy");
-            $(ele).prev().slider({
-                val:val,
-                max:total,
-                min:0,
-                step: 1,
-                create: function(event) {
-                    var p = Math.ceil(100 - (total - val) / total * 100)+"%";
-                    $(event.target).next().val(p);
-                    $(event.target).find("span").text(p);
-                    $(event.target).find("span").css("left", p);
-                },
-                slide: function( event, ui ) {
-                    var r = true;
-                    try{
-                        sliderChange(ui, $(event.target).parent().next().find("input"));
-                        var p = Math.ceil(100 - (total - ui.value) / total * 100)+"%";
-                        $(ui.handle).text(p);
-                        $(event.target).next().val(p);
-                        $(event.target).parent().next().find("input").val(ui.value);
-                    }catch(err){
-                        r = false;
-                    }
-                    return r;
-                },
-                change: function (event, ui) {
-                    var p = Math.ceil(100 - (total - ui.value) / total * 100)+"%";
-                    $(ui.handle).text(p);
-                    $(event.target).next().val(p);
-                    $(event.target).parent().next().find("input").val(ui.value);
-                }
+        if($(percents).length == 1){
+            sliderElement($(percents).eq(0).prev(), total);
+        }else{
+            $(percents).each(function(i, ele){
+
             });
-        });
+        }
         if (!isNaN(total) && total > 0) {
             if (cal > total) {
                 if (total % $(values).length != 0) {
@@ -1002,10 +861,10 @@
             $("#o_money").val(total.toFixed(2));
         } else {
             $(values).each(function (i, ele) {
-                $(ele).val("");
+                $(ele).val("0.00");
             })
             $(percents).each(function (i, ele) {
-                $(ele).val("");
+                $(ele).val("0.00");
             })
         }
     }
@@ -1020,7 +879,7 @@
         for (var i = (len - 1); i >= 0; i--) {
             baseTr += '<option value="-' + bm[i] + '">- ' + bm[i] + '</option>';
         }
-        baseTr += '</select></td><td><div class="slider" style="margin: 0 10px;width: 100%;"></div><input type="text" class="orderProject_percent_' + index + ' sliderPercent" style="display: none;" name="project[' + index + '][percent][]" value="0"/></td><td><input class="orderProject_value_' + index + ' sliderValue" name="project[' + index + '][value][]" style="margin-left: 10px;" type="text" value="0"/></td></tr>';
+        baseTr += '</select></td><td><div class="slider" style="margin: 0 20px;"></div><input type="text" class="orderProject_percent_' + index + ' sliderPercent" style="display: none;" name="project[' + index + '][percent][]" value="0"/></td><td><input class="orderProject_value_' + index + ' sliderValue" name="project[' + index + '][value][]" style="margin-left: 10px;" type="text" value="0"/></td></tr>';
         return baseTr;
     }
     function valueChange(em){
@@ -1046,5 +905,52 @@
             $(persent).slider("value", val);
             $(parentSlider).val(val);
         }
+        sliderElement(persent, val);
+    }
+    function sliderElement(ele, val){
+        if($(ele).slider('instance') != undefined){
+            $(ele).slider('destroy');
+        }
+        var max = parseFloat($("#o_money").val());
+        $( ele ).slider({
+            range: "max",
+            min: 0,
+            max: max,
+            value: val,
+            create: function (event,ui) {
+                var values = $(ele).next().val() == "" ? 0 : parseFloat($(ele).next().val());
+                values = val > 0 ? val : values;
+                if(values > 0){
+                    $(ele).find("span").text(Math.round(100 - (max - values) / max * 100)+"%");
+                }else{
+                    $(ele).find("span").text("0%");
+                }
+
+            },
+            slide: function( event, ui ) {
+                var total = 0;
+                var returns = true;
+                $(ele).parents("table").find(".slider").each(function(index, element){
+                    if(!$(element).is($(ele))){
+                        total += parseFloat($(element).slider("value"));
+                    }
+                });
+                total = max - total;
+                var value = parseFloat(ui.value);
+                if(value > total){
+                    value = total;
+                    returns = false;
+                }
+                $(ele).parent().next().find("input").val( value.toFixed(2) );
+                if(max > 0){
+                    var p = Math.round(100 - (max - value) / max * 100)+"%";
+                }else{
+                    var p = "0%";
+                }
+                $(ui.handle).text(p);
+                return returns;
+            }
+        });
+        $(ele).parent().next().find("input").val( $( ele ).slider( "value" ).toFixed(2) );
     }
 </script>

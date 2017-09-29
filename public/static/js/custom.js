@@ -8,11 +8,13 @@
         hasClose:true,
         hasMask:true,
         maskClose:true,
-        title:'新智云',
+        title:'新智超脑',
         content:false,
         confirmValue:'确认',
         cancelValue:'取消',
         hasBtn:false,
+        time: 5000,
+        autoHide: true,
         confirm:function(){}
     };
 

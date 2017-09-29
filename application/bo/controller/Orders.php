@@ -122,8 +122,19 @@ class Orders extends BoController
             $logModel->saveLogs($post, $old, $op_id, "orders", "edit");
             return array("status" => 1, "message" => "以保存此次提交,请等待审核");
         } else {
-            $post['o_no'] = $this->ordersModel->getOrderNO($post['o_pid']);
+            $post['o_no'] = $this->ordersModel->getOrderNO($post['o_pid'], $post['o_type']);
             $result = $this->ordersModel->save($post, $where);
+            if($result AND $post['o_lie'] == '2'){
+                $nO = new \app\bo\model\Orders();
+                $oldI = $post['o_did'];$oldN = $post['o_dname'];$newI = $post['o_coid'];$newN = $post['o_coname'];
+                $post['o_did'] = $newI;
+                $post['o_dname'] = $newN;
+                $post['o_coid'] = $oldI;
+                $post['o_coname'] = $oldN;
+                $post['o_type'] = $post['o_type'] == '1' ? '2' : '1';
+                $post['o_no'] = $nO->getOrderNO($post['o_pid'], $post['o_type']);
+                $result = $nO->save($post, $where);
+            }
             $logModel->saveLogs($post, array(), $this->ordersModel->o_id, "orders", "add");
         }
         if (!$result) {

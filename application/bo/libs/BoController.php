@@ -39,6 +39,7 @@ class BoController extends Controller
         $post = Request::instance()->post();
         $page = Request::instance()->get("page", false);
         $c_type = Request::instance()->get("c_type", false);
+        $did = Request::instance()->get("did", false);
         $name = get_class($model);
         $name = strtolower(substr($name, strripos($name, "\\") + 1));
         $search = array();
