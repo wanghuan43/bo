@@ -47,7 +47,8 @@ class   Orders extends BoModel
         ],
     ];
 
-    public function getList($search,$limit){
+    public function getList($search, $limit)
+    {
         $member = $this->getCurrent();
         $this->alias('o');
         if (!$member->m_isAdmin) {
@@ -62,12 +63,16 @@ class   Orders extends BoModel
         return $list;
     }
 
-    public function getOrderNO($p_id)
+    public function getOrderNO($p_id, $otype)
     {
         $projectModel = new Project();
         $project = $projectModel->get($p_id);
-        $c = $this->where("o_pid", "=", $p_id)->count();
-        return $project->p_no . "-" . str_pad(($c + 1), 6, "0", STR_PAD_LEFT);
+        $str = "C";
+        if ($otype == '1') {
+            $str = "x";
+        }
+        $c = $this->where("o_pid", "=", $p_id)->where("o_type", "=", $otype)->count();
+        return $project->p_no . "-" . $str . str_pad(($c + 1), 5, "0", STR_PAD_LEFT);
     }
 
     public function getOrderById($id)
@@ -126,8 +131,8 @@ class   Orders extends BoModel
         return $result;
     }
 
-    public function getOrdersByContractId( $cid )
+    public function getOrdersByContractId($cid)
     {
-        return $this->where('o_cid','=',$cid)->select();
+        return $this->where('o_cid', '=', $cid)->select();
     }
 }
