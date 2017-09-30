@@ -25,7 +25,7 @@
             <td><{$val.c_no}></td>
             <td><{$val.c_name}></td>
             <td><{$val.c_coname}></td>
-            <td><{$val.c_type}></td>
+            <td><?php echo getTypeList($val['c_type']);?></td>
             <td><?php echo date("Y-m-d", $val['c_date']); ?></td>
             <td><{$val.c_money}></td>
             <td><{$val.c_noused}></td>

@@ -13,7 +13,11 @@ function getTypeList($key = "")
     Config::load(APP_PATH . "bo" . DS . "commonField.php", "", "commonField");
     $return = Config::get("type", "commonField");
     if (!empty($key)) {
-        $return = $return[$key];
+        if(array_key_exists($key, $return)){
+            $return = $return[$key];
+        }else{
+            $return = "";
+        }
     }
     return $return;
 }
@@ -23,7 +27,11 @@ function getTaxList($key = "")
     Config::load(APP_PATH . "bo" . DS . "commonField.php", "", "commonField");
     $return = Config::get("tax", "commonField");
     if (!empty($key)) {
-        $return = $return[$key];
+        if(array_key_exists($key, $return)){
+            $return = $return[$key];
+        }else{
+            $return = "";
+        }
     }
     return $return;
 }
@@ -33,7 +41,11 @@ function getLieList($key = "")
     Config::load(APP_PATH . "bo" . DS . "commonField.php", "", "commonField");
     $return = Config::get("lie", "commonField");
     if (!empty($key)) {
-        $return = $return[$key];
+        if(array_key_exists($key, $return)){
+            $return = $return[$key];
+        }else{
+            $return = "";
+        }
     }
     return $return;
 }
@@ -43,7 +55,11 @@ function getStatusList($key = "")
     Config::load(APP_PATH . "bo" . DS . "commonField.php", "", "commonField");
     $return = Config::get("status", "commonField");
     if (!empty($key)) {
-        $return = $return[$key];
+        if(array_key_exists($key, $return)){
+            $return = $return[$key];
+        }else{
+            $return = "";
+        }
     }
     return $return;
 }
@@ -53,7 +69,11 @@ function getMonth($key = "")
     Config::load(APP_PATH . "bo" . DS . "commonField.php", "", "commonField");
     $return = Config::get("month", "commonField");
     if (!empty($key)) {
-        $return = $return[$key];
+        if(array_key_exists($key, $return)){
+            $return = $return[$key];
+        }else{
+            $return = "";
+        }
     }
     return $return;
 }

@@ -39,7 +39,6 @@ class BoController extends Controller
         $post = Request::instance()->post();
         $page = Request::instance()->get("page", false);
         $c_type = Request::instance()->get("c_type", false);
-        $did = Request::instance()->get("did", false);
         $name = get_class($model);
         $name = strtolower(substr($name, strripos($name, "\\") + 1));
         $search = array();
@@ -62,14 +61,14 @@ class BoController extends Controller
                 }
             }
         }
-        if($c_type AND in_array($name, ["company","contract"])){
-            if($name == "company"){
+        if ($c_type AND in_array($name, ["company", "contract"])) {
+            if ($name == "company") {
                 $search[] = [
                     "field" => "co_type",
                     "opt" => "=",
                     "val" => ($c_type == 1 ? 2 : 1),
                 ];
-            }else{
+            } else {
                 $search[] = [
                     "field" => "c_type",
                     "opt" => "=",
@@ -77,6 +76,7 @@ class BoController extends Controller
                 ];
             }
         }
+        $this->formartSearch($model, $search);
         $this->assign("other", $this->other);
         $list = $model->getList($search, $this->limit);
         $this->assign("lists", $list);
@@ -96,6 +96,35 @@ class BoController extends Controller
         return "";
     }
 
+    private function formartSearch($model, &$search)
+    {
+        foreach ($search as $key => $value) {
+            $tmp = $model->getSearchableByKey($value['field']);
+            if ($tmp) {
+                $value['val'] = $this->formartValue($value['val'], $tmp['type']);
+            }
+            $search[$key] = $value;
+        }
+    }
+
+    private function formartValue($value, $type)
+    {
+        if (is_array($value)) {
+            foreach ($value as $key => $val) {
+                $value[$key] = $this->formartValue($val, $type);
+            }
+        } else {
+            switch ($type) {
+                case 'date':
+                    $value = strtotime(trim($value));
+                    break;
+                default:
+                    $value = trim($value);
+                    break;
+            }
+        }
+        return $value;
+    }
 
     public function add()
     {

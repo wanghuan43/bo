@@ -35,7 +35,7 @@ class Orders extends BoController
         $params = array_merge($filters, $params);
         $this->setType($type, $params);
         session("filtersOrders", $params);
-        $lists = $this->ordersModel->paginate($this->limit, true);
+        $lists = $this->ordersModel->paginate($this->limit);
         $this->assign("lists", $lists);
         $this->assign("title", $this->title);
         $this->assign("type", $type);
@@ -252,6 +252,7 @@ class Orders extends BoController
     public function searchOrders($type = "orders")
     {
         $this->setType($type, array());
+        $this->assign("controller", "orders");
         $this->assign("type", $type);
         $this->other = "main-pannel";
         return $this->search($this->ordersModel, "common/poplayer", 11);
@@ -265,22 +266,30 @@ class Orders extends BoController
             case "contract":
                 $this->title = "我的合同";
                 $this->ordersModel->where("o.o_status", "=", "6");
-                $this->ordersModel->where("o.o_mid", "=", $this->current->m_id);
+                if(!$this->current->m_isAdmin){
+                    $this->ordersModel->where("o.o_mid", "=", $this->current->m_id);
+                }
                 break;
             case "favourite":
                 $this->title = "我的收藏";
                 $this->ordersModel->join("__FAVORITE__ f", "o.o_id = f.f_oid", "LEFT");
-                $this->ordersModel->where("f.f_mid", "=", $this->current->m_id);
+//                if(!$this->current->m_isAdmin){
+                    $this->ordersModel->where("f.f_mid", "=", $this->current->m_id);
+//                }
                 break;
             case "circulate":
                 $this->title = "我的传阅";
                 $this->ordersModel->join("__CIRCULATION__ c", "o.o_id = c.ci_otid AND c.ci_type = 'orders'", "LEFT");
-                $this->ordersModel->where("c.ci_mid", "=", $this->current->m_id);
+//                if(!$this->current->m_isAdmin){
+                    $this->ordersModel->where("c.ci_mid", "=", $this->current->m_id);
+//                }
                 break;
             default:
                 $this->title = "我的订单";
                 $this->ordersModel->where("o.o_status", "<>", "6");
-                $this->ordersModel->where("o.o_mid", "=", $this->current->m_id);
+                if(!$this->current->m_isAdmin){
+                    $this->ordersModel->where("o.o_mid", "=", $this->current->m_id);
+                }
                 break;
         }
         foreach ($params as $key => $value) {
