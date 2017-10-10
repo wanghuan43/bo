@@ -21,9 +21,17 @@ class Project extends BoController
         return $this->search($this->model);
     }
 
+    public function searchProjectNoList()
+    {
+        $this->assign("type", "project");
+        $this->other = "main-pannel";
+        return $this->search($this->model);
+    }
+
     public function all()
     {
         $this->assign('empty','<tr><td colspan="3">没有数据</td></tr>');
+        $this->assign('stype','project');
         $this->assign('title','所有项目');
         return parent::all();
     }

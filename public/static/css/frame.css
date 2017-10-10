@@ -58,6 +58,7 @@ nav ul li a {
     font-weight: 400;
     text-decoration: none!important;
     position: relative;
+    cursor: pointer;
 }
 nav ul li span {
     font-weight: 400;

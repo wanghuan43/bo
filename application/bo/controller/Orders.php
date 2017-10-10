@@ -39,6 +39,7 @@ class Orders extends BoController
         $this->assign("lists", $lists);
         $this->assign("title", $this->title);
         $this->assign("type", $type);
+        $this->assign("stype", "orders");
         $this->assign("empty", '<tr><td colspan="11">无数据.</td></tr>');
         return $this->fetch("index");
     }
@@ -160,7 +161,7 @@ class Orders extends BoController
     {
         $logModel = new Logs();
         $logModel->where("l_model", "=", "orders")->where("l_mid", "=", $this->current->m_id)->where("l_otid", "=", $opId);
-        $loglist = $logModel->paginate($this->limit, true);
+        $loglist = $logModel->paginate($this->limit);
         $this->assign("loglist", $loglist);
         $this->assign("title", "日志");
         $this->assign("empty", '<tr><td colspan="6">无数据.</td></tr>');

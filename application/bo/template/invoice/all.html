@@ -8,7 +8,7 @@
                 <a href="#"><i class="fa fa-file-excel-o"></i>导出</a>
             </li>
             <li>
-                <a href="#"><i class="fa fa-filter"></i>筛选</a>
+                <a href="<{:url("/invoice/searchInvoiceNoList")}>" target="_blank" id="searchList" stype="<{$stype}>"><i class="fa fa-filter"></i>筛选</a>
             </li>
             <li>
                 <a href="/circulation/add/type/invoice" id="btn-circulation" target="_blank" onclick="return false;"><i class="fa fa-users"></i>传阅<i class="fa fa-sort-desc"></i></a>
@@ -25,10 +25,10 @@
         </ul>
     </div>
 </div>
-<nav aria-label="Page navigation">
-    <{$lists->render()}>
-</nav>
-<div class="main-pannel">
+<div class="main-pannel" id="main-pannel">
+    <nav aria-label="Page navigation">
+        <{$lists->render()}>
+    </nav>
     <table class="list" cellspacing="0">
         <thead>
         <tr>
@@ -63,8 +63,8 @@
         <{/volist}>
         </tbody>
     </table>
-</div>
-<nav aria-label="Page navigation">
+    <nav aria-label="Page navigation">
     <{$lists->render()}>
-</nav>
+    </nav>
+</div>
 <{load href="/static/js/plugin/select/select.min.js,/static/js/lists.js,/static/css/select.min.css"}>

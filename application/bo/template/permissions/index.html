@@ -3,35 +3,49 @@
     <div class="link-pannel">
         <ul>
             <li>
-                <a href="#"><i class="fa fa-filter"></i>筛选</a>
+                <a href="<{:url("/member/searchMemberNoList")}>?permissions=1" target="_blank" id="searchList" stype="<{$stype}>"><i class="fa fa-filter"></i>筛选</a>
             </li>
         </ul>
     </div>
 </div>
-<div class="main-pannel">
+<div class="main-pannel" id="main-pannel">
+    <nav aria-label="Page navigation">
+        <{$memberList->render()}>
+    </nav>
     <table class="list" cellspacing="0">
         <thead>
         <tr>
             <th></th>
-            <th>用户名</th>
-            <th>邮箱</th>
+            <th>姓名</th>
+            <th>编码</th>
+            <th>Email</th>
+            <th>电话</th>
+            <th>部门</th>
+            <th>科室</th>
+            <th>部门领导</th>
             <th>管理员</th>
-            <th>设置权限</th>
+            <th style="width:8em;"></th>
         </tr>
         </thead>
         <tbody>
         <{volist name="memberList" id="vo" empty="$empty"}>
         <tr>
-            <td><input type="checkbox" value="<{$vo.m_id}>"></td>
-            <td><{$vo.m_name}></td>
+            <td></td>
+            <td><a href="/member/detail?id=<{$vo.m_id}>"><{$vo.m_name}></a></td>
+            <td><{$vo.m_code}></td>
             <td><{$vo.m_email}></td>
-            <td><{$vo.m_isAdmin?"是":"否"}></td>
+            <td><{$vo.m_phone}></td>
+            <td><{$vo.m_department}></td>
+            <td><{$vo.m_office}></td>
+            <td><{if $vo.m_is_lead == 1}><span style="color: green;">是</span><{else}><span style="color:red">否</span><{/if}></td>
+            <td><{if $vo.m_isAdmin == 1}><span style="color: green;">是</span><{else}><span style="color:red">否</span><{/if}></td>
             <td><a href="<{:url("/permissions/setPermissions/mid/".$vo['m_id'])}>" style="color: blue;">设置权限</a></td>
         </tr>
         <{/volist}>
         </tbody>
     </table>
+    <nav aria-label="Page navigation">
+        <{$memberList->render()}>
+    </nav>
 </div>
-<div class="btn-pannel">
-    <{$memberList->render()}>
-</div>
+<{load href="/static/js/plugin/select/select.min.js,/static/js/lists.js,/static/css/select.min.css"}>

@@ -6,7 +6,7 @@
                 <a href="#"><i class="fa fa-file-excel-o"></i>导出</a>
             </li>
             <li>
-                <a href="<{:url("/orders/searchOrders/type/".$type)}>" target="_blank" id="searchList"><i class="fa fa-filter"></i>筛选</a>
+                <a href="<{:url("/orders/searchOrders/type/".$type)}>" target="_blank" id="searchList" stype="<{$stype}>"><i class="fa fa-filter"></i>筛选</a>
             </li>
             <{if condition="in_array($type, array('contract', 'orders'))"}>
             <li>
@@ -86,36 +86,6 @@
                 custom.alert(data.message);
             }
         });
-        return false;
-    });
-    $("#searchList").click(function(){
-        loading.show();
-        var cla = ".f-layer-orders";
-        var url = $(this).attr("href");
-        if ($(cla).length <= 0) {
-            $.ajax({
-                url: url,
-                dataType: "json",
-                method: "post",
-                success: function (data) {
-                    loading.hide();
-                    $("body").append(data.content);
-                    $(cla).addClass("show");
-                    //$(cla).show();
-                    $(cla + "-back").show();
-                    $(cla + " .close").click(function () {
-                        //$(cla).hide();
-                        $(cla).removeClass("show");
-                        $(cla + "-back").hide();
-                        return false;
-                    });
-                }
-            });
-        }else{
-            loading.hide();
-            $(cla).addClass("show");
-            $(cla + "-back").show();
-        }
         return false;
     });
 </script>

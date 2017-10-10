@@ -1,30 +1,52 @@
-<div class="clearfix header searchTitle">
-    <h2></h2>
-    <div class="btn-pannel paginate">
-        <{$lists->render()}>
-    </div>
-</div>
 <div class="search-result">
+    <nav aria-label="Page navigation">
+        <{$lists->render()}>
+    </nav>
     <table cellspacing="0" class="list">
         <thead>
         <tr>
-            <th></th>
-            <th>公司代码</th>
-            <th>公司名称</th>
-            <th>公司类型</th>
-            <th>内部/外部</th>
+            <th style="min-width: 50px;text-align:center;padding-right:4px;"><input type="checkbox" id="lists-all-checked" value="all"/></th>
+            <th>编码</th>
+            <th>名称</th>
+            <th>核准/禁用</th>
+            <th>助记码</th>
+            <th>行业</th>
+            <th>地址</th>
+            <th>税务登记号</th>
+            <th>工商注册号</th>
+            <th>法人代表</th>
+            <th>集团内公司名称</th>
+            <th>创建时间</th>
+            <th>内部</th>
+            <{if $type == 1}>
+            <th>委外商</th>
+            <{/if}>
         </tr>
         </thead>
         <tbody>
-        <{volist name="lists" id="val" empty="$empty"}>
+        <{volist name="lists" id="vo" empty="<tr><td colspan='11'>暂无数据</td></tr>"}>
         <tr>
-            <td><input type="radio" class="selectRadio" name="selectRadio" value="<{$val.co_id}>" data="<{$val.co_name}>" /></td>
-            <td><{$val.co_code}></td>
-            <td><{$val.co_name}></td>
-            <td><{$val.co_type==1?"供应商":"客户"}></td>
-            <td><?php echo empty($val['co_internal_flag'])?"外部":"内部" ?></td>
+            <td><input type="checkbox" value="<{$vo.co_id}>" class="lists-id"></td>
+            <td><a href="/company/detail?id=<{$vo.co_id}>"><{$vo.co_code}></a></td>
+            <td><{$vo.co_name}></td>
+            <td><{if $vo.co_status == 1}><span style="color:green">核准</span><{else}><span style="color:red;">禁用</span><{/if}></td>
+            <td><{$vo.co_mnemonic_code}></td>
+            <td><{$vo.co_industry}></td>
+            <td><{$vo.co_address}></td>
+            <td><{$vo.co_tax_id}></td>
+            <td><{$vo.co_reg_id}></td>
+            <td><{$vo.co_lr}></td>
+            <td><{$vo.co_internal_name}></td>
+            <td><{$vo.co_create_time|date='Y-m-d',###}></td>
+            <td><{if $vo.co_internal_flag == 1}><span style="color:green;">是</span><{else}><span style="color: #f00;">否</span><{/if}></td>
+            <{if $type == 1}>
+            <td><{if $vo.co_flag==1}><span style="color:green;">是</span><{else}><span style="color: #f00;">否</span><{/if}></td>
+            <{/if}>
         </tr>
         <{/volist}>
         </tbody>
     </table>
+    <nav aria-label="Page navigation">
+        <{$lists->render()}>
+    </nav>
 </div>

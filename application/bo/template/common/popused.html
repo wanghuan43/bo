@@ -82,9 +82,8 @@
                 data: data,
                 success:function(data){
                     $("#<{$type}>List").html(data.content);
-                    $("#invoiceList input").click(function(){
+                    $("#<{$type}>List input").click(function(){
                         var cla = ".f-layer-<{$type}>";
-                        console.log(cla);
                         if($(this).attr('c') == "true"){
                             $(this).prop("checked", false);
                             $(this).attr("c", "false");
@@ -98,10 +97,17 @@
                             $(this).prop("checked", true);
                             $(this).attr("c", "true");
                             var jdata = JSON.parse(decodeURIComponent($(this).attr("json")));
+                            var money = parseFloat($("#o_money").val());
+                            jdata.noused = parseFloat(jdata.noused);
+                            if(money > jdata.noused){
+                                money = jdata.noused;
+                            }else if(money < jdata.noused){
+                                money = money;
+                            }
                             $(cla).find(".on_class").html(jdata.id);
                             $(cla).find(".cp_class").html(jdata.coname);
                             $(cla).find(".money_class").html(jdata.money);
-//                            $(cla).find(".m_class").val(jdata.noused);
+                            $(cla).find(".m_class").val(money);
                             $(cla).find(".m_class").attr("max", jdata.noused);
                             $(cla).find(".no_class").html(jdata.noused);
                         }

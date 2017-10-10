@@ -8,11 +8,11 @@
 
 use think\Config;
 
-function getTypeList($key = "")
+function getTypeList($key = null)
 {
     Config::load(APP_PATH . "bo" . DS . "commonField.php", "", "commonField");
     $return = Config::get("type", "commonField");
-    if (!empty($key)) {
+    if ($key !== null) {
         if(array_key_exists($key, $return)){
             $return = $return[$key];
         }else{
@@ -22,11 +22,11 @@ function getTypeList($key = "")
     return $return;
 }
 
-function getTaxList($key = "")
+function getTaxList($key = null)
 {
     Config::load(APP_PATH . "bo" . DS . "commonField.php", "", "commonField");
     $return = Config::get("tax", "commonField");
-    if (!empty($key)) {
+    if ($key !== null) {
         if(array_key_exists($key, $return)){
             $return = $return[$key];
         }else{
@@ -36,11 +36,11 @@ function getTaxList($key = "")
     return $return;
 }
 
-function getLieList($key = "")
+function getLieList($key = null)
 {
     Config::load(APP_PATH . "bo" . DS . "commonField.php", "", "commonField");
     $return = Config::get("lie", "commonField");
-    if (!empty($key)) {
+    if ($key !== null) {
         if(array_key_exists($key, $return)){
             $return = $return[$key];
         }else{
@@ -50,11 +50,11 @@ function getLieList($key = "")
     return $return;
 }
 
-function getStatusList($key = "")
+function getStatusList($key = null)
 {
     Config::load(APP_PATH . "bo" . DS . "commonField.php", "", "commonField");
     $return = Config::get("status", "commonField");
-    if (!empty($key)) {
+    if ($key !== null) {
         if(array_key_exists($key, $return)){
             $return = $return[$key];
         }else{
@@ -64,11 +64,11 @@ function getStatusList($key = "")
     return $return;
 }
 
-function getMonth($key = "")
+function getMonth($key = null)
 {
     Config::load(APP_PATH . "bo" . DS . "commonField.php", "", "commonField");
     $return = Config::get("month", "commonField");
-    if (!empty($key)) {
+    if ($key !== null) {
         if(array_key_exists($key, $return)){
             $return = $return[$key];
         }else{

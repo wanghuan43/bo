@@ -23,6 +23,7 @@ class Permissions extends BoController
         $lists = $memberModel->paginate($this->limit);
         $this->assign("memberList", $lists);
         $this->assign("empty", '<tr><td colspan="4">无用户权限数据.</td></tr>');
+        $this->assign("stype", "member");
         return $this->fetch("permissions/index");
     }
 
