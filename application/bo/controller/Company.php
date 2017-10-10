@@ -68,4 +68,11 @@ class Company extends BoController
         return $this->fetch();
     }
 
+    public function detail($id)
+    {
+        $data = $this->model->getDataById($id);
+        $this->assign('data',$data);
+        return $this->fetch();
+    }
+
 }

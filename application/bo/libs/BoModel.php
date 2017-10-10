@@ -2,6 +2,7 @@
 
 namespace app\bo\libs;
 
+use think\Exception;
 use think\Model;
 use think\Request;
 
@@ -53,6 +54,35 @@ abstract class BoModel extends Model
     {
         $pk = $this->pk ?: $this->getPk();
         return $this->where($pk, '=', $id)->find()->getData();
+    }
+
+    public function import($dataset){
+
+        $validateClass = '\\app\\bo\\validate\\'.$this->name;
+
+        if(class_exists($validateClass)){
+            $validate = new $validateClass();
+        }else{
+            $validate = false;
+        }
+
+        $res = [];
+
+        if($validate){
+            foreach ($dataset as $key=>$data){
+                if(!$validate->check($data)) {
+                    $res[$key]['data'] = $data;
+                    $res[$key]['msg'] = $validate->getError();
+                    unset($dataset[$key]);
+                }
+            }
+        }
+
+        $ret['validate'] = $res;
+
+        $ret['res'] = $this->saveAll($dataset);
+
+        return $ret;
     }
 
 }

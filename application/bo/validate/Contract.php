@@ -19,13 +19,13 @@ class Contract extends Validate
         'c_name' => 'require',
         'c_pid' => 'require|number',
         'c_pname' => 'require',
-        'c_coid' => 'require|number',
+        //'c_coid' => 'require|number',
         'c_coname' => 'require',
         'c_type' => 'require',
-        'c_mid' => 'require|number',
+        //'c_mid' => 'require|number',
         'c_mname' => 'require',
         'c_money' => 'require|float',
-        'c_date' => 'require|number'
+        //'c_date' => 'require|number'
     ];
 
     protected $message = [

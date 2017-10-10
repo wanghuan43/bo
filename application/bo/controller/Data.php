@@ -95,14 +95,10 @@ class Data extends BoController
         if($info){
             
             $xlsx = ROOT_PATH . 'uploads' . DS . 'xlsx' . DS . $info->getSaveName();
-            
-            if( $type == 'supplier' ){
-                $res = DataImport::excelImport('company', $xlsx);   
-            }elseif( $type == 'customer' ){
-                $res = DataImport::excelImport('company', $xlsx,0,1);
-            }else{           
-                $res = DataImport::excelImport($type, $xlsx );
-            }
+
+            $import = new DataImport();
+
+            $res = $import->excelImport($type,$xlsx,0);
             
             $this->assign('msgs',['导入结束']);
             

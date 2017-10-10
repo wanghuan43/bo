@@ -1,0 +1,44 @@
+<form action="/company/update" method="post" onsubmit="return false" id="form-update">
+    <div class="clearfix header">
+        <h2><{if $data.co_type == 1}>供应商<{else}>客户<{/if}>管理.数据查看</h2>
+        <div class="btn-pannel">
+            <button type="submit" class="btn">保存</button>
+            <button type="button" href="#historyBack" class="btn red">取消</button>
+        </div>
+    </div>
+    <div class="main-pannel">
+        <h3>基本信息</h3>
+        <div class="content">
+            <table>
+                <tr>
+                    <td>类型:</td>
+                    <td>
+                        <label><input type="radio" name="type" value="1"<{if $data.co_type==1}> checked<{/if}>>&nbsp;&nbsp;供应商</label>
+                        &nbsp;&nbsp;&nbsp;&nbsp;
+                        <label><input type="radio" name="type" value="2"<{if $data.co_type==2}> checked<{/if}>>&nbsp;&nbsp;客户</label>
+                    </td>
+                    <td colspan="3">
+                        <label style="margin-right:1em;">内部供应商/客户:</label>
+                        <label><input type="radio" name="internal_flag" value="1"<{if $data.co_internal_flag==1}> checked<{/if}>>&nbsp;&nbsp;是</label>
+                        &nbsp;&nbsp;&nbsp;&nbsp;
+                        <label><input type="radio" name="internal_flag" value="2"<{if $data.co_internal_flag==0}> checked<{/if}>>&nbsp;&nbsp;否</label>
+                    </td>
+                </tr>
+                <tr>
+                    <td>编号:</td>
+                    <td><input type="text" name="code" value="<{$data.co_code}>"/><input type="hidden" name="id" value="<{$data.co_id}>"/> </td>
+                    <td style="padding-left:20px;width:84px;">名称:</td>
+                    <td><input type="text" name="name" value="<{$data.co_name}>"/></td>
+                    <td style="padding-left:20px;width:84px">助记码:</td>
+                    <td><input type="text" value="<{$data.co_mnemonic_code}>" name="mnemonic_code"/></td>
+                </tr>
+                <tr>
+                    <td>行业:</td>
+                    <td><input type="text" name="industry" value="<{$data.co_industry}>"></td>
+                    <td></td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</form>
+<{load file="/static/js/update.js"}}>

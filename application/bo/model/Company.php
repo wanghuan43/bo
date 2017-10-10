@@ -7,7 +7,7 @@ use think\Request;
 
 class Company extends BoModel
 {
-    protected $pk = 'c_id';
+    protected $pk = 'co_id';
 
     protected $searchable = array(
         "co_name" => array(

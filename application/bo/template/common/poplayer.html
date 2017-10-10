@@ -16,7 +16,7 @@
 <?php $formUrl = "/".$type."/search".ucfirst($type)."/type/".$type.$str; ?>
 <{/if}>
 <div class="f-layer-<{$type}>-back"
-     style="display:none;background-color: black;opacity: 0.5;width: 100%;height: 100%;position: fixed;top: 0;"></div>
+     style="display:none;background-color: black;opacity: 0.5;width: 100%;height: 100%;position: fixed;top: 0;z-index:999"></div>
 <div class="f-layer f-layer-<{$type}>" style="display: block;">
     <form action="<{$formUrl}>" id="<{$type}>Form">
     <div class="clearfix header">
