@@ -284,7 +284,8 @@ th.icon {
 
 .list th {
     text-align: left;
-    background: #D2F0FF
+    background: #D2F0FF;
+    min-width: 4em;
 }
 
 table.list tbody tr:nth-child(2n) {
