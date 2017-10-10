@@ -582,6 +582,14 @@
                     loading.hide();
                     $(this).prop("disabled", "false");
                     custom.alert(data.message);
+                    if(data.status){
+                        window.setTimeout("location.reload()", 800);
+                    }
+                },
+                error:function () {
+                    loading.hide();
+                    $(this).prop("disabled", "false");
+                    custom.alert("提交出错，请联系管理员！");
                 }
             });
             return false;
@@ -647,7 +655,7 @@
                                 }else{
                                     var nu = parseFloat(json.c_noused),mo = parseFloat($("#o_money").val());
                                     if(nu < mo){
-                                        custom.alert("当前合同金额，超过合同的可用金额:"+nu.toFixed(2));
+                                        custom.alert("当前订单金额，超过合同的可用金额:"+nu.toFixed(2));
                                         $("#o_money").val(nu.toFixed(2));
                                     }
                                 }
@@ -722,15 +730,19 @@
     });
     function baseUTR(element,data,type){
         var i = 1;
+        var url = "";
         switch(type){
             case "invoice":
                 i=1;
+                url = "/invoice/detail?id="+data.id;
                 break;
             case "acceptance":
                 i=2;
+                url = "/acceptance/detail?id="+data.id;
                 break;
             case "received":
                 i=3;
+                url = "/received/detail?id="+data.id;
                 break;
         }
         var cla = "."+type+"_"+i;
@@ -739,7 +751,7 @@
         var html = '<tr><td><i class="fa fa-minus-circle"></i></td>' +
                 '<td><?php echo date("Y-m-d"); ?></td>' +
                 '<td class="mony-'+type+'">'+val+'</td>' +
-                '<td><a href="#" target="_blank" style="color: blue;">'+data.id+'</a>' +
+                '<td><a href="'+url+'" target="_blank" style="color: blue;">'+data.id+'</a>' +
                 '<input type="hidden" name="used['+i+'][value][]" value="'+val+'">' +
                 '<input type="hidden" name="used['+i+'][date][]" value="'+data.date+'">' +
                 '<input type="hidden" name="used['+i+'][ot_id][]" value="'+data.id+'"></td></tr>';

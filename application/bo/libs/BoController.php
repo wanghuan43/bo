@@ -35,10 +35,10 @@ class BoController extends Controller
 
     protected function search($model, $file = "common/poplayer", $colspan = "3")
     {
-
         $post = Request::instance()->post();
         $page = Request::instance()->get("page", false);
         $c_type = Request::instance()->get("c_type", false);
+        $permissions = Request::instance()->get("permissions", false);
         $name = get_class($model);
         $name = strtolower(substr($name, strripos($name, "\\") + 1));
         $search = array();
@@ -77,6 +77,7 @@ class BoController extends Controller
             }
         }
         $this->formartSearch($model, $search);
+        $this->assign("permissions", $permissions);
         $this->assign("other", $this->other);
         $list = $model->getList($search, $this->limit);
         $this->assign("lists", $list);

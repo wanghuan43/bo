@@ -51,7 +51,25 @@
 <div id="dialog-box"></div>
 <div id="loading"><img src="/static/images/loading.gif" /></div>
 <script>
+    var detectBack = {
+        initialize: function() {
+            //监听hashchange事件
+            window.addEventListener('hashchange', function() {
+                //为当前导航页附加一个tag
+                this.history.replaceState('hasHash', '', '');
+            }, false);
+
+            window.addEventListener('popstate', function(e) {
+                if (e.state) {
+                    //侦测是用户触发的后退操作, dosomething
+                    //这里刷新当前url
+                    this.location.reload();
+                }
+            }, false);
+        }
+    }
     $(document).ready(function () {
+        detectBack.initialize();
         var lh = location.href;
         var i = lh.indexOf("/#");
         var bak = "";
@@ -168,6 +186,12 @@
         		loading.hide();
         		succ(data);
         	}
+        }
+        if(ajaxData.error == undefined){
+            ajaxData.error = function(){
+                loading.hide();
+                custom.alert("页面加载出错，请联系管理员！");
+            }
         }
         var url = ajaxData.url;
         if(url.indexOf("/") >= 0 || url.indexOf("#") >= 0){

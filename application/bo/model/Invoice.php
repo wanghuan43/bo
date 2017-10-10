@@ -43,7 +43,7 @@ class Invoice extends BoModel
         foreach ($search as $key => $value) {
             $this->where("i." . $value['field'], $value['opt'], $value['val']);
         }
-        $list = $this->paginate($limit, true);
+        $list = $this->paginate($limit);
         return $list;
     }
 

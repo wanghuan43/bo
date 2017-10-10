@@ -13,23 +13,37 @@
                 <th style="min-width: 50px;text-align:center;padding-right:4px;"></th>
                 <{/if}>
                 <th>姓名</th>
-                <th>编号</th>
+                <th>编码</th>
+                <th>Email</th>
+                <th>电话</th>
                 <th>部门</th>
                 <th>科室</th>
+                <th>部门领导</th>
+                <th>管理员</th>
+                <th style="width:8em;"></th>
             </tr>
             </thead>
             <tbody>
-            <{volist name="lists" id="vo" empty="$empty"}>
+            <{volist name="lists" id="vo" empty="<tr><td colspan='11'>暂无数据</td></tr>"}>
             <tr>
                 <{if empty($type)}>
                 <td><input type="checkbox" value="<{$vo.m_id}>" class="member-ids"></td>
                 <{else}>
                 <td><input type="radio" value="<{$vo.m_id}>" class="member-ids" name="member-id"></td>
                 <{/if}>
-                <td><{$vo.m_name}></td>
+                <td><a href="/member/detail?id=<{$vo.m_id}>"><{$vo.m_name}></a></td>
                 <td><{$vo.m_code}></td>
+                <td><{$vo.m_email}></td>
+                <td><{$vo.m_phone}></td>
                 <td><{$vo.m_department}></td>
                 <td><{$vo.m_office}></td>
+                <td><{if $vo.m_is_lead == 1}><span style="color: green;">是</span><{else}><span style="color:red">否</span><{/if}></td>
+                <td><{if $vo.m_isAdmin == 1}><span style="color: green;">是</span><{else}><span style="color:red">否</span><{/if}></td>
+                <{if empty($permissions)}>
+                <td><a href="/member/detail?id=<{$vo.m_id}>">查看</a></td>
+                <{else}>
+                <td><a href="<{:url("/permissions/setPermissions/mid/".$vo['m_id'])}>">设置权限</a></td>
+                <{/if}>
             </tr>
             <{/volist}>
             </tbody>

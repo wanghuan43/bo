@@ -19,6 +19,14 @@ class Company extends BoController
         return $this->search($companyModel);
     }
 
+    public function searchCompanyNoList()
+    {
+        $companyModel = new \app\bo\model\Company();
+        $this->assign("type", "company");
+        $this->other = "main-pannel";
+        return $this->search($companyModel);
+    }
+
     protected function doAdd()
     {
         $post = $this->request->post();
@@ -65,6 +73,7 @@ class Company extends BoController
         $this->assign('lists', $list);
         $this->assign('titleName',$titleName);
         $this->assign('type',$type);
+        $this->assign("stype", "company");
         return $this->fetch();
     }
 
