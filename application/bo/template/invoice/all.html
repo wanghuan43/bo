@@ -35,13 +35,13 @@
             <th style="min-width: 50px;text-align:center;padding-right:4px;"><input type="checkbox" id="lists-all-checked" value="all"/></th>
             <th>发票号</th>
             <th>责任人</th>
-            <th>描述</th>
+            <th width="250">描述</th>
             <th>类型</th>
             <th>对方公司</th>
-            <th>总金额</th>
-            <th>已使用金额</th>
-            <th>未使用金额</th>
-            <th>验收时间</th>
+            <th class="money">总金额</th>
+            <th class="money">已使用金额</th>
+            <th class="money">未使用金额</th>
+            <th class="date">验收时间</th>
             <th></th>
         </tr>
         </thead>
@@ -54,9 +54,9 @@
             <td><{$vo.i_content}></td>
             <td><{if $vo.i_type==1}>销售<{else}>采销<{/if}></td>
             <td><{$vo.i_coname}></td>
-            <td><{$vo.i_money}></td>
-            <td><{$vo.i_used}></td>
-            <td><{$vo.i_noused}></td>
+            <td class="money"><{$vo.i_money|number_format=2}></td>
+            <td class="money"><{$vo.i_used|number_format=2}></td>
+            <td class="money"><{$vo.i_noused|number_format=2}></td>
             <td><{$vo.i_date|date="Y-m-d",###}></td>
             <td><a href="/circulation/list/type/invoice/id/<{$vo.i_id}>">传阅列表</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a href="/invoice/detail?id=<{$vo.i_id}>">查看</a></td>
         </tr>

@@ -35,14 +35,14 @@
         <tr>
             <th style="min-width: 50px;text-align:center;padding-right:4px;"><input type="checkbox" id="lists-all-checked" value="all"/></th>
             <th>合同号</th>
-            <th>合同名</th>
+            <th width="300">合同名</th>
             <th>责任人</th>
             <th>对方公司</th>
             <th>类型</th>
-            <th>总金额</th>
-            <th>已使用金额</th>
-            <th>未使用金额</th>
-            <th>验收时间</th>
+            <th class="money">总金额</th>
+            <th class="money">已使用金额</th>
+            <th class="money">未使用金额</th>
+            <th class="date">验收时间</th>
             <th style="width:8em;"></th>
         </tr>
         </thead>
@@ -55,9 +55,9 @@
             <td><{$vo.c_mname}></td>
             <td><{$vo.c_coname}></td>
             <td><{if $vo.c_type==1}>销售<{else}>采销<{/if}></td>
-            <td><{$vo.c_money}></td>
-            <td><{$vo.c_used}></td>
-            <td><{$vo.c_noused}></td>
+            <td class="money"><{$vo.c_money|number_format=2}></td>
+            <td class="money"><{$vo.c_used|number_format=2}></td>
+            <td class="money"><{$vo.c_noused|number_format=2}></td>
             <td><{$vo.c_date|date="Y-m-d",###}></td>
             <td><a href="/circulation/list/type/contract/id/<{$vo.c_id}>">传阅列表</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a href="/contract/detail?id=<{$vo.c_id}>">查看</a></td>
         </tr>

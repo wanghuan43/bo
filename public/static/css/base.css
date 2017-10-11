@@ -285,7 +285,28 @@ th.icon {
 .list th {
     text-align: left;
     background: #D2F0FF;
-    min-width: 4em;
+    /*min-width: 4em;*/
+    word-break:keep-all;           /* 不换行 */
+    white-space:nowrap;
+    padding-right:1em;
+    max-width:25%;
+}
+.list th:last-child{
+    width:100px;
+}
+.list th.date{
+    width:7em;
+}
+table .money{
+    text-align:right;
+    padding-right:2em;
+    width:86px;
+    color:#c00;
+}
+table th.money{
+    padding-right:1em;
+    text-align:center;
+    color:#000;
 }
 
 table.list tbody tr:nth-child(2n) {
