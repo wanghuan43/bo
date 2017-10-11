@@ -77,6 +77,7 @@ class BoController extends Controller
             }
         }
         $this->formartSearch($model, $search);
+        $this->assign("fi", Request::instance()->get("fi", "0"));
         $this->assign("permissions", $permissions);
         $this->assign("other", $this->other);
         $list = $model->getList($search, $this->limit);

@@ -24,8 +24,8 @@
                 "date"=>date("Y-m-d", $val['a_date']),
                 );
         ?>
-        <tr>
-            <td><input type="radio" class="selectRadio" name="selectRadio" value="<{$val.a_id}>" data="<{$val.a_no}>" json="<?php echo urlencode(json_encode($json)); ?>" /></td>
+        <tr <{if !empty($fi)}>style="<{$val['a_noused']=="0.00"?"background-color: red":"background-color: green"}>;color: white;border-bottom: 1px solid white;"<{/if}>>
+            <td><input type="radio" <{if !empty($fi)}><{$val['a_noused']=="0.00"?"disabled":""}><{/if}>  class="selectRadio" name="selectRadio" value="<{$val.a_id}>" data="<{$val.a_no}>" json="<?php echo urlencode(json_encode($json)); ?>" /></td>
             <td><{$val.a_no}></td>
             <td><{$val.a_coname}></td>
             <td><?php echo date("Y-m-d", $val['a_date']); ?></td>

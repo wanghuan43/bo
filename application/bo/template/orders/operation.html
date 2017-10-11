@@ -173,7 +173,7 @@
                 <tr>
                     <td><i class="fa fa-search" data="invoice"></i></td>
                     <td>&#931;已交付</td>
-                    <td>0</td>
+                    <td>0.00</td>
                     <td>0%</td>
                 </tr>
                 <tr class="thead">
@@ -210,7 +210,7 @@
                 <tr>
                     <td><i class="fa fa-search" data="acceptance"></i></td>
                     <td>&#931;已交付</td>
-                    <td>0</td>
+                    <td>0.00</td>
                     <td>0%</td>
                 </tr>
                 <tr class="thead">
@@ -247,7 +247,7 @@
                 <tr>
                     <td><i class="fa fa-search" data="received"></i></td>
                     <td>&#931;已交付</td>
-                    <td>0</td>
+                    <td>0.00</td>
                     <td>0%</td>
                 </tr>
                 <tr class="thead">
@@ -436,6 +436,7 @@
         received:"<{:url("/received/searchReceived")}>",
     }
     $(document).ready(function () {
+        bindRemove();
         $("#o_type").change(function(){
             var cla = ".f-layer-company";
             $(cla).remove();
@@ -615,9 +616,9 @@
                         type = "company";
                     }
                 }
-                url = baseUrl[type] + "?c_type="+otype;
+                url = baseUrl[type] + "?c_type="+otype+"&fi=1";
             }else{
-                url = baseUrl[type];
+                url = baseUrl[type] + "?fi=1";
             }
             var cla = ".f-layer-" + type;
             if ($(cla).length <= 0) {
@@ -750,7 +751,7 @@
         var val = $(element).find(".m_class").val();
         var html = '<tr><td><i class="fa fa-minus-circle"></i></td>' +
                 '<td><?php echo date("Y-m-d"); ?></td>' +
-                '<td class="mony-'+type+'">'+val+'</td>' +
+                '<td class="mony-'+type+'">'+parseFloat(val).toFixed(2)+'</td>' +
                 '<td><a href="'+url+'" target="_blank" style="color: blue;">'+data.id+'</a>' +
                 '<input type="hidden" name="used['+i+'][value][]" value="'+val+'">' +
                 '<input type="hidden" name="used['+i+'][date][]" value="'+data.date+'">' +
@@ -763,6 +764,26 @@
         var persent = 100-((total-plus)/total*100);
         $(cla).find("tr:first").find("td:eq(2)").html(parseFloat(plus).toFixed(2));
         $(cla).find("tr:first").find("td:eq(3)").html(Math.round(persent)+"%");
+        bindRemove();
+    }
+    function bindRemove(){
+        $(".fa-minus-circle").unbind("click");
+        $(".fa-minus-circle").click(function(){
+            var tr = $(this).parents("tr");
+            var now = parseFloat($(tr).find("input:eq(0)").val());
+            var subTotal = parseFloat($(this).parents("table").find("tr:eq(0)").find("td:eq(2)").html());
+            var total = parseFloat($("#o_money").val());
+            subTotal = subTotal-now;
+            if(subTotal <= 0){
+                $(this).parents("table").find("tr:eq(0)").find("td:eq(2)").html("0.00");
+                $(this).parents("table").find("tr:eq(0)").find("td:eq(3)").html("0%");
+            }else{
+                var tmp = 100-((total-subTotal)/total*100);
+                $(this).parents("table").find("tr:eq(0)").find("td:eq(2)").html(subTotal.toFixed(2));
+                $(this).parents("table").find("tr:eq(0)").find("td:eq(3)").html(Math.round(tmp)+"%");
+            }
+            $(tr).remove();
+        });
     }
     function bindClick(element) {
         var index = $(element).attr('data');
