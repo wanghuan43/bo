@@ -507,6 +507,13 @@
         $(".mstag").select2();
         $(".msmember").select2();
         $("#o_money").change(function () {
+            var val = $(this).val().replace(",","");
+            if(isNaN(val) === true){
+                custom.alert("合同金额只能是数字");
+                $(this).val(0);
+                calculateAll();
+                return false;
+            }
             var max = $(this).attr("max");
             if(max != undefined){
                 max = parseFloat(max);
@@ -515,6 +522,7 @@
                     $(this).val(max.toFixed(2));
                 }
             }
+            $(this).val(val);
             calculateAll();
         });
         $(".fa-plus").click(function () {
@@ -918,7 +926,13 @@
     function valueChange(em){
         var parentSlider = $(em).parent().prev().find("input");
         var persent = $(em).parent().prev().find(".slider");
-        var val = parseFloat($(em).val());
+        var val = parseFloat($(em).val().replace(",",""));
+        if(isNaN(val) === true){
+            custom.alert("计划金额只能是数字");
+            $(em).val("0.00");
+            sliderElement(persent, "0");
+            return false;
+        }
         var total = parseFloat($("#o_money").val());
         var classs = $(parentSlider).attr("class").split(" ");
         var now = 0;
