@@ -8,7 +8,11 @@ use think\Config;
 class DataImport
 {
 
-    protected $cols = ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z','AA','AB','AC','AD','AE','AF'];
+    protected $cols = ['A','B','C','D','E','F','G',
+                        'H','I','J','K','L','M','N',
+                        'O','P','Q','R','S','T',
+                        'U','V','W','X','Y','Z',
+                        'AA','AB','AC','AD','AE','AF'];
 
     /**
      * @param $type
@@ -75,7 +79,12 @@ class DataImport
             foreach ($config['fields'] as $key=>$val){
                 $data[$key] = trim($row[$cols[$val]]);
                 if(isset($config['dateFields']) && in_array($key,$config['dateFields'])){
-                    $data[$key] = strtotime($data[$key]);
+                    if($data[$key]) {
+                        $data[$key] = strtotime($data[$key]);
+                        if(!$data[$key]) {
+                            throw new \Exception('日期列:'.$val.' 格式不对');
+                        }
+                    }
                 }
                 if(isset($config['moneyFields']) && in_array($key,$config['moneyFields'])){
                     $data[$key] = floatval(str_replace(',', '', $data[$key]));
@@ -96,19 +105,23 @@ class DataImport
 
         $res = null;
 
-        if($type == 'supplier' || $type == 'customer'){
-            $class = '\\app\\bo\\model\\Company';
-        }elseif ($type == 'purchase-contract' || $type == 'sales-contract'){
-            $class = '\\app\\bo\\model\\Contract';
-        }elseif ($type == 'purchase-invoice' || $type == 'sales-invoice'){
-            $class = '\\app\\bo\\model\\Invoice';
-        }else {
-            $class = '\\app\\bo\\model\\' . ucfirst($type);
+        if( isset($config['model']) ){
+            $modelName = ucfirst($config['model']);
+        }else{
+            $modelName = ucfirst($type);
         }
+
+        $class = '\\app\\bo\\model\\'.$modelName;
 
         $model = new $class();
 
-        return $model->import($dataset);
+        CustomUtils::writeImportLog('IMPORT START',$modelName);
+
+        $res =  $model->import($dataset);
+
+        CustomUtils::writeImportLog('IMPORT END',$modelName);
+
+        return $res;
 
     }
 

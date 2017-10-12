@@ -71,6 +71,7 @@ abstract class BoModel extends Model
                 if(!$validate->check($data)) {
                     $res[$key]['data'] = $data;
                     $res[$key]['msg'] = $validate->getError();
+                    CustomUtils::writeImportLog('FAILED  - '.serialize($res[$key]),strtolower($this->name));
                     unset($dataset[$key]);
                 }
             }
@@ -79,6 +80,11 @@ abstract class BoModel extends Model
         $ret['validate'] = $res;
 
         $ret['res'] = $this->saveAll($dataset);
+
+        foreach($ret['res'] as $item){
+            $log = 'SUCCESS - '.serialize($item->getData());
+            CustomUtils::writeImportLog($log,strtolower($this->name));
+        }
 
         return $ret;
     }

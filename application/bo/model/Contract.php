@@ -78,23 +78,26 @@ class Contract extends BoModel
         $mCompany = new Company();
         $mMember = new Member();
         foreach ($dataset as $key=>$data){
-            if(empty($data['c_no'])){
+            if(empty($data['c_no'])){//合同号和项目号不能为空
                 unset($dataset[$key]);
             }else{
-                $data['p_no'] = str_replace('-','',$data['p_no']);
-                $project = $mProject->where('p_no','=',$data['p_no'])->find();
-                if(empty($project)){
-                    unset($dataset[$key]);
-                    continue;
-                }else{
-                    $data['c_pid'] = $project->p_id;
-                    $data['c_pname'] = $project->p_name?:$data['c_pname'];
+                if( !empty($data['p_no']) ) {
+                    $data['p_no'] = str_replace('-', '', $data['p_no']);
+                    $project = $mProject->where('p_no', '=', $data['p_no'])->find();
+                    if (empty($project) && isset($data['c_pname'])) {
+                        $project = $mProject->getProject($data['p_no'], $data['c_pname']);
+                    }
+                    if ($project) {
+                        $data['c_pid'] = $project->p_id;
+                        $data['c_pname'] = $project->p_name;
+                    }
                     unset($data['p_no']);
                 }
                 $co_type = $data['c_type'] == 1?2:1;
-                $company = $mCompany->where('co_name','=',$data['c_coname'])
-                                    ->where('co_type','=',$co_type)
-                                    ->where('co_status','=',1)->find();
+                $co_code = isset($data['co_code'])?$data['co_code']:false;
+                $co_name = isset($data['c_coname'])?$data['c_coname']:false;
+                $company = $mCompany->getCompany($co_code,$co_name,$co_type);
+                if(isset($data['co_code'])) unset($data['co_code']);
                 if(!!$company){
                     $data['c_coid'] = $company->co_id;
                 }else{

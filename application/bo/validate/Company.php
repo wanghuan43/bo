@@ -13,7 +13,7 @@ class Company extends Validate
 {
 
     protected $rule = [
-        ['co_code','require','编码不能为空'],
+        ['co_code','require|unique:\\app\\bo\\model\\Company','编码不能为空|编码已存在'],
         ['co_name','require','名称不能为空']
     ];
 

@@ -11,7 +11,5 @@
 
 return [
     'app\bo\command\DataImport',
-    'app\bo\command\OrderImport',
-    'app\bo\command\ContactImport',
-    'app\bo\command\InvoiceImport'
+    'app\bo\command\Test'
 ];

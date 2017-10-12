@@ -130,6 +130,7 @@ class BoController extends Controller
 
     public function add()
     {
+        $this->assign('types',getTypeList());
         if ($this->request->isPost()) {
             return $this->doAdd();
         } else {
@@ -144,6 +145,7 @@ class BoController extends Controller
         } else {
             $list = $this->model->paginate($this->limit);
             $this->assign('lists', $list);
+            $this->assign('types',getTypeList());
             $ret = $this->fetch();
         }
         return $ret;

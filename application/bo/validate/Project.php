@@ -15,7 +15,7 @@ class Project extends Validate
 {
 
     protected $rule = [
-        'p_no' => 'require',
+        'p_no' => 'require|unique:\\app\\bo\\model\\Project',
         'p_name' => 'require'
     ];
 

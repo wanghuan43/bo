@@ -23,4 +23,16 @@ class Chances extends BoModel
         }
         return $result;
     }
+
+    public function getIdByName($name){
+        $chance = $this->where('cs_name','=',$name)->find();
+        if(empty($chance)){
+            $data = ['cs_name'=>$name,'cs_isShow'=>1,'cs_createtime'=>time()];
+            $id = $this->insertGetId($data);
+        }else{
+            $id = $chance->cs_id;
+        }
+        return $id;
+    }
+
 }

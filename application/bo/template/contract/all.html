@@ -54,7 +54,13 @@
             <td><{$vo.c_name}></td>
             <td><{$vo.c_mname}></td>
             <td><{$vo.c_coname}></td>
-            <td><{if $vo.c_type==1}>销售<{else}>采销<{/if}></td>
+            <{if $vo.c_type==1}>
+            <td style="color:green"><{$types.1}></td>
+            <{elseif $vo.c_type==2}>
+            <td style="color:#c00"><{$types.2}></td>
+            <{else}>
+            <td><{$types[$vo.c_type]}></td>
+            <{/if}>
             <td class="money"><{$vo.c_money|number_format=2}></td>
             <td class="money"><{$vo.c_used|number_format=2}></td>
             <td class="money"><{$vo.c_noused|number_format=2}></td>

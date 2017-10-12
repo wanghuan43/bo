@@ -23,9 +23,7 @@ class DataImport extends Command
 
         $import = new LibImport();
 
-        $res = $import->excelImport($type);
-
-        var_export($res);
+        $import->excelImport($type);
 
     }
     

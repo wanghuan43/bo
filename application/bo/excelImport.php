@@ -20,7 +20,7 @@ return [
         ],
         'project' => [
             'file' => 'uploads/xlsx/主数据.xlsx',
-            'index' => 5,
+            'index' => 2,
             'fields' => [
                 'p_no' => 'B',
                 'p_name' => 'C',
@@ -29,7 +29,7 @@ return [
         ],
         'member' => [
             'file' => 'uploads/xlsx/主数据.xlsx',
-            'index' => 8,
+            'index' => 1,
             'fields' => [
                 'm_code' => 'B',
                 'm_department' => 'D',
@@ -41,6 +41,7 @@ return [
         ],
         'supplier' => [
             'file' => 'uploads/xlsx/主数据.xlsx',
+            'model' => 'company',
             'index' => 3,
             'fields' => [
                 'co_code' => 'A',
@@ -80,6 +81,7 @@ return [
         ],
         'customer' => [
             'file' => 'uploads/xlsx/主数据.xlsx',
+            'model' => 'company',
             'index' => 4,
             'fields' => [
                 'co_code' => 'A',
@@ -113,46 +115,99 @@ return [
             ]
         ],
         'purchase-contract' => [ //采销、采购合同
-            'file' => 'uploads/xlsx/商务合同跟踪表及商机表.xls',
-            'index' => 0,
+            'file' => 'uploads/xlsx/最终版-主数据.xlsx',
+            'model' => 'contract',
+            'index' => 6,
             'fields' => [
-                'c_pname' => 'D',
-                'c_money' => 'M',
-                'c_coname' => 'E',
-                'c_mname' => 'B',
-                'c_date' => 'N',
-                'c_no' => 'V',
-                'c_name' => 'W',
-                'd_name' => 'A',
-                'p_no' => 'C'
+                //'c_pname' => '',
+                'c_money' => 'E',
+                'c_coname' => 'G',
+                'co_code' => 'F',
+                'c_mname' => 'J',
+                'd_name' => 'K',
+                'c_date' => 'I',
+                'c_no' => 'C',
+                'c_name' => 'D',
+                'c_type' => 'H',
+                'd_name' => 'K',
+                'p_no' => 'A'
             ],
             'dateFields' => ['c_date'],
-            'defaultFields' => ['c_type' => 2],
-            'moneyFields' => ['c_money']
+            'moneyFields' => ['c_money'],
+            'enumFields' => [
+                'c_type' => [
+                    '采购合同' => 2,
+                    '销售合同' => 1,
+                    'default' => 0
+                ]
+            ]
         ],
-        'sales-contract' => [ //销售合同
-            'file' => 'uploads/xlsx/商务合同跟踪表及商机表.xls',
-            'index' => 3,
+        'sales-contract' => [ //主数据 - 销售合同
+            'file' => 'uploads/xlsx/主数据.xlsx',
+            'model' => 'contract',
+            'index' => 5,
             'fields' => [
-                'c_pname' => 'D',
-                'c_money' => 'M',
-                'c_coname' => 'E',
+                'c_pname' => 'E',
+                'c_money' => 'F',
+                'c_coname' => 'H',
                 'c_mname' => 'B',
-                'c_date' => 'N',
-                'c_no' => 'U',
-                'c_name' => 'V',
-                'd_name' => 'A',
-                'p_no' => 'C'
+                'c_date' => 'M',
+                'c_no' => 'O',
+                'c_name' => 'P',
+                'c_bakup' => 'L',
+                'd_name' => 'C',
+                'p_no' => 'D'
             ],
             'dateFields' => ['c_date'],
             'defaultFields' => ['c_type' => 1],
             'moneyFields' => ['c_money']
         ],
+        'order-chance' =>[ //主数据商机表
+            'file' => 'uploads/xlsx/最终版-主数据.xlsx',
+            'model' => 'orders',
+            'index' => 7,
+            'fields' => [
+                'o_no' => 'A',
+                'o_mname' => 'C',
+                'm_department' => 'B',
+                'p_no' => 'D',
+                'o_pname' => 'E',
+                'o_type' => 'M',
+                'o_lie' => 'H',
+                'o_coname' => 'F',
+                'o_dname' => 'B',
+                'o_date' => 'O',
+                'o_money' => 'N',
+                'o_deal' => 'I',
+                'o_status' => 'J'
+            ],
+            'dateFields' => ['o_date'],
+            'moneyFields' => ['o_money'],
+            'enumFields' => [
+                'o_type' => [
+                    '销' => 1,
+                    'default' => 2
+                ],
+                'o_lie' => [
+                    '1' => 1,
+                    'default' => 2
+                ],
+                'o_status' => [
+                    '0接洽' => 1,
+                    '1意向' => 2,
+                    '2立项' => 3,
+                    '3发标' => 4,
+                    '4定标' => 5,
+                    '5合同' => 6,
+                    'default' => 1,
+                ]
+            ]
+        ],
         'purchase-invoice' => [ //采购发票
             'file' => 'uploads/xlsx/主数据.xlsx',
             'index' => 1,
             'fields' => [
-                'i_no' => 'Y',
+                'i_no' => 'C',
                 'i_mname' => 'T',
                 'i_content' => 'J',
                 'i_coname' => 'D',
@@ -167,8 +222,5 @@ return [
             'defaultFields' => ['i_type'=>1,'o_csid'=>6,'o_csname'=>'C合同'],
             'moneyFields' => ['i_money']
         ],
-        'sales-invoice' => [ //销售发票
-
-        ]
     ],
 ];

@@ -43,4 +43,36 @@ class Company extends BoModel
         $list = $this->paginate($limit, false, array("query"=>["c_type"=>Request::instance()->get("c_type")]));
         return $list;
     }
+
+    /**
+     * 根据公司编码、公司名、类型获取公司
+     * @param bool $code
+     * @param bool $name
+     * @param bool $type
+     * @return array|false|\PDOStatement|string|\think\Model
+     */
+    public function getCompany($code=false,$name=false,$type=false){
+
+        if(!$code && !$name){
+            $res = false;
+        }else {
+            $model = $this->where('co_status', '=', 1);
+
+            if ($code) {
+                $model = $model->where('co_code', '=', $code);
+            } elseif ($name) {
+                $model = $model->where('co_name', '=', $name);
+            }
+
+            if ($type) {
+                $model = $model->where('co_type', '=', $type);
+            }
+
+            $res = $model->find();
+        }
+
+        return $res;
+
+    }
+
 }
