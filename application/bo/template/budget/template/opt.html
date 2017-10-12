@@ -1,0 +1,156 @@
+<{load href="/static/css/budget.css,/static/css/jquery.contextmenu.css"/}>
+<div class="page-header">
+    <h2>预算管理.预算模板</h2>
+</div>
+
+<form class="form-horizontal form-default form-add" id="form-company-add">
+    <div class="form-group">
+        <label class="col-sm-2 control-label">模板名称</label>
+        <div class="col-sm-10">
+            <input type="text" class="form-control" id="t_title" name="t_title"/>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-2 control-label">设置模板<br>行列</label>
+        <div class="col-sm-10">
+            行：<input type="text" class="form-control table" id="t_row" name="t_row"
+                     style="width: 10%;display: inline-block;text-align: center;" value="10"/> *
+            列：<input type="text" class="form-control table" id="t_col" name="t_col"
+                     style="width: 10%;display: inline-block;text-align: center;" value="10"/>
+        </div>
+    </div>
+</form>
+<div id="table" contextmenu="html5polyfill">
+
+</div>
+<menu id="html5polyfill" type="context" style="display:none">
+    <command label="合并单元格" onclick="combine()">
+        <!--<command label="拆分单元格" onclick="spliTable()">-->
+</menu>
+<{load href="/static/js/jquery-ui.custom.js,/static/js/plugin/menu/jquery.ui.position.min.js,/static/js/plugin/menu/jquery.contextmenu.min.js"/}>
+<script>
+    var settingTable = "";
+    $(document).ready(function () {
+        $(".table").change(function () {
+            var row = parseInt($("#t_row").val());
+            var col = parseInt($("#t_col").val());
+            if (isNaN(row) || isNaN(col)) {
+                custom.alert("行列只能输入数字!");
+                return false;
+            }
+            if (row <= 0 || col <= 0) {
+                return false;
+            }
+            setTable(row, col);
+        });
+        $(".table").change();
+        $.contextMenu('html5');
+    });
+
+    function combine() {
+        var len = $(".cbTool:checked").length, rowCount = 2, colCount = 2;
+        var td = $(".cbTool:checked").first().parents("td"), colIndex = 99999,
+            rowIndex = $(".cbTool:checked").first().attr("row"), rowLast = $(".cbTool:checked").last().attr("row"),
+            colLast = 0;
+        if (len <= 1) {
+            custom.alert("请至少选择两个相邻单元格，才可以合并。");
+            return false;
+        }
+        $(".cbTool:checked").each(function (i, e) {
+            colIndex = parseInt($(e).attr("col")) < colIndex ? parseInt($(e).attr("col")) : colIndex;
+            colLast = parseInt($(e).attr("col")) > colIndex ? parseInt($(e).attr("col")) : colIndex;
+        });
+        var row1 = $("input[row='" + rowIndex + "']:checked").length;
+        for (var i = (parseInt(rowIndex) + 1); i < parseInt(rowLast); i++) {
+            var row2 = $("input[row='" + (i + 1) + "']:checked").length;
+            if (row2 > 0) {
+                rowCount++;
+            }
+            if (row1 != row2) {
+                custom.alert("合并单元格不可跨行或者跨列ROW");
+                return false;
+            }
+        }
+        var col1 = $("input[col='" + colIndex + "']:checked").length;
+        for (var i = (parseInt(colIndex) + 1); i < parseInt(colLast); i++) {
+            var col2 = $("input[col='" + i + "']:checked").length;
+            if (col2 > 0) {
+                colCount++;
+            }
+            if (col1 != col2) {
+                custom.alert("合并单元格不可跨行或者跨列COL");
+                return false;
+            }
+        }
+
+        for (var i = parseInt(rowIndex); i <= parseInt(rowCount); i++) {
+            var j = (i == parseInt(rowIndex) ? parseInt(colIndex) + 1 : parseInt(colIndex));
+            for (; j <= parseInt(colLast); j++) {
+                $("input[col='" + j + "'][row='" + i + "']").parents("td").remove();
+            }
+        }
+        $(td).attr({
+            colspan: colCount,
+            rowspan: rowCount
+        });
+    }
+
+    //    function spliTable() {
+    //
+    //    }
+
+    function setTable(row, col) {
+        var html = '<table id="settingTable" border="1">';
+        html = setColName(col, html);
+        for (var i = 1; i <= row; i++) {
+            html += '<tr row="' + i + '">';
+            html += '<td style="width: 40px;" align="center">' + i + '&nbsp;<input type="checkbox" class="tableCheck rowCheck" data="' + i + '"></td>';
+            for (var j = 1; j <= col; j++) {
+                html += '<td col="' + j + '"><div class="checkDiv"><input type="checkbox" col="' + j + '" row="' + i + '" class="cbTool"></div><input type="text" class="stcol" col="' + j + '" row="' + i + '" value=""></td>';
+            }
+            html += '</tr>';
+        }
+        html += '</table>';
+        settingTable = $(html);
+        $("#table").html(settingTable);
+        bindClick();
+    }
+
+    function bindClick() {
+        $(settingTable).unbind("click");
+        $(settingTable).find(".tableCheck").click(function () {
+            var row = $(this).hasClass("rowCheck") ? $(this).attr("data") : 0;
+            var col = $(this).hasClass("colCheck") ? $(this).attr("data") : 0;
+            setCheck(row, col, $(this).prop("checked"));
+        });
+        $(settingTable).find("#checkAll").click(function () {
+            setCheck(0, 0, $(this).prop("checked"));
+        });
+    }
+
+    function setCheck(row, col, checked) {
+        if (row == 0 && col == 0) {
+            $("#table").find("input[type='checkbox']").prop("checked", checked);
+        } else if (row == 0) {
+            $("input[col='" + col + "']").prop("checked", checked);
+        } else if (col == 0) {
+            $("input[row='" + row + "']").prop("checked", checked);
+        }
+    }
+
+    function setColName(col, html) {
+        var asc = 65;
+        var round = Math.ceil(col / 26);
+        var left = col % 26;
+        html += '<tr><td align="center">全选<input type="checkbox" id="checkAll"></td>';
+        for (var i = 0; i < round; i++) {
+            var count = col < 26 ? col : (i == (round - 1) ? (round == 1 ? 26 : left) : 26);
+            var before = i == 0 ? "" : String.fromCharCode(asc + (i - 1));
+            for (var j = 0; j < count; j++) {
+                html += '<td align="center" style="min-width: 40px;" align="center">' + before + String.fromCharCode(asc + j) + '&nbsp;<input type="checkbox" class="tableCheck colCheck" data="' + ((i + 1) * (j + 1)) + '"></td>';
+            }
+        }
+        html += '</tr>';
+        return html;
+    }
+</script>

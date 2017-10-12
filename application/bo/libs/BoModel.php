@@ -2,9 +2,7 @@
 
 namespace app\bo\libs;
 
-use think\Exception;
 use think\Model;
-use think\Request;
 
 abstract class BoModel extends Model
 {
