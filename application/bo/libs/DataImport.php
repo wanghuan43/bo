@@ -8,6 +8,8 @@ use think\Config;
 class DataImport
 {
 
+    const CONFIG_ROOT = 'boExcel';
+
     protected $cols = ['A','B','C','D','E','F','G',
                         'H','I','J','K','L','M','N',
                         'O','P','Q','R','S','T',
@@ -26,14 +28,10 @@ class DataImport
 
         $type = strtolower($type);
 
-        $config = Config::load(APP_PATH.'bo'.DS.'excelImport.php','boExcel');
-        $config = $config['boExcel'];
+        $config = Config::load(APP_PATH.'bo'.DS.'excelImport.php',self::CONFIG_ROOT);
+        $configRoot = $config[self::CONFIG_ROOT];
 
-        if(isset($config[$type])){
-            $config = $config[$type];
-        }else{
-            throw new \Exception('没有相关Excel配置');
-        }
+        $config = $this->getConfig($type,$configRoot);
 
         if(empty($filePath)){
             $filePath = $config['file'];
@@ -82,12 +80,15 @@ class DataImport
                     if($data[$key]) {
                         $data[$key] = strtotime($data[$key]);
                         if(!$data[$key]) {
-                            throw new \Exception('日期列:'.$val.' 格式不对');
+                            throw new \Exception('日期列 '.$val.' 格式不对');
                         }
                     }
                 }
                 if(isset($config['moneyFields']) && in_array($key,$config['moneyFields'])){
                     $data[$key] = floatval(str_replace(',', '', $data[$key]));
+                    if($data[$key]<0){
+                        $data[$key] = 0 - $data[$key];
+                    }
                 }
                 if(isset($config['enumFields'][$key])){
                     $enum = $config['enumFields'][$key];
@@ -123,6 +124,33 @@ class DataImport
 
         return $res;
 
+    }
+
+    protected function getConfig($name,$allConfig){
+        if(isset($allConfig[$name])) {
+            $config = $allConfig[$name];
+            if (isset($config['extends'])) {
+                $extends = $this->getConfig($config['extends'], $allConfig);
+                $bak = $config;
+                $config = $extends;
+                foreach ($bak as $key => $value) {
+                    if(is_array($value)){
+                        $config[$key] = $value + $config[$key];
+                        if(isset($config[$key]['unextends'])){
+                            foreach ($config[$key]['unextends'] as $i){
+                                unset($config[$key][$i]);
+                            }
+                            unset($config[$key]['unextends']);
+                        }
+                    }else {
+                        $config[$key] = $value;
+                    }
+                }
+            }
+            return $config;
+        }else{
+            throw new \Exception('相关Excel配置错误');
+        }
     }
 
 }

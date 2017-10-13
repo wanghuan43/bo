@@ -200,10 +200,54 @@ return [
                     '4定标' => 5,
                     '5合同' => 6,
                     'default' => 1,
+                ],
+                'flag' => [
+                    'C合同' => 1,
+                    'default' => 0
                 ]
             ]
         ],
-        'purchase-invoice' => [ //采购发票
+        'order-purchase-chance' => [ //采购商机表
+            'extends' => 'order-purchase',
+            'index' => 1,
+            'fields' => [
+                'unextends' => ['o_cno']
+            ]
+        ],
+        'order-sales-chance' => [ //销售商机表
+            'extends' => 'order-purchase-chance',
+            'index' => 2
+        ],
+        'order-purchase' => [ //采购合同跟踪表
+            'file' => 'uploads/xlsx/商务合同跟踪表及商机表.xls',
+            'extends' => 'order-chance',
+            'index' => 0,
+            'fields' => [
+                'o_mname' => 'B',
+                'm_department' => 'A',
+                'p_no' => 'C',
+                'o_pname' => 'D',
+                'o_type' => 'L',
+                'o_lie' => 'G',
+                'o_coname' => 'E',
+                'o_dname' => 'A',
+                'o_date' => 'N',
+                'o_money' => 'M',
+                'o_deal' => 'H',
+                'o_status' => 'I',
+                'flag' => 'P',
+                'o_cno' => 'V',
+                'unextends' => ['o_no']
+            ],
+        ],
+        'order-sales' => [ //销售合同跟踪表
+            'extends' => 'order-purchase',
+            'index' => 3,
+            'fields' => [
+                'o_cno' => 'U'
+            ]
+        ],
+        'purchase-invoice' => [ //主数据-销售发票
             'file' => 'uploads/xlsx/主数据.xlsx',
             'index' => 1,
             'fields' => [

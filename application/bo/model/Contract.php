@@ -112,7 +112,7 @@ class Contract extends BoModel
                 if($data['c_money']<0){
                     $data['c_money'] = 0 - $data['c_money'];
                 }
-                $data['c_used'] = $data['c_money'];
+                $data['c_noused'] = $data['c_money'];
                 $dataset[$key] = $data;
             }
         }

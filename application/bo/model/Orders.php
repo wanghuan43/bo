@@ -3,6 +3,7 @@
 namespace app\bo\model;
 
 use app\bo\libs\BoModel;
+use think\Exception;
 
 class   Orders extends BoModel
 {
@@ -117,13 +118,16 @@ class   Orders extends BoModel
         unset($data['cList']);
         unset($data['project']);
         unset($data['used']);
-        $result = parent::save($data, $where, $sequence);
         if (!empty($data['o_cid'])) {
             $c = $con->where("c_id", "=", $data['o_cid'])->find();
             $c->c_used = $c->c_used + $data['o_money'];
             $c->c_noused = $c->c_money - $c->c_used;
+            if($c->c_noused < 0){
+                throw new Exception('合同余额不足');
+            }
             $c->save();
         }
+        $result = parent::save($data, $where, $sequence);
         $tlm->setTagLink($this->o_id, $tagList, "orders");
         $clm->setCirculation($this->o_id, $cList, "orders");
         $opm->setOrderProject($this->o_id, $data['o_date'], $pj);
@@ -143,7 +147,14 @@ class   Orders extends BoModel
         $mProject = new Project();
         $mCompany = new Company();
         $mDepartment = new Department();
+        $mContract = new Contract();
         foreach ($dataset as $key => $data){
+            if(isset($data['flag']) && $data['flag']!=1){
+                unset($dataset[$key]);
+                continue;
+            }else{
+                unset($data['flag']);
+            }
             if(empty($data['o_deal'])){
                 $data['o_deal'] = 0;
             }else {
@@ -153,8 +164,8 @@ class   Orders extends BoModel
                 $member = $mMember->getMemberByName($data['o_mname'],$data['m_department']);
                 if($member)
                     $data['o_mid'] = $member->m_id;
-                unset($data['m_department']);
             }
+            unset($data['m_department']);
             if($data['p_no']){
                 $project = $mProject->getProject($data['p_no'],$data['o_pname']);
                 if($project){
@@ -162,6 +173,14 @@ class   Orders extends BoModel
                     $data['o_pname'] = $project->p_name;
                 }
                 unset($data['p_no']);
+            }
+            if(!isset($data['o_no']) || empty($data['o_no'])){
+                if(!isset($data['o_pid'])){
+                    unset($dataset[$key]);
+                    continue;
+                }else{
+                    $data['o_no'] = $this->getOrderNO($data['o_pid'],$data['o_type']);
+                }
             }
             if($data['o_coname']){
                 $co_type = $data['o_type'] == 1?2:1;
@@ -175,6 +194,12 @@ class   Orders extends BoModel
                 $d = $mDepartment->where('d_name','=',$data['o_dname'])->find();
                 if($d){
                     $data['o_did'] = $d->d_id;
+                }
+            }
+            if(isset($data['o_cno'])){
+                $contract = $mContract->where('c_no','=',$data['o_cno'])->find();
+                if($contract){
+                    $data['o_cid'] = $contract->c_id;
                 }
             }
             $data['o_createtime'] = $data['o_updatetime'] = time();
