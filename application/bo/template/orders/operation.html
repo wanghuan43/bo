@@ -67,9 +67,9 @@
                 <td class="txt">销售/采销:</td>
                 <td>
                     <select name="o_type" id="o_type" <{if condition="!empty($order.o_type)"}>disabled<{/if}>>
-                        <{volist name="typeList" id="tl" key="k"}>
+                        <{foreach name="typeList" id="tl" key="k"}>
                         <option value="<{$k}>" <{eq name="$k" value="$order.o_type"}>selected<{/eq}>><{$tl}></option>
-                        <{/volist}>
+                        <{/foreach}>
                     </select>
                 </td>
             </tr>
