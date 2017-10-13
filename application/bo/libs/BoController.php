@@ -130,7 +130,6 @@ class BoController extends Controller
 
     public function add()
     {
-        $this->assign('types',getTypeList());
         if ($this->request->isPost()) {
             return $this->doAdd();
         } else {

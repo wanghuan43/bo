@@ -32,7 +32,7 @@
     <table class="list" cellspacing="0">
         <thead>
         <tr>
-            <th style="min-width: 50px;text-align:center;padding-right:4px;"><input type="checkbox" id="lists-all-checked" value="all"/></th>
+            <th style="width: 50px;text-align:center;padding-right:4px;"><input type="checkbox" id="lists-all-checked" value="all"/></th>
             <th>付款单号</th>
             <th>责任人</th>
             <th>类型</th>
@@ -45,12 +45,18 @@
         </tr>
         </thead>
         <tbody>
-        <{volist name="lists" id="vo" empty="<tr><td colspan='暂无数据'></td></tr>"}>
+        <{volist name="lists" id="vo" empty="<tr><td colspan='10'>暂无数据</td></tr>"}>
         <tr>
             <td><input type="checkbox" value="<{$vo.r_id}>" class="lists-id"></td>
             <td><a href="/received/detail?id=<{$vo.r_id}>"><{$vo.r_no}></a></td>
             <td><{$vo.r_mname}></td>
-            <td><{if $vo.r_type==1}>销售<{else}>采销<{/if}></td>
+            <{if $vo.c_type==1}>
+            <td style="color:green"><{$types.1}></td>
+            <{elseif $vo.c_type==2}>
+            <td style="color:#c00"><{$types.2}></td>
+            <{else}>
+            <td><{$types[$vo.c_type]}></td>
+            <{/if}>
             <td><{$vo.r_coname}></td>
             <td class="money"><{$vo.r_money|number_format=2}></td>
             <td class="money"><{$vo.r_used|number_format=2}></td>

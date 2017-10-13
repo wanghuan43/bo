@@ -32,7 +32,7 @@
     <table class="list" cellspacing="0">
         <thead>
         <tr>
-            <th style="min-width: 50px;text-align:center;padding-right:4px;"><input type="checkbox" id="lists-all-checked" value="all"/></th>
+            <th style="width: 50px;text-align:center;padding-right:4px;"><input type="checkbox" id="lists-all-checked" value="all"/></th>
             <th>验收单号</th>
             <th>责任人</th>
             <th width="200">描述</th>
@@ -52,7 +52,13 @@
             <td><a href="/acceptance/detail?id=<{$vo.a_id}>"><{$vo.a_no}></a></td>
             <td><{$vo.a_mname}></td>
             <td><{$vo.a_content}></td>
-            <td><{if $vo.a_type==1}>销售<{else}>采销<{/if}></td>
+            <{if $vo.c_type==1}>
+            <td style="color:green"><{$types.1}></td>
+            <{elseif $vo.c_type==2}>
+            <td style="color:#c00"><{$types.2}></td>
+            <{else}>
+            <td><{$types[$vo.c_type]}></td>
+            <{/if}>
             <td><{$vo.a_coname}></td>
             <td class="money"><{$vo.a_money|number_format=2}></td>
             <td class="money"><{$vo.a_used|number_format=2}></td>
