@@ -10,7 +10,6 @@ input.stcol {
     border-radius: 0;
     text-indent: 22px;
     display: inline-block;
-    float: left;
 }
 
 div.checkDiv {
@@ -21,7 +20,13 @@ div.checkDiv {
     text-align: center;
     border-right: 1px solid black;
     position: absolute;
-    padding-top: 3px;
+}
+
+div.checkDiv:before {
+    content: '';
+    display: inline-block;
+    height: 100%;
+    vertical-align: middle;
 }
 
 td.selected {

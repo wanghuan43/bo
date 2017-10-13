@@ -24,8 +24,11 @@
 
 </div>
 <menu id="html5polyfill" type="context" style="display:none">
-    <command label="合并单元格" onclick="combine()">
-        <!--<command label="拆分单元格" onclick="spliTable()">-->
+    <command label="插入一行" onclick="spliTable()">
+        <command label="插入一列" onclick="spliTable()">
+            <hr>
+            <command label="合并单元格" onclick="combine()">
+                <command label="拆分单元格" onclick="spliTable()">
 </menu>
 <{load href="/static/js/jquery-ui.custom.js,/static/js/plugin/menu/jquery.ui.position.min.js,/static/js/plugin/menu/jquery.contextmenu.min.js"/}>
 <script>
@@ -48,7 +51,7 @@
     });
 
     function combine() {
-        var len = $(".cbTool:checked").length, rowCount = 2, colCount = 2;
+        var len = $(".cbTool:checked").length, rowCount = 0, colCount = 0;
         var td = $(".cbTool:checked").first().parents("td"), colIndex = 99999,
             rowIndex = $(".cbTool:checked").first().attr("row"), rowLast = $(".cbTool:checked").last().attr("row"),
             colLast = 0;
@@ -60,64 +63,118 @@
             colIndex = parseInt($(e).attr("col")) < colIndex ? parseInt($(e).attr("col")) : colIndex;
             colLast = parseInt($(e).attr("col")) > colIndex ? parseInt($(e).attr("col")) : colIndex;
         });
-        var row1 = $("input[row='" + rowIndex + "']:checked").length;
+        $(".stcol:checked").each(function (i, e) {
+            var colspan = isNaN(parseInt($(e).parents("td").attr("colsapn"))) ? 0 : parseInt($(e).parents("td").attr("colsapn"));
+            var rowspan = isNaN(parseInt($(e).parents("td").attr("rowspan"))) ? 0 : parseInt($(e).parents("td").attr("rowspan"));
+            if (colspan > 0 || rowspan > 0) {
+                custom.alert("合并单元格中不可以选择已合并过的单元格。请先拆分！");
+                return false;
+            }
+        })
+        var row1 = $(".stcol[row='" + rowIndex + "']:checked").length;
         for (var i = (parseInt(rowIndex) + 1); i < parseInt(rowLast); i++) {
-            var row2 = $("input[row='" + (i + 1) + "']:checked").length;
+            var row2 = $(".stcol[row='" + (i + 1) + "']:checked").length;
             if (row2 > 0) {
                 rowCount++;
             }
             if (row1 != row2) {
-                custom.alert("合并单元格不可跨行或者跨列ROW");
+                custom.alert("合并单元格不可跨行或者跨列");
                 return false;
             }
         }
-        var col1 = $("input[col='" + colIndex + "']:checked").length;
+        var col1 = $(".stcol[col='" + colIndex + "']:checked").length;
         for (var i = (parseInt(colIndex) + 1); i < parseInt(colLast); i++) {
-            var col2 = $("input[col='" + i + "']:checked").length;
+            var col2 = $(".stcol[col='" + i + "']:checked").length;
             if (col2 > 0) {
                 colCount++;
             }
             if (col1 != col2) {
-                custom.alert("合并单元格不可跨行或者跨列COL");
+                custom.alert("合并单元格不可跨行或者跨列");
                 return false;
             }
         }
-
-        for (var i = parseInt(rowIndex); i <= parseInt(rowCount); i++) {
-            var j = (i == parseInt(rowIndex) ? parseInt(colIndex) + 1 : parseInt(colIndex));
-            for (; j <= parseInt(colLast); j++) {
-                $("input[col='" + j + "'][row='" + i + "']").parents("td").remove();
+        rowCount = rowLast - rowIndex + 1;
+        colCount = colLast - colIndex + 1;
+        $(".cbTool:checked").each(function (i, e) {
+            if (i > 0) {
+                $(e).parents("td").hide();
             }
-        }
-        $(td).attr({
-            colspan: colCount,
-            rowspan: rowCount
         });
+        $(td).attr("colspan", colCount);
+        $(td).attr("rowspan", rowCount);
+        $("#settingTable input[type='checkbox']").prop("checked", false);
+        $("#settingTable").attr("border", "0");
+        setTimeout(function () {
+            resetTable(td)
+        }, 1);
     }
 
-    //    function spliTable() {
-    //
-    //    }
+    function resetTable(td) {
+        $("#settingTable").attr("border", "1");
+        var height = (parseInt($(td).height()) + 2);
+        $(td).find(".stcol").css({height: height + "px", lineHeight: height + "px"});
+        $(td).find("div").css("height", height + "px");
+    }
+
+    function spliTable() {
+        var len = $(".cbTool:checked").length;
+        if (len <= 0) {
+            custom.alert("请至少选择一个合并过的单元格，才可以拆分。");
+            return false;
+        }
+        $(".cbTool:checked").each(function (i, e) {
+            var colspan = isNaN(parseInt($(e).parents("td").attr("colsapn"))) ? 0 : parseInt($(e).parents("td").attr("colsapn"));
+            var rowspan = isNaN(parseInt($(e).parents("td").attr("rowspan"))) ? 0 : parseInt($(e).parents("td").attr("rowspan"));
+            if (rowspan <= 0 && colspan <= 0) {
+                custom.alert("只能拆分合并过的单元格");
+                return false;
+            }
+        })
+        $(".cbTool:checked").each(function (i, e) {
+            var colspan = parseInt($(e).parents("td").attr("colspan")),
+                rowspan = parseInt($(e).parents("td").attr("rowspan"));
+            var rowStart = parseInt($(e).attr("row")), rowEnd = rowspan == 1 ? rowStart : (rowStart + (rowspan - 1)),
+                colStart = parseInt($(e).attr("col")), colEnd = colspan == 1 ? colStart : (colStart + colspan);
+            for (var i = rowStart; i <= rowEnd; i++) {
+                for (var j = colStart; j <= colEnd; j++) {
+                    $(".stcol[row='" + i + "'][col='" + j + "']").parents("td").show();
+                }
+            }
+            $(e).parents("td").attr({
+                rowspan: 0,
+                colspan: 0,
+            });
+            $(".stcol[row='" + rowStart + "'][col='" + colStart + "']").css({
+                height: "30px",
+                lineHeight: "30px",
+            });
+            $(".stcol[row='" + rowStart + "'][col='" + colStart + "']").prev().css({
+                height: "30px",
+            });
+            $("#settingTable input[type='checkbox']").prop("checked", false);
+        })
+    }
 
     function setTable(row, col) {
-        var html = '<table id="settingTable" border="1">';
+        var html = '<table id="settingTable" border="1">\n';
         html = setColName(col, html);
         for (var i = 1; i <= row; i++) {
-            html += '<tr row="' + i + '">';
-            html += '<td style="width: 40px;" align="center">' + i + '&nbsp;<input type="checkbox" class="tableCheck rowCheck" data="' + i + '"></td>';
+            html += '<tr row="' + i + '">\n';
+            html += '<td style="width: 40px;" align="center">' + i + '&nbsp;<input type="checkbox" class="tableCheck rowCheck" data="' + i + '"></td>\n';
             for (var j = 1; j <= col; j++) {
-                html += '<td col="' + j + '"><div class="checkDiv"><input type="checkbox" col="' + j + '" row="' + i + '" class="cbTool"></div><input type="text" class="stcol" col="' + j + '" row="' + i + '" value=""></td>';
+                html += '<td col="' + j + '"><div class="checkDiv"><input type="checkbox" col="' + j + '" row="' + i + '" class="cbTool"></div><input type="text" class="stcol" col="' + j + '" row="' + i + '" value=""></td>\n';
             }
-            html += '</tr>';
+            html += '</tr>\n';
         }
-        html += '</table>';
+        html += '</table>\n';
         settingTable = $(html);
         $("#table").html(settingTable);
         bindClick();
     }
 
     function bindClick() {
-        $(settingTable).unbind("click");
+        $(settingTable).find("input").unbind("click");
+        $(settingTable).find("input").unbind("change");
         $(settingTable).find(".tableCheck").click(function () {
             var row = $(this).hasClass("rowCheck") ? $(this).attr("data") : 0;
             var col = $(this).hasClass("colCheck") ? $(this).attr("data") : 0;
@@ -126,15 +183,77 @@
         $(settingTable).find("#checkAll").click(function () {
             setCheck(0, 0, $(this).prop("checked"));
         });
+        $(settingTable).find(".stcol").change(function () {
+            valueChange($(this));
+        });
+    }
+
+    function valueChange(input) {
+        var reg = /^(\=)(sum|average)\((.+?)\)/i, val = $.trim($(input).val()),
+            hasColon = val.indexOf(":") >= 0 ? true : false,
+            hasComma = val.indexOf(",") >= 0 ? true : false;
+        if (val.indexOf("=") == 0) {
+            var search = reg.exec(val), newInput = $(input).clone(), fun = "";
+            if (search == null && (hasComma || hasColon)) {
+                custom.alert("格式有误。");
+                return false;
+            } else {
+                fun = search[2];
+                val = search[3];
+            }
+            newInput.hide();
+            $(input).insertAfter(newInput);
+            val = arrangeValue(val, hasColon, hasComma);
+            calculateValue(val, fun);
+        }
+    }
+
+    function calculateValue(val, fun) {
+        switch (fun) {
+            case "sum":
+                break;
+            case "average":
+                break;
+            default:
+                break;
+        }
+    }
+
+    function arrangeValue(val, hasColon, hasComma) {
+        var tmp = val;
+        if (hasColon) {
+            if (typeof tmp == "string") {
+                tmp = val.split(":");
+            }
+        }
+        if (hasComma) {
+            if (typeof tmp == "string") {
+                tmp = val.split(",");
+            } else {
+                var tt = [];
+                for (var i = 0; i < tmp.length; i++) {
+                    if(tmp[i].indexOf(",") >= 0){
+                        var t = tmp[i].split(",");
+                        for (var j = 0; j < t.length; j++) {
+                            tt.push(t[j]);
+                        }
+                    }else{
+                        tt.push(tmp[i])
+                    }
+                }
+                tmp = tt;
+            }
+        }
+        return tmp;
     }
 
     function setCheck(row, col, checked) {
         if (row == 0 && col == 0) {
             $("#table").find("input[type='checkbox']").prop("checked", checked);
         } else if (row == 0) {
-            $("input[col='" + col + "']").prop("checked", checked);
+            $(".cbTool[col='" + col + "']").prop("checked", checked);
         } else if (col == 0) {
-            $("input[row='" + row + "']").prop("checked", checked);
+            $(".cbTool[row='" + row + "']").prop("checked", checked);
         }
     }
 
@@ -142,15 +261,15 @@
         var asc = 65;
         var round = Math.ceil(col / 26);
         var left = col % 26;
-        html += '<tr><td align="center">全选<input type="checkbox" id="checkAll"></td>';
+        html += '<tr>\n<td align="center">全选<input type="checkbox" id="checkAll"></td>\n';
         for (var i = 0; i < round; i++) {
             var count = col < 26 ? col : (i == (round - 1) ? (round == 1 ? 26 : left) : 26);
             var before = i == 0 ? "" : String.fromCharCode(asc + (i - 1));
             for (var j = 0; j < count; j++) {
-                html += '<td align="center" style="min-width: 40px;" align="center">' + before + String.fromCharCode(asc + j) + '&nbsp;<input type="checkbox" class="tableCheck colCheck" data="' + ((i + 1) * (j + 1)) + '"></td>';
+                html += '<td align="center" style="min-width: 40px;" align="center">' + before + String.fromCharCode(asc + j) + '&nbsp;<input type="checkbox" class="tableCheck colCheck" data="' + ((i + 1) * (j + 1)) + '"></td>\n';
             }
         }
-        html += '</tr>';
+        html += '</tr>\n';
         return html;
     }
 </script>
