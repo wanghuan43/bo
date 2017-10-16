@@ -247,20 +247,21 @@ return [
                 'o_cno' => 'U'
             ]
         ],
-        'purchase-invoice' => [ //主数据-销售发票
-            'file' => 'uploads/xlsx/主数据.xlsx',
+        'purchase-invoice' => [ //主数据-财务部开票数据
+            'file' => 'uploads/xlsx/最终版-主数据.xlsx',
+            'model' => 'invoice',
             'index' => 1,
             'fields' => [
-                'i_no' => 'C',
+                'i_no' => 'X',
                 'i_mname' => 'T',
                 'i_content' => 'J',
                 'i_coname' => 'D',
                 'co_code' => 'C',
                 'i_money' => 'F',
-                'i_date' => 'Z',
+                'i_date' => 'Y',
                 'p_no' => 'A',
-                'c_no' => 'AC',
-                'c_name' => 'AD'
+                'c_no' => 'AB',
+                'c_name' => 'AC'
             ],
             'dateFields' => ['i_date'],
             'defaultFields' => ['i_type'=>1,'o_csid'=>6,'o_csname'=>'C合同'],

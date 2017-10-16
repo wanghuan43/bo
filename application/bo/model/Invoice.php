@@ -3,6 +3,7 @@
 namespace app\bo\model;
 
 use app\bo\libs\BoModel;
+use app\bo\libs\CustomUtils;
 
 class Invoice extends BoModel
 {
@@ -87,9 +88,12 @@ class Invoice extends BoModel
             //$cName = $data['c_name'];
             unset($data['c_name']);
             $project  = $mProject->where('p_no','=',$pNo)->find();
-            if(empty($project)) continue;
-            $contract = $mContract->where('c_no','=',$cNo)->find();
-            if(empty($contract)) continue;
+            if(empty($project)){
+                CustomUtils::writeImportLog('ERORR : PROJECT EMPTY'.serialize($data),$this->name);
+                continue;
+            }
+            //$contract = $mContract->where('c_no','=',$cNo)->find();
+            //if(empty($contract)) continue;
             $company = $mCompany->where('co_name','=',$data['i_coname'])->where('co_type','=',$data['i_type'])
                                 ->where('co_status','=',1)->find();
             if(empty($company)){
@@ -114,9 +118,9 @@ class Invoice extends BoModel
                 $data['i_money'] = 0 - $data['i_money'];
             }
 
-            $data['i_used'] = $data['i_money'];
+            $data['i_noused'] = $data['i_money'];
 
-            $orderModel = new Orders();
+            /*$orderModel = new Orders();
 
             $order['o_cid'] = $contract->c_id;
             $order['o_cno'] = $contract->c_no;
@@ -150,13 +154,16 @@ class Invoice extends BoModel
             $order['o_status'] = 6;
             $order['o_createtime'] = $order['o_updatetime'] = time();
             $order['o_csname'] = $data['o_csname'];
-            $order['o_deal'] = $order['o_csid'] = $data['o_csid'];
-            unset($data['o_csid']);
-            unset($data['o_csname']);
+            $order['o_deal'] = $order['o_csid'] = $data['o_csid'];*/
+            if(isset($data['o_csid']))
+                unset($data['o_csid']);
+
+            if(isset($data['o_csname']))
+                unset($data['o_csname']);
 
             $iid = $this->insertGetId($data);
 
-            $oid = $orderModel->insertGetId($order);
+            /*$oid = $orderModel->insertGetId($order);
 
             $ou = [
                 'ou_oid' => $oid,
@@ -168,7 +175,7 @@ class Invoice extends BoModel
 
             $ouModel = new OrderUsed();
 
-            $ouModel ->insert( $ou );
+            $ouModel ->insert( $ou );*/
 
         }
 

@@ -37,8 +37,8 @@
             <th>购销</th>
             <th>对方名称</th>
             <th>责任人</th>
-            <th>发生日期</th>
-            <th>发生金额</th>
+            <th class="date">发生日期</th>
+            <th class="money">发生金额</th>
             <th>操作</th>
         </tr>
         </thead>
@@ -54,7 +54,7 @@
             <td><{$vo.o_coname}></td>
             <td><{$vo.o_mname}></td>
             <td><?php echo date("Y-m-d", $vo['o_date']);?></td>
-            <td><{$vo.o_money}></td>
+            <td class="money"><{$vo.o_money|number_format=2}></td>
             <td><a href="<{:url("/orders/delete/opID/".$vo['o_id'])}>" target="_blank" class="deleteOrders" style="color: blue;">删除</a></td>
         </tr>
         <{/volist}>

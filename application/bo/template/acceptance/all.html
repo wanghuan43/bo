@@ -52,12 +52,12 @@
             <td><a href="/acceptance/detail?id=<{$vo.a_id}>"><{$vo.a_no}></a></td>
             <td><{$vo.a_mname}></td>
             <td><{$vo.a_content}></td>
-            <{if $vo.c_type==1}>
+            <{if $vo.a_type==1}>
             <td style="color:green"><{$types.1}></td>
-            <{elseif $vo.c_type==2}>
+            <{elseif $vo.a_type==2}>
             <td style="color:#c00"><{$types.2}></td>
             <{else}>
-            <td><{$types[$vo.c_type]}></td>
+            <td><{$types[$vo.a_type]}></td>
             <{/if}>
             <td><{$vo.a_coname}></td>
             <td class="money"><{$vo.a_money|number_format=2}></td>

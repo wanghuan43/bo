@@ -52,12 +52,12 @@
             <td><a href="/invoice/detail?id=<{$vo.i_id}>"><{$vo.i_no}></a></td>
             <td><{$vo.i_mname}></td>
             <td><{$vo.i_content}></td>
-            <{if $vo.c_type==1}>
+            <{if $vo.i_type==1}>
             <td style="color:green"><{$types.1}></td>
-            <{elseif $vo.c_type==2}>
+            <{elseif $vo.i_type==2}>
             <td style="color:#c00"><{$types.2}></td>
             <{else}>
-            <td><{$types[$vo.c_type]}></td>
+            <td><{$types[$vo.i_type]}></td>
             <{/if}>
             <td><{$vo.i_coname}></td>
             <td class="money"><{$vo.i_money|number_format=2}></td>
