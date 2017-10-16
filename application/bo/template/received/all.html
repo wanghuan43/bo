@@ -50,12 +50,12 @@
             <td><input type="checkbox" value="<{$vo.r_id}>" class="lists-id"></td>
             <td><a href="/received/detail?id=<{$vo.r_id}>"><{$vo.r_no}></a></td>
             <td><{$vo.r_mname}></td>
-            <{if $vo.c_type==1}>
+            <{if $vo.r_type==1}>
             <td style="color:green"><{$types.1}></td>
-            <{elseif $vo.c_type==2}>
+            <{elseif $vo.r_type==2}>
             <td style="color:#c00"><{$types.2}></td>
             <{else}>
-            <td><{$types[$vo.c_type]}></td>
+            <td><{$types[$vo.r_type]}></td>
             <{/if}>
             <td><{$vo.r_coname}></td>
             <td class="money"><{$vo.r_money|number_format=2}></td>
