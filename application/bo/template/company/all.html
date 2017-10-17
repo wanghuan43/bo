@@ -26,55 +26,6 @@
     </div>
 </div>
 <div class="main-pannel" id="main-pannel">
-    <nav aria-label="Page navigation">
-        <{$lists->render()}>
-    </nav>
-    <table class="list" cellspacing="0">
-        <thead>
-        <tr>
-            <th style="min-width: 50px;text-align:center;padding-right:4px;"><input type="checkbox" id="lists-all-checked" value="all"/></th>
-            <th>编码</th>
-            <th width="300">名称</th>
-            <th>核准/禁用</th>
-            <th>助记码</th>
-            <th>行业</th>
-            <th width="200">地址</th>
-            <th>税务登记号</th>
-            <th>工商注册号</th>
-            <th>法人代表</th>
-            <th>集团内公司名称</th>
-            <th class="date">创建时间</th>
-            <th style="width:40px">内部</th>
-            <{if $type == 1}>
-            <th style="width:40px">委外商</th>
-            <{/if}>
-        </tr>
-        </thead>
-        <tbody>
-        <{volist name="lists" id="vo" empty="<tr><td colspan='11'>暂无数据</td></tr>"}>
-        <tr>
-            <td><input type="checkbox" value="<{$vo.co_id}>" class="lists-id"></td>
-            <td><a href="/company/detail?id=<{$vo.co_id}>"><{$vo.co_code}></a></td>
-            <td><{$vo.co_name}></td>
-            <td><{if $vo.co_status == 1}><span style="color:green">核准</span><{else}><span style="color:red;">禁用</span><{/if}></td>
-            <td><{$vo.co_mnemonic_code}></td>
-            <td><{$vo.co_industry}></td>
-            <td><{$vo.co_address}></td>
-            <td><{$vo.co_tax_id}></td>
-            <td><{$vo.co_reg_id}></td>
-            <td><{$vo.co_lr}></td>
-            <td><{$vo.co_internal_name}></td>
-            <td><{$vo.co_create_time|date='Y-m-d',###}></td>
-            <td style="text-align:center;"><{if $vo.co_internal_flag == 1}><span style="color:green;">是</span><{else}><span style="color: #f00;">否</span><{/if}></td>
-            <{if $type == 1}>
-            <td style="text-align:center;"><{if $vo.co_flag==1}><span style="color:green;">是</span><{else}><span style="color: #f00;">否</span><{/if}></td>
-            <{/if}>
-        </tr>
-        <{/volist}>
-        </tbody>
-    </table>
-    <nav aria-label="Page navigation">
-        <{$lists->render()}>
-    </nav>
+    <{include file="company/all_list"}>
 </div>
 <{load href="/static/js/plugin/select/select.min.js,/static/js/lists.js,/static/css/select.min.css"}>

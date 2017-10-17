@@ -9,13 +9,14 @@
 return [
     'boExcel' => [
         'department' => [
-            'file' => 'uploads/xlsx/主数据.xlsx',
-            'index' => 0,
+            'file' => 'uploads/xlsx/员工.xlsx',
+            'index' => 1,
             'fields' => [
-                'd_name' => 'A',
-                'd_code' => 'B',
-                'm_name' => 'C',
-                'm_code' => 'D'
+                'd_name' => 'B',
+                'd_code' => 'C',
+                //'m_name' => '',
+                //'m_code' => 'D',
+                'd_cname' => 'A'
             ]
         ],
         'project' => [
@@ -28,15 +29,16 @@ return [
             ]
         ],
         'member' => [
-            'file' => 'uploads/xlsx/主数据.xlsx',
-            'index' => 1,
+            'file' => 'uploads/xlsx/员工.xlsx',
+            'index' => 3,
             'fields' => [
                 'm_code' => 'B',
-                'm_department' => 'D',
+                'm_department' => 'J',
                 'm_office' => 'E',
                 'm_name' => 'F',
                 'm_phone' => 'G',
-                'm_email' => 'H'
+                'm_email' => 'H',
+                'm_cname' => 'I'
             ]
         ],
         'supplier' => [

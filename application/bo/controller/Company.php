@@ -74,7 +74,7 @@ class Company extends BoController
         $this->assign('titleName',$titleName);
         $this->assign('type',$type);
         $this->assign("stype", "company");
-        return $this->fetch();
+        return $this->fetch('all');
     }
 
     public function detail($id)

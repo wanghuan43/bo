@@ -16,7 +16,7 @@ class Department extends Validate
 
     protected $rule = [
         ['d_name','require','名称不能为空'],
-        ['d_code','require','编码不能为空']
+        //['d_code','require','编码不能为空']
     ];
 
 }

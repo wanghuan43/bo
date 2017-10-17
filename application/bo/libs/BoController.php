@@ -85,7 +85,11 @@ class BoController extends Controller
         $this->assign("empty", '<tr><td colspan="' . $colspan . '">暂无数据</td></tr>');
         if (Request::instance()->isAjax()) {
             if (count($post) > 0 OR $page) {
-                $content = $this->fetch("list");
+                if($this->request->get('listType')=='all'){
+                    $content = $this->fetch('all_list');
+                }else {
+                    $content = $this->fetch("list");
+                }
             } else {
                 $this->assign("searchable", $model->getSearchable());
                 $content = $this->fetch($file);

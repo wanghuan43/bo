@@ -10,6 +10,13 @@
 <{assign name="str" value="$str.$key.'='.$val"}>
 <{/foreach}>
 <{/if}>
+<{if !empty($other)}>
+    <{if empty($str)}>
+        <{assign name="str" value="?listType=all"}>
+    <{else}>
+        <{assign name="str" value="$str.'&listType=all'"}>
+    <{/if}>
+<{/if}>
 <{if !empty($controller)}>
 <?php $formUrl = "/".$controller."/search".ucfirst($controller)."/type/".$type.$str;$type = $controller; ?>
 <{else}>

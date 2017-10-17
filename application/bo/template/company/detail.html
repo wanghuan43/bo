@@ -27,15 +27,52 @@
                 <tr>
                     <td>编号:</td>
                     <td><input type="text" name="code" value="<{$data.co_code}>"/><input type="hidden" name="id" value="<{$data.co_id}>"/> </td>
-                    <td style="padding-left:20px;width:84px;">名称:</td>
+                    <td style="width:84px;">名称:</td>
                     <td><input type="text" name="name" value="<{$data.co_name}>"/></td>
-                    <td style="padding-left:20px;width:84px">助记码:</td>
+                    <td>简称:</td>
+                    <td><input type="text" name="remark" value="<{$data.co_remark}>"/></td>
+                    <td style="width:84px">助记码:</td>
                     <td><input type="text" value="<{$data.co_mnemonic_code}>" name="mnemonic_code"/></td>
                 </tr>
                 <tr>
                     <td>行业:</td>
                     <td><input type="text" name="industry" value="<{$data.co_industry}>"></td>
-                    <td></td>
+                    <td>地址:</td>
+                    <td colspan="5"><input type="text" name="address" value="<{$data.co_address}>"/></td>
+                </tr>
+                <tr>
+                    <td>税务登记号:</td>
+                    <td><input type="text" name="tax_id" value="<{$data.co_tax_id}>"/> </td>
+                    <td>工商注册号:</td>
+                    <td><input type="text" name="reg_id" value="<{$data.co_reg_id}>"/></td>
+                    <td>法人代表:</td>
+                    <td><input type="text" name="lr" value="<{$data.co_lr}>"/></td>
+                    <td>集团内名称:</td>
+                    <td><input type="text" name="internal_name" value="<{$data.co_internal_name}>"/> </td>
+                </tr>
+                <tr>
+                    <td>状态:</td>
+                    <td>
+                        <label class="radio-inline">
+                            <input type="radio" name="status" value="1"<{if $data.co_status==1}> checked<{/if}>> 核准
+                        </label>
+                        <label class="radio-inline">
+                            <input type="radio" name="status" value="0"<{if $data.co_status!=1}> checked<{/if}>> 禁用
+                        </label>
+                    </td>
+                    <td>委外商:</td>
+                    <td>
+                        <label class="radio-inline">
+                            <input type="radio" name="flag" value="0"<{if $data.co_flag != 1}> checked<{/if}>> 否
+                        </label>
+                        <label class="radio-inline">
+                            <input type="radio" name="flag" value="1"<{if $data.co_flag==1}> checked<{/if}>> 是
+                        </label>
+                    </td>
+                </tr>
+                <tr>
+                    <td>创建组织:</td>
+                    <td colspan="3"><input type="text" name="create_org" value="<{$data.co_create_org}>"></td>
                 </tr>
             </table>
         </div>
