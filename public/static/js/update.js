@@ -46,7 +46,7 @@
                 method: "post",
                 dataType: "json",
                 success: function (res) {
-                    $("body").append(res.content);
+                    $("#popDIV").append(res.content);
                     $(".f-layer-company .close").click(function () {
                         $(".f-layer-company-back").hide();
                         $(".f-layer-company").removeClass("show");
@@ -90,7 +90,7 @@
                 method: "post",
                 dataType: "json",
                 success: function (res) {
-                    $("body").append(res.content);
+                    $("#popDIV").append(res.content);
                     $(".f-layer-department .close").click(function () {
                         $(".f-layer-department-back").hide();
                         $(".f-layer-department").removeClass("show");

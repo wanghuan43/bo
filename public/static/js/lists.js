@@ -88,7 +88,7 @@
                 $.ajax({
                     url: '/member/searchMember',
                     success: function (res) {
-                        $("body").append(res.content);
+                        $("#popDIV").append(res.content);
                         $(".f-layer-member .save").html("传阅");
                         $(".f-layer-member .close").html("关闭");
                         $(".f-layer-member-back").show();
@@ -121,7 +121,7 @@
             $.ajax({
                 url: '/member/searchMember',
                 success: function (res) {
-                    $("body").append(res.content);
+                    $("#popDIV").append(res.content);
                     $(".f-layer-member .save").html("传阅");
                     $(".f-layer-member .close").html("关闭");
                     $(".f-layer-member-back").show();
@@ -155,7 +155,7 @@
                 method: "post",
                 success: function (data) {
                     loading.hide();
-                    $("body").append(data.content);
+                    $("#popDIV").append(data.content);
                     $(cla).addClass("show");
                     //$(cla).show();
                     $(cla + "-back").show();

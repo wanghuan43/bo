@@ -635,7 +635,7 @@
                     dataType: "json",
                     method: "post",
                     success: function (data) {
-                        $("body").append(data.content);
+                        $("#popDIV").html(data.content);
                         $(cla + " .save").click(function () {
                             if($(cla+" .selectRadio:checked").length == 0){
                                 custom.alert("请选择一个再保存！");

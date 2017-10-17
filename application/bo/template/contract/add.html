@@ -115,7 +115,7 @@
                     url:"company/searchCompany.html",
                     dataType:'json',
                     success:function(res){
-                        $("body").append(res.content);
+                        $("#popDIV").append(res.content);
                         $(".f-layer-company .close").click(function () {
                             $(".f-layer-company-back").hide();
                             $(".f-layer-company").removeClass("show");
@@ -147,7 +147,7 @@
                     url:"project/searchProject.html",
                     dataType:'json',
                     success:function(res){
-                        $("body").append(res.content);
+                        $("#popDIV").append(res.content);
                         $(".f-layer-project .close").click(function () {
                             $(".f-layer-project-back").hide();
                             $(".f-layer-project").removeClass("show");
