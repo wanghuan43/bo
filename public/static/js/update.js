@@ -30,6 +30,8 @@
                 custom.alert(res.msg);
                 if(res.flag == 1){
                     form.find("input[type='text']").val("");
+                    form.find("textarea").val("");
+                    form.find("option").removeAttr("selected");
                 }
             }
         })
@@ -66,6 +68,38 @@
                     setTimeout('$(".f-layer-company").addClass("show")', 500);
                 }
             });
+        }
+    });
+
+    $("#ipt-project-name").click(function(){
+        if($(".f-layer-project").length>0){
+            $(".flayer-project-back").show();
+            $(".f-layer-project").addClass("show");
+        }else{
+            $.ajax({
+                url:"project/searchProject.html",
+                dataType:'json',
+                success:function(res){
+                    $("#popDIV").append(res.content);
+                    $(".f-layer-project .close").click(function () {
+                        $(".f-layer-project-back").hide();
+                        $(".f-layer-project").removeClass("show");
+                    });
+                    $(".f-layer-project .save").click(function(){
+                        var radio = $("#projectList .selectRadio:checked");
+                        if( radio.length>0 ){
+                            $("input[name='pid']").val(radio.val());
+                            $("input[name='pname']").val(radio.attr('data'));
+                            $(".f-layer-project .close").click();
+                        }else{
+                            custom.alert('请至少选择一项');
+                        }
+
+                    });
+                    $(".f-layer-project-back").show();
+                    setTimeout('$(".f-layer-project").addClass("show")',500);
+                }
+            })
         }
     });
 

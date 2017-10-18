@@ -2,7 +2,7 @@
     <h2>添加发票</h2>
 </div>
 
-<form class="form-horizontal form-default" id="form-add-invoice" action="/invoice/add" method="post" onsubmit="return false;">
+<form class="form-horizontal form-default form-add" id="form-add-invoice" action="/invoice/add" method="post" onsubmit="return false;">
 
     <div class="form-group">
         <label for="inputNo" class="col-sm-2 control-label">发票号</label>
@@ -32,7 +32,7 @@
     <div class="form-group">
         <label class="col-sm-2 control-label">公司</label>
         <div class="col-sm-10">
-            <input type="text" class="form-control" name="coname" id="inputCompany" readonly/>
+            <input type="text" class="form-control" name="coname" id="ipt-company-name" readonly/>
             <input type="hidden" name="coid" />
         </div>
     </div>
@@ -50,12 +50,14 @@
             <input type="text" class="form-control" name="used"/>
         </div>
     </div>
+
     <div class="form-group">
         <label class="col-sm-2 control-label">剩余金额</label>
         <div class="col-sm-10">
             <input type="text" class="form-control" name="noused"/>
         </div>
     </div>
+
     <div class="form-group">
         <label class="col-sm-2 control-label">开票日期</label>
         <div class="col-sm-10">
@@ -63,93 +65,12 @@
         </div>
     </div>
 
-    <!--div class="form-group">
-        <label for="inputName" class="col-sm-2 control-label">传阅</label>
-        <div class="col-sm-10">
-            <input type="text" class="form-control" id="inputName" name="mids" />
-            <input type="hidden" name="mname" value="" />
-        </div>
-    </div-->
-
     <div class="form-group">
         <div class="col-sm-offset-2 col-sm-10">
-            <button class="btn btn-default" id="btn-add-invoice">确认</button>
+            <button class="btn btn-default" id="btn-add-invoice" type="submit">确认</button>
         </div>
     </div>
 
 </form>
 
-<script>
-
-    (function($){
-        laydate.render({
-            elem:'#inputDate'
-        });
-        $("#inputCompany").click(function(){
-            if($(".f-layer-company").length>0){
-                $(".flayer-company-back").show();
-                $(".f-layer-company").addClass("show");
-            }else{
-                $.ajax({
-                    url:"company/searchCompany.html",
-                    dataType:'json',
-                    success:function(res){
-                        $("#popDIV").append(res.content);
-                        $(".f-layer-company .close").click(function () {
-                            $(".f-layer-company-back").hide();
-                            $(".f-layer-company").removeClass("show");
-                        });
-                        $(".f-layer-company .save").click(function(){
-                            var radio = $("#companyList .selectRadio:checked");
-                            if( radio.length>0 ){
-                                $("input[name='coid']").val(radio.val());
-                                $("input[name='coname']").val(radio.attr('data'));
-                                $(".f-layer-company .close").click();
-                            }else{
-                                custom.alert('请至少选择一项');
-                            }
-
-                        });
-                        $(".f-layer-company-back").show();
-                        setTimeout('$(".f-layer-company").addClass("show")',500);
-                    }
-                })
-            }
-        });
-
-        $("#btn-add-invoice").click(function(){
-            var form = $("#form-add-invoice");
-            $.ajax({
-                url:form.attr("action"),
-                data:form.serialize(),
-                method:"post",
-                dataType:'json',
-                success:function(res){
-                    custom.alert(res.msg);
-                }
-            });
-            //$("#form-add-invoice");
-        });
-        /*$("#inputName").click(function(){
-            if( $(".f-layer-member").length>0){
-                $(".f-layer-member-back").show();
-                $(".f-layer-member").addClass("show");
-            }else {
-                $.ajax({
-                    url:'member/searchMember.html?type=select',
-                    dataType:'json',
-                    success:function(res){
-                        $("body").append(res.content);
-                        $(".f-layer-member-back").show();
-                        $(".f-layer-member .close").click(function(){
-                            $(".f-layer-member-back").hide();
-                            $(".f-layer-member").removeClass("show");
-                        });
-                        setTimeout('$(".f-layer-member").addClass("show")',500);
-                    }
-                });
-            }
-        });*/
-    })(jQuery);
-
-</script>
+<{load file="/static/js/update.js"}>
