@@ -123,7 +123,7 @@ class   Orders extends BoModel
             $c->c_used = $c->c_used + $data['o_money'];
             $c->c_noused = $c->c_money - $c->c_used;
             if($c->c_noused < 0){
-                throw new Exception('合同余额不足');
+                return -10;
             }
             $c->save();
         }
