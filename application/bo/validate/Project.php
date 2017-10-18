@@ -20,7 +20,8 @@ class Project extends Validate
     ];
 
     protected $message = [
-        'p_no' => '编号不能为空|编号已存在',
+        'p_no.require' => '编号不能为空',
+        'p_no.unique' => '编号已存在',
         'p_name' => '名称不能为空'
     ];
 
