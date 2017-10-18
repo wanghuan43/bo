@@ -540,7 +540,8 @@
                 type:"json",
                 method:"post",
                 success:function(data){
-                    alert(data.message);
+                    custom.alert(data.message);
+                    window.setTimeout("location.reload()", 800);
                 }
             })
         });
