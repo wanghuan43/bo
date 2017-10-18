@@ -1,3 +1,6 @@
+<{if (!isset($listType)) OR empty($listType) }>
+<{assign name="listType" value="1"}>
+<{/if}>
 <div class="search-result">
     <nav aria-label="Page navigation">
         <{$lists->render()}>
@@ -5,7 +8,11 @@
     <table cellspacing="0" class="list">
         <thead>
         <tr>
-            <th></th>
+            <th style="width: 50px;text-align:center;padding-right:4px;">
+                <{if $listType == 2}>
+                <input type="checkbox" id="lists-all-checked" value="all"/>
+                <{/if}>
+            </th>
             <th>发票号</th>
             <th>开票摘要</th>
             <th>对方名称</th>
@@ -13,6 +20,9 @@
             <th>开票日期</th>
             <th>开票金额</th>
             <th>未对应订单金额</th>
+            <{if $listType == 2}>
+            <th></th>
+            <{/if}>
         </tr>
         </thead>
         <tbody>
@@ -27,14 +37,22 @@
             );
          ?>
         <tr <{if !empty($fi)}>style="<{$val['i_noused']=="0.00"?"background-color: red":"background-color: green"}>;color: white;border-bottom: 1px solid white;"<{/if}>>
+            <{if $listType == 2}>
+            <td><input type="checkbox" value="<{$val.i_id}>" class="lists-id"></td>
+            <td><a href="/invoice/detail?id=<{$val.i_id}>"><{$val.i_no}></a></td>
+            <{else}>
             <td><input type="radio" c="false" <{if !empty($fi)}><{$val['i_noused']=="0.00"?"disabled":""}><{/if}> class="selectRadio" name="selectRadio" value="<{$val.i_id}>" data="<{$val.i_no}>" json="<?php echo urlencode(json_encode($json)); ?>" /></td>
             <td><{$val.i_no}></td>
+            <{/if}>
             <td><{$val.i_content}></td>
             <td><{$val.i_coname}></td>
             <td><?php echo getTaxList($val['i_tax']); ?></td>
             <td><?php echo date("Y-m-d", $val['i_date']); ?></td>
-            <td><{$val.i_money}></td>
-            <td><{$val.i_noused}></td>
+            <td class="money"><{$val.i_money|number_format=2}></td>
+            <td class="money"><{$val.i_noused|number_format=2}></td>
+            <{if $listType == 2}>
+            <td><a href="/circulation/list/type/invoice/id/<{$val.i_id}>">传阅列表</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a href="/invoice/detail?id=<{$val.i_id}>">查看</a></td>
+            <{/if}>
         </tr>
         <{/volist}>
         </tbody>
@@ -43,3 +61,12 @@
         <{$lists->render()}>
     </nav>
 </div>
+<script>
+    (function($){
+        $("#lists-all-checked").unbind("click");
+        $("#lists-all-checked").click(function () {
+            var _this = $(this);
+            $(".lists-id").prop("checked", _this.prop("checked"));
+        });
+    })(jQuery);
+</script>

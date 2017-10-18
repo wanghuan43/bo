@@ -1,3 +1,6 @@
+<{if (!isset($listType)) OR empty($listType) }>
+<{assign name="listType" value="1"}>
+<{/if}>
 <nav aria-label="Page navigation">
     <{$lists->render()}>
 </nav>
@@ -44,7 +47,6 @@
 <nav aria-label="Page navigation">
     <{$lists->render()}>
 </nav>
-
 <script>
     (function($){
         $("#lists-all-checked").unbind("click");

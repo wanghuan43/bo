@@ -25,50 +25,8 @@
         </ul>
     </div>
 </div>
-<nav aria-label="Page navigation">
-    <{$lists->render()}>
-</nav>
-<div class="main-pannel">
-    <table class="list" cellspacing="0">
-        <thead>
-        <tr>
-            <th style="width: 50px;text-align:center;padding-right:4px;"><input type="checkbox" id="lists-all-checked" value="all"/></th>
-            <th>付款单号</th>
-            <th>责任人</th>
-            <th>类型</th>
-            <th>对方公司</th>
-            <th class="money">总金额</th>
-            <th class="money">已使用金额</th>
-            <th class="money">未使用金额</th>
-            <th class="date">验收时间</th>
-            <th width="100"></th>
-        </tr>
-        </thead>
-        <tbody>
-        <{volist name="lists" id="vo" empty="<tr><td colspan='10'>暂无数据</td></tr>"}>
-        <tr>
-            <td><input type="checkbox" value="<{$vo.r_id}>" class="lists-id"></td>
-            <td><a href="/received/detail?id=<{$vo.r_id}>"><{$vo.r_no}></a></td>
-            <td><{$vo.r_mname}></td>
-            <{if $vo.r_type==1}>
-            <td style="color:green"><{$types.1}></td>
-            <{elseif $vo.r_type==2}>
-            <td style="color:#c00"><{$types.2}></td>
-            <{else}>
-            <td><{$types[$vo.r_type]}></td>
-            <{/if}>
-            <td><{$vo.r_coname}></td>
-            <td class="money"><{$vo.r_money|number_format=2}></td>
-            <td class="money"><{$vo.r_used|number_format=2}></td>
-            <td class="money"><{$vo.r_noused|number_format=2}></td>
-            <td><{$vo.r_date|date="Y-m-d",###}></td>
-            <td><a href="/circulation/list/type/received/id/<{$vo.r_id}>">传阅列表</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a href="/received/detail?id=<{$vo.r_id}>">查看</a</td>
-        </tr>
-        <{/volist}>
-        </tbody>
-    </table>
+<div class="main-pannel" id="main-pannel">
+    <{assign name="listType" value="2"}>
+    <{include file="received/list"}>
 </div>
-<nav aria-label="Page navigation">
-    <{$lists->render()}>
-</nav>
 <{load href="/static/js/plugin/select/select.min.js,/static/js/lists.js,/static/css/select.min.css"}>

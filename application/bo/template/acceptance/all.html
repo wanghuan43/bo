@@ -26,51 +26,7 @@
     </div>
 </div>
 <div class="main-pannel" id="main-pannel">
-    <nav aria-label="Page navigation">
-        <{$lists->render()}>
-    </nav>
-    <table class="list" cellspacing="0">
-        <thead>
-        <tr>
-            <th style="width: 50px;text-align:center;padding-right:4px;"><input type="checkbox" id="lists-all-checked" value="all"/></th>
-            <th>验收单号</th>
-            <th>责任人</th>
-            <th width="200">描述</th>
-            <th>类型</th>
-            <th>对方公司</th>
-            <th class="money">总金额</th>
-            <th class="money">已使用金额</th>
-            <th class="money">未使用金额</th>
-            <th class="date">验收时间</th>
-            <th></th>
-        </tr>
-        </thead>
-        <tbody>
-        <{volist name="lists" id="vo" empty="<tr><td colspan='11'>暂无数据</td></tr>"}>
-        <tr>
-            <td><input type="checkbox" value="<{$vo.a_id}>" class="lists-id"></td>
-            <td><a href="/acceptance/detail?id=<{$vo.a_id}>"><{$vo.a_no}></a></td>
-            <td><{$vo.a_mname}></td>
-            <td><{$vo.a_content}></td>
-            <{if $vo.a_type==1}>
-            <td style="color:green"><{$types.1}></td>
-            <{elseif $vo.a_type==2}>
-            <td style="color:#c00"><{$types.2}></td>
-            <{else}>
-            <td><{$types[$vo.a_type]}></td>
-            <{/if}>
-            <td><{$vo.a_coname}></td>
-            <td class="money"><{$vo.a_money|number_format=2}></td>
-            <td class="money"><{$vo.a_used|number_format=2}></td>
-            <td class="money"><{$vo.a_noused|number_format=2}></td>
-            <td><{$vo.a_date|date="Y-m-d",###}></td>
-            <td><a href="/circulation/list/type/acceptance/id/<{$vo.a_id}>">传阅列表</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a href="/acceptance/detail?id=<{$vo.a_id}>">查看</a></td>
-        </tr>
-        <{/volist}>
-        </tbody>
-    </table>
-    <nav aria-label="Page navigation">
-        <{$lists->render()}>
-    </nav>
+    <{assign name="listType" value="2"}>
+    <{include file="acceptance/list"}>
 </div>
 <{load href="/static/js/plugin/select/select.min.js,/static/js/lists.js,/static/css/select.min.css"}>

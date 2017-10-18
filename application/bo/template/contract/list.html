@@ -1,3 +1,6 @@
+<{if (!isset($listType)) OR empty($listType) }>
+<{assign name="listType" value="1"}>
+<{/if}>
 <nav aria-label="Page navigation">
     <{$lists->render()}>
 </nav>
@@ -12,11 +15,11 @@
             </th>
             <th>合同号</th>
             <th>合同名称</th>
-            <th>对方名称</th>
+            <th width="400">对方名称</th>
             <th>合同类型</th>
-            <th>签约日期</th>
-            <th>合同金额</th>
-            <th>未对应订单金额</th>
+            <th class="date">签约日期</th>
+            <th class="money">合同金额</th>
+            <th class="money">未对应订单金额</th>
             <{if $listType == 2}>
             <th style="width:8em;"></th>
             <{/if}>
@@ -34,10 +37,10 @@
             <{/if}>
             <td><{$val.c_name}></td>
             <td><{$val.c_coname}></td>
-            <td><?php echo getTypeList($val['c_type']);?></td>
+            <td style="color:<{if $val['c_type']==1}>green<{elseif $val['c_type']==2}>#c00<{else}>#000<{/if}>"><?php echo getTypeList($val['c_type']);?></td>
             <td><?php echo date("Y-m-d", $val['c_date']); ?></td>
-            <td><{$val.c_money}></td>
-            <td><{$val.c_noused}></td>
+            <td class="money"><{$val.c_money|number_format=2}></td>
+            <td class="money"><{$val.c_noused|number_format=2}></td>
             <{if $listType==2}>
             <td><a href="/circulation/list/type/contract/id/<{$val.c_id}>">传阅列表</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a href="/contract/detail?id=<{$val.c_id}>">查看</a></td>
             <{/if}>
