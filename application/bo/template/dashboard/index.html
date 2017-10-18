@@ -150,6 +150,9 @@
         });
     })
     function contentAjax(id,ajaxData,jump){
+        if(id == 'main-container'){
+            $("#popDIV").html("");
+        }
         sessionStorage.current = "/"+location.href.substr(location.href.indexOf("#")+1);
         if(ajaxData.url == "/historyBack"){
             historyBack();
