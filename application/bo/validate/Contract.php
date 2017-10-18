@@ -15,7 +15,7 @@ class Contract extends Validate
 {
 
     protected $rule = [
-        ['c_no','require|unique:\\app\\bo\\model\\Contract','合同号不能为空|合同已存在'],
+        ['c_no','require|unique:\\app\\bo\\model\\Contract','合同号不能为空|合同号已存在'],
         ['c_name','require','合同名不能为空']
     ];
 

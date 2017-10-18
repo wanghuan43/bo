@@ -19,7 +19,7 @@ class Acceptance extends Validate
         'a_coid' => 'require|number',
         'a_coname' => 'require',
         'a_money' => 'require|float',
-        'a_date' => 'require|number'
+        'a_date' => 'require'
     ];
 
     protected $message = [
