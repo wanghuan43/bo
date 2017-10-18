@@ -1,3 +1,6 @@
+<{if $listType == 2}>
+<{include file="company/all_list"}>
+<{else}>
 <div class="search-result">
     <nav aria-label="Page navigation">
         <{$lists->render()}>
@@ -50,3 +53,4 @@
         <{$lists->render()}>
     </nav>
 </div>
+<{/if}>

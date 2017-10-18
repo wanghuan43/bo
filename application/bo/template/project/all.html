@@ -26,31 +26,7 @@
     </div>
 </div>
 <div class="main-pannel" id="main-pannel">
-    <nav aria-label="Page navigation">
-        <{$lists->render()}>
-    </nav>
-    <table class="list" cellspacing="0">
-        <thead>
-        <tr>
-            <th style="min-width: 50px;text-align:center;padding-right:4px;"><input type="checkbox" id="lists-all-checked" value="all"/></th>
-            <th width="100">编号</th>
-            <th>名称</th>
-            <th></th>
-        </tr>
-        </thead>
-        <tbody>
-        <{volist name="lists" id="vo" empty="$empty"}>
-        <tr>
-            <td><input type="checkbox" value="<{$vo.p_id}>" class="lists-id"></td>
-            <td><a href="/project/detail?id=<{$vo.p_id}>"><{$vo.p_no}></a></td>
-            <td><{$vo.p_name}></td>
-            <td><a href="/circulation/list/type/project/id/<{$vo.p_id}>">传阅列表</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a href="/project/detail?id=<{$vo.p_id}>">查看</a></td>
-        </tr>
-        <{/volist}>
-        </tbody>
-    </table>
-    <nav aria-label="Page navigation">
-        <{$lists->render()}>
-    </nav>
+    <{assign name="listType" value="2"}>
+    <{include file="project/list"/}>
 </div>
 <{load href="/static/js/plugin/select/select.min.js,/static/js/lists.js,/static/css/select.min.css"}>

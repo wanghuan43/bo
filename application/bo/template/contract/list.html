@@ -5,7 +5,11 @@
     <table cellspacing="0" class="list">
         <thead>
         <tr>
-            <th></th>
+            <th style="min-width: 50px;text-align:center;padding-right:4px;">
+                <{if $listType == 2}>
+                    <input type="checkbox" id="lists-all-checked" value="all"/>
+                <{/if}>
+            </th>
             <th>合同号</th>
             <th>合同名称</th>
             <th>对方名称</th>
@@ -13,19 +17,30 @@
             <th>签约日期</th>
             <th>合同金额</th>
             <th>未对应订单金额</th>
+            <{if $listType == 2}>
+            <th style="width:8em;"></th>
+            <{/if}>
         </tr>
         </thead>
         <tbody>
         <{volist name="lists" id="val" empty="$empty"}>
         <tr>
+            <{if $listType == 2}>
+            <td><input type="checkbox" value="<{$val.c_id}>" class="lists-id"></td>
+            <td><a href="/contract/detail?id=<{$val.c_id}>"><{$val.c_no}></a></td>
+            <{else}>
             <td><input type="radio" class="selectRadio" name="selectRadio" value="<{$val.c_id}>" data="<{$val.c_no}>" data-value="<?php echo urlencode(json_encode($val->toArray())) ?>" /></td>
             <td><{$val.c_no}></td>
+            <{/if}>
             <td><{$val.c_name}></td>
             <td><{$val.c_coname}></td>
             <td><?php echo getTypeList($val['c_type']);?></td>
             <td><?php echo date("Y-m-d", $val['c_date']); ?></td>
             <td><{$val.c_money}></td>
             <td><{$val.c_noused}></td>
+            <{if $listType==2}>
+            <td><a href="/circulation/list/type/contract/id/<{$val.c_id}>">传阅列表</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a href="/contract/detail?id=<{$val.c_id}>">查看</a></td>
+            <{/if}>
         </tr>
         <{/volist}>
         </tbody>
@@ -34,3 +49,12 @@
 <nav aria-label="Page navigation">
     <{$lists->render()}>
 </nav>
+<script>
+    (function($){
+        $("#lists-all-checked").unbind("click");
+        $("#lists-all-checked").click(function () {
+            var _this = $(this);
+            $(".lists-id").prop("checked", _this.prop("checked"));
+        });
+    })(jQuery);
+</script>
