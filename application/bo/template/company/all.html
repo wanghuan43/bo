@@ -4,9 +4,9 @@
 
     <div class="link-pannel">
         <ul>
-            <li>
+            <!--li>
                 <a href="#"><i class="fa fa-file-excel-o"></i>导出</a>
-            </li>
+            </li-->
             <li>
                 <a href="<{:url("/company/searchCompanyNoList")}>?c_type=<{$type==1?2:1}>" target="_blank" id="searchList" stype="<{$stype}>"><i class="fa fa-filter"></i>筛选</a>
             </li>
@@ -26,6 +26,6 @@
     </div>
 </div>
 <div class="main-pannel" id="main-pannel">
-    <{include file="company/all_list"}>
+    <{include file="company/all_list" listType="2"}>
 </div>
 <{load href="/static/js/plugin/select/select.min.js,/static/js/lists.js,/static/css/select.min.css"}>

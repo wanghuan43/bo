@@ -86,10 +86,11 @@ class BoController extends Controller
         if (Request::instance()->isAjax()) {
             if (count($post) > 0 OR $page) {
                 if($this->request->get('listType')=='all'){
-                    $content = $this->fetch('all_list');
-                }else {
-                    $content = $this->fetch("list");
-                }
+                    $this->assign('listType',2);
+                }else{
+                    $this->assign('listType',1);
+                }    
+                $content = $this->fetch("list");
             } else {
                 $this->assign("searchable", $model->getSearchable());
                 $content = $this->fetch($file);
