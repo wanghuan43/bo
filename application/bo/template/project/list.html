@@ -5,17 +5,37 @@
     <table cellspacing="0" class="list">
         <thead>
         <tr>
-            <th></th>
+            <th style="min-width: 50px;text-align:center;padding-right:4px;">
+                <{if $listType == 2}><input type="checkbox" id="lists-all-checked" value="all"/><{/if}>
+            </th>
             <th width="100">项目号</th>
             <th style="width: auto;">项目名称</th>
+            <{if $listType == 2}>
+            <th></th>
+            <{/if}>
         </tr>
         </thead>
         <tbody>
         <{volist name="lists" id="val" empty="$empty"}>
         <tr>
-            <td><input type="radio" class="selectRadio" name="selectRadio" value="<{$val.p_id}>" data="<{$val.p_name}>" /></td>
-            <td><{$val.p_no}></td>
+            <td>
+                <{if $listType == 2}>
+                    <input type="checkbox" value="<{$val.p_id}>" class="lists-id">
+                <{else}>
+                    <input type="radio" class="selectRadio" name="selectRadio" value="<{$val.p_id}>" data="<{$val.p_name}>" />
+                <{/if}>
+            </td>
+            <td>
+                <{if $listType == 2}>
+                <a href="/project/detail?id=<{$val.p_id}>"><{$val.p_no}></a>
+                <{else}>
+                <{$val.p_no}>
+                <{/if}>
+            </td>
             <td><{$val.p_name}></td>
+            <{if $listType == 2}>
+            <td><a href="/circulation/list/type/project/id/<{$val.p_id}>">传阅列表</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a href="/project/detail?id=<{$val.p_id}>">查看</a></td>
+            <{/if}>
         </tr>
         <{/volist}>
         </tbody>
@@ -24,3 +44,13 @@
 <nav aria-label="Page navigation">
     <{$lists->render()}>
 </nav>
+
+<script>
+    (function($){
+        $("#lists-all-checked").unbind("click");
+        $("#lists-all-checked").click(function () {
+            var _this = $(this);
+            $(".lists-id").prop("checked", _this.prop("checked"));
+        });
+    })(jQuery);
+</script>
