@@ -178,7 +178,7 @@
 <h3>已完成情况</h3>
 <div class="content table clearfix">
     <div class="col33 col50">
-        <{if condition="isset($log['l_old']['used'][1]['date']) AND $log['l_opt'] != 'add'"}>
+        <{if condition="isset($log['l_old']['used'][1]) AND $log['l_opt'] != 'add'"}>
         <table class="invoice_1" data="1">
             <thead>
             <tr class="thead">
@@ -236,7 +236,7 @@
 </div>
 <div class="content table clearfix">
     <div class="col33 col50">
-        <{if condition="isset($log['l_old']['used'][2]['date']) AND $log['l_opt'] != 'add'"}>
+        <{if condition="isset($log['l_old']['used'][2]) AND $log['l_opt'] != 'add'"}>
         <table class="acceptance_2" data="2">
             <thead>
             <tr class="thead">
@@ -294,7 +294,7 @@
 </div>
 <div class="content table clearfix">
     <div class="col33 col50">
-        <{if condition="isset($log['l_old']['used'][3]['date']) AND $log['l_opt'] != 'add'"}>
+        <{if condition="isset($log['l_old']['used'][3]) AND $log['l_opt'] != 'add'"}>
         <table class="received_3" data="3">
             <thead>
             <tr class="thead">
@@ -355,7 +355,7 @@
     <h3>预计执行计划</h3>
     <div class="content table clearfix">
         <div class="col33 col50">
-            <{if condition="is_array($log['l_old']['project'][1]['month']) AND $log['l_opt'] != 'add'"}>
+            <{if condition="is_array($log['l_old']['project'][1]) AND $log['l_opt'] != 'add'"}>
             <table data="1" style="border-collapse: separate;border-spacing: 0px 10px;">
                 <thead>
                 <tr>
@@ -411,7 +411,7 @@
     </div>
     <div class="content table clearfix">
         <div class="col33 col50">
-            <{if condition="is_array($log['l_old']['project'][2]['month']) AND $log['l_opt'] != 'add'"}>
+            <{if condition="is_array($log['l_old']['project'][2]) AND $log['l_opt'] != 'add'"}>
             <table data="2" style="border-collapse: separate;border-spacing: 0px 10px;">
                 <thead>
                 <tr>
@@ -469,7 +469,7 @@
     </div>
     <div class="content table clearfix">
         <div class="col33 col50">
-            <{if condition="is_array($log['l_old']['project'][3]['month']) AND $log['l_opt'] != 'add'"}>
+            <{if condition="is_array($log['l_old']['project'][3]) AND $log['l_opt'] != 'add'"}>
             <table data="3" style="border-collapse: separate;border-spacing: 0px 10px;">
                 <thead>
                 <tr>
@@ -540,7 +540,8 @@
                 type:"json",
                 method:"post",
                 success:function(data){
-                    alert(data.message);
+                    custom.alert(data.message);
+                    window.setTimeout("location.reload()", 800);
                 }
             })
         });
