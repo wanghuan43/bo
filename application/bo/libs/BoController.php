@@ -89,7 +89,7 @@ class BoController extends Controller
                     $this->assign('listType',2);
                 }else{
                     $this->assign('listType',1);
-                }    
+                }
                 $content = $this->fetch("list");
             } else {
                 $this->assign("searchable", $model->getSearchable());

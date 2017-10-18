@@ -156,11 +156,19 @@
                 <tr>
                     <td class="txt">关键字/标签:</td>
                     <td colspan="3">
-                        <?php echo '<span>',implode(",", $log['l_old']['tagList']),'</span> <- <span style="color:red;">',implode(",",$log['l_new']['tagList']),'</span>'; ?>
+                        <{if condition="$log['l_opt'] != 'add'"}>
+                        <?php echo '<span>',implode(",", $log['l_old']['tagList']),'</span>  <- <span style="color:red;">',implode(",",$log['l_new']['tagList']),'</span>'; ?>
+                        <{else}>
+                        <?php echo '<span>',implode(",", $log['l_old']['tagList']),'</span>'; ?>
+                        <{/if}>
                     </td>
                     <td class="txt">传阅人:</td>
                     <td colspan="3">
+                        <{if condition="$log['l_opt'] != 'add'"}>
                         <?php echo '<span>',implode(",", $log['l_old']['cList']),'</span> <- <span style="color:red;">',implode(",",$log['l_new']['cList']),'</span>'; ?>
+                        <{else}>
+                        <?php echo '<span>',implode(",", $log['l_old']['cList']),'</span>'; ?>
+                        <{/if}>
                     </td>
                 </tr>
             </table>
@@ -170,6 +178,7 @@
 <h3>已完成情况</h3>
 <div class="content table clearfix">
     <div class="col33 col50">
+        <{if condition="isset($log['l_old']['used'][1]['date']) AND $log['l_opt'] != 'add'"}>
         <table class="invoice_1" data="1">
             <thead>
             <tr class="thead">
@@ -194,6 +203,7 @@
             <{/volist}>
             </tbody>
         </table>
+        <{/if}>
     </div>
     <div class="col33 col50">
         <{if condition="isset($log['l_new']['used'][1]['date'])"}>
@@ -226,6 +236,7 @@
 </div>
 <div class="content table clearfix">
     <div class="col33 col50">
+        <{if condition="isset($log['l_old']['used'][2]['date']) AND $log['l_opt'] != 'add'"}>
         <table class="acceptance_2" data="2">
             <thead>
             <tr class="thead">
@@ -250,6 +261,7 @@
             <{/volist}>
             </tbody>
         </table>
+        <{/if}>
     </div>
     <div class="col33 col50">
         <{if condition="isset($log['l_new']['used'][2]['date'])"}>
@@ -282,6 +294,7 @@
 </div>
 <div class="content table clearfix">
     <div class="col33 col50">
+        <{if condition="isset($log['l_old']['used'][3]['date']) AND $log['l_opt'] != 'add'"}>
         <table class="received_3" data="3">
             <thead>
             <tr class="thead">
@@ -306,6 +319,7 @@
             <{/volist}>
             </tbody>
         </table>
+        <{/if}>
     </div>
     <div class="col33 col50">
         <{if condition="isset($log['l_new']['used'][3]['date'])"}>
@@ -341,6 +355,7 @@
     <h3>预计执行计划</h3>
     <div class="content table clearfix">
         <div class="col33 col50">
+            <{if condition="is_array($log['l_old']['project'][1]['month']) AND $log['l_opt'] != 'add'"}>
             <table data="1" style="border-collapse: separate;border-spacing: 0px 10px;">
                 <thead>
                 <tr>
@@ -363,6 +378,7 @@
                 </tr>
                 <{/volist}>
             </table>
+            <{/if}>
         </div>
         <div class="col33 col50">
             <{if condition="is_array($log['l_new']['project'][1]['month'])"}>
@@ -395,6 +411,7 @@
     </div>
     <div class="content table clearfix">
         <div class="col33 col50">
+            <{if condition="is_array($log['l_old']['project'][2]['month']) AND $log['l_opt'] != 'add'"}>
             <table data="2" style="border-collapse: separate;border-spacing: 0px 10px;">
                 <thead>
                 <tr>
@@ -419,6 +436,7 @@
                 <{/volist}>
                 </tbody>
             </table>
+            <{/if}>
         </div>
         <div class="col33 col50">
             <{if condition="is_array($log['l_new']['project'][2]['month'])"}>
@@ -451,6 +469,7 @@
     </div>
     <div class="content table clearfix">
         <div class="col33 col50">
+            <{if condition="is_array($log['l_old']['project'][3]['month']) AND $log['l_opt'] != 'add'"}>
             <table data="3" style="border-collapse: separate;border-spacing: 0px 10px;">
                 <thead>
                 <tr>
@@ -475,6 +494,7 @@
                 <{/volist}>
                 </tbody>
             </table>
+            <{/if}>
         </div>
         <div class="col33 col50">
             <{if condition="is_array($log['l_new']['project'][3]['month'])"}>

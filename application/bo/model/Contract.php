@@ -18,6 +18,14 @@ class Contract extends BoModel
                 "=" => "等于",
             ),
         ),
+        "c_no" => array(
+            "name" => "合同号",
+            "type" => "text",
+            "operators" => array(
+                "like" => "包含",
+                "=" => "等于",
+            ),
+        ),
         "c_money" => array(
             "name" => "合同金额",
             "type" => "price",

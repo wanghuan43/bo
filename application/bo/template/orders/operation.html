@@ -629,82 +629,77 @@
                 url = baseUrl[type] + "?fi=1";
             }
             var cla = ".f-layer-" + type;
-            if ($(cla).length <= 0) {
-                $.ajax({
-                    url: url,
-                    dataType: "json",
-                    method: "post",
-                    success: function (data) {
-                        $("#popDIV").html(data.content);
-                        $(cla + " .save").click(function () {
-                            if($(cla+" .selectRadio:checked").length == 0){
-                                custom.alert("请选择一个再保存！");
-                                return false;
-                            }
-                            if ($(inputs).length > 1) {
-                                $(inputs).eq(0).val($(cla+" .selectRadio:checked").attr("data"));
-                                $(inputs).eq(1).val($(cla+" .selectRadio:checked").val());
-                            } else {
-                                $(inputs).eq(0).val($(cla+" .selectRadio:checked").val());
-                            }
-                            $(cla).removeClass("show");
-                            $(cla + "-back").hide();
-                            $(thisEle).next().show();
-                            $(thisEle).hide();
-                            $(thisEle).parent().next().find("input:eq(0)").unbind("focus");
-                            if(type == "contract" && $(inputs).length > 1){
-                                $("#o_status option").prop("selected", false);
-                                $("#o_status option").prop("disabled", true);
-                                $("#o_status option:last").prop("selected", true);
-                                $("#o_status option:last").prop("disabled", false);
-                                $("#o_status").prop("", true);
-                                var json = JSON.parse(decodeURIComponent($(cla + " .selectRadio:checked").attr("data-value")));
-                                if($("#o_money").val() == ""){
-                                    $("#o_money").val(json.c_noused);
-                                }else{
-                                    var nu = parseFloat(json.c_noused),mo = parseFloat($("#o_money").val());
-                                    if(nu < mo){
-                                        custom.alert("当前订单金额，超过合同的可用金额:"+nu.toFixed(2));
-                                        $("#o_money").val(nu.toFixed(2));
-                                    }
-                                }
-                                $("#o_money").attr("max",parseFloat(json.c_noused));
-                                if($("#o_pname").val() == ""){
-                                    $("#o_pname").val(json.c_pname);
-                                    $("#o_pname").click();
-                                    $("#o_pid").val(json.c_pid);
-                                }
-                                if($("#o_coname").val() == ""){
-                                    $("#o_coname").val(json.c_coname);
-                                    $("#o_coname").click();
-                                    $("#o_coid").val(json.c_coid);
-                                }
-                            }
+            $.ajax({
+                url: url,
+                dataType: "json",
+                method: "post",
+                success: function (data) {
+                    $("#popDIV").html(data.content);
+                    $(cla + " .save").click(function () {
+                        if($(cla+" .selectRadio:checked").length == 0){
+                            custom.alert("请选择一个再保存！");
                             return false;
-                        });
-                        $(cla + " .moreSave").click(function(){
-                            var ci = $(cla + " .search-result input:checked");
-                            var jdata = JSON.parse(decodeURIComponent($(ci).attr("json")));
-                            baseUTR($(cla), jdata, type);
-                            $(cla).removeClass("show");
-                            $(cla + "-back").hide();
-                        });
-                        window.cla = cla;
-                        setTimeout('$(cla).addClass("show")',500);
-                        //$(cla).show();
-                        $(cla + "-back").show();
-                        $(cla + " .close").click(function () {
-                            //$(cla).hide();
-                            $(cla).removeClass("show");
-                            $(cla + "-back").hide();
-                            return false;
-                        });
-                    }
-                });
-            } else {
-                $(cla).addClass("show");
-                $(cla + "-back").show();
-            }
+                        }
+                        if ($(inputs).length > 1) {
+                            $(inputs).eq(0).val($(cla+" .selectRadio:checked").attr("data"));
+                            $(inputs).eq(1).val($(cla+" .selectRadio:checked").val());
+                        } else {
+                            $(inputs).eq(0).val($(cla+" .selectRadio:checked").val());
+                        }
+                        $(cla).removeClass("show");
+                        $(cla + "-back").hide();
+                        $(thisEle).next().show();
+                        $(thisEle).hide();
+                        $(thisEle).parent().next().find("input:eq(0)").unbind("focus");
+                        if(type == "contract" && $(inputs).length > 1){
+                            $("#o_status option").prop("selected", false);
+                            $("#o_status option").prop("disabled", true);
+                            $("#o_status option:last").prop("selected", true);
+                            $("#o_status option:last").prop("disabled", false);
+                            $("#o_status").prop("", true);
+                            var json = JSON.parse(decodeURIComponent($(cla + " .selectRadio:checked").attr("data-value")));
+                            if($("#o_money").val() == ""){
+                                $("#o_money").val(json.c_noused);
+                            }else{
+                                var nu = parseFloat(json.c_noused),mo = parseFloat($("#o_money").val());
+                                if(nu < mo){
+                                    custom.alert("当前订单金额，超过合同的可用金额:"+nu.toFixed(2));
+                                    $("#o_money").val(nu.toFixed(2));
+                                }
+                            }
+                            $("#o_money").attr("max",parseFloat(json.c_noused));
+                            if($("#o_pname").val() == ""){
+                                $("#o_pname").val(json.c_pname);
+                                $("#o_pname").click();
+                                $("#o_pid").val(json.c_pid);
+                            }
+                            if($("#o_coname").val() == ""){
+                                $("#o_coname").val(json.c_coname);
+                                $("#o_coname").click();
+                                $("#o_coid").val(json.c_coid);
+                            }
+                        }
+                        return false;
+                    });
+                    $(cla + " .moreSave").click(function(){
+                        var ci = $(cla + " .search-result input:checked");
+                        var jdata = JSON.parse(decodeURIComponent($(ci).attr("json")));
+                        baseUTR($(cla), jdata, type);
+                        $(cla).removeClass("show");
+                        $(cla + "-back").hide();
+                    });
+                    window.cla = cla;
+                    setTimeout('$(cla).addClass("show")',500);
+                    //$(cla).show();
+                    $(cla + "-back").show();
+                    $(cla + " .close").click(function () {
+                        //$(cla).hide();
+                        $(cla).removeClass("show");
+                        $(cla + "-back").hide();
+                        return false;
+                    });
+                }
+            });
         });
         $(".fa-minus-square").click(function(){
             var inputs = $(this).parent().next().find("input");
