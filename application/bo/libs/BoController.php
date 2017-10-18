@@ -86,7 +86,7 @@ class BoController extends Controller
         if (Request::instance()->isAjax()) {
             if (count($post) > 0 OR $page) {
                 if($this->request->get('listType')=='all'){
-                    $content = $this->fetch('all_list');
+                    $content = $this->fetch('list');
                 }else {
                     $content = $this->fetch("list");
                 }
@@ -146,7 +146,7 @@ class BoController extends Controller
         if (empty($this->model)) {
             $ret = '<h2>Error Page!</h2>';
         } else {
-            $list = $this->model->paginate($this->limit);
+            $list = $this->model->paginate($this->limit, false);
             $this->assign('lists', $list);
             $this->assign('types',getTypeList());
             $ret = $this->fetch();

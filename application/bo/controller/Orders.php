@@ -179,7 +179,6 @@ class Orders extends BoController
             $this->assign("admin", false);
         }
         $log['l_new'] = unserialize($log['l_new']);
-        $log['l_old'] = unserialize($log['l_old']);
         if (isset($log['l_new']['tagList']) AND is_array($log['l_new']['tagList'])) {
             $t = implode(",", $log['l_new']['tagList']);
             $m = new Taglib();
@@ -202,29 +201,34 @@ class Orders extends BoController
         } else {
             $log['l_new']['cList'] = [];
         }
-        if (isset($log['l_old']['tagList']) AND is_array($log['l_old']['tagList'])) {
-            foreach ($log['l_old']['tagList'] as $key => $value) {
-                $log['l_old']['tagList'][$key] = $value['tl_name'];
+        if($log['l_opt'] == "add"){
+            $log['l_old'] = $log['l_new'];
+        }else{
+            $log['l_old'] = unserialize($log['l_old']);
+            if (isset($log['l_old']['tagList']) AND is_array($log['l_old']['tagList'])) {
+                foreach ($log['l_old']['tagList'] as $key => $value) {
+                    $log['l_old']['tagList'][$key] = $value['tl_name'];
+                }
+            } else {
+                $log['l_old']['tagList'] = [];
             }
-        } else {
-            $log['l_old']['tagList'] = [];
-        }
-        if (isset($log['l_old']['cList']) AND is_array($log['l_old']['cList'])) {
-            foreach ($log['l_old']['cList'] as $key => $value) {
-                $log['l_old']['cList'][$key] = $value['m_department'] . ' - ' . $value['m_name'];
+            if (isset($log['l_old']['cList']) AND is_array($log['l_old']['cList'])) {
+                foreach ($log['l_old']['cList'] as $key => $value) {
+                    $log['l_old']['cList'][$key] = $value['m_department'] . ' - ' . $value['m_name'];
+                }
+            } else {
+                $log['l_old']['cList'] = [];
             }
-        } else {
-            $log['l_old']['cList'] = [];
         }
-        $log['l_old']['o_tax'] = getTaxList($log['l_old']['o_tax']);
+        $log['l_old']['o_tax'] = isset($log['l_old']['o_tax']) ? getTaxList($log['l_old']['o_tax']) : "未知";
         $log['l_new']['o_tax'] = getTaxList($log['l_new']['o_tax']);
-        $log['l_old']['o_deal'] = $chancesModle->getChanges($log['l_old']['o_deal']);
+        $log['l_old']['o_deal'] = isset($log['l_old']['o_deal']) ? $chancesModle->getChanges($log['l_old']['o_deal']) : "未知";
         $log['l_new']['o_deal'] = $chancesModle->getChanges($log['l_new']['o_deal']);
-        $log['l_old']['o_status'] = getStatusList($log['l_old']['o_status']);
+        $log['l_old']['o_status'] = isset($log['l_old']['o_status']) ? getStatusList($log['l_old']['o_status']) : "未知";
         $log['l_new']['o_status'] = getStatusList($log['l_new']['o_status']);
-        $log['l_old']['o_lie'] = getLieList($log['l_old']['o_lie']);
+        $log['l_old']['o_lie'] = isset($log['l_old']['o_lie']) ? getLieList($log['l_old']['o_lie']) : "未知";
         $log['l_new']['o_lie'] = getLieList($log['l_new']['o_lie']);
-        $log['l_old']['o_type'] = getLieList($log['l_old']['o_type']);
+        $log['l_old']['o_type'] = isset($log['l_old']['o_type']) ? getLieList($log['l_old']['o_type']) : "未知";
         $log['l_new']['o_type'] = getLieList($log['l_new']['o_type']);
         $this->assign("log", $log);
         return $this->fetch("orders/viewLog");

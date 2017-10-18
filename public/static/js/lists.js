@@ -148,30 +148,24 @@
         var stype = $(this).attr("stype");
         var cla = ".f-layer-"+stype;
         var url = $(this).attr("href");
-        if ($(cla).length <= 0) {
-            $.ajax({
-                url: url,
-                dataType: "json",
-                method: "post",
-                success: function (data) {
-                    loading.hide();
-                    $("#popDIV").append(data.content);
-                    $(cla).addClass("show");
-                    //$(cla).show();
-                    $(cla + "-back").show();
-                    $(cla + " .close").click(function () {
-                        //$(cla).hide();
-                        $(cla).removeClass("show");
-                        $(cla + "-back").hide();
-                        return false;
-                    });
-                }
-            });
-        }else{
-            loading.hide();
-            $(cla).addClass("show");
-            $(cla + "-back").show();
-        }
+        $.ajax({
+            url: url,
+            dataType: "json",
+            method: "post",
+            success: function (data) {
+                loading.hide();
+                $("#popDIV").html(data.content);
+                $(cla).addClass("show");
+                //$(cla).show();
+                $(cla + "-back").show();
+                $(cla + " .close").click(function () {
+                    //$(cla).hide();
+                    $(cla).removeClass("show");
+                    $(cla + "-back").hide();
+                    return false;
+                });
+            }
+        });
         return false;
     });
 })(jQuery);

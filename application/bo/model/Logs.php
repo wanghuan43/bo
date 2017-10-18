@@ -13,6 +13,7 @@ class Logs extends BoModel
         if (empty($new) OR empty($id) OR empty($model) OR !$member) {
             return false;
         }
+        $l_panding = $opt == "add" ? 2 : 0;
         $data = [
             "l_otid" => $id,
             "l_mid" => $member->m_id,
@@ -22,6 +23,7 @@ class Logs extends BoModel
             "l_old" => serialize($old),
             "l_model" => $model,
             "l_isadmin" => $member->m_isAdmin,
+            "l_panding" => $l_panding,
             "l_createtime" => time(),
         ];
         return $this->save($data);
