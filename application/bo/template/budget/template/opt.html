@@ -12,6 +12,14 @@
         </div>
     </div>
     <div class="form-group">
+        <label class="col-sm-2 control-label">复制模板</label>
+        <div class="col-sm-10">
+            <select id="">
+                <option></option>
+            </select>
+        </div>
+    </div>
+    <div class="form-group">
         <label class="col-sm-2 control-label">设置模板<br>行列</label>
         <div class="col-sm-10">
             行：<input type="text" class="form-control table" id="t_row" name="t_row"
@@ -30,15 +38,15 @@
     </div>
 </form>
 <menu id="html5polyfill" type="context" style="display:none">
-    <command label="插入一行" onclick="spliTable()">
-        <command label="插入一列" onclick="spliTable()">
+    <command label="插入一行" onclick="insertTable('row')">
+        <command label="插入一列" onclick="insertTable('col')">
             <hr>
             <command label="合并单元格" onclick="combine()">
                 <command label="拆分单元格" onclick="spliTable()">
 </menu>
 <{load href="/static/js/jquery-ui.custom.js,/static/js/plugin/menu/jquery.ui.position.min.js,/static/js/plugin/menu/jquery.contextmenu.min.js"/}>
 <script>
-    var settingTable = "";
+    var settingTable = "", rclickTD = "";
     $(document).ready(function () {
         $(".table").change(function () {
             var row = parseInt($("#t_row").val());
@@ -48,7 +56,7 @@
                 return false;
             }
             if (row <= 0 || col <= 0) {
-                custom.alert("行列输入的数字必须大于1!");
+                custom.alert("行列输入的数字必须大于等于1!");
                 if (row <= 0) {
                     row = 1;
                     $("#t_row").val(1);
@@ -57,46 +65,113 @@
                     col = 1;
                     $("#t_col").val(1);
                 }
+//                return false;
             }
             setTable(row, col);
         });
         $(".table").change();
         $.contextMenu('html5');
         $("#form-testT-add").submit(function () {
-            var title = $.trim($("#t_title").val()), tdata = {};
+            var title = $.trim($("#t_title").val()), tdata = {}, data = {}, url = $(this).attr("action");
             if (title == "") {
                 custom.alert("请输入模板名称!");
                 return false;
             }
             $(".stcol").each(function (i, e) {
                 var col = $(e).attr("col"), row = $(e).attr("row"), val = $.trim($(e).val()),
-                    dval = $.trim($(e).attr("data")), val = (dval === undefined ? val : dval),
-                    colSpan = $(e).parents("td").attr("colspan") === undefined ? 0 : $(e).parents("td").attr("colspan"),
-                    rowSpan = $(e).parents("td").attr("rowspan") === undefined ? 0 : $(e).parents("td").attr("rowspan");
+                    dval = $.trim($(e).attr("data")), val = ((dval === undefined || dval == "") ? val : dval),
+                    colSpan = $(e).parents("td").attr("colspan") === undefined ? "0" : $(e).parents("td").attr("colspan"),
+                    rowSpan = $(e).parents("td").attr("rowspan") === undefined ? "0" : $(e).parents("td").attr("rowspan"),
+                    display = $(e).parents("td").is(":hidden") ? "none" : "block";
                 if (tdata[row] === undefined) {
                     eval("tdata[" + row + "] = {}");
                     eval("tdata[" + row + "][" + col + "] = []");
                     tdata[row][col] = {
                         val: val,
                         colSpan: colSpan,
-                        rowSpan: rowSpan
+                        rowSpan: rowSpan,
+                        display: display
                     };
                 } else if (tdata[row][col] === undefined) {
                     eval("tdata[" + row + "][" + col + "] = []");
                     tdata[row][col] = {
                         val: val,
                         colSpan: colSpan,
-                        rowSpan: rowSpan
+                        rowSpan: rowSpan,
+                        display: display
                     };
                 }
             });
-            console.log(tdata);
-//            var data['data'] = tdata, data['t_title'] = title, data['t_row'] = $("#t_row").val(),
-//                data['t_col'] = $("#t_col").val();
-//            $.ajax({});
+            data["data"] = tdata, data['t_title'] = title, data['t_row'] = $("#t_row").val(), data['t_col'] = $("#t_col").val();
+            $.ajax({
+                url: url,
+                dataType: "json",
+                method: "post",
+                data: data,
+                success: function (data) {
+                    custom.alert(data.message)
+                    if (data.status == "true") {
+                        window.setTimeout("location.reload()", 800);
+                    }
+                }
+            });
             return false;
         });
+        $('body').on('mousedown', 'td', function (e) {
+            if (e.button == 2) {
+                rclickTD = $(this);
+            }
+        });
     });
+
+    function insertTable(type) {
+        var input = $(rclickTD).find("input"), col = parseInt($(input).attr("col")),
+            row = parseInt($(input).attr("row")),
+            t_col = parseInt($("#t_col").val()), t_row = parseInt($("#t_row").val()), html = "";
+        switch (type) {
+            case "col":
+                var html = '', t_col = t_col + 1;
+                html = setColName(t_col, html);
+                $(settingTable).find("tr:eq(0)").before(html);
+                $(settingTable).find("tr:eq(1)").remove();
+                $(settingTable).find("tr").each(function (index, element) {
+                    $(element).find("td").each(function (i, e) {
+                        var c = isNaN(parseInt($(e).attr("col"))) ? 0 : parseInt($(e).attr("col"));
+                        if ((i + 1) > col) {
+                            $(e).attr("col", c + 1);
+                            $(e).find("input").attr("col", c + 1);
+                        }
+                    });
+                })
+                for (var i = 1; i <= t_row; i++) {
+                    var td = '<td col="' + col + '"><div class="checkDiv"><input type="checkbox" col="' + col + '" row="' + i + '" class="cbTool"></div><input type="text" class="stcol" col="' + col + '" row="' + i + '" value=""></td>\n';
+                    $(settingTable).find("input[row='" + i + "'][col='" + (col + 1) + "']").parents("td").before(td);
+                }
+                $("#t_col").val(t_col);
+                break;
+            case "row":
+                html = '<tr row="' + row + '">\n';
+                html += '<td style="width: 40px;" align="center">' + row + '&nbsp;<input type="checkbox" class="tableCheck rowCheck" data="' + row + '"></td>\n';
+                for (var i = 1; i <= t_col; i++) {
+                    html += '<td col="' + i + '"><div class="checkDiv"><input type="checkbox" col="' + i + '" row="' + row + '" class="cbTool"></div><input type="text" class="stcol" col="' + i + '" row="' + row + '" value=""></td>\n';
+                }
+                html += '</tr>\n';
+                $(settingTable).find("tr").each(function (i, e) {
+                    if ((i + 1) > row) {
+                        var r = parseInt($(e).attr("row"));
+                        $(e).find("td:eq(0)").html($(e).find("td:eq(0)").html().replace(r + '&nbsp;', (r + 1) + '&nbsp;'));
+                        $(e).attr("row", r + 1);
+                        $(e).find(".rowCheck").attr("data", r + 1);
+                        $(e).find("input").attr("row", r + 1);
+                    }
+                });
+                $(rclickTD).parent("tr").before(html);
+                $("#t_row").val(t_row + 1);
+                break;
+        }
+        bindClick();
+        funChange();
+    }
 
     function combine() {
         var len = $(".cbTool:checked").length, rowCount = 0, colCount = 0;
@@ -146,6 +221,7 @@
         $(".cbTool:checked").each(function (i, e) {
             if (i > 0) {
                 $(e).parents("td").hide();
+                $(e).parents("td").find(".stcol").val("");
             }
         });
         $(td).attr("colspan", colCount);
@@ -155,6 +231,7 @@
         setTimeout(function () {
             resetTable(td)
         }, 1);
+        funChange();
     }
 
     function resetTable(td) {
@@ -233,25 +310,31 @@
         });
         $(settingTable).find(".stcol").change(function () {
             valueChange($(this));
+            funChange(this);
+        });
+    }
+
+    function funChange(thisElement) {
+        $(settingTable).find(".stcol").each(function (i, e) {
+            if ($(e).attr("data") != undefined && !$(thisElement).is($(e))) {
+                var data = $(e).attr("data");
+                $(e).val(data);
+                valueChange($(e));
+            }
         });
     }
 
     function valueChange(input) {
         var reg = /^(\=)(sum|average)\((.+?)\)/i, val = $.trim($(input).val()),
-            hasColon = val.indexOf(":") >= 0 ? true : false,
-            hasComma = val.indexOf(",") >= 0 ? true : false,
             td = $(input).parents("td");
         if (val.indexOf("=") == 0) {
             var search = reg.exec(val), fun = "";
-            if (search === null && (hasComma || hasColon)) {
-                custom.alert("格式有误。");
-                return false;
-            } else if (search !== null) {
+            if (search !== null) {
                 fun = search[2].toLocaleLowerCase();
                 val = search[3];
             }
-            $(input).attr("data", val);
-            val = arrangeValue(val, hasColon, hasComma, fun, input);
+            $(input).attr("data", $.trim($(input).val()));
+            val = arrangeValue(val, fun, input);
             if (val === false) {
                 custom.alert("格式有误。")
                 return false;
@@ -263,20 +346,24 @@
     }
 
     function calculateValue(val, fun, input) {
-        var nums = 0;
+        var nums = 0, count = val.length;
         switch (fun) {
             case "sum":
-                var count = val.length;
                 for (var i = 0; i < count; i++) {
-                    nums += parseInt(val[i]);
+                    var cc = val[i].length;
+                    for (var j = 0; j < cc; j++) {
+                        nums += parseFloat(val[i][j]);
+                    }
                 }
                 break;
             case "average":
-                var count = val.length;
                 for (var i = 0; i < count; i++) {
-                    nums += parseFloat(val[i]);
+                    var cc = val[i].length;
+                    for (var j = 0; j < cc; j++) {
+                        nums += parseFloat(val[i][j]);
+                    }
                 }
-                nums = nums / count;
+                nums = count == 0 ? 0 : nums / count;
                 break;
             default:
                 nums = eval(val);
@@ -285,38 +372,16 @@
         $(input).val(nums);
     }
 
-    function arrangeValue(val, hasColon, hasComma, fun, input) {
-        var all = {
-            colon: [],
-            comma: []
-        };
+    function arrangeValue(val, fun, input) {
+        var all = [];
         if (fun != "") {
-            if (hasComma) {
-                var comma = val.split(",");
-                if (hasColon) {
-                    var colon = [];
-                    for (var i = 0; i < comma.length; i++) {
-                        var tmp = comma[i].split(":");
-                        if (tmp.length < 2 && !isNaN(tmp[0])) {
-                            return false;
-                        } else {
-                            var tt = funExcelFormat(tmp, input);
-                            if (tt === false) {
-                                return false;
-                            }
-                            colon.push(tt);
-                        }
-                    }
-                    all.colon = colon;
-                } else {
-                    all.comma = comma;
-                }
-            } else if (hasColon) {
-                var tmp = funExcelFormat(val.split(":"), input);
-                if (tmp === false) {
+            var comma = val.split(",");
+            for (var i = 0; i < comma.length; i++) {
+                var tt = funExcelFormat(comma[i], input);
+                if (tt === false) {
                     return false;
                 }
-                all.colon = tmp;
+                all.push(tt);
             }
         } else {
             var tmp = val.match(/[a-z0-9]+/ig), count = tmp.length;
@@ -326,7 +391,6 @@
                     var col = splitCharToNum(tmp[i].match(/^[a-zA-Z]+|[0-9]+/g)[0].toLocaleLowerCase()),
                         num = parseInt(tmp[i].match(/^[a-zA-Z]+|[0-9]+/g)[1]),
                         v = parseInt($("input[class='stcol'][col='" + col + "'][row='" + num + "']").val());
-                    console.log("\/" + tmp[i] + "\\b\/ig");
                     v = isNaN(v) ? 0 : v;
                     val = val.replace(eval("\/" + tmp[i] + "\\b\/ig"), v);
                 }
@@ -337,25 +401,37 @@
     }
 
     function funExcelFormat(tmp, input) {
-        if (!/^[a-zA-Z0-9]*$/g.test(tmp[0])) {
-            return false;
-        }
-        if (!/^[a-zA-Z0-9]*$/g.test(tmp[1])) {
-            return false;
-        }
-        var charB = splitCharToNum(tmp[0].match(/^[a-zA-Z]+|[0-9]+/g)[0].toLocaleLowerCase()),
-            numB = parseInt(tmp[0].match(/^[a-zA-Z]+|[0-9]+/g)[1]),
-            charE = splitCharToNum(tmp[1].match(/^[a-zA-Z]+|[0-9]+/g)[0].toLocaleLowerCase()),
-            numE = parseInt(tmp[1].match(/^[a-zA-Z]+|[0-9]+/g)[1])
-            , count = (charE - charB) + 1, tt = [];
-        for (var b = 1; b <= count; b++) {
-            for (var n = numB; n <= numE; n++) {
-                if ($(input).is($("input[class='stcol'][col='" + b + "'][row='" + n + "']"))) {
-                    return false;
-                }
-                var p = parseFloat($("input[class='stcol'][col='" + b + "'][row='" + n + "']").val());
-                tt.push((isNaN(p) ? 0 : p));
+        var hasColon = tmp.indexOf(":") >= 0 ? true : false, tt = [];
+        if (hasColon) {
+            tmp = tmp.split(":");
+            if (!/^[a-zA-Z0-9]*$/g.test(tmp[0])) {
+                return false;
             }
+            if (!/^[a-zA-Z0-9]*$/g.test(tmp[1])) {
+                return false;
+            }
+            var charB = splitCharToNum(tmp[0].match(/^[a-zA-Z]+|[0-9]+/g)[0].toLocaleLowerCase()),
+                numB = parseInt(tmp[0].match(/^[a-zA-Z]+|[0-9]+/g)[1]),
+                charE = splitCharToNum(tmp[1].match(/^[a-zA-Z]+|[0-9]+/g)[0].toLocaleLowerCase()),
+                numE = parseInt(tmp[1].match(/^[a-zA-Z]+|[0-9]+/g)[1])
+                , count = (charE - charB) + 1;
+            for (var b = 1, dd = charB; b <= count; b++, dd++) {
+                for (var n = numB; n <= numE; n++) {
+                    if ($(input).is($("input[class='stcol'][col='" + dd + "'][row='" + n + "']"))) {
+                        return false;
+                    }
+                    var p = parseFloat($("input[class='stcol'][col='" + dd + "'][row='" + n + "']").val());
+                    tt.push((isNaN(p) ? 0 : p));
+                }
+            }
+        } else {
+            var charB = splitCharToNum(tmp.match(/^[a-zA-Z]+|[0-9]+/g)[0].toLocaleLowerCase()),
+                numB = parseInt(tmp.match(/^[a-zA-Z]+|[0-9]+/g)[1]);
+            if ($(input).is($("input[class='stcol'][col='" + charB + "'][row='" + numB + "']"))) {
+                return false;
+            }
+            var p = parseFloat($("input[class='stcol'][col='" + charB + "'][row='" + numB + "']").val());
+            tt.push((isNaN(p) ? 0 : p));
         }
         return tt;
     }
