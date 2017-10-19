@@ -21,6 +21,13 @@
 
         var form = $(".form-add:first");
 
+        var reset = function(){
+            form.find("input[type='text']").val("");
+            form.find("textarea").val("");
+            form.find("option").attr("selected", false);
+            form.find("option:first-child").attr("selected", true);
+        };
+
         $.ajax({
             url:form.attr("action"),
             method:form.attr("method"),
@@ -29,9 +36,12 @@
             success:function(res) {
                 custom.alert(res.msg);
                 if(res.flag == 1){
-                    form.find("input[type='text']").val("");
-                    form.find("textarea").val("");
-                    form.find("option").removeAttr("selected");
+                    $(".dialog-box").click(function(){
+                        reset();
+                    });
+                    $(".dialog-box-mask").click(function() {
+                        reset();
+                    });
                 }
             }
         })
