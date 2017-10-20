@@ -33,20 +33,66 @@ td.selected {
     background-color: #dedddd;
 }
 
+input.selectedI {
+    background-color: #D2D1D1;
+}
+
 .rcMenu {
     width: 78px;
     border: 1px solid;
     padding: 2px 0;
 }
 
-.rcMenu ul{
+.rcMenu ul {
     margin: 0;
 }
 
-.rcMenu li{
+.rcMenu li {
     padding: 2px;
 }
 
 .rcMenu li:hover {
     background-color: #476bff;
+}
+
+.showTips {
+    position: absolute;
+    z-index: 999;
+    border: 1px solid;
+    padding: 4px;
+    display: none;
+    background-color: white;
+}
+
+.permissionDiv {
+    width: 500px;
+    background-color: white;
+    border: 1px black solid;
+    text-align: center;
+    position: fixed;
+    top: 13%;
+    left: 24%;
+    display: none;
+    padding: 10px;
+    border-radius: 8px;
+}
+
+.permissionDiv .closeDiv {
+    margin-bottom: 5px;
+    overflow: hidden;
+}
+
+.permissionDiv button {
+    width: 50px;
+    height: 30px;
+    background-color: #0070bf;
+    border: none;
+    border-radius: 5px;
+    margin-right: 10px;
+    color: white;
+    font-size: 14px;
+}
+
+.permissionDiv button.red {
+    background-color: red;
 }

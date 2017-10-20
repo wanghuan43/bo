@@ -37,7 +37,7 @@
         <tbody>
         <{foreach $lists as $val}>
         <tr>
-            <td><{$val['t_title']}></td>
+            <td><a href="/budget/templateAdd?tid=<{$val['t_id']}>"><{$val['t_title']}></a></td>
             <td><{$val['t_col']}></td>
             <td><{$val['t_row']}></td>
             <td><{$val['t_mname']}></td>

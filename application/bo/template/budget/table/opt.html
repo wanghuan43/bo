@@ -1,17 +1,117 @@
+<{load href="/static/css/select.min.css,/static/css/budget.css,/static/css/jquery.contextmenu.css"/}>
 <div class="page-header">
-    <h2>预算管理.预算模板</h2>
+    <h2>预算管理.预算表</h2>
 </div>
 
-<form class="form-horizontal form-default form-add" id="form-company-add">
+<form class="form-horizontal form-default form-add" id="form-testT-add" action="/budget/addTable" method="post"
+      style="max-width: 800px;" onsubmit="javascript:return false;">
     <div class="form-group">
-        <label class="col-sm-2 control-label">模板名称</label>
+        <label class="col-sm-2 control-label">表名称</label>
         <div class="col-sm-10">
-            <input type="text" class="form-control" id="t_title" name="t_title"/>
+            <input type="text" class="form-control" id="title" name="title"/>
         </div>
     </div>
-    <table>
-        <tr>
-            <td></td>
-        </tr>
-    </table>
+    <div class="form-group">
+        <label class="col-sm-2 control-label">选择模板</label>
+        <div class="col-sm-10">
+            <select id="tid" name="tid" class="form-control">
+                <option value="0">请选择</option>
+                <{foreach $lists as $val}>
+                <option value="<{$val['t_id']}>"><{$val['t_title']}>(<{$val['t_row']}>*<{$val['t_col']}>)</option>
+                <{/foreach}>
+            </select>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-2 control-label">责任部门</label>
+        <div class="col-sm-10">
+            <select id="did" name="did" class="form-control">
+                <option value="0">请选择</option>
+                <{foreach $departments as $val}>
+                <option value="<{$val['d_id']}>"><{$val['d_name']}>(<{$val['d_code']}>)</option>
+                <{/foreach}>
+            </select>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-2 control-label">表状态</label>
+        <div class="col-sm-10">
+            <select id="status" name="status" class="form-control">
+                <option value="0">开放</option>
+                <option value="1">锁定(关闭写权限)</option>
+            </select>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-2 control-label">查看权限</label>
+        <div class="col-sm-10">
+            <select id="show" name="show" class="form-control">
+                <option value="0">部门查看</option>
+                <option value="1">权限查看</option>
+                <option value="2">仅限责任人</option>
+            </select>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-sm-offset-2 col-sm-10">
+            <button class="btn btn-default" type="submit">确认</button>
+        </div>
+    </div>
+    <div id="table" contextmenu="html5polyfill" style="margin-left: 15%;width: 100%">
+    </div>
 </form>
+<input type="hidden" id="t_row" value=""/>
+<input type="hidden" id="t_col" value=""/>
+<menu id="html5polyfill" type="context" style="display:none">
+    <command label="插入一行" onclick="insertTable('row')">
+        <command label="插入一列" onclick="insertTable('col')">
+            <hr>
+            <command label="合并单元格" onclick="combine()">
+                <command label="拆分单元格" onclick="spliTable()">
+                    <hr>
+                    <command label="设置权限" onclick="permissions()">
+</menu>
+<div class="showTips"></div>
+<div class="permissionDiv">
+    <div class="closeDiv"><i class="fa fa-times close pcd"></i></div>
+    <div>
+    <span style="font-weight: bold;">请设置权限人：</span>
+    <select multiple id="permissions" name="permissions" style="width: 300px;">
+        <{volist name="memberList" id="ml"}>
+        <option value="<{$ml.m_id}>"><{$ml.m_department}>-<{$ml.m_name}></option>
+        <{/volist}>
+    </select>
+    </div>
+    <p style="padding-top: 10px;padding-right: 35px;text-align: right;"><button>确认</button><button class="red pcd">取消</button></p>
+</div>
+<{load href="/static/js/plugin/select/select.min.js,/static/js/jquery-ui.custom.js,/static/js/budget.js,/static/js/plugin/menu/jquery.ui.position.min.js,/static/js/plugin/menu/jquery.contextmenu.min.js"/}>
+<script>
+    var settingTable = "", rclickTD = "";
+    $(document).ready(function () {
+        $("#permissions").select2();
+        $.contextMenu('html5');
+        $("#tid").change(function () {
+            var val = $(this).val();
+            if (val != "0") {
+                loading.show();
+                $.ajax({
+                    url: "/budget/getTemplateTable?tid=" + val,
+                    dataType: "json",
+                    method: "post",
+                    success: function (data) {
+                        loading.hide();
+                        $("#t_row").val(data.message.t_row), $("#t_col").val(data.message.t_col);
+                        var t = JSON.parse(data.message.cols);
+                        setTable(data.message.t_row, data.message.t_col, t);
+                        funChange();
+                    }
+                });
+            } else {
+                $("table").html("");
+                settingTable = "";
+                rclickTD = "";
+            }
+        });
+        $("#tid").change();
+    });
+</script>

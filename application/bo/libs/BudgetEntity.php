@@ -47,34 +47,70 @@ class BudgetEntity extends BoModel
         ];
         $result = $this->templateModel->save($par);
         if ($result) {
-            $result = $this->columnModel->saveAll($this->formatCols($cols, $this->templateModel->t_id, 1));
+            $result = $this->columnModel->saveAll($this->formatColsToSQL($cols, $this->templateModel->t_id, 1));
         }
         return ($result ? true : false);
     }
 
     function getTemplateList($limit, $filter = false)
     {
-        if($this->member->m_isAdmin != 1){
+        if ($this->member->m_isAdmin != 1) {
             $this->templateModel->where("t_mid", "=", $this->member->m_id);
         }
-        $this->templateModel->order("create_time desc")->order("update_time desc");
+        $this->templateModel->order("update_time desc")->order("create_time desc");
         if ($filter !== false) {
-
+            foreach ($filter as $key => $value) {
+                $this->templateModel->where($key, $value['op'], $value['val']);
+            }
         }
         if ($limit !== false) {
             $list = $this->templateModel->paginate($limit);
         } else {
-            $list = $this->templateModel->find();
+            $list = $this->templateModel->select();
         }
         return $list;
     }
 
-    function getTemplateByID($id)
+    function getTemplateByID($id, $needTable = false)
     {
-        return $this->templateModel->where("t_id", "=", $id)->select();
+        $model = $this->templateModel->where("t_id", "=", $id)->find();
+        if ($needTable && $model) {
+            $model->cols = $this->formatColsToJS($this->getColsByTid($model->t_id));
+        }
+        return $model;
     }
 
-    function formatCols($cols, $tid, $isTemplate = 0)
+    function getTableList($limit, $filter = false)
+    {
+        if ($this->member->m_isAdmin != 1) {
+            $this->tableModel->where("mid", "=", $this->member->m_id);
+        }
+        $this->tableModel->order("update_time desc")->order("create_time desc");
+        if ($filter !== false) {
+            foreach ($filter as $key => $value) {
+                $this->tableModel->where($key, $value['op'], $value['val']);
+            }
+        }
+        if ($limit !== false) {
+            $list = $this->tableModel->paginate($limit);
+        } else {
+            $list = $this->tableModel->select();
+        }
+        return $list;
+    }
+
+    function getTableByID($id)
+    {
+        $model = $this->tableModel->where("id", "=", $id)->find();
+        return $model;
+    }
+
+    function getColsByTid($id)
+    {
+        return $this->columnModel->where("c_tid", "=", $id)->select();
+    }
+
+    function formatColsToSQL($cols, $tid, $isTemplate = 0)
     {
         $colsTmp = [];
         foreach ($cols as $key => $value) {
@@ -93,5 +129,14 @@ class BudgetEntity extends BoModel
             }
         }
         return $colsTmp;
+    }
+
+    function formatColsToJS($cols)
+    {
+        $colsTmp = [];
+        foreach ($cols as $val) {
+            $colsTmp[$val['c_row']][] = $val;
+        }
+        return json_encode(array_values($colsTmp));
     }
 }
