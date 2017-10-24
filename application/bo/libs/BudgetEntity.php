@@ -109,7 +109,7 @@ class BudgetEntity extends BoModel
         $pcr = json_decode(urldecode($data['pcr']), true);
         unset($data['pcr']);
         if (!empty($data['id'])) {
-            $this->tableModel->update(true);
+            $this->tableModel->isUpdate(true);
             $data['update_time'] = time();
         } else {
             unset($data['id']);
