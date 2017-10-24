@@ -14,7 +14,7 @@
     <div class="form-group">
         <label class="col-sm-2 control-label">复制模板</label>
         <div class="col-sm-10">
-            <select id="copy" class="form-control">
+            <select id="copy" class="form-control" <{if !empty($tid)}>disabled<{/if}>>
                 <option value="0">不复制</option>
                 <{foreach $lists as $val}>
                 <option value="<{$val['t_id']}>"><{$val['t_title']}>(<{$val['t_row']}>*<{$val['t_col']}>)</option>
@@ -27,10 +27,10 @@
         <div class="col-sm-10">
             行：<input type="text" class="form-control table" id="t_row" name="t_row"
                      style="width: 10%;display: inline-block;text-align: center;"
-                     value="<{$template.t_row ? $template.t_row : 10}>"/> *
+                     value="<{$template.t_row ? $template.t_row : 10}>" <{if !empty($tid)}>readonly<{/if}>/> *
             列：<input type="text" class="form-control table" id="t_col" name="t_col"
                      style="width: 10%;display: inline-block;text-align: center;"
-                     value="<{$template.t_col ? $template.t_col : 10}>"/>
+                     value="<{$template.t_col ? $template.t_col : 10}>" <{if !empty($tid)}>readonly<{/if}>/>
         </div>
     </div>
     <div class="form-group">
@@ -38,15 +38,18 @@
             <button class="btn btn-default" type="submit">确认</button>
         </div>
     </div>
+    <input type="hidden" id="tid" value="<{$tid}>" >
 </form>
 <div id="table" contextmenu="html5polyfill" style="margin-bottom: 20px;">
 
 </div>
 <div class="showTips"></div>
 <menu id="html5polyfill" type="context" style="display:none">
+    <{if empty($tid)}>
     <command label="插入一行" onclick="insertTable('row')">
         <command label="插入一列" onclick="insertTable('col')">
             <hr>
+    <{/if}>
             <command label="合并单元格" onclick="combine()">
                 <command label="拆分单元格" onclick="spliTable()">
 </menu>
@@ -90,6 +93,7 @@
             }
             $(".stcol").each(function (i, e) {
                 var col = $(e).attr("col"), row = $(e).attr("row"), val = $.trim($(e).val()),
+                    cid=($(e).attr("cid") == undefined ? 0 : $(e).attr("cid")),
                     dval = $.trim($(e).attr("data")), val = ((dval === undefined || dval == "") ? val : dval),
                     colSpan = $(e).parents("td").attr("colspan") === undefined ? "0" : $(e).parents("td").attr("colspan"),
                     rowSpan = $(e).parents("td").attr("rowspan") === undefined ? "0" : $(e).parents("td").attr("rowspan"),
@@ -102,7 +106,8 @@
                         colSpan: colSpan,
                         rowSpan: rowSpan,
                         display: display,
-                        readonly: readonly
+                        readonly: readonly,
+                        cid: cid,
                     };
                 } else if (tdata[row][col] === undefined) {
                     eval("tdata[" + row + "][" + col + "] = []");
@@ -111,11 +116,13 @@
                         colSpan: colSpan,
                         rowSpan: rowSpan,
                         display: display,
-                        readonly: readonly
+                        readonly: readonly,
+                        cid: cid,
                     };
                 }
             });
-            data["data"] = tdata, data['t_title'] = title, data['t_row'] = $("#t_row").val(), data['t_col'] = $("#t_col").val();
+            data["data"] = tdata, data['t_title'] = title, data['t_row'] = $("#t_row").val(), data['t_col'] = $("#t_col").val(),
+            data['tid'] = $("#tid").val();
             $.ajax({
                 url: url,
                 dataType: "json",

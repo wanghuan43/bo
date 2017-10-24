@@ -32,27 +32,28 @@ class Budget extends BoController
             $filter['t_id'] = ["op" => "<>", "val" => $tid];
         }
         $lists = $this->budgetEntity->getTemplateList(false, $filter);
-        $this->assign("lists", $lists);
         $template = $this->budgetEntity->getTemplateByID($tid, true);
+        $this->assign("tid", $tid);
+        $this->assign("lists", $lists);
         $this->assign("template", $template);
         return $this->fetch("budget/template/opt");
     }
 
-    public function getTemplateTable()
+    public function addTemplate()
     {
-        $tid = Request::instance()->get("tid", false);
-        $return = ["status" => false, "message" => "模板加载失败，请选择其他模板"];
-        if ($tid) {
-            $template = $this->budgetEntity->getTemplateByID($tid, true);
-            $return = ["status"=> false, "message" => $template];
-        }
+        $post = Request::instance()->post();
+        $result = $this->budgetEntity->saveTemplate($post);
+        $return = ["status" => $result, "message" => ($result ? "保存成功" : "保存失败")];
         return $return;
     }
 
     public function table()
     {
         $lists = $this->budgetEntity->getTableList($this->limit);
+        $tlists = $this->budgetEntity->getTemplateList(false);
+        $this->assign("memberList", \app\bo\model\Member::all());
         $this->assign("lists", $lists);
+        $this->assign("tlists", $tlists);
         return $this->fetch("budget/table/index");
     }
 
@@ -61,19 +62,73 @@ class Budget extends BoController
         $model = new \app\bo\model\Department();
         $id = Request::instance()->get("id", 0);
         $lists = $this->budgetEntity->getTemplateList(false);
-        $this->assign("lists", $lists);
         $table = $this->budgetEntity->getTableByID($id, true);
+        $tpcr = $this->budgetEntity->getPermissionsByTable($id);
+        $tmp = [];
+        foreach($tpcr as $value){
+            $t = $value['rw'] == 1 ? "read" : "other";
+            $tmp[$t][] = $value;
+        }
+        $this->assign("lists", $lists);
         $this->assign("table", $table);
+        $this->assign("tpcr", json_encode($tmp));
         $this->assign("departments", $model->all());
         $this->assign("memberList", \app\bo\model\Member::all());
+        $this->assign("tableID", $id);
         return $this->fetch("budget/table/opt");
     }
 
-    public function addTemplate()
+    public function addTable()
     {
         $post = Request::instance()->post();
-        $result = $this->budgetEntity->saveTemplate($post);
+        $result = $this->budgetEntity->saveTable($post);
         $return = ["status" => $result, "message" => ($result ? "保存成功" : "保存失败")];
+        return $return;
+    }
+
+    public function getTemplateTable()
+    {
+        $tid = Request::instance()->get("tid", false);
+        $return = ["status" => false, "message" => "模板加载失败，请选择其他模板"];
+        if ($tid) {
+            $template = $this->budgetEntity->getTemplateByID($tid, true);
+            $return = ["status" => true, "message" => $template];
+        }
+        return $return;
+    }
+
+    public function getTableByTemplate()
+    {
+        $tid = Request::instance()->get("tid", false);
+        $return = ["status" => false, "message" => "模板加载失败，请选择其他模板"];
+        if ($tid) {
+            $template = $this->budgetEntity->getTableByTemplate($tid);
+            $return = ["status" => true, "message" => $template];
+        }
+        return $return;
+    }
+
+    public function tablePermissions()
+    {
+        $pcr = Request::instance()->post("pcr", false);
+        $return = ["status" => false, "message" => "参数有问题"];
+        if ($pcr) {
+            $pcr = json_decode(urldecode($pcr), true);
+            $lists = [];
+            foreach ($pcr as $value) {
+                $tmp = [
+                    "tid" => $value['tid'],
+                    "mid" => $value['mid'],
+                    "cid" => $value['cid'],
+                    "rw" => $value['rw'],
+                ];
+                $lists[$value['tid']][] = $tmp;
+            }
+            foreach($lists as $key=>$value){
+                $this->budgetEntity->saveTablePermissions($value, $key);
+            }
+            $return = ["status" => true, "message" => "保存成功"];
+        }
         return $return;
     }
 }

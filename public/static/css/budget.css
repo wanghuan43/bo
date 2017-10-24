@@ -96,3 +96,51 @@ input.selectedI {
 .permissionDiv button.red {
     background-color: red;
 }
+
+.pcrCols {
+    width: 170px;
+    padding: 3px;
+    overflow: hidden;
+    float: left;
+    color: white;
+    margin-right: 2px;
+    margin-bottom: 2px;
+}
+
+.pcrText {
+    padding-right: 4px;
+}
+
+.pcrClose {
+    padding-top: 2px;
+}
+
+.pcrLists {
+    padding: 2px;
+}
+
+.blockColor {
+    width: 22px;
+    color: white;
+    padding: 3px;
+    float: left;
+    position: relative;
+    margin-right: 3px;
+}
+
+.blockColor.both {
+    width: 35px;
+    background-color: #de2a36;
+}
+
+.read {
+    background-color: #3737de;
+}
+
+.write {
+    background-color: #0fde68;
+}
+
+.both {
+    background-color: #de2a36;
+}

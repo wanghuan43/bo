@@ -1,3 +1,4 @@
+<{load href="/static/css/budget.css,/static/css/select.min.css"}>
 <div class="clearfix header">
     <h2></h2>
     <div class="link-pannel">
@@ -7,6 +8,9 @@
             </li>
             <li>
                 <a href="<{:url("/budget/tableAdd")}>"><i class="fa fa-plus"></i>添加</a>
+            </li>
+            <li>
+                <a href="#" class="batchPer"><i class="fa fa-cogs"></i>批量设置权限</a>
             </li>
         </ul>
     </div>
@@ -22,7 +26,6 @@
             <col width="150px">
             <col width="40px">
             <col width="40px">
-            <col width="40px">
             <col width="150px">
             <col width="150px">
         </colgroup>
@@ -32,7 +35,6 @@
             <th>责任部门</th>
             <th>模板名称</th>
             <th>表状态</th>
-            <th>表权限</th>
             <th>创建人</th>
             <th>创建日期</th>
             <th>修改日期</th>
@@ -41,11 +43,10 @@
         <tbody>
         <{foreach $lists as $val}>
         <tr>
-            <td><a href="/budget/tableAdd?tid=<{$val['id']}>"><{$val['title']}></a></td>
+            <td><a href="/budget/tableAdd?id=<{$val['id']}>"><{$val['title']}></a></td>
             <td><{$val['dname']}></td>
             <td><{$val['t_title']}></td>
             <td><{$val['status']}></td>
-            <td><{$val['show']}></td>
             <td><{$val['mname']}></td>
             <td><{$val['create_time']}></td>
             <td><{$val['update_time']}></td>
@@ -57,4 +58,138 @@
         <{$lists->render()}>
     </nav>
 </div>
-<{load href="/static/js/plugin/select/select.min.js,/static/js/lists.js,/static/css/select.min.css"}>
+<div class="permissionDiv" style="text-align: left;max-height: 400px;overflow: scroll;">
+    <form id="tablePermissions" action="/budget/tablePermissions" method="post"
+          onsubmit="javascript:return false;">
+        <div class="closeDiv"><i class="fa fa-times close pcd"></i></div>
+        <div style="margin-bottom: 5px;">
+            <span style="font-weight: bold;display: inline-block;width: 85px;">请选择模板：</span>
+            <select id="tpl" style="width: 300px;">
+                <option value="0">请选择</option>
+                <{foreach $tlists as $val}>
+                <option value="<{$val['t_id']}>" data="<{$val['t_title']}>">
+                    <{$val['t_title']}>(<{$val['t_row']}>*<{$val['t_col']}>)
+                </option>
+                <{/foreach}>
+            </select>
+        </div>
+        <div style="margin-bottom: 5px;">
+            <span style="font-weight: bold;display: inline-block;width: 85px;">请选择表：</span>
+            <select multiple id="tableBud" style="width: 300px;">
+            </select>
+        </div>
+        <div>
+            <span style="font-weight: bold;display: inline-block;width: 85px;">请设置权限人：</span>
+            <select multiple id="permissions" style="width: 300px;">
+                <{volist name="memberList" id="ml"}>
+                <option value="<{$ml.m_id}>" data="<{$ml.m_department}>-<{$ml.m_name}>">
+                    <{$ml.m_department}>-<{$ml.m_name}>
+                </option>
+                <{/volist}>
+            </select>
+            <select id="rw">
+                <option value="1">读</option>
+                <option value="3">读/写</option>
+            </select>
+        </div>
+        <div style="margin-top: 30px;">
+            <span style="font-weight: bold;display: inline-block;width: 85px;float: left">已设置权限</span>
+            <div style="position: absolute;margin-left: 88px;margin-top: -26px;">
+                <div class="blockColor read">读</div>
+                <div class="blockColor both">读/写</div>
+            </div>
+            <div class="pcrLists" style="border: none;overflow: hidden;">
+
+            </div>
+        </div>
+        <p style="padding-top: 10px;padding-right: 35px;text-align: right;">
+            <button class="savePs">保存</button>
+            <button class="submitPs">确认</button>
+            <button class="red pcd">取消</button>
+        </p>
+        <div id="table" style="width: 100%;max-height: 400px;overflow: scroll;">
+        </div>
+        <input type="hidden" id="pcr" name="pcr" value="">
+    </form>
+</div>
+<input type="hidden" id="t_row" value=""/>
+<input type="hidden" id="t_col" value=""/>
+<{load href="/static/js/plugin/select/select.min.js,/static/js/lists.js,/static/js/budget.js"}>
+<script>
+    $(document).ready(function () {
+        $("#rw").select2();
+        $("#tpl").select2();
+        $("#tableBud").select2();
+        $("#permissions").select2();
+        $(".batchPer").click(function () {
+            $(".permissionDiv").show();
+        });
+        $("#tpl").change(function () {
+            var val = $(this).val();
+            if (val != "0") {
+                loading.show();
+                $.ajax({
+                    url: "/budget/getTableByTemplate?tid=" + val,
+                    dataType: "json",
+                    method: "post",
+                    success: function (data) {
+                        loading.hide();
+                        $("#t_row").val(data.message.table.t_row), $("#t_col").val(data.message.table.t_col);
+                        var t = JSON.parse(data.message.table.cols);
+                        setTable(data.message.table.t_row, data.message.table.t_col, t, "table");
+                        var list = data.message.list, count = list.length;
+                        if (count > 0) {
+                            var html = "";
+                            for (var i = 0; i < count; i++) {
+                                html += '<option value="' + list[i].id + '" data="' + list[i].title + '">' + list[i].title + '</option>';
+                            }
+                            $("#tableBud").html(html);
+                        }
+                    }
+                });
+            } else {
+                $("#t_title").val("");
+                $("#table").val("");
+                $("#tableBud").html("");
+            }
+        });
+        $(".submitPs").click(function () {
+            var tpl = $("#tpl").val();
+            if (tpl == "0") {
+                custom.alert("请选择一个模板");
+                return false;
+            }
+            if ($("#tableBud option:selected").length == 0) {
+                custom.alert("请选择一个或多个表");
+                return false;
+            }
+            if ($(".cbTool:checked").length == 0) {
+                custom.alert("请选择一个或多个，要释放权限的列");
+                return false;
+            }
+            if ($("#permissions option:selected").length == 0) {
+                custom.alert("请选择权限人员");
+                return false;
+            }
+            batchPermissions();
+            return false;
+        });
+        $("#tablePermissions").submit(function () {
+            var data = $(this).serialize(), url = $(this).attr("action");
+            loading.show();
+            $.ajax({
+                url: url,
+                data: data,
+                dataType: "json",
+                method: "post",
+                success: function (data) {
+                    loading.hide();
+                    if (data.status == "true") {
+                        $(".permissionDiv").hide();
+                        window.setTimeout("location.reload()", 800);
+                    }
+                }
+            });
+        });
+    });
+</script>

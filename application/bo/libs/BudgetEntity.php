@@ -34,17 +34,22 @@ class BudgetEntity extends BoModel
 
     function saveTemplate($data)
     {
-        $member = $this->getCurrent();
         $cols = $data['data'];
         $par = [
             "t_title" => $data['t_title'],
-            "t_mid" => $member->m_id,
-            "t_mname" => $member->m_name,
+            "t_mid" => $this->member->m_id,
+            "t_mname" => $this->member->m_name,
             "t_row" => $data['t_row'],
             "t_col" => $data['t_col'],
-            "create_time" => time(),
-            "update_time" => time(),
         ];
+        if (!empty($data['tid'])) {
+            $this->templateModel->isUpdate(true);
+            $par["t_id"] = $data['tid'];
+            $par['update_time'] = time();
+        } else {
+            $par['create_time'] = time();
+            $par['update_time'] = $par['create_time'];
+        }
         $result = $this->templateModel->save($par);
         if ($result) {
             $result = $this->columnModel->saveAll($this->formatColsToSQL($cols, $this->templateModel->t_id, 1));
@@ -99,6 +104,43 @@ class BudgetEntity extends BoModel
         return $list;
     }
 
+    function saveTable($data)
+    {
+        $pcr = json_decode(urldecode($data['pcr']), true);
+        unset($data['pcr']);
+        if (!empty($data['id'])) {
+            $this->tableModel->update(true);
+            $data['update_time'] = time();
+        } else {
+            unset($data['id']);
+            $data['create_time'] = time();
+            $data['update_time'] = $data['create_time'];
+            $data["mid"] = $this->member->m_id;
+            $data["mname"] = $this->member->m_name;
+        }
+        $result = $this->tableModel->save($data);
+        if ($result AND count($pcr) > 0) {
+            $result = $this->saveTablePermissions($pcr, $this->tableModel->id);
+        }
+        return ($result ? true : false);
+    }
+
+    function saveTablePermissions($data, $id)
+    {
+        $this->permissionsModel->where("tid", "=", $id)->delete();
+        $lists = [];
+        foreach ($data as $value) {
+            $tmp = [
+                "tid" => $id,
+                "mid" => $value['mid'],
+                "cid" => $value['cid'],
+                "rw" => $value['rw'],
+            ];
+            $lists[] = $tmp;
+        }
+        return $this->permissionsModel->saveAll($lists);
+    }
+
     function getTableByID($id)
     {
         $model = $this->tableModel->where("id", "=", $id)->find();
@@ -123,8 +165,12 @@ class BudgetEntity extends BoModel
                     "c_rowspan" => $val['rowSpan'],
                     "c_display" => $val['display'],
                     "c_isTemplate" => $isTemplate,
+                    "c_readonly" => $val['readonly'],
                     "c_tid" => $tid,
                 ];
+                if (!empty($val['cid'])) {
+                    $tmp["c_id"] = $val['cid'];
+                }
                 $colsTmp[] = $tmp;
             }
         }
@@ -138,5 +184,17 @@ class BudgetEntity extends BoModel
             $colsTmp[$val['c_row']][] = $val;
         }
         return json_encode(array_values($colsTmp));
+    }
+
+    function getTableByTemplate($tid)
+    {
+        $data['table'] = $this->getTemplateByID($tid, true);
+        $data['list'] = $this->tableModel->where("tid", "=", $tid)->select();
+        return $data;
+    }
+
+    function getPermissionsByTable($id)
+    {
+        return $this->permissionsModel->where("tid", "=", $id)->select();
     }
 }

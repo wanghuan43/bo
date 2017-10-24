@@ -8,17 +8,17 @@
     <div class="form-group">
         <label class="col-sm-2 control-label">表名称</label>
         <div class="col-sm-10">
-            <input type="text" class="form-control" id="title" name="title"/>
+            <input type="text" class="form-control" id="title" name="title" value="<{$table.title}>"/>
         </div>
     </div>
     <div class="form-group">
         <label class="col-sm-2 control-label">选择模板</label>
         <div class="col-sm-10">
-            <select id="tid" name="tid" class="form-control">
-                <option value="0">请选择</option>
-                <{foreach $lists as $val}>
-                <option value="<{$val['t_id']}>"><{$val['t_title']}>(<{$val['t_row']}>*<{$val['t_col']}>)</option>
-                <{/foreach}>
+            <select id="tid" name="tid" class="form-control" <{if !empty($tableID)}>disabled<{/if}>>
+            <option value="0">请选择</option>
+            <{foreach $lists as $val}>
+            <option value="<{$val['t_id']}>" data="<{$val['t_title']}>" <{if $val['t_id'] == $table.tid}>selected<{/if}>><{$val['t_title']}>(<{$val['t_row']}>*<{$val['t_col']}>)</option>
+            <{/foreach}>
             </select>
         </div>
     </div>
@@ -28,7 +28,7 @@
             <select id="did" name="did" class="form-control">
                 <option value="0">请选择</option>
                 <{foreach $departments as $val}>
-                <option value="<{$val['d_id']}>"><{$val['d_name']}>(<{$val['d_code']}>)</option>
+                <option value="<{$val['d_id']}>" data="<{$val['d_name']}>" <{if $val['d_id'] == $table.did}>selected<{/if}>><{$val['d_name']}>(<{$val['d_code']}>)</option>
                 <{/foreach}>
             </select>
         </div>
@@ -37,18 +37,10 @@
         <label class="col-sm-2 control-label">表状态</label>
         <div class="col-sm-10">
             <select id="status" name="status" class="form-control">
-                <option value="0">开放</option>
-                <option value="1">锁定(关闭写权限)</option>
-            </select>
-        </div>
-    </div>
-    <div class="form-group">
-        <label class="col-sm-2 control-label">查看权限</label>
-        <div class="col-sm-10">
-            <select id="show" name="show" class="form-control">
-                <option value="0">部门查看</option>
-                <option value="1">权限查看</option>
-                <option value="2">仅限责任人</option>
+                <option value="0"
+                <{if "0" == $table.status}>selected<{/if}>>开放</option>
+                <option value="1"
+                <{if "1" == $table.status}>selected<{/if}>>锁定(关闭写权限)</option>
             </select>
         </div>
     </div>
@@ -57,38 +49,56 @@
             <button class="btn btn-default" type="submit">确认</button>
         </div>
     </div>
+    <div class="form-group" style="margin-top: 30px;">
+        <label class="col-sm-2 control-label">已设置权限</label>
+        <div class="col-sm-2" style="position: absolute;margin-left: 121px;margin-top: -26px;">
+            <div class="blockColor read">读</div>
+            <div class="blockColor both">读/写</div>
+        </div>
+        <div class="col-sm-10 pcrLists" style="border: none;">
+
+        </div>
+    </div>
     <div id="table" contextmenu="html5polyfill" style="margin-left: 15%;width: 100%">
     </div>
+    <input type="hidden" id="pcr" name="pcr" value="">
+    <input type="hidden" id="t_title" name="t_title" value="<{$table.t_title}>">
+    <input type="hidden" id="dname" name="dname" value="<{$table.dname}>">
+    <input type="hidden" id="id" name="id" value="<{$tableID}>">
 </form>
 <input type="hidden" id="t_row" value=""/>
 <input type="hidden" id="t_col" value=""/>
 <menu id="html5polyfill" type="context" style="display:none">
-    <command label="插入一行" onclick="insertTable('row')">
-        <command label="插入一列" onclick="insertTable('col')">
-            <hr>
-            <command label="合并单元格" onclick="combine()">
-                <command label="拆分单元格" onclick="spliTable()">
-                    <hr>
-                    <command label="设置权限" onclick="permissions()">
+    <command label="设置权限" onclick="permissions()">
 </menu>
 <div class="showTips"></div>
 <div class="permissionDiv">
     <div class="closeDiv"><i class="fa fa-times close pcd"></i></div>
     <div>
-    <span style="font-weight: bold;">请设置权限人：</span>
-    <select multiple id="permissions" name="permissions" style="width: 300px;">
-        <{volist name="memberList" id="ml"}>
-        <option value="<{$ml.m_id}>"><{$ml.m_department}>-<{$ml.m_name}></option>
-        <{/volist}>
-    </select>
+        <span style="font-weight: bold;">请设置权限人：</span>
+        <select multiple id="permissions" style="width: 300px;">
+            <{volist name="memberList" id="ml"}>
+            <option value="<{$ml.m_id}>" data="<{$ml.m_department}>-<{$ml.m_name}>">
+                <{$ml.m_department}>-<{$ml.m_name}>
+            </option>
+            <{/volist}>
+        </select>
+        <select id="rw">
+            <option value="1">读</option>
+            <option value="3">读/写</option>
+        </select>
     </div>
-    <p style="padding-top: 10px;padding-right: 35px;text-align: right;"><button>确认</button><button class="red pcd">取消</button></p>
+    <p style="padding-top: 10px;padding-right: 35px;text-align: right;">
+        <button class="submitPermissions">确认</button>
+        <button class="red pcd">取消</button>
+    </p>
 </div>
 <{load href="/static/js/plugin/select/select.min.js,/static/js/jquery-ui.custom.js,/static/js/budget.js,/static/js/plugin/menu/jquery.ui.position.min.js,/static/js/plugin/menu/jquery.contextmenu.min.js"/}>
 <script>
-    var settingTable = "", rclickTD = "";
+    var settingTable = "", rclickTD = "", tpcr =<{$tpcr}>,first = true;
     $(document).ready(function () {
         $("#permissions").select2();
+        $("#rw").select2();
         $.contextMenu('html5');
         $("#tid").change(function () {
             var val = $(this).val();
@@ -102,16 +112,56 @@
                         loading.hide();
                         $("#t_row").val(data.message.t_row), $("#t_col").val(data.message.t_col);
                         var t = JSON.parse(data.message.cols);
-                        setTable(data.message.t_row, data.message.t_col, t);
+                        setTable(data.message.t_row, data.message.t_col, t, "table");
                         funChange();
+                        if ((tpcr.read != undefined || tpcr.other != undefined) && first) {
+                            for (var i in tpcr){
+                                var v = i == "read" ? 1 : 3;
+                                $("#rw option").prop("selected", false);
+                                $(tpcr[i]).each(function (i, e) {
+                                    $(".cbTool[cid='" + e.cid + "']").prop("checked", true);
+                                    $("#permissions option[value='" + e.mid + "']").prop("selected", true);
+                                });
+                                $("#rw option[value='" + v + "']").prop("selected", true);
+                                $(".submitPermissions").click();
+                            }
+                        }
+                        first = false;
                     }
                 });
+                $("#t_title").val($(this).find("option:selected").attr("data"));
             } else {
+                $("#t_title").val("");
                 $("table").html("");
                 settingTable = "";
                 rclickTD = "";
             }
         });
         $("#tid").change();
+        $("#did").change(function () {
+            var val = $(this).val(), url = $(this).attr("action");
+            if (val != "0") {
+                $("#dname").val($(this).find("option:selected").attr("data"));
+            } else {
+                $("#dname").val("");
+            }
+        });
+        $("#did").change();
+        $("#form-testT-add").submit(function () {
+            var data = $(this).serialize(), url = $(this).attr("action");
+            loading.show();
+            $.ajax({
+                url: url,
+                data: data,
+                dataType: "json",
+                method: "post",
+                success: function (data) {
+                    loading.hide();
+                    if (data.status == "true") {
+                        window.setTimeout("location.reload()", 800);
+                    }
+                }
+            });
+        });
     });
 </script>

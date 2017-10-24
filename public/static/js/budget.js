@@ -154,8 +154,8 @@ function spliTable() {
     })
 }
 
-function setTable(row, col, baseTable, ro) {
-    var html = '<table id="settingTable" border="1">\n', ro = ro == undefined ? 1 : ro;
+function setTable(row, col, baseTable, type) {
+    var html = '<table id="settingTable" border="1">\n', type = type == undefined ? "other" : type;
     html = setColName(col, html);
     if (baseTable.length > 0) {
         for (var i = 0; i < baseTable.length; i++) {
@@ -163,23 +163,27 @@ function setTable(row, col, baseTable, ro) {
             html += '<tr row="' + ii + '">\n';
             html += '<td style="width: 40px;" align="center">' + ii + '&nbsp;<input type="checkbox" class="tableCheck rowCheck" data="' + ii + '"></td>\n';
             for (var j = 0; j < baseTable[i].length; j++) {
-                var jj = j + 1;
-                var crspan = "";
+                var jj = j + 1, crspan = "", valueHtml = "", readOnlyHtml = "";
                 if (parseInt(baseTable[i][j].c_colspan) > 0) {
                     crspan += 'colspan="' + baseTable[i][j].c_colspan + '" ';
                 }
                 if (parseInt(baseTable[i][j].c_rowspan) > 0) {
                     crspan += 'rowspan="' + baseTable[i][j].c_rowspan + '" ';
                 }
-                if (baseTable[i][j].display == "none") {
-                    crspan += 'style="display:"' + baseTable[i][j].display + '" ';
+                if (baseTable[i][j].c_display == "none") {
+                    crspan += 'style="display:"' + baseTable[i][j].c_display + '" ';
                 }
-                if (baseTable[i][j].readonly != "1" && ro != 1) {
-                    crspan += 'readonly="readonly" ';
+                if (baseTable[i][j].c_readonly != "1") {
+                    readOnlyHtml = ' readonly="readonly" ';
+                }
+                if (type == "table") {
+                    readOnlyHtml = ' readonly="readonly" ';
+                } else {
+                    valueHtml = ' value="' + baseTable[i][j].c_value + ' "';
                 }
                 html += '<td col="' + jj + '" ' + crspan + '>' +
-                    '<div class="checkDiv"><input type="checkbox" col="' + jj + '" row="' + ii + '" class="cbTool"></div>' +
-                    '<input type="text" class="stcol" col="' + jj + '" row="' + ii + '" value="' + baseTable[i][j].c_value + '">' +
+                    '<div class="checkDiv"><input type="checkbox" cid="' + baseTable[i][j].c_id + '" col="' + jj + '" row="' + ii + '" class="cbTool"></div>' +
+                    '<input type="text" class="stcol" cid="' + baseTable[i][j].c_id + '" col="' + jj + '" row="' + ii + '" ' + valueHtml + readOnlyHtml + '>' +
                     '</td>\n';
             }
             html += '</tr>\n';
@@ -380,9 +384,7 @@ function setCheck(row, col, checked) {
 }
 
 function setColName(col, html) {
-    var asc = 65;
-    var round = Math.ceil(col / 26);
-    var left = col % 26;
+    var asc = 65, round = Math.ceil(col / 26), left = col % 26;
     html += '<tr>\n<td align="center">全选<input type="checkbox" id="checkAll"></td>\n';
     for (var i = 0; i < round; i++) {
         var count = col < 26 ? col : (i == (round - 1) ? (round == 1 ? 26 : left) : 26);
@@ -396,9 +398,140 @@ function setColName(col, html) {
 }
 
 function permissions() {
+    if ($(".cbTool:checked").length == 0) {
+        custom.alert("请选择要设置的行和列");
+        return false;
+    }
     $(".permissionDiv").show();
 }
 
-$(".permissionDiv .pcd").click(function(){
+function ascTochar(char) {
+    var asc = 65, round = Math.ceil(char / 26), left = char % 26, r = "";
+    for (var i = 0; i < round; i++) {
+        var count = char < 26 ? char : (i == (round - 1) ? (round == 1 ? 26 : left) : 26);
+        var before = i == 0 ? "" : String.fromCharCode(asc + (i - 1));
+        for (var j = 0; j < count; j++) {
+            r = before + String.fromCharCode(asc + j)
+        }
+    }
+    return r;
+}
+
+function tablePermissions(op) {
+    var pcrLists = $(".pcrLists"), html = "",
+        pcr = JSON.parse(decodeURIComponent($("#pcr").val())), count = pcr.length;
+    for (var i = 0; i < count; i++) {
+        var tmp = pcr[i], char = ascTochar(tmp.col) + tmp.row + ":" + tmp.data, blockColor = "";
+        if (op) {
+            char += "-" + $("#tableBud option[value='" + tmp.tid + "']").attr("data");
+        }
+        if (tmp.rw == "1") {
+            blockColor = "read"
+        } else if (tmp.rw == "2") {
+            blockColor = "write";
+        } else {
+            blockColor = "both";
+        }
+        html += '\n<div class="pcrCols ' + blockColor + '">\n';
+        html += '<span class="pcrText">' + char + '</span>\n';
+        html += '<span><i class="fa fa-times pcrClose" check="' + tmp.check + '"></i></span>\n';
+        html += '</div>\n';
+    }
+    $(pcrLists).html(html);
+    $(pcrLists).find(".pcrClose").unbind("click");
+    $(pcrLists).find(".pcrClose").click(function () {
+        var check = $(this).attr("check"), pcr = JSON.parse(decodeURIComponent($("#pcr").val()));
+        $(pcr).each(function (index, element) {
+            if (element.check == check) {
+                pcr.splice(index, 1);
+            }
+        });
+        if (pcr.length == 0) {
+            $(".pcrLists").css("border", "none");
+            $("#pcr").val("");
+        } else {
+            $("#pcr").val(encodeURIComponent(JSON.stringify(pcr)));
+        }
+        $(this).parent().parent().remove();
+    });
+}
+
+function batchPermissions() {
+    var cols = $(".cbTool:checked"), pcr = $("#pcr").val(),
+        pcr = pcr != "" ? JSON.parse(decodeURIComponent($("#pcr").val())) : [];
+    $("#tableBud option:selected").each(function (ind, ele) {
+        $("#permissions option:selected").each(function (index, element) {
+            cols.each(function (i, e) {
+                pcr.push({
+                    col: $(e).attr("col"),
+                    row: $(e).attr("row"),
+                    tid: $(ele).val(),
+                    mid: $(element).val(),
+                    data: $(element).attr("data"),
+                    check: $(e).attr("col") + "-" + $(e).attr("row") + "-" + $(element).val(),
+                    rw: $("#rw").val(),
+                    cid: $(e).attr("cid"),
+                });
+            });
+        });
+    });
+
+    var prev = "", count = pcr.length;
+    for (var i = 0; i < count; i++) {
+        if (prev == "") {
+            prev = pcr[i];
+        } else if (prev.cid == pcr[i].cid && prev.mid == pcr[i].mid && prev.tid == pcr[i].tid && prev.rw == pcr[i].rw) {
+            pcr.splice(i, 1);
+        } else {
+            prev = pcr[i];
+        }
+    }
+    $("#pcr").val(encodeURIComponent(JSON.stringify(pcr)));
+    $(".pcrLists").css("border", "1px solid");
+    tablePermissions(true);
+}
+
+$(".permissionDiv .pcd").click(function () {
     $(".permissionDiv").hide();
+});
+
+$(".submitPermissions").click(function () {
+    if ($(".cbTool:checked").length == 0) {
+        custom.alert("请选择要设置的行和列");
+        return false;
+    }
+    if ($("#permissions option:selected").length == 0) {
+        custom.alert("请选择要分配权限的人");
+        return false;
+    }
+    var cols = $(".cbTool:checked"), pcr = $("#pcr").val(),
+        pcr = pcr != "" ? JSON.parse(decodeURIComponent($("#pcr").val())) : [];
+    $("#permissions option:selected").each(function (index, element) {
+        cols.each(function (i, e) {
+            pcr.push({
+                col: $(e).attr("col"),
+                row: $(e).attr("row"),
+                tid: $("#id").val(),
+                mid: $(element).val(),
+                data: $(element).attr("data"),
+                check: $(e).attr("col") + "-" + $(e).attr("row") + "-" + $(element).val(),
+                rw: $("#rw").val(),
+                cid: $(e).attr("cid"),
+            });
+        });
+    });
+    var prev = "", count = pcr.length;
+    for (var i = 0; i < count; i++) {
+        if (prev == "") {
+            prev = pcr[i];
+        } else if (prev.cid == pcr[i].cid && prev.mid == pcr[i].mid && prev.rw == pcr[i].rw) {
+            pcr.splice(i, 1);
+        } else {
+            prev = pcr[i];
+        }
+    }
+    $(".permissionDiv").hide();
+    $("#pcr").val(encodeURIComponent(JSON.stringify(pcr)));
+    $(".pcrLists").css("border", "1px solid");
+    tablePermissions(false);
 });
