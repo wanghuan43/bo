@@ -101,8 +101,8 @@ class Member extends BoModel
 
             if(array_key_exists($data['m_code'],$arr)){
                 $dataset[$key]['m_is_lead'] = 1;
-                $dataset[$key]['m_ldid'] = $arr[$data['m_code']]->d_id;
-                $dataset[$key]['m_ldname'] = $arr[$data['m_code']]->d_name;
+                //$dataset[$key]['m_ldid'] = $arr[$data['m_code']]->d_id;
+                //$dataset[$key]['m_ldname'] = $arr[$data['m_code']]->d_name;
             }
 
             foreach ($departments as $department){

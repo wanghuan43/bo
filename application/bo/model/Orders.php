@@ -48,7 +48,7 @@ class   Orders extends BoModel
         ],
     ];
 
-    public function getList($search, $limit)
+    public function getList($search, $limit=false)
     {
         $member = $this->getCurrent();
         $this->alias('o');
@@ -60,7 +60,11 @@ class   Orders extends BoModel
         foreach ($search as $key => $value) {
             $this->where("o." . $value['field'], $value['opt'], $value['val']);
         }
-        $list = $this->paginate($limit);
+        if(empty($limit)){
+            $list = $this->select();
+        }else {
+            $list = $this->paginate($limit);
+        }
         return $list;
     }
 

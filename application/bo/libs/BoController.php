@@ -103,6 +103,103 @@ class BoController extends Controller
         return "";
     }
 
+    /**
+     * @param $operator select|circulation|filter|export
+     * @param int $listType
+     * @param bool|string $listContainer
+     * @param bool $model
+     * @param string $file
+     * @return mixed
+     */
+    protected function filter($operator,$listType=1,$listContainer=false,$model=false,$file="common/filter")
+    {
+        $post = $this->request->post();
+        $get = $this->request->get();
+        $param = $this->request->param();
+
+        if(!empty($this->model))
+            $model = $this->model;
+
+        $mName = strtolower($this->model->getModelName());
+        $type = isset($param['type'])?$param['type']:$mName;
+        $listFile = $mName.'/list/'.$listType;
+
+        $search = $this->getSearch($post,$type);
+
+        if(isset($post['fields']) || isset($get['page'])){
+            $file = $listFile;
+        }
+
+        if( empty($listContainer) || isset($post['fields']) || isset($get['page'])) {
+            $list = $model->getList($search, $this->limit);
+            $this->assign("lists", $list);
+        }
+
+        if($operator == 'export'){
+            $this->assign('btnSaveText','导出');
+        }
+
+        $this->assign('type',$type);
+        $this->assign('listContainer',$listContainer);
+        $this->assign('operator',$operator);
+        $this->assign('listType',$listType);
+        $this->assign("searchable", $model->getSearchable());
+        $this->assign('listFile',$listFile);
+        $this->assign('url',$this->request->url());
+
+        return $this->fetch($file);
+
+    }
+
+    protected function getSearch($post=false,$type=false)
+    {
+        if(empty($post)){
+            $post = $this->request->post();
+        }
+        if(empty($type)){
+            $param = $this->request->param();
+            $mName = strtolower($this->model->getModelName());
+            $type = isset($param['type'])?$param['type']:$mName;
+        }
+
+        $search = array();
+        if (isset($post['fields'])) {
+            foreach ($post['fields'][$type] as $key => $value) {
+                $val = count($post['values'][$type][$key]) > 1 ? $post['values'][$type][$key] : trim($post['values'][$type][$key][0]);
+                $opt = trim($post['operators'][$type][$key]);
+                $val = is_array($val) ? ((empty($val['0']) AND empty($val['1'])) ? "" : $val) : $val;
+                if (!empty($val)) {
+                    if ($opt == "between") {
+                        $val = is_array($val) ? $val : explode(" ~ ", $val);
+                    } elseif ($opt == "like") {
+                        $val = "%$val%";
+                    }
+                    $search[] = array(
+                        "field" => $value,
+                        "opt" => $opt,
+                        "val" => $val
+                    );
+                }
+            }
+        }
+
+        if($type == "orders"){
+            $search[] = [
+                'field' => 'o_status',
+                'opt'   => '<>',
+                'val'   => 6
+            ];
+        }elseif ($type == 'contract'){
+            $search[] = [
+                'field' => 'o_status',
+                'opt'   => '=',
+                'val'   => 6
+            ];
+        }
+        $this->formartSearch($this->model,$search);
+        return $search;
+    }
+
     private function formartSearch($model, &$search)
     {
         foreach ($search as $key => $value) {

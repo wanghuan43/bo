@@ -34,4 +34,21 @@
         $("#dialog-box").dialogBox(params);
     };
 
+    custom.showFilter = function(el,flag){
+        elBack = $(".f-layer-back");
+        if(elBack.length == 0){
+            $("body").append('<div class="f-layer-back"' +
+                ' style="display:none;background-color: black;opacity: 0.5;width: 100%;height: 100%;position: fixed;top: 0;z-index:999"></div>');
+            elBack = $(".f-layer-back");
+        }
+        elBack.show();
+        if( flag == 1 || flag == true ){
+            // noinspection JSAnnotator
+            window.fel = el;
+            setTimeout("$(fel).addClass('show')",500);
+        }else{
+            $(el).addClass("show");
+        }
+    };
+
 }

@@ -3,7 +3,7 @@
     <div class="link-pannel">
         <ul>
             <li>
-                <a href="#"><i class="fa fa-file-excel-o"></i>导出</a>
+                <a href="<{:url('/orders/export/type/'.$type)}>" target="_blank" id="link-export" data-type="<{$type}>" data-list-type="3"><i class="fa fa-file-excel-o"></i>导出</a>
             </li>
             <li>
                 <a href="<{:url("/orders/searchOrders/type/".$type)}>" target="_blank" id="searchList" stype="<{$stype}>"><i class="fa fa-filter"></i>筛选</a>

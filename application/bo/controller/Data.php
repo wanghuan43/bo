@@ -21,6 +21,9 @@ class Data extends BoController
     
     public function import( $type=FALSE )
     {
+
+        set_time_limit(0);
+        ini_set("memory_limit", "1024M");
         
         if( is_string($type) ){
             $type = strtolower($type);

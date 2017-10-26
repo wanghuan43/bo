@@ -13,6 +13,29 @@
         $(".lists-id").prop("checked", _this.prop("checked"));
     });
 
+    $("#link-export").click(function(){
+        var type = $(this).attr("data-type");
+        var listType = $(this).attr("data-list-type");
+        var url = $(this).attr("href");
+        var ele = ".f-layer-"+type+"-"+listType;
+        if( $(ele).length > 0 ){
+            custom.showFilter(ele);
+        }else {
+            $.ajax({
+                url: url,
+                method: "POST",
+                success: function (res) {
+                    if (res.content) {
+                        $("body").append(res.content);
+                    } else {
+                        $("body").append(res);
+                    }
+                    custom.showFilter(ele,1);
+                }
+            });
+        }
+        return false;
+    });
 
     $("#lists-delete").click(function () {
 

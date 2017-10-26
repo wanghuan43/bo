@@ -1,0 +1,81 @@
+<nav aria-label="Page navigation">
+    <{$lists->render()}>
+</nav>
+<div class="search-result">
+    <table cellspacing="0" class="list">
+        <thead>
+        <tr>
+            <th style="text-align: center;padding-right: 4px;"><input type="checkbox" class="checkAll"></th>
+            <th>阶段</th>
+            <th>订单号</th>
+            <th>项目名称</th>
+            <th>订单标题</th>
+            <th>购销</th>
+            <th>对方名称</th>
+            <th>责任人</th>
+            <th class="date">发生日期</th>
+            <th class="money">发生金额</th>
+            <!--th>操作</th-->
+        </tr>
+        </thead>
+        <tbody>
+        <{volist name="lists" id="vo" empty="$empty"}>
+        <tr>
+            <td><input type="checkbox" value="<{$vo.o_id}>" data-name="<{$vo.o_no}>" class="lists-id"/></td>
+            <td><?php echo getStatusList($vo['o_status']);?></td>
+            <td style="word-break: keep-all;white-space:nowrap;"><{$vo.o_no}></td>
+            <td><{$vo.o_pname}></td>
+            <td><{$vo.o_subject}></td>
+            <td><?php echo getTypeList($vo['o_type']);?></td>
+            <td><{$vo.o_coname}></td>
+            <td><{$vo.o_mname}></td>
+            <td><?php echo date("Y-m-d", $vo['o_date']);?></td>
+            <td class="money"><{$vo.o_money|number_format=2}></td>
+        </tr>
+        <{/volist}>
+        </tbody>
+    </table>
+</div>
+<nav aria-label="Page navigation">
+    <{$lists->render()}>
+</nav>
+<script>
+    (function($){
+        var pid = "<{$type.'-'.$listType.'-list'}>" ;
+        //var form = $(".f-layer-<{$type.'-'.$listType}> form");
+        var sel = $("#sel-<{$type.'-'.$listType}>-ids");
+
+        $("#"+pid).find(".lists-id").each(function(){
+            if(sel.find("option[value="+$(this).attr("value")+"]").length>0)
+                $(this).prop("checked",true);
+        });
+
+        $("#"+pid).find("a").click(function(){
+            var data = {
+                url:$(this).attr("href"),
+                method:"GET",
+                dataType:"json"
+            }
+            contentAjax(pid,data,"jump");
+            return false;
+        });
+        $("#"+pid).find(".checkAll").click(function(){
+            var status = $(this).prop("checked");
+            $("#"+pid).find(".lists-id").each(function(){
+                $(this).prop("checked",status);
+                var val = $(this).attr("value");
+                sel.find("option[value="+val+"]").remove();
+                if(status == true) {
+                    sel.append("<option value='"+val+"' selected>"+$(this).attr("data-name")+"</option>");
+                }
+            });
+        });
+        $("#"+pid).find(".lists-id").click(function(){
+            var val = $(this).attr("value");
+            sel.find("option[value="+val+"]").remove();
+            if($(this).prop("checked") == true){
+                sel.append("<option value='"+val+"' selected>"+$(this).attr("data-name")+"</option>");
+            }
+        });
+    })(jQuery);
+</script>

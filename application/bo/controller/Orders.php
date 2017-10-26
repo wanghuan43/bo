@@ -12,6 +12,8 @@ use app\bo\model\OrderUsed;
 use app\bo\model\Taglib;
 use app\bo\model\Taglink;
 use app\bo\libs\BoController;
+use PHPExcel_IOFactory;
+use think\Config;
 use think\Request;
 use think\Session;
 
@@ -299,6 +301,158 @@ class Orders extends BoController
         }
         foreach ($params as $key => $value) {
             $this->ordersModel->where("o." . $key, $value['op'], $value['val']);
+        }
+    }
+
+    public  function export()
+    {
+        if($this->request->post('operator')=='export'){
+
+            ini_set("memory_limit", "1024M");
+
+            $type = $this->request->param('type')?:'orders';
+            $post = $this->request->post();
+            $search = $this->getSearch($post,$type);
+
+            $ids = [];
+            if( isset($post['ids']) ){
+                $ids = $post['ids'];
+            }else{
+                $res = $this->model->getList($search);
+                foreach( $res as $i )
+                    $ids[] = $i->o_id;
+            }
+
+            $ids = implode(',',$ids);
+
+            $view = $type == 'orders'?'kj_vw_my_orders':'kj_vw_my_contract';
+
+            $sql = 'SELECT * FROM '.$view.' WHERE `o_id` IN ('.$ids.') ORDER BY `o_updatetime` DESC';
+
+            $res = $this->model->query($sql);
+
+
+            $arr = [];
+            foreach( $res as $item ){
+                $arr[$item['o_id']][] = $item;
+            }
+            $res = [];
+            foreach( $arr as $key => $val ){
+                $arr1 = $val[0];
+                if($type == 'orders') {
+                    $arr1['op_type'] = 'C合同';
+                    $arr1['op_used'] = 0;
+                    $arr1['o_date'] = $arr1['op_date'] = date('Y/m/d', $arr1['o_date']);
+                }else{
+                    $arr1['ou_type'] = 'C合同';
+                    $arr1['ou_used'] = $arr1['c_used'];
+                    $arr1['ou_date'] = date('Y/m/d',$arr1['c_date'] );
+                    $arr1['o_date'] = date('Y/m/d',$arr1['o_date']);
+                }
+                $types = getTypeList();
+                $arr1['o_type'] = $types[$arr1['o_type']];
+                foreach( $val as $k=>$i ){
+                    if( $type == 'orders' ) {
+                        if ($i['op_type'] == 1) {
+                            $arr1['op_used'] += $i['op_used'];
+                            $i['op_type'] = 'I发票';
+                        } elseif ($i['op_type'] == 2) {
+                            $i['op_type'] = '付款单';
+                        } elseif ($i['op_type'] == 3) {
+                            $i['op_type'] = '验收单';
+                        }else{
+                            $i['op_type'] = '';
+                        }
+                        $i['op_date'] = date('Y/m/d', $i['op_date']);
+                    }else{
+                        if($i['ou_type'] == 1){
+                            $i['ou_type'] = '已开票';
+                        }elseif($i['ou_type'] ==  2){
+                            $i['ou_type'] = '已交付';
+                        }elseif( $i['ou_type']==3 ){
+                            $i['ou_type'] = '已付款';
+                        }else{
+                            $i['ou_type'] = '' ;
+                        }
+                        $i['ou_date'] = date('Y/m/d',$i['ou_date']);
+                    }
+                    if($i['o_status']==1){
+                        $arr1['o_status'] = $i['o_status'] = '1接洽';
+                    }elseif( $i['o_status'] == 2 ){
+                        $arr1['o_status'] = $i['o_status'] = '2意向';
+                    }elseif( $i['o_status'] == 3 ){
+                        $arr1['o_status'] = $i['o_status'] = '3立项';
+                    }elseif( $i['o_status'] == 4 ){
+                        $arr1['o_status'] = $i['o_status'] = '4招标';
+                    }elseif( $i['o_status'] == 5 ){
+                        $arr1['o_status'] = $i['o_status'] = '5定向';
+                    }elseif( $i['o_status'] == 6 ){
+                        $arr1['o_status'] = $i['o_status'] = '6合同';
+                    }
+                    if($i['o_lie'] == 1){
+                        $arr1['o_lie'] = $i['o_lie'] = '内';
+                    }elseif( $i['o_lie'] == 2 ){
+                        $arr1['o_lie'] = $i['o_lie'] = '外';
+                    }else{
+                        $arr1['o_lie'] = $i['o_lie'] = '';
+                    }
+                    $i['o_type'] = $types[$i['o_type']];
+                    $i['o_date'] = date('Y/m/d',$i['o_date']);
+
+                    $i['c_no'] = '';
+                    $i['c_name'] = '';
+
+                    $val[$k] = $i;
+                }
+                $val = array_merge([$arr1],$val);
+                $arr[$key] = $val;
+            }
+
+            if( $type == 'orders' ) {
+                $title = '商机表';
+            }else {
+                $title = '合同跟踪表';
+            }
+
+            $res = $arr;
+            unset($arr);
+
+            $obj = new \PHPExcel();
+            $obj->getProperties()->setCreator("新智云商机管理系统")
+                ->setLastModifiedBy("新智云商机管理系统")
+                ->setTitle($title)
+                ->setSubject($title)
+                ->setDescription($title);
+            $config = Config::load(APP_PATH.'bo'.DS.'excelExport.php','boExcel');
+            $config = $config['boExcel'][$type];
+            $obj->setActiveSheetIndex(0);
+            $activeSheet = $obj->getActiveSheet();
+            foreach( $config as $k=>$i ){
+                $activeSheet->setCellValue($k.'1',$i['title']);
+            }
+            $col = 2;
+            foreach($res as $group){
+                foreach ( $group as $row ){
+                    foreach($config as $k => $i ){
+                        $val = $row[$i['key']];
+                        $activeSheet->setCellValue($k.$col,$val);
+                    }
+                    $col ++;
+                }
+            }
+            $activeSheet->setTitle($type);
+            $fileName = $title.date('ymdHis');
+            header('Content-Type: application/vnd.ms-excel');
+            header('Content-Disposition: attachment;filename="'.$fileName.'.xlsx"');
+            header('Cache-Control: max-age=0');
+
+            $objWriter = PHPExcel_IOFactory::createWriter($obj, 'Excel2007');
+            $objWriter->save('php://output');
+
+            exit;
+
+        }else {
+            return $this->filter("export", 3);
         }
     }
 }

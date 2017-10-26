@@ -12,11 +12,11 @@ return [
             'file' => 'uploads/xlsx/员工.xlsx',
             'index' => 1,
             'fields' => [
+                'd_cname' => 'A',
                 'd_name' => 'B',
                 'd_code' => 'C',
-                //'m_name' => '',
-                //'m_code' => 'D',
-                'd_cname' => 'A'
+                'm_name' => 'D',
+                'm_code' => 'E'
             ]
         ],
         'project' => [
@@ -29,16 +29,16 @@ return [
             ]
         ],
         'member' => [
-            'file' => 'uploads/xlsx/员工.xlsx',
-            'index' => 3,
+            'file' => 'uploads/xlsx/人事员工.xlsx',
+            'index' => 6,
             'fields' => [
                 'm_code' => 'B',
-                'm_department' => 'J',
-                'm_office' => 'E',
-                'm_name' => 'F',
-                'm_phone' => 'G',
-                'm_email' => 'H',
-                'm_cname' => 'I'
+                'm_department' => 'H',
+                'm_office' => 'G',
+                'm_name' => 'C',
+                'm_phone' => 'D',
+                'm_email' => 'E',
+                'm_cname' => 'F'
             ]
         ],
         'supplier' => [

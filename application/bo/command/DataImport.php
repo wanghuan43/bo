@@ -18,6 +18,9 @@ class DataImport extends Command
     
     protected function execute(Input $input, Output $output)
     {
+
+        set_time_limit(0);
+        ini_set("memory_limit", "1024M");
        
         $type = $input->getArgument('type');
 

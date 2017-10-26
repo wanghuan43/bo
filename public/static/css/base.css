@@ -271,7 +271,9 @@ th.icon {
     opacity: 0;
     transition: all 0.3s;
 }
-
+.f-layer .checked-result{
+    display:none;
+}
 .f-layer.show {
     -webkit-transform: scale(1);
     -ms-transform: scale(1);

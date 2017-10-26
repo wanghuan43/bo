@@ -89,4 +89,8 @@ abstract class BoModel extends Model
         return $ret;
     }
 
+    public function getModelName(){
+        return $this->name;
+    }
+
 }
