@@ -28,12 +28,38 @@
             <table>
                 <tr>
                     <td width="64">项目编号:</td>
-                    <td><input type="text" name="no" value="<{$data.p_no}>"/><input type="hidden" name="id" value="<{$data.p_id}>"/> </td>
+                    <td><input type="text" name="no" value="<{$data.p_no}>"<{if $readonly==true}> class="no-border" readonly<{/if}>/><input type="hidden" name="id" value="<{$data.p_id}>"/> </td>
                     <td style="padding-left:20px;width:84px;">项目名称:</td>
-                    <td><input type="text" name="name" value="<{$data.p_name}>"/></td>
+                    <td><input type="text" name="name" value="<{$data.p_name}>"<{if $readonly==true}> class="no-border" readonly<{/if}>/></td>
                 </tr>
             </table>
         </div>
     </div>
 </form>
+<div class="main-pannel">
+    <h3>已对应订单情况</h3>
+    <div class="content">
+        <table class="table2">
+            <tr>
+                <!--th id="btn-add-order"><i class="fa fa-plus-circle"></i></th-->
+                <th>订单号</th>
+                <th>订单金额</th>
+                <th>订单主题</th>
+                <th>对方名称</th>
+                <th>责任人</th>
+                <th>项目名称</th>
+            </tr>
+            <{volist name="orders" id="order" empty="<tr><td colspan='7' style='text-align: center'>暂无数据</td></tr>"}>
+            <tr>
+                <!--td><i class="fa fa-minus-circle"></i><input type="hidden" name="oids[]" value="<{$order.o_id}>"</td-->
+                <td><a href="/orders/operation?op=edit&op_id=<{$order.o_id}>"><{$order.o_no}></a></td>
+                <td><{$order.o_money}><input type="hidden" name="omoneys[]" value="<{$order.o_money}>"/></td>
+                <td><{$order.o_subject}></td>
+                <td><{$order.o_coname}></td>
+                <td><{$order.o_mname}></td>
+                <td><{$order.o_pname}></td>
+            </tr>
+            <{/volist}>
+        </table>
+    </div>
 <{load file="/static/js/update.js"}}>

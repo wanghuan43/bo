@@ -44,6 +44,10 @@ return [
             //'Q' => ['title'=>'记账月','key'=>''],
             'P' => ['title'=>'合同号','key'=>'c_no'],
             'Q' => ['title'=>'合同名称','key'=>'c_name']
+        ],
+        'project' => [
+            'A' => ['title'=>'项目编号','key'=>'p_no'],
+            'B' => ['title'=>'项目名称','key'=>'p_name']
         ]
     ],
 ];

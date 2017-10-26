@@ -2,6 +2,7 @@
 namespace app\bo\controller;
 
 use app\bo\libs\BoController;
+use app\bo\model\Orders;
 use app\bo\model\Project as ModelProject;
 use think\Request;
 
@@ -80,6 +81,15 @@ class Project extends BoController
     public function detail($id)
     {
         $data = $this->model->getDataById($id);
+        $mOrders = new Orders();
+        $orders = $mOrders->where('o_pid','=',$id)->select();
+        if(empty($orders)){
+            $readonly = false;
+        }else{
+            $readonly = true;
+        }
+        $this->assign('readonly',$readonly);
+        $this->assign('orders',$orders);
         $this->assign('data',$data);
         return $this->fetch();
     }
@@ -103,6 +113,11 @@ class Project extends BoController
         }
 
         return $ret;
+    }
+
+    public function export()
+    {
+        return $this->doExport();
     }
 
 }

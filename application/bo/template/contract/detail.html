@@ -14,16 +14,25 @@
                     <td width="64">合同号:</td>
                     <td><input type="text" name="no" value="<{$data.c_no}>" class="no-border" readonly/><input type="hidden" name="id" value="<{$data.c_id}>"/> </td>
                     <td style="padding-left:20px;width:84px;">签约日期:</td>
-                    <td><input type="text" name="date" value="<{$data.c_date|date='Y-m-d',###}>"/></td>
+                    <td>
+                        <{if $readonly == true}>
+                        <input type="text" value="<{$data.c_date|date='Y-m-d',###}>" class="no-border" readonly/>
+                        <input type="hidden" name="date" value="<{$data.c_date|date='Y-m-d',###}>" />
+                        <{else}>
+                        <input type="text" name="date" value="<{$data.c_date|date='Y-m-d',###}>"/>
+                        <{/if}>
+                    </td>
                     <td style="padding-left:20px;width:84px">合同金额:</td>
                     <td><input type="text" value="<{$data.c_money}>" name="money"<{if $orders}> class="no-border" readonly<{/if}>/></td>
                 </tr>
                 <tr>
                     <td>合同名称:</td>
-                    <td colspan="3"><input type="text" name="name" value="<{$data.c_name}>"/></td>
+                    <td colspan="3">
+                        <input type="text" name="name" value="<{$data.c_name}>"<{if $readonly==true}> class="no-border" readonly<{/if}>/>
+                    </td>
                     <td style="padding-left:20px;width:84px">销售/采销:</td>
                     <td>
-                        <select name="type">
+                        <select name="type"<{if $readonly == true}> disabled="disabled"<{/if}>>
                             <option value="1"<{if $data.c_type == 1}> selected<{/if}>>销售</option>
                             <option value="2"<{if $data.c_type == 2}> selected<{/if}>>采销</option>
                         </select>
@@ -32,7 +41,8 @@
                 <tr>
                     <td>对方名称:</td>
                     <td>
-                        <input type="text" value="<{$data.c_coname}>" name="coname" id="ipt-company-name" readonly/>
+
+                        <input type="text" value="<{$data.c_coname}>" name="coname" <{if $readonly==true}>class="no-border"<{else}>id="ipt-company-name"<{/if}> readonly/>
                         <input type="hidden" name="coid" value="<{$data.c_coid}>" id="ipt-company-id">
                     </td>
                     <td style="padding-left:20px;">责任人:</td>

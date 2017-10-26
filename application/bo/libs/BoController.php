@@ -331,4 +331,59 @@ class BoController extends Controller
         return $this->maxSize . "M";
     }
 
+    protected function doExport()
+    {
+        if($this->request->post('operator') == 'export'){
+
+            ini_set("memory_limit", "1024M");
+            $post = $this->request->post();
+            $type = strtolower($this->model->getModelName());
+
+            if( isset($post['ids']) ){
+                $res = $this->model->where($this->model->getPk(),'IN',$post['ids'])->select();
+            }else{
+                $search = $this->getSearch($post,$type);
+                $res = $this->model->getList($search,false);
+            }
+
+            $title = ucfirst($type);
+
+            $obj = new \PHPExcel();
+            $obj->getProperties()->setCreator("新智云商机管理系统")
+                ->setLastModifiedBy("新智云商机管理系统")
+                ->setTitle($title)
+                ->setSubject($title)
+                ->setDescription($title);
+            $config = Config::load(APP_PATH.'bo'.DS.'excelExport.php','boExcel');
+            $config = $config['boExcel'][$type];
+            $obj->setActiveSheetIndex(0);
+            $activeSheet = $obj->getActiveSheet();
+            foreach( $config as $k=>$i ){
+                $activeSheet->setCellValue($k.'1',$i['title']);
+            }
+            $col = 2;
+            foreach($res as $item){
+
+                foreach($config as $k => $i ){
+                    $val = $item->getData($i['key']);
+                    $activeSheet->setCellValue($k.$col,$val);
+                }
+                $col ++;
+            }
+            $activeSheet->setTitle($type);
+            $fileName = $title.date('ymdHis');
+            header('Content-Type: application/vnd.ms-excel');
+            header('Content-Disposition: attachment;filename="'.$fileName.'.xlsx"');
+            header('Cache-Control: max-age=0');
+
+            $objWriter = \PHPExcel_IOFactory::createWriter($obj, 'Excel2007');
+            $objWriter->save('php://output');
+
+            exit;
+        }else {
+            return $this->filter('export', 3);
+        }
+
+    }
+
 }

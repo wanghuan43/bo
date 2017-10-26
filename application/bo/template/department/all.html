@@ -33,9 +33,9 @@
         <thead>
         <tr>
             <th style="min-width: 50px;text-align:center;padding-right:4px;"><input type="checkbox" id="lists-all-checked" value="all"/></th>
-            <th>公司</th>
             <th>名称</th>
             <th>成本中心编码</th>
+            <th>公司</th>
             <th>部门领导</th>
             <th>部门领导编码</th>
             <th style="width:8em;"></th>
@@ -45,9 +45,9 @@
         <{volist name="lists" id="vo" empty="<tr><td colspan='11'>暂无数据</td></tr>"}>
         <tr>
             <td><input type="checkbox" value="<{$vo.d_id}>" class="lists-id"></td>
-            <td><{$vo.d_cname}></td>
             <td><a href="/department/detail?id=<{$vo.d_id}>"><{$vo.d_name}></a></td>
             <td><{$vo.d_code}></td>
+            <td><{$vo.d_cname}></td>
             <td><{$vo.m_name}></td>
             <td><{$vo.m_code}></td>
             <td><a href="/department/detail?id=<{$vo.d_id}>">查看</a></td>

@@ -78,6 +78,12 @@ class Contract extends BoController
         $data = $this->model->getDataById($id);
         $modelOrders = new \app\bo\model\Orders();
         $orders = $modelOrders->getOrdersByContractId($id);
+        if(empty($orders)){
+            $readonly = false;
+        }else{
+            $readonly = true;
+        }
+        $this->assign('readonly',$readonly);
         $this->assign('data',$data);
         $this->assign('orders',$orders);
         return $this->fetch();

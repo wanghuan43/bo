@@ -1,0 +1,70 @@
+<nav aria-label="Page navigation">
+    <{$lists->render()}>
+</nav>
+<div class="search-result">
+    <table cellspacing="0" class="list">
+        <thead>
+        <tr>
+            <th style="min-width: 50px;text-align:center;padding-right:4px;"><input type="checkbox" class="checkAll" value="all"/></th>
+            <th width="100">项目号</th>
+            <th style="width: auto;">项目名称</th>
+        </tr>
+        </thead>
+        <tbody>
+        <{volist name="lists" id="val" empty="$empty"}>
+        <tr>
+            <td>
+                <input type="checkbox" value="<{$val.p_id}>" class="lists-id" data-name="<{$val.p_name}>">
+            </td>
+            <td>
+                <{$val.p_no}>
+            </td>
+            <td><{$val.p_name}></td>
+        </tr>
+        <{/volist}>
+        </tbody>
+    </table>
+</div>
+<nav aria-label="Page navigation">
+    <{$lists->render()}>
+</nav>
+<script>
+    (function($){
+        var pid = "<{$type.'-'.$listType.'-list'}>" ;
+        //var form = $(".f-layer-<{$type.'-'.$listType}> form");
+        var sel = $("#sel-<{$type.'-'.$listType}>-ids");
+
+        $("#"+pid).find(".lists-id").each(function(){
+            if(sel.find("option[value="+$(this).attr("value")+"]").length>0)
+                $(this).prop("checked",true);
+        });
+
+        $("#"+pid).find("a").click(function(){
+            var data = {
+                url:$(this).attr("href"),
+                method:"GET",
+                dataType:"json"
+            }
+            contentAjax(pid,data,"jump");
+            return false;
+        });
+        $("#"+pid).find(".checkAll").click(function(){
+            var status = $(this).prop("checked");
+            $("#"+pid).find(".lists-id").each(function(){
+                $(this).prop("checked",status);
+                var val = $(this).attr("value");
+                sel.find("option[value="+val+"]").remove();
+                if(status == true) {
+                    sel.append("<option value='"+val+"' selected>"+$(this).attr("data-name")+"</option>");
+                }
+            });
+        });
+        $("#"+pid).find(".lists-id").click(function(){
+            var val = $(this).attr("value");
+            sel.find("option[value="+val+"]").remove();
+            if($(this).prop("checked") == true){
+                sel.append("<option value='"+val+"' selected>"+$(this).attr("data-name")+"</option>");
+            }
+        });
+    })(jQuery);
+</script>

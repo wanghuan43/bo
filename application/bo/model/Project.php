@@ -38,7 +38,11 @@ class Project extends BoModel
         foreach ($search as $key => $value) {
             $this->where('p.' . $value['field'], $value['opt'], $value['val']);
         }
-        $list = $this->paginate($limit);
+        if(empty($limit)){
+            $list = $this->select();
+        }else {
+            $list = $this->paginate($limit);
+        }
         return $list;
     }
 
