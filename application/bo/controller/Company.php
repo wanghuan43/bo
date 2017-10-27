@@ -84,4 +84,9 @@ class Company extends BoController
         return $this->fetch();
     }
 
+    public function export()
+    {
+        return $this->doExport();
+    }
+
 }

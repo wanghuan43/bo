@@ -122,6 +122,10 @@ class BoController extends Controller
 
         $mName = strtolower($this->model->getModelName());
         $type = isset($param['type'])?$param['type']:$mName;
+
+        if($mName == 'company'){
+            $type = 'company';
+        }
         $listFile = $mName.'/list/'.$listType;
 
         $search = $this->getSearch($post,$type);
@@ -198,6 +202,16 @@ class BoController extends Controller
                 'val'   => 6
             ];
         }
+
+        if($type == 'company'){
+            $co_type = $this->request->param('type');
+            $search[] = [
+                'field' => 'co_type',
+                'opt'   => '=',
+                'val'   => $co_type
+            ];
+        }
+
         $this->formartSearch($this->model,$search);
         return $search;
     }
@@ -357,7 +371,12 @@ class BoController extends Controller
                 ->setSubject($title)
                 ->setDescription($title);
             $config = Config::load(APP_PATH.'bo'.DS.'excelExport.php','boExcel');
-            $config = $config['boExcel'][$type];
+            if( $type == 'company' ){
+                $co_type = $this->request->param('type');
+                $config = $config['boExcel'][$type.'-'.$co_type];
+            }else {
+                $config = $config['boExcel'][$type];
+            }
             $obj->setActiveSheetIndex(0);
             $activeSheet = $obj->getActiveSheet();
             foreach( $config as $k=>$i ){
@@ -375,13 +394,15 @@ class BoController extends Controller
                                 $val = $i['type'][$val];
                             else
                                 $val = '';
-                        }elseif($i['type']=='type'){
-                            if( isset($types[$val]) )
-                                $val = $types[$val];
-                            else
-                                $val = '';
-                        }elseif( $i['type']=='date' ){
-                            $val = date('Y/m/d',$val);
+                        }else {
+                            if ($i['type'] == 'type') {
+                                if (isset($types[$val]))
+                                    $val = $types[$val];
+                                else
+                                    $val = '';
+                            } elseif ($i['type'] == 'date') {
+                                $val = date('Y/m/d', $val);
+                            }
                         }
                     }
                     $activeSheet->setCellValue($k.$col,$val);
@@ -400,7 +421,12 @@ class BoController extends Controller
             exit;
 
         }else {
-            return $this->filter('export', 3);
+            if($this->model->getModelName() == 'Company' && $this->request->param('type') == 2 ){
+                $listType = 4;
+            }else{
+                $listType = 3;
+            }
+            return $this->filter('export', $listType);
         }
 
     }
