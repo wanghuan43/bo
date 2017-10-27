@@ -48,6 +48,9 @@ return [
         'project' => [
             'A' => ['title'=>'项目编号','key'=>'p_no'],
             'B' => ['title'=>'项目名称','key'=>'p_name']
+        ],
+        'contract' => [
+            'A' => ['title'=>'项目名称','key'=>'c_pname'],
         ]
     ],
 ];

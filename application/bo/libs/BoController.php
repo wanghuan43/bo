@@ -144,8 +144,10 @@ class BoController extends Controller
         $this->assign('operator',$operator);
         $this->assign('listType',$listType);
         $this->assign("searchable", $model->getSearchable());
-        $this->assign('listFile',$listFile);
         $this->assign('url',$this->request->url());
+
+        $listHtml = $this->fetch($listFile);
+        $this->assign('listHtml',$listHtml);
 
         return $this->fetch($file);
 
@@ -189,7 +191,7 @@ class BoController extends Controller
                 'opt'   => '<>',
                 'val'   => 6
             ];
-        }elseif ($type == 'contract'){
+        }elseif ($this->model->getModelName()=='Orders' && $type == 'contract'){
             $search[] = [
                 'field' => 'o_status',
                 'opt'   => '=',
@@ -371,7 +373,7 @@ class BoController extends Controller
                 $col ++;
             }
             $activeSheet->setTitle($type);
-            $fileName = $title.date('ymdHis');
+            $fileName = $title.'-'.date('ymdHis');
             header('Content-Type: application/vnd.ms-excel');
             header('Content-Disposition: attachment;filename="'.$fileName.'.xlsx"');
             header('Cache-Control: max-age=0');
@@ -380,6 +382,7 @@ class BoController extends Controller
             $objWriter->save('php://output');
 
             exit;
+
         }else {
             return $this->filter('export', 3);
         }
