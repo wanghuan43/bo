@@ -411,6 +411,7 @@ class Orders extends BoController
             if( $type == 'orders' ) {
                 $title = '商机表';
             }else {
+                $type = 'orders-'.$type;
                 $title = '合同跟踪表';
             }
 
@@ -440,8 +441,8 @@ class Orders extends BoController
                     $col ++;
                 }
             }
-            $activeSheet->setTitle($type);
-            $fileName = $title.date('ymdHis');
+            $activeSheet->setTitle($title);
+            $fileName = $title.'-'.date('ymdHis');
             header('Content-Type: application/vnd.ms-excel');
             header('Content-Disposition: attachment;filename="'.$fileName.'.xlsx"');
             header('Cache-Control: max-age=0');

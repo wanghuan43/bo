@@ -24,7 +24,7 @@ return [
             'M' => ['title'=>'发生日(计划)','key'=>'op_date'],
             'N' => ['title'=>'商务阶段','key'=>'op_type']
         ],
-        'contract' => [
+        'orders-contract' => [
             'A' => ['title'=>'部门','key'=>'o_dname'],
             'B' => ['title'=>'责任人','key'=>'o_mname'],
             'C' => ['title'=>'项目号','key'=>'p_no'],
@@ -51,6 +51,11 @@ return [
         ],
         'contract' => [
             'A' => ['title'=>'项目名称','key'=>'c_pname'],
+            'B' => ['title'=>'合同编号','key'=>'c_no'],
+            'C' => ['title'=>'合同名','key'=>'c_name'],
+            'D' => ['title'=>'合同标的额（元）','key'=>'c_money'],
+            'E' => ['title'=>'供应商/客户','key'=>'c_coname'],
+            'F' => ['title'=>'','key'=>'']
         ]
     ],
 ];
