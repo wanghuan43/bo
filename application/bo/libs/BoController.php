@@ -370,7 +370,12 @@ class BoController extends Controller
                 foreach($config as $k => $i ){
                     $val = $item->getData($i['key']);
                     if(isset($i['type'])){
-                        if($i['type']=='type'){
+                        if( is_array($i['type']) ){
+                            if( isset($i['type'][$val]) )
+                                $val = $i['type'][$val];
+                            else
+                                $val = '';
+                        }elseif($i['type']=='type'){
                             if( isset($types[$val]) )
                                 $val = $types[$val];
                             else

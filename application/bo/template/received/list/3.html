@@ -1,0 +1,77 @@
+<div class="btn-pannel paginate">
+    <{$lists->render()}>
+</div>
+
+<div class="search-result">
+    <table cellspacing="0" class="list">
+        <thead>
+        <tr>
+            <th style="width: 50px;text-align:center;padding-right:4px;">
+                <input type="checkbox" id="lists-all-checked" value="all"/>
+            </th>
+            <th>回款号</th>
+            <th>对方名称</th>
+            <th class="date">回款日期</th>
+            <th class="money">回款金额</th>
+            <th class="money">未对应订单金额</th>
+        </tr>
+        </thead>
+        <tbody>
+        <{volist name="lists" id="val" empty="$empty"}>
+        <tr>
+        <td><input type="checkbox" value="<{$val.r_id}>" class="lists-id" data-name="<{$val.r_no}>"></td>
+        <td><{$val.r_no}></td>
+        <td><{$val.r_coname}></td>
+        <td><?php echo date("Y-m-d", $val['r_date']); ?></td>
+        <td class="money"><{$val.r_money|number_format=2}></td>
+        <td class="money"><{$val.r_noused|number_format=2}></td>
+        </tr>
+        <{/volist}>
+        </tbody>
+    </table>
+</div>
+
+<div class="btn-pannel paginate">
+    <{$lists->render()}>
+</div>
+
+<script>
+    (function($){
+        var pid = "<{$type.'-'.$listType.'-list'}>" ;
+        //var form = $(".f-layer-<{$type.'-'.$listType}> form");
+        var sel = $("#sel-<{$type.'-'.$listType}>-ids");
+
+        $("#"+pid).find(".lists-id").each(function(){
+            if(sel.find("option[value="+$(this).attr("value")+"]").length>0)
+                $(this).prop("checked",true);
+        });
+
+        $("#"+pid).find("a").click(function(){
+            var data = {
+                url:$(this).attr("href"),
+                method:"GET",
+                dataType:"json"
+            }
+            contentAjax(pid,data,"jump");
+            return false;
+        });
+        $("#"+pid).find(".checkAll").click(function(){
+            var status = $(this).prop("checked");
+            $("#"+pid).find(".lists-id").each(function(){
+                $(this).prop("checked",status);
+                var val = $(this).attr("value");
+                sel.find("option[value="+val+"]").remove();
+                if(status == true) {
+                    sel.append("<option value='"+val+"' selected>"+$(this).attr("data-name")+"</option>");
+                }
+            });
+        });
+        $("#"+pid).find(".lists-id").click(function(){
+            var val = $(this).attr("value");
+            sel.find("option[value="+val+"]").remove();
+            if($(this).prop("checked") == true){
+                sel.append("<option value='"+val+"' selected>"+$(this).attr("data-name")+"</option>");
+            }
+        });
+    })(jQuery);
+</script>

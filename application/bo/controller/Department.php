@@ -79,4 +79,9 @@ class Department extends BoController
         return $ret;
     }
 
+    public function export()
+    {
+        return $this->doExport();
+    }
+
 }
