@@ -130,4 +130,9 @@ class Contract extends BoController
 
     }
 
+    public function export()
+    {
+        return $this->doExport();
+    }
+
 }

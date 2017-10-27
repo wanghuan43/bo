@@ -55,7 +55,18 @@ return [
             'C' => ['title'=>'合同名','key'=>'c_name'],
             'D' => ['title'=>'合同标的额（元）','key'=>'c_money'],
             'E' => ['title'=>'供应商/客户','key'=>'c_coname'],
-            'F' => ['title'=>'','key'=>'']
+            'F' => ['title'=>'商务工作流类别','key'=>'c_type','type'=>'type'],
+            'G' => ['title'=>'合同签订时间','key'=>'c_date','type'=>'date'],
+            'H' => ['title'=>'责任人','key'=>'c_mname']
+        ],
+        'acceptance' => [ //验收单
+            'A' => ['title'=>'','key'=>'']
+        ],
+        'received' => [ //付款单
+
+        ],
+        'invoice' => [
+
         ]
     ],
 ];

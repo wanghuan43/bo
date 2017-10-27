@@ -70,7 +70,11 @@ class Contract extends BoModel
         foreach ($search as $key => $value) {
             $this->where("ct." . $value['field'], $value['opt'], $value['val']);
         }
-        $list = $this->paginate($limit, false, array("query"=>["c_type"=>Request::instance()->get("c_type")]));
+        if($limit == false){
+            $list = $this->select();
+        }else {
+            $list = $this->paginate($limit, false, array("query" => ["c_type" => Request::instance()->get("c_type")]));
+        }
         return $list;
     }
 

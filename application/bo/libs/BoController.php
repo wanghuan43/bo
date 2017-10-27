@@ -364,10 +364,21 @@ class BoController extends Controller
                 $activeSheet->setCellValue($k.'1',$i['title']);
             }
             $col = 2;
+            $types = getTypeList();
             foreach($res as $item){
 
                 foreach($config as $k => $i ){
                     $val = $item->getData($i['key']);
+                    if(isset($i['type'])){
+                        if($i['type']=='type'){
+                            if( isset($types[$val]) )
+                                $val = $types[$val];
+                            else
+                                $val = '';
+                        }elseif( $i['type']=='date' ){
+                            $val = date('Y/m/d',$val);
+                        }
+                    }
                     $activeSheet->setCellValue($k.$col,$val);
                 }
                 $col ++;
