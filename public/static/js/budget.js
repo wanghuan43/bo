@@ -154,8 +154,8 @@ function spliTable() {
     })
 }
 
-function setTable(row, col, baseTable, type) {
-    var html = '<table id="settingTable" border="1">\n', type = type == undefined ? "other" : type;
+function setTable(row, col, baseTable) {
+    var html = '<table id="settingTable" border="1">\n';
     html = setColName(col, html);
     if (baseTable.length > 0) {
         for (var i = 0; i < baseTable.length; i++) {
@@ -174,6 +174,9 @@ function setTable(row, col, baseTable, type) {
                     crspan += 'style="display:"' + baseTable[i][j].c_display + '" ';
                 }
                 if (baseTable[i][j].c_readonly != "1") {
+                    readOnlyHtml = ' readonly="readonly" ';
+                }
+                if (baseTable[i][j].c_value.indexOf("=") == 0 && noreadOnly !== true){
                     readOnlyHtml = ' readonly="readonly" ';
                 }
                 if (type == "table") {
@@ -207,6 +210,8 @@ function setTable(row, col, baseTable, type) {
 function bindClick() {
     $(settingTable).find("input").unbind("click");
     $(settingTable).find("input").unbind("change");
+    $(settingTable).find("input").unbind("focus");
+    $(settingTable).find("input").unbind("focusout");
     $(settingTable).find("td").unbind("mousedown");
     $(settingTable).find(".stcol").unbind("mouseover");
     $(settingTable).find(".stcol").unbind("mouseout");
@@ -220,7 +225,10 @@ function bindClick() {
     });
     $(settingTable).find(".stcol").change(function () {
         valueChange($(this));
-        funChange(this);
+        funChange($(this));
+    });
+    $(settingTable).find(".stcol").each(function(index, element){
+        $(element).change();
     });
     $(settingTable).find("td").mousedown(function (e) {
         if (e.button == 2) {
@@ -238,7 +246,21 @@ function bindClick() {
             });
         }
     });
-    $(settingTable).find(".stcol").mouseout(function (event) {
+    $(settingTable).find(".stcol").focus(function () {
+        var data = $(this).attr("data"), val = $(this).val();
+        if (data != "" && data != undefined) {
+            $(this).val(data);
+            $(this).attr("data", val);
+        }
+    });
+    $(settingTable).find(".stcol").focusout(function () {
+        var data = $(this).attr("data"), val = $.trim($(this).val());
+        if (val.indexOf("=") == 0) {
+            $(this).val(data);
+            $(this).attr("data", val);
+        }
+    });
+    $(settingTable).find(".stcol").mouseout(function () {
         $(".showTips").hide();
     });
 }
@@ -461,34 +483,39 @@ function batchPermissions() {
         pcr = pcr != "" ? JSON.parse(decodeURIComponent($("#pcr").val())) : [];
     $("#tableBud option:selected").each(function (ind, ele) {
         $("#permissions option:selected").each(function (index, element) {
+            var mid = $(element).val();
             cols.each(function (i, e) {
+                var cid = $(e).attr("cid");
+                for (var ii = 0; ii < pcr.length; ii++) {
+                    if (cid == pcr[ii].cid && mid == pcr[ii].mid) {
+                        pcr.splice(ii, 1);
+                    }
+                }
                 pcr.push({
                     col: $(e).attr("col"),
                     row: $(e).attr("row"),
                     tid: $(ele).val(),
-                    mid: $(element).val(),
+                    mid: mid,
                     data: $(element).attr("data"),
                     check: $(e).attr("col") + "-" + $(e).attr("row") + "-" + $(element).val(),
                     rw: $("#rw").val(),
-                    cid: $(e).attr("cid"),
+                    cid: cid,
                 });
             });
         });
     });
-
-    var prev = "", count = pcr.length;
-    for (var i = 0; i < count; i++) {
-        if (prev == "") {
-            prev = pcr[i];
-        } else if (prev.cid == pcr[i].cid && prev.mid == pcr[i].mid && prev.tid == pcr[i].tid && prev.rw == pcr[i].rw) {
-            pcr.splice(i, 1);
-        } else {
-            prev = pcr[i];
-        }
-    }
     $("#pcr").val(encodeURIComponent(JSON.stringify(pcr)));
     $(".pcrLists").css("border", "1px solid");
     tablePermissions(true);
+}
+
+function rdoly(op) {
+    var input = rclickTD.find(".stcol");
+    if (op == 1) {
+        $(input).prop("readonly", true);
+    } else {
+        $(input).prop("readonly", false);
+    }
 }
 
 $(".permissionDiv .pcd").click(function () {
@@ -505,9 +532,16 @@ $(".submitPermissions").click(function () {
         return false;
     }
     var cols = $(".cbTool:checked"), pcr = $("#pcr").val(),
-        pcr = pcr != "" ? JSON.parse(decodeURIComponent($("#pcr").val())) : [];
+        pcr = pcr != "" ? JSON.parse(decodeURIComponent($("#pcr").val())) : [], count = pcr.length;
     $("#permissions option:selected").each(function (index, element) {
+        var mid = $(element).val();
         cols.each(function (i, e) {
+            var cid = $(e).attr("cid");
+            for (var ii = 0; ii < pcr.length; ii++) {
+                if (cid == pcr[ii].cid && mid == pcr[ii].mid) {
+                    pcr.splice(ii, 1);
+                }
+            }
             pcr.push({
                 col: $(e).attr("col"),
                 row: $(e).attr("row"),
@@ -520,16 +554,6 @@ $(".submitPermissions").click(function () {
             });
         });
     });
-    var prev = "", count = pcr.length;
-    for (var i = 0; i < count; i++) {
-        if (prev == "") {
-            prev = pcr[i];
-        } else if (prev.cid == pcr[i].cid && prev.mid == pcr[i].mid && prev.rw == pcr[i].rw) {
-            pcr.splice(i, 1);
-        } else {
-            prev = pcr[i];
-        }
-    }
     $(".permissionDiv").hide();
     $("#pcr").val(encodeURIComponent(JSON.stringify(pcr)));
     $(".pcrLists").css("border", "1px solid");

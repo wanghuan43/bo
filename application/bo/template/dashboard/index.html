@@ -25,6 +25,14 @@
 <aside id="left-pannel">
     <nav>
         <ul>
+            <li>
+                <a><i class="fa fa-lg fa-fw fa-credit-card"></i><span class="menu-item-parent">我的预算</span><b class="collapse-sign"><em class="fa fa-plus-square-o"></em></b></a>
+                <ul>
+                    <li>
+                        <a href="#mybudget">被授权的预算表</a>
+                    </li>
+                </ul>
+            </li>
             <{volist name="menuList" id="menu"}>
             <li>
                 <a <{if condition="!empty($menu['url'])"}>href="#<{$menu['url']}>"<{/if}>><i class="fa fa-lg fa-fw <{$menu['flag']}>"></i> <span

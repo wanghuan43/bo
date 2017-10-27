@@ -1,0 +1,55 @@
+<{load href="/static/css/budget.css,/static/css/select.min.css"}>
+<div class="clearfix header">
+    <h2></h2>
+    <div class="link-pannel">
+        <ul>
+            <li>
+                <a href="#"><i class="fa fa-file-excel-o"></i>导出</a>
+            </li>
+        </ul>
+    </div>
+</div>
+<div class="main-pannel" id="main-pannel">
+    <nav aria-label="Page navigation">
+        <{$lists->render()}>
+    </nav>
+    <table class="list" cellspacing="0">
+        <colgroup>
+            <col width="150px">
+            <col width="150px">
+            <col width="150px">
+            <col width="40px">
+            <col width="40px">
+            <col width="150px">
+            <col width="150px">
+        </colgroup>
+        <thead>
+        <tr>
+            <th style="text-align: center;">表名称</th>
+            <th>责任部门</th>
+            <th>模板名称</th>
+            <th>表状态</th>
+            <th>创建人</th>
+            <th>创建日期</th>
+            <th>修改日期</th>
+        </tr>
+        </thead>
+        <tbody>
+        <{foreach $lists as $val}>
+        <tr>
+            <td><a href="/mybudget/edit?id=<{$val['id']}>"><{$val['title']}></a></td>
+            <td><{$val['dname']}></td>
+            <td><{$val['t_title']}></td>
+            <td><?php echo (empty($val['status']) ? "正常" : "锁定"); ?></td>
+            <td><{$val['mname']}></td>
+            <td><{$val['create_time']}></td>
+            <td><{$val['update_time']}></td>
+        </tr>
+        <{/foreach}>
+        </tbody>
+    </table>
+    <nav aria-label="Page navigation">
+        <{$lists->render()}>
+    </nav>
+</div>
+<{load href="/static/js/plugin/select/select.min.js,/static/js/lists.js,/static/js/budget.js"}>

@@ -62,10 +62,10 @@ class Budget extends BoController
         $model = new \app\bo\model\Department();
         $id = Request::instance()->get("id", 0);
         $lists = $this->budgetEntity->getTemplateList(false);
-        $table = $this->budgetEntity->getTableByID($id, true);
+        $table = $this->budgetEntity->getTableByID($id);
         $tpcr = $this->budgetEntity->getPermissionsByTable($id);
         $tmp = [];
-        foreach($tpcr as $value){
+        foreach ($tpcr as $value) {
             $t = $value['rw'] == 1 ? "read" : "other";
             $tmp[$t][] = $value;
         }
@@ -89,9 +89,20 @@ class Budget extends BoController
     public function getTemplateTable()
     {
         $tid = Request::instance()->get("tid", false);
+        $tableID = Request::instance()->get("tableID", 0);
         $return = ["status" => false, "message" => "模板加载失败，请选择其他模板"];
+        $template = false;
         if ($tid) {
-            $template = $this->budgetEntity->getTemplateByID($tid, true);
+            if ($tableID) {
+                $template = $this->budgetEntity->getTableByID($tableID, true);
+            }
+            $tmp = $this->budgetEntity->getTemplateByID($tid, true);
+            if($template){
+                $template->t_row = $tmp->t_row;
+                $template->t_col = $tmp->t_col;
+            }else{
+                $template = $tmp;
+            }
             $return = ["status" => true, "message" => $template];
         }
         return $return;
@@ -124,7 +135,7 @@ class Budget extends BoController
                 ];
                 $lists[$value['tid']][] = $tmp;
             }
-            foreach($lists as $key=>$value){
+            foreach ($lists as $key => $value) {
                 $this->budgetEntity->saveTablePermissions($value, $key);
             }
             $return = ["status" => true, "message" => "保存成功"];

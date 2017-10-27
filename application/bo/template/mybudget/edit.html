@@ -1,0 +1,96 @@
+<{load href="/static/css/select.min.css,/static/css/budget.css,/static/css/jquery.contextmenu.css"/}>
+<div class="page-header">
+    <h2>我的预算.被授权的预算表</h2>
+</div>
+
+<form class="form-horizontal form-default form-add" id="form-testT-add" action="/mybudget/doEdit"
+      method="post"
+      style="max-width: 800px;" onsubmit="javascript:return false;">
+    <div class="form-group">
+        <label class="col-sm-2 control-label">表名称</label>
+        <div class="col-sm-10">
+            <input type="text" class="form-control" value="<{$table.title}>" disabled/>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-2 control-label">选择模板</label>
+        <div class="col-sm-10">
+            <input type="text" class="form-control" value="<{$table.t_title}>" disabled/>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-2 control-label">责任部门</label>
+        <div class="col-sm-10">
+            <input type="text" class="form-control" value="<{$table.dname}>" disabled/>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-sm-offset-2 col-sm-10">
+            <button class="btn btn-default" type="submit">确认</button>
+        </div>
+    </div>
+    <div id="table" style="margin-left: 15%;width: 100%">
+    </div>
+</form>
+<{load href="/static/js/plugin/select/select.min.js,/static/js/jquery-ui.custom.js,/static/js/budget.js,/static/js/plugin/menu/jquery.ui.position.min.js,/static/js/plugin/menu/jquery.contextmenu.min.js"/}>
+<script>
+    var permissionsTable = <{$lists}>, hasSubmit = false, checkHide = true, noreadOnly = false, type = "mytable",
+    blockDiv = '<div class="blockDiv">&nbsp;</div>';
+    $(document).ready(function () {
+        setTable(<{$template.t_row}>, <{$template.t_col}>, <{$table.cols}>);
+        $("input[type='checkbox']").remove();
+        $(".checkDiv").remove();
+        $(settingTable).find(".stcol").css("text-indent", "2px");
+        $(settingTable).find(".stcol").each(function (index, element) {
+            $(element).after(blockDiv);
+        });
+        if (permissionsTable.length > 0) {
+            $(permissionsTable).each(function (index, element) {
+                var find = $(settingTable).find(".stcol[cid='" + element.c_id + "']").parent().find(".blockDiv");
+                if (element.rw == 1) {
+                    $(find).css("opacity", "0");
+                } else if(element.rw == 3){
+                    $(find).remove();
+                }
+            });
+            hasSubmit = true;
+        }
+        $("#form-testT-add").submit(function () {
+            if(!hasSubmit){
+                custom.alert("你对当前预算表没有写权限。");
+                return false;
+            }
+            var data = [], url = $(this).attr("action");
+            $(permissionsTable).each(function(index, element){
+                var find = ".stcol[cid='" + element.c_id + "']";
+                var val = ($.trim($(find).attr("data")) == "" && $.trim($(find).attr("data")) == undefined) ? $.trim($(find).val()) : $.trim($(find).attr("data"));
+                if (element.rw == 3) {
+                    data.push({
+                        c_id : element.c_id,
+                        c_value : val,
+                    });
+                }
+            });
+            if(data.length == 0){
+                custom.alert("你对当前预算表没有写权限。");
+                return false;
+            }
+            data = "cols="+encodeURIComponent(JSON.stringify(data));
+            loading.show();
+            $.ajax({
+                url: url,
+                dataType: "json",
+                method: "post",
+                data: data,
+                success: function (data) {
+                    loading.hide();
+                    custom.alert(data.message);
+                    if (data.status == "true") {
+                        window.setTimeout("location.reload()", 800);
+                    }
+                }
+            });
+            return false;
+        });
+    });
+</script>

@@ -1,4 +1,4 @@
-<{load href="/static/css/budget.css,/static/css/jquery.contextmenu.css"/}>
+<{load href="/static/css/budget.css,/static/css/jquery.contextMenu.css"/}>
 <div class="page-header">
     <h2>预算管理.预算模板</h2>
 </div>
@@ -50,12 +50,15 @@
         <command label="插入一列" onclick="insertTable('col')">
             <hr>
     <{/if}>
+            <command label="设置只读" onclick="rdoly(1)">
+                <command label="解除只读" onclick="rdoly(0)">
+                    <hr>
             <command label="合并单元格" onclick="combine()">
                 <command label="拆分单元格" onclick="spliTable()">
 </menu>
-<{load href="/static/js/jquery-ui.custom.js,/static/js/plugin/menu/jquery.ui.position.min.js,/static/js/plugin/menu/jquery.contextmenu.min.js,/static/js/budget.js"/}>
+<{load href="/static/js/jquery-ui.custom.js,/static/js/plugin/menu/jquery.ui.position.min.js,/static/js/plugin/menu/jquery.contextMenu.min.js,/static/js/budget.js"/}>
 <script>
-    var settingTable = "", rclickTD = "", baseTable =<{$template.cols ? $template.cols : "[]"}>;
+    var settingTable = "", rclickTD = "", baseTable =<{$template.cols ? $template.cols : "[]"}>, noreadOnly = true,type="template";
     $(document).ready(function () {
         $.contextMenu('html5');
         $(".table").change(function () {
@@ -75,7 +78,7 @@
                     col = 1;
                     $("#t_col").val(1);
                 }
-//                return false;
+                return false;
             }
             setTable(row, col, []);
         });
@@ -97,7 +100,7 @@
                     dval = $.trim($(e).attr("data")), val = ((dval === undefined || dval == "") ? val : dval),
                     colSpan = $(e).parents("td").attr("colspan") === undefined ? "0" : $(e).parents("td").attr("colspan"),
                     rowSpan = $(e).parents("td").attr("rowspan") === undefined ? "0" : $(e).parents("td").attr("rowspan"),
-                    display = $(e).parents("td").is(":hidden") ? "none" : "block",readonly = ((dval === undefined || dval == "") ? "1" : "0");
+                    display = $(e).parents("td").is(":hidden") ? "none" : "block",readonly = (($(e).prop("readonly") == false) ? "1" : "0");
                 if (tdata[row] === undefined) {
                     eval("tdata[" + row + "] = {}");
                     eval("tdata[" + row + "][" + col + "] = []");
@@ -123,14 +126,16 @@
             });
             data["data"] = tdata, data['t_title'] = title, data['t_row'] = $("#t_row").val(), data['t_col'] = $("#t_col").val(),
             data['tid'] = $("#tid").val();
+            loading.show();
             $.ajax({
                 url: url,
                 dataType: "json",
                 method: "post",
                 data: data,
                 success: function (data) {
-                    custom.alert(data.message)
-                    if (data.status == "true") {
+                    loading.hide();
+                    custom.alert(data.message);
+                    if (data.status == true) {
                         window.setTimeout("location.reload()", 800);
                     }
                 }
@@ -147,11 +152,13 @@
             if (val == 0) {
                 return;
             }
+            loading.show();
             $.ajax({
                 url: "/budget/getTemplateTable?tid="+val,
                 dataType: "json",
                 method: "post",
                 success: function (data) {
+                    loading.hide();
                     $("#t_row").val(data.message.t_row),$("#t_col").val(data.message.t_col);
                     var t = JSON.parse(data.message.cols);
                     setTable(data.message.t_row,data.message.t_col,t);

@@ -12,6 +12,18 @@ input.stcol {
     display: inline-block;
 }
 
+input.stcol[disabled]{
+    cursor: not-allowed;
+    background-color: #eee;
+    opacity: 1;
+}
+
+input.stcol[readonly]{
+    cursor: not-allowed;
+    background-color: #eee;
+    opacity: 1;
+}
+
 div.checkDiv {
     width: 19px;
     height: 30px;
@@ -143,4 +155,14 @@ input.selectedI {
 
 .both {
     background-color: #de2a36;
+}
+
+.blockDiv {
+    cursor: not-allowed;
+    position: relative;
+    z-index: 99;
+    width: 75px;
+    height: 30px;
+    background-color: #eee;
+    margin-top: -30px;
 }

@@ -1,4 +1,4 @@
-<{load href="/static/css/select.min.css,/static/css/budget.css,/static/css/jquery.contextmenu.css"/}>
+<{load href="/static/css/select.min.css,/static/css/budget.css,/static/css/jquery.contextMenu.css"/}>
 <div class="page-header">
     <h2>预算管理.预算表</h2>
 </div>
@@ -14,12 +14,15 @@
     <div class="form-group">
         <label class="col-sm-2 control-label">选择模板</label>
         <div class="col-sm-10">
-            <select id="tid" name="tid" class="form-control" <{if !empty($tableID)}>disabled<{/if}>>
+            <select id="tid"<{if empty($tableID)}> name="tid"<{/if}> class="form-control" <{if !empty($tableID)}>disabled<{/if}>>
             <option value="0">请选择</option>
             <{foreach $lists as $val}>
             <option value="<{$val['t_id']}>" data="<{$val['t_title']}>" <{if $val['t_id'] == $table.tid}>selected<{/if}>><{$val['t_title']}>(<{$val['t_row']}>*<{$val['t_col']}>)</option>
             <{/foreach}>
             </select>
+            <{if !empty($tableID)}>
+            <input type="hidden" name="tid" value="<{$table.tid}>">
+            <{/if}>
         </div>
     </div>
     <div class="form-group">
@@ -93,9 +96,9 @@
         <button class="red pcd">取消</button>
     </p>
 </div>
-<{load href="/static/js/plugin/select/select.min.js,/static/js/jquery-ui.custom.js,/static/js/budget.js,/static/js/plugin/menu/jquery.ui.position.min.js,/static/js/plugin/menu/jquery.contextmenu.min.js"/}>
+<{load href="/static/js/plugin/select/select.min.js,/static/js/jquery-ui.custom.js,/static/js/budget.js,/static/js/plugin/menu/jquery.ui.position.min.js,/static/js/plugin/menu/jquery.contextMenu.min.js"/}>
 <script>
-    var settingTable = "", rclickTD = "", tpcr =<{$tpcr}>,first = true;
+    var settingTable = "", rclickTD = "", tpcr =<{$tpcr}>,first = true,noreadOnly=false,type="table";
     $(document).ready(function () {
         $("#permissions").select2();
         $("#rw").select2();
@@ -105,14 +108,14 @@
             if (val != "0") {
                 loading.show();
                 $.ajax({
-                    url: "/budget/getTemplateTable?tid=" + val,
+                    url: "/budget/getTemplateTable?tid=" + val + "&tableID=<{$tableID}>",
                     dataType: "json",
                     method: "post",
                     success: function (data) {
                         loading.hide();
                         $("#t_row").val(data.message.t_row), $("#t_col").val(data.message.t_col);
                         var t = JSON.parse(data.message.cols);
-                        setTable(data.message.t_row, data.message.t_col, t, "table");
+                        setTable(data.message.t_row, data.message.t_col, t);
                         funChange();
                         if ((tpcr.read != undefined || tpcr.other != undefined) && first) {
                             for (var i in tpcr){
@@ -124,6 +127,8 @@
                                 });
                                 $("#rw option[value='" + v + "']").prop("selected", true);
                                 $(".submitPermissions").click();
+                                $("#permissions option").prop("selected", false);
+                                $("#rw option").prop("selected", false);
                             }
                         }
                         first = false;
@@ -139,7 +144,7 @@
         });
         $("#tid").change();
         $("#did").change(function () {
-            var val = $(this).val(), url = $(this).attr("action");
+            var val = $(this).val();
             if (val != "0") {
                 $("#dname").val($(this).find("option:selected").attr("data"));
             } else {
@@ -157,7 +162,8 @@
                 method: "post",
                 success: function (data) {
                     loading.hide();
-                    if (data.status == "true") {
+                    custom.alert(data.message);
+                    if (data.status == true) {
                         window.setTimeout("location.reload()", 800);
                     }
                 }
