@@ -30,7 +30,7 @@
         <{volist name="lists" id="vo" empty="<tr><td colspan='11'>暂无数据</td></tr>"}>
         <tr>
             <td><input type="radio" class="selectRadio" name="selectRadio" value="<{$vo.co_id}>" data="<{$vo.co_name}>" /></td>
-            <td><a href="/company/detail?id=<{$vo.co_id}>"><{$vo.co_code}></a></td>
+            <td><{$vo.co_code}></td>
             <td><{$vo.co_name}></td>
             <td><{if $vo.co_status == 1}><span style="color:green">核准</span><{else}><span style="color:red;">禁用</span><{/if}></td>
             <td><{$vo.co_mnemonic_code}></td>
