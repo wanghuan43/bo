@@ -271,7 +271,7 @@ class Orders extends BoController
         $this->ordersModel->alias("o");
         switch ($type) {
             case "contract":
-                $this->title = "我的合同";
+                $this->title = "合同订单";
                 $this->ordersModel->where("o.o_status", "=", "6");
                 if(!$this->current->m_isAdmin){
                     $this->ordersModel->where("o.o_mid", "=", $this->current->m_id);
@@ -292,7 +292,7 @@ class Orders extends BoController
 //                }
                 break;
             default:
-                $this->title = "我的订单";
+                $this->title = "商机订单";
                 $this->ordersModel->where("o.o_status", "<>", "6");
                 if(!$this->current->m_isAdmin){
                     $this->ordersModel->where("o.o_mid", "=", $this->current->m_id);

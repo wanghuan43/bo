@@ -23,6 +23,7 @@ class Acceptance extends BoController
     {
         $acceptanceModel = new \app\bo\model\Acceptance();
         $this->assign("type", "acceptance");
+        $acceptanceModel->where("a.a_noused",">","0");
         return $this->search($acceptanceModel, "common/popused");
     }
 

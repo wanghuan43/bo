@@ -36,7 +36,7 @@
                 "date"=>date("Y-m-d", $val['i_date']),
             );
          ?>
-        <tr <{if !empty($fi)}>style="<{$val['i_noused']=="0.00"?"background-color: red":"background-color: green"}>;color: white;border-bottom: 1px solid white;"<{/if}>>
+        <tr>
             <{if $listType == 2}>
             <td><input type="checkbox" value="<{$val.i_id}>" class="lists-id"></td>
             <td><a href="/invoice/detail?id=<{$val.i_id}>"><{$val.i_no}></a></td>
