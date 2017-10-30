@@ -18,7 +18,7 @@
     <div style="float: right;">
         <p style="margin: 13px 0;">
             <span style="font-size: 16px;margin-right: 20px;"><i class="fa fa-user-circle"></i><{$member.m_name}></span>
-            <a href="<{:url("/dashboard/logout")}>" style="color: blue;"><i class="fa fa-sign-out"></i>退出</a>
+            <a href="<{:url("/dashboard/logout")}>" style="color: blue;" id="link-site-exit"><i class="fa fa-sign-out"></i>退出</a>
         </p>
     </div>
 </header>
@@ -159,6 +159,13 @@
             if(bak == $(ele).attr("href")){
                 $(ele).click();
             }
+        });
+
+        $("#link-site-exit").click(function(){
+            custom.confirm("您确定要退出登录吗？",function(){
+                location.href=$("#link-site-exit").attr("href");
+            });
+            return false;
         });
     })
     function contentAjax(id,ajaxData,jump){
