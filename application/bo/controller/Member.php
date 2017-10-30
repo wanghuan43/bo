@@ -63,6 +63,21 @@ class Member extends BoController
     public function detail($id)
     {
         $data = $this->model->getDataById($id);
+
+        $readonly = $isSelf = $isAdmin = false;
+        if( $this->current->m_id == $id ){
+            $isSelf = true;
+        }
+        if( $this->current->m_isAdmin == 1){
+            $isAdmin = true;
+        }
+        if( !$isAdmin && !$isSelf ){
+            $readonly = true;
+        }
+
+        $this->assign('isSelf',$isSelf);
+        $this->assign('isAdmin',$isAdmin);
+        $this->assign('readonly',$readonly);
         $this->assign('data', $data);
         return $this->fetch();
     }
@@ -97,6 +112,11 @@ class Member extends BoController
     public function export()
     {
         return $this->doExport();
+    }
+
+    public function selectMember()
+    {
+        return $this->filter('select',1);
     }
 
 }

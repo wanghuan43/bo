@@ -157,5 +157,31 @@
         }
     });
 
+    $("#ipt-member-name").click(function(){
+        if($(".f-layer-member-1").length>0){
+            custom.showFilter(".f-layer-member-1");
+        }else{
+            $.ajax({
+                url:"/member/selectMember",
+                method:"POST",
+                success:function (res) {
+                    $("body").append(res);
+                    $(".f-layer-member-1 .btn.save").click(function(){
+                        var radio = $(".f-layer-member-1 .selectRadio:checked");
+                        if(radio.length>0){
+                            $("input[name='mname']").val(radio.parent().parent().find("td:eq(1)").html());
+                            $("input[name='mcode']").val(radio.parent().parent().find("td:eq(2)").html());
+                            custom.hideFilter(".f-layer-member-1");
+                        }else{
+                            custom.alert("请至少选择一项");
+                        }
+                        return false;
+                    });
+                    custom.showFilter(".f-layer-member-1",1);
+                }
+            });
+        }
+    });
+
 
 })(jQuery);

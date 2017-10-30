@@ -11,29 +11,23 @@
         <div class="content">
             <table class="detail" style="max-width:500px">
                 <colgroup>
-                    <col width="86" />
-                    <col width="380"/>
                 </colgroup>
                 <tbody>
                 <tr>
-                    <td>公司</td>
-                    <td><input type="text" name="cname" value="<{$data.d_cname}>"/></td>
+                    <td class="bo-label"><label>公司:</label></td>
+                    <td><input type="text" name="cname" value="<{$data.d_cname}>"<{if !$isAdmin}> readonly<{/if}>/></td>
+                    <td class="bo-label"><label>名称:</label></td>
+                    <td><input type="text" name="name" value="<{$data.d_name}>"<{if !$isAdmin}> readonly<{/if}>/><input type="hidden" name="id" value="<{$data.d_id}>"/></td>
                 </tr>
                 <tr>
-                    <td>名称</td>
-                    <td><input type="text" name="name" value="<{$data.d_name}>"/><input type="hidden" name="id" value="<{$data.d_id}>"/></td>
-                </tr>
-                <tr>
-                    <td>编码:</td>
-                    <td><input type="text" name="code" value="<{$data.d_code}>"/></td>
-                </tr>
-                <tr>
-                    <td>部门领导</td>
-                    <td><input type="text" name="mname" value="<{$data.m_name}>"/></td>
-                </tr>
-                <tr>
-                    <td>部门领导编码</td>
-                    <td><input type="text" name="mcode" value="<{$data.m_code}>"/></td>
+                    <td class="bo-label"><label>编码:</label></td>
+                    <td><input type="text" name="code" value="<{$data.d_code}>"<{if !$isAdmin}> readonly<{/if}>/></td>
+                    <td class="bo-label"><label>领导/负责人:</label></td>
+                    <td>
+                        <input type="text" name="mname" value="<{$data.m_name}>" <{if $isAdmin}>id="ipt-member-name"<{else}>readonly<{/if}>/>
+                        <input type="hidden" name="mcode" value="<{$data.m_code}>" />
+                        <input type="hidden" name="o-mcode" value="<{$data.m_code}>"/>
+                    </td>
                 </tr>
                 </tbody>
             </table>
