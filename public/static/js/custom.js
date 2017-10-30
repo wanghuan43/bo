@@ -51,4 +51,9 @@
         }
     };
 
+    custom.hideFilter = function(el){
+        $(".f-layer-back").hide();
+        $(el).removeClass("show");
+    }
+
 }

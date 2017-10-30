@@ -38,7 +38,7 @@ class Member extends BoController
     {
         $post = $this->request->post();
 
-        $arr = ['code', 'is_lead', 'name', 'email', 'phone', 'department', 'did', 'office', 'password', 'isAdmin'];
+        $arr = ['code', 'name', 'email', 'phone', 'department', 'did', 'office', 'password', 'isAdmin'];
 
         foreach ($arr as $item) {
             $data['m_' . $item] = trim($post[$item]);
@@ -63,6 +63,21 @@ class Member extends BoController
     public function detail($id)
     {
         $data = $this->model->getDataById($id);
+
+        $readonly = $isSelf = $isAdmin = false;
+        if( $this->current->m_id == $id ){
+            $isSelf = true;
+        }
+        if( $this->current->m_isAdmin == 1){
+            $isAdmin = true;
+        }
+        if( !$isAdmin && !$isSelf ){
+            $readonly = true;
+        }
+
+        $this->assign('isSelf',$isSelf);
+        $this->assign('isAdmin',$isAdmin);
+        $this->assign('readonly',$readonly);
         $this->assign('data', $data);
         return $this->fetch();
     }
@@ -71,7 +86,7 @@ class Member extends BoController
     {
         $post = $this->request->post();
 
-        $arr = ['email', 'code', 'is_lead', 'name', 'phone', 'department', 'did', 'office', 'password'];
+        $arr = ['email', 'code', 'isAdmin', 'name', 'phone', 'department', 'did', 'office', 'password'];
 
         foreach ($arr as $k) {
             $member['m_' . $k] = trim($post[$k]);
@@ -97,6 +112,11 @@ class Member extends BoController
     public function export()
     {
         return $this->doExport();
+    }
+
+    public function selectMember()
+    {
+        return $this->filter('select',1);
     }
 
 }

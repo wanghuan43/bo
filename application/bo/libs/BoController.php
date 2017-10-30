@@ -141,6 +141,8 @@ class BoController extends Controller
 
         if($operator == 'export'){
             $this->assign('btnSaveText','导出');
+        }elseif($operator == 'select'){
+            $this->assign('btnSaveText','保存');
         }
 
         $this->assign('type',$type);

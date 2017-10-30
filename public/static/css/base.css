@@ -58,6 +58,10 @@ input[type=text] {
     border-radius: 4px;
 }
 
+.detail input[type=text]:read-only{
+    /*background:yellow;*/
+}
+
 td {
     padding-right: 4px;
 }
@@ -552,4 +556,12 @@ input[type=radio] {
 }
 table.list tr.hover{
     background: #f2dede !important;
+}
+.bo-label{
+    text-align: right;
+}
+.detail label,
+.bo-label label{
+    margin:0;
+    padding-right:.8em;
 }

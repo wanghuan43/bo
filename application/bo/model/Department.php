@@ -11,7 +11,7 @@ class Department extends BoModel
 
     protected $searchable = [
         "d_name" => array(
-            "name" => "部门名称",
+            "name" => "科室名称",
             "type" => "text",
             "operators" => array(
                 "like" => "包含",
@@ -19,7 +19,7 @@ class Department extends BoModel
             ),
         ),
         "d_code" => array(
-            "name" => "部门编码",
+            "name" => "科室编码",
             "type" => "text",
             "operators" => array(
                 "like" => "包含",

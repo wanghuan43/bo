@@ -1,5 +1,5 @@
 <div class="page-header">
-    <h2>部门管理.添加部门</h2>
+    <h2>科室管理.添加科室(部门)</h2>
 </div>
 
 <form class="form-horizontal form-default form-add" id="form-department-add" action="/department/add" method="post" onsubmit="return false;">
@@ -12,30 +12,24 @@
     </div>
 
     <div class="form-group">
-        <label for="inputName" class="col-sm-2 control-label">部门名称</label>
+        <label for="inputName" class="col-sm-2 control-label">科室(部门)</label>
         <div class="col-sm-10">
             <input type="text" class="form-control" id="inputName" name="name"/>
         </div>
     </div>
 
     <div class="form-group">
-        <label for="inputCode" class="col-sm-2 control-label">部门编码</label>
+        <label for="inputCode" class="col-sm-2 control-label">编码</label>
         <div class="col-sm-10">
             <input type="text" class="form-control" id="inputCode" name="code"/>
         </div>
     </div>
 
     <div class="form-group">
-        <label for="inputMName" class="col-sm-2 control-label">领导姓名</label>
+        <label for="ipt-member-name" class="col-sm-2 control-label">领导/负责人</label>
         <div class="col-sm-10">
-            <input type="text" class="form-control" id="inputMName" name="mname"/>
-        </div>
-    </div>
-
-    <div class="form-group">
-        <label for="inputMCode" class="col-sm-2 control-label">领导编号</label>
-        <div class="col-sm-10">
-            <input type="text" class="form-control" id="inputMCode" name="mcode"/>
+            <input type="text" class="form-control" id="ipt-member-name" name="mname" readonly/>
+            <input type="hidden" name="mcode" />
         </div>
     </div>
 
