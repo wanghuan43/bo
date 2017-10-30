@@ -38,7 +38,7 @@ class Member extends BoController
     {
         $post = $this->request->post();
 
-        $arr = ['code', 'is_lead', 'name', 'email', 'phone', 'department', 'did', 'office', 'password', 'isAdmin'];
+        $arr = ['code', 'name', 'email', 'phone', 'department', 'did', 'office', 'password', 'isAdmin'];
 
         foreach ($arr as $item) {
             $data['m_' . $item] = trim($post[$item]);
@@ -86,7 +86,7 @@ class Member extends BoController
     {
         $post = $this->request->post();
 
-        $arr = ['email', 'code', 'is_lead', 'name', 'phone', 'department', 'did', 'office', 'password'];
+        $arr = ['email', 'code', 'isAdmin', 'name', 'phone', 'department', 'did', 'office', 'password'];
 
         foreach ($arr as $k) {
             $member['m_' . $k] = trim($post[$k]);
