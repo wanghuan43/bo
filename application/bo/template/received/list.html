@@ -36,7 +36,7 @@
                 "date"=>date("Y-m-d", $val['r_date']),
                 );
         ?>
-        <tr <{if !empty($fi)}>style="<{$val['r_noused']=="0.00"?"background-color: red":"background-color: green"}>;color: white;border-bottom: 1px solid white;"<{/if}>>
+        <tr>
             <{if $listType == 2}>
             <td><input type="checkbox" value="<{$val.r_id}>" class="lists-id"></td>
             <td><a href="/received/detail?id=<{$val.r_id}>"><{$val.r_no}></a></td>

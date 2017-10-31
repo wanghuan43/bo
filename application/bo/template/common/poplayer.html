@@ -29,10 +29,10 @@
     <div class="clearfix header">
         <h2>搜索条件:</h2>
         <div class="btn-pannel">
-            <{if condition="empty($other)"}>
-            <button class="btn save" type="reset">保存</button>
-            <{/if}>
             <button class="btn red close" type="reset">取消</button>
+            <{if condition="empty($other)"}>
+            <button class="btn save" type="reset">确认</button>
+            <{/if}>
             <button class="btn search" type="submit">搜索</button>
         </div>
     </div>

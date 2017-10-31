@@ -4,8 +4,8 @@
     <h2>订单信息管理（商机阶段）</h2>
     <div class="btn-pannel">
         <{if condition="$isAdmin"}>
-        <button type="submit" class="btn">保存</button>
         <button type="button" href="#historyBack" class="btn red">取消</button>
+        <button type="submit" class="btn">保存</button>
         <{/if}>
     </div>
     <div class="link-pannel">
@@ -101,9 +101,9 @@
                 </td>
             </tr>
             <tr>
-                <td class="txt"><{if condition="$op=='add'"}>预计日期:<{else /}>合同日期:<{/if}></td>
+                <td class="txt"><{if condition="$op=='add'"}>预计日期:<{else /}>签约日期:<{/if}></td>
                 <td><input type="text" name="o_date" id="o_date" value="<?php echo (empty($order['o_date']) ? "" : date("Y-m-d", $order['o_date'])) ?>"/></td>
-                <td class="txt"><{if condition="$op=='add'"}>预计金额:<{else /}>合同金额:<{/if}></td>
+                <td class="txt"><{if condition="$op=='add'"}>预计总金额:<{else /}>合同总金额:<{/if}></td>
                 <td><input type="text" name="o_money" id="o_money" value="<{$order.o_money}>"/></td>
                 <!--<td><input type="text" name="o_money" id="o_money" value="1233"/></td>-->
                 <td class="txt">订单数量:</td>
@@ -193,7 +193,7 @@
                     <td><?php echo date("Y-m-d", $value['ou_date']); ?></td>
                     <td class="mony-invoice"><{$value['ou_used']}></td>
                     <td>
-                        <a href="#" target="_blank" style="color: blue;"><{$value['ou_otid']}></a>
+                        <a href="invoice/detail?id=<{$value['ou_id']}>" target="_blank" style="color: blue;"><{$value['ou_otid']}></a>
                         <input type="hidden" name="used[1][date][]" value="<?php echo date("Y-m-d", $value['ou_date']); ?>">
                         <input type="hidden" name="used[1][value][]" value="<{$value['ou_used']}>">
                         <input type="hidden" name="used[1][ot_id][]" value="<{$value['ou_oid']}>">
@@ -230,7 +230,7 @@
                     <td><?php echo date("Y-m-d", $value['ou_date']); ?></td>
                     <td class="mony-invoice"><{$value['ou_used']}></td>
                     <td>
-                        <a href="#" target="_blank" style="color: blue;"><{$value['ou_otid']}></a>
+                        <a href="acceptance/detail?id=<{$value['ou_id']}>" target="_blank" style="color: blue;"><{$value['ou_otid']}></a>
                         <input type="hidden" name="used[2][date][]" value="<?php echo date("Y-m-d", $value['ou_date']); ?>">
                         <input type="hidden" name="used[2][value][]" value="<{$value['ou_used']}>">
                         <input type="hidden" name="used[2][ot_id][]" value="<{$value['ou_oid']}>">
@@ -267,7 +267,7 @@
                     <td><?php echo date("Y-m-d", $value['ou_date']); ?></td>
                     <td class="mony-invoice"><{$value['ou_used']}></td>
                     <td>
-                        <a href="#" target="_blank" style="color: blue;"><{$value['ou_otid']}></a>
+                        <a href="received/detail?id=<{$value['ou_id']}>" target="_blank" style="color: blue;"><{$value['ou_otid']}></a>
                         <input type="hidden" name="used[3][date][]" value="<?php echo date("Y-m-d", $value['ou_date']); ?>">
                         <input type="hidden" name="used[3][value][]" value="<{$value['ou_used']}>">
                         <input type="hidden" name="used[3][ot_id][]" value="<{$value['ou_oid']}>">
@@ -728,9 +728,9 @@
                 $(element).parent().prev().find("i:eq(0)").click();
             }
         });
-        $("#o_cno,#o_pname,#o_coname").click(function(){
-            $(this).parent().prev().find("i:eq(0)").click();
-        });
+//        $("#o_cno,#o_pname,#o_coname").click(function(){
+//            $(this).parent().prev().find("i:eq(0)").click();
+//        });
     });
     function baseUTR(element,data,type){
         var i = 1;

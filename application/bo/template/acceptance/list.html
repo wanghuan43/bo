@@ -34,7 +34,7 @@
                 "date"=>date("Y-m-d", $val['a_date']),
                 );
         ?>
-        <tr <{if !empty($fi)}>style="<{$val['a_noused']=="0.00"?"background-color: red":"background-color: green"}>;color: white;border-bottom: 1px solid white;"<{/if}>>
+        <tr>
         <{if $listType == 2}>
             <td><input type="checkbox" value="<{$val.a_id}>" class="lists-id"></td>
             <td><a href="/acceptance/detail?id=<{$val.a_id}>"><{$val.a_no}></a></td>
