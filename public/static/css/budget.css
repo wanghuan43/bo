@@ -10,6 +10,8 @@ input.stcol {
     border-radius: 0;
     text-indent: 22px;
     display: inline-block;
+    position: relative;
+    top: -30px;
 }
 
 input.stcol[disabled]{
@@ -24,6 +26,12 @@ input.stcol[readonly]{
     opacity: 1;
 }
 
+div.tdDiv{
+    height: 30px;
+    overflow: hidden;
+    min-width: 40px;
+}
+
 div.checkDiv {
     width: 19px;
     height: 30px;
@@ -31,15 +39,16 @@ div.checkDiv {
     float: left;
     text-align: center;
     border-right: 1px solid black;
-    position: absolute;
+    position: relative;
+    z-index: 1;
 }
 
-div.checkDiv:before {
-    content: '';
-    display: inline-block;
-    height: 100%;
-    vertical-align: middle;
-}
+/*div.checkDiv:before {*/
+    /*content: '';*/
+    /*display: inline-block;*/
+    /*height: 100%;*/
+    /*vertical-align: middle;*/
+/*}*/
 
 td.selected {
     background-color: #dedddd;
@@ -165,4 +174,16 @@ input.selectedI {
     height: 30px;
     background-color: #eee;
     margin-top: -30px;
+}
+
+#table{
+    max-width: 700px;
+    max-height: 700px;
+    margin: 0 auto;
+    overflow: scroll;
+}
+
+td input[type='text']{
+    width: 100px;
+    height: 30px;
 }

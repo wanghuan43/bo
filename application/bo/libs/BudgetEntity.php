@@ -179,8 +179,8 @@ class BudgetEntity extends BoModel
         foreach ($cols as $key => $value) {
             foreach ($value as $k => $val) {
                 $tmp = [
-                    "c_col" => $key,
-                    "c_row" => $k,
+                    "c_col" => $k,
+                    "c_row" => $key,
                     "c_value" => $val['val'],
                     "c_colspan" => $val['colSpan'],
                     "c_rowspan" => $val['rowSpan'],

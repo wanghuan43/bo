@@ -95,12 +95,12 @@
                 return false;
             }
             $(".stcol").each(function (i, e) {
-                var col = $(e).attr("col"), row = $(e).attr("row"), val = $.trim($(e).val()),
+                var col = $(e).attr("col"), row = $(e).attr("row"), val = $.trim($(e).val()), data = $(e).attr("data"),
                     cid=($(e).attr("cid") == undefined ? 0 : $(e).attr("cid")),
                     dval = $.trim($(e).attr("data")), val = ((dval === undefined || dval == "") ? val : dval),
                     colSpan = $(e).parents("td").attr("colspan") === undefined ? "0" : $(e).parents("td").attr("colspan"),
                     rowSpan = $(e).parents("td").attr("rowspan") === undefined ? "0" : $(e).parents("td").attr("rowspan"),
-                    display = $(e).parents("td").is(":hidden") ? "none" : "block",readonly = (($(e).prop("readonly") == false) ? "1" : "0");
+                    display = $(e).parents("td").is(":hidden") ? "none" : "block",readonly = (($(e).prop("readonly") == false && (data == undefined || data == "")) ? "1" : "0");
                 if (tdata[row] === undefined) {
                     eval("tdata[" + row + "] = {}");
                     eval("tdata[" + row + "][" + col + "] = []");
@@ -179,6 +179,9 @@
         });
         $(".stcol").mouseout(function(event){
             $(".showTips").hide();
+        });
+        $("td").each(function(index, element){
+            resetTable(element);
         });
     });
 </script>

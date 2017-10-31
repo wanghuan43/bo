@@ -110,8 +110,8 @@ function combine() {
 
 function resetTable(td) {
     $("#settingTable").attr("border", "1");
-    var height = (parseInt($(td).height()) + 2);
-    $(td).find(".stcol").css({height: height + "px", lineHeight: height + "px"});
+    var height = (parseInt($(td).height()) + 2), width = $(td).find("div:eq(0)").width();
+    $(td).find(".stcol").css({height: height + "px", lineHeight: height + "px",top: "-"+height + "px", width:width+"px"});
     $(td).find("div").css("height", height + "px");
 }
 
@@ -161,7 +161,7 @@ function setTable(row, col, baseTable) {
         for (var i = 0; i < baseTable.length; i++) {
             var ii = i + 1;
             html += '<tr row="' + ii + '">\n';
-            html += '<td style="width: 40px;" align="center">' + ii + '&nbsp;<input type="checkbox" class="tableCheck rowCheck" data="' + ii + '"></td>\n';
+            html += '<td style="width: 40px;" align="center"><div class="tdDiv">' + ii + '&nbsp;<input type="checkbox" class="tableCheck rowCheck" data="' + ii + '"></div></td>\n';
             for (var j = 0; j < baseTable[i].length; j++) {
                 var jj = j + 1, crspan = "", valueHtml = "", readOnlyHtml = "";
                 if (parseInt(baseTable[i][j].c_colspan) > 0) {
@@ -184,19 +184,19 @@ function setTable(row, col, baseTable) {
                 } else {
                     valueHtml = ' value="' + baseTable[i][j].c_value + ' "';
                 }
-                html += '<td col="' + jj + '" ' + crspan + '>' +
+                html += '<td col="' + jj + '" ' + crspan + '><div class="tdDiv">' +
                     '<div class="checkDiv"><input type="checkbox" cid="' + baseTable[i][j].c_id + '" col="' + jj + '" row="' + ii + '" class="cbTool"></div>' +
                     '<input type="text" class="stcol" cid="' + baseTable[i][j].c_id + '" col="' + jj + '" row="' + ii + '" ' + valueHtml + readOnlyHtml + '>' +
-                    '</td>\n';
+                    '</div></td>\n';
             }
             html += '</tr>\n';
         }
     } else {
         for (var i = 1; i <= row; i++) {
             html += '<tr row="' + i + '">\n';
-            html += '<td style="width: 40px;" align="center">' + i + '&nbsp;<input type="checkbox" class="tableCheck rowCheck" data="' + i + '"></td>\n';
+            html += '<td style="width: 40px;" align="center"><div class="tdDiv">' + i + '&nbsp;<input type="checkbox" class="tableCheck rowCheck" data="' + i + '"></div></td>\n';
             for (var j = 1; j <= col; j++) {
-                html += '<td col="' + j + '"><div class="checkDiv"><input type="checkbox" col="' + j + '" row="' + i + '" class="cbTool"></div><input type="text" class="stcol" col="' + j + '" row="' + i + '" value=""></td>\n';
+                html += '<td col="' + j + '"><div class="tdDiv"><div class="checkDiv"><input type="checkbox" col="' + j + '" row="' + i + '" class="cbTool"></div><input type="text" class="stcol" col="' + j + '" row="' + i + '" value=""></div></td>\n';
             }
             html += '</tr>\n';
         }
@@ -407,12 +407,12 @@ function setCheck(row, col, checked) {
 
 function setColName(col, html) {
     var asc = 65, round = Math.ceil(col / 26), left = col % 26;
-    html += '<tr>\n<td align="center">全选<input type="checkbox" id="checkAll"></td>\n';
+    html += '<tr>\n<td align="center"><div class="tdDiv">全选<input type="checkbox" id="checkAll"></div></td>\n';
     for (var i = 0; i < round; i++) {
         var count = col < 26 ? col : (i == (round - 1) ? (round == 1 ? 26 : left) : 26);
         var before = i == 0 ? "" : String.fromCharCode(asc + (i - 1));
         for (var j = 0; j < count; j++) {
-            html += '<td align="center" style="min-width: 40px;" align="center">' + before + String.fromCharCode(asc + j) + '&nbsp;<input type="checkbox" class="tableCheck colCheck" data="' + ((i + 1) * (j + 1)) + '"></td>\n';
+            html += '<td align="center" align="center"><div class="tdDiv">' + before + String.fromCharCode(asc + j) + '&nbsp;<input type="checkbox" class="tableCheck colCheck" data="' + ((i + 1) * (j + 1)) + '"></div></td>\n';
         }
     }
     html += '</tr>\n';
