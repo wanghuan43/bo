@@ -43,8 +43,8 @@ class Acceptance extends BoController
         $data['a_content'] = trim($post['content']);
         $data['a_type'] = $post['type'];
         $data['a_money'] = floatval(trim($post['money']));
-        $data['a_used'] = floatval(trim($post['used']));
-        $data['a_noused'] = floatval(trim($post['noused']))?:$data['a_money'];
+        //$data['a_used'] = floatval(trim($post['used']));
+        //$data['a_noused'] = floatval(trim($post['noused']))?:$data['a_money'];
         $data['a_date'] = strtotime($post['date']);
         $data['a_coid'] = trim($post['coid']);
         $data['a_coname'] = trim($post['coname']);
@@ -92,8 +92,8 @@ class Acceptance extends BoController
         $data['a_coid'] = intval($post['coid']);
         $data['a_mname'] = trim($post['mname']);
         $data['a_mid'] = intval($post['mid']);
-        $data['a_used'] = floatval($post['used']);
-        $data['a_noused'] = floatval($post['noused']);
+        //$data['a_used'] = floatval($post['used']);
+        //$data['a_noused'] = floatval($post['noused']);
 
         if( empty($data['a_used']) && !!$post['oused'] ){
             $used = 0;

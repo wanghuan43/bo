@@ -44,8 +44,8 @@ class Contract extends BoController
         $data['c_bakup'] = trim($post['bakup']);
         $data['c_type'] = $post['type'];
         $data['c_money'] = floatval(trim($post['money']));
-        $data['c_used'] = floatval(trim($post['used']));
-        $data['c_noused'] = floatval(trim($post['noused']))?:$data['c_money'];
+        //$data['c_used'] = floatval(trim($post['used']));
+        //$data['c_noused'] = floatval(trim($post['noused']))?:$data['c_money'];
         $data['c_date'] = strtotime($post['date']);
         $data['c_coid'] = trim($post['coid']);
         $data['c_coname'] = trim($post['coname']);
@@ -78,11 +78,7 @@ class Contract extends BoController
         $data = $this->model->getDataById($id);
         $modelOrders = new \app\bo\model\Orders();
         $orders = $modelOrders->getOrdersByContractId($id);
-        if(empty($orders)){
-            $readonly = false;
-        }else{
-            $readonly = true;
-        }
+        $readonly = true;
         $this->assign('readonly',$readonly);
         $this->assign('data',$data);
         $this->assign('orders',$orders);

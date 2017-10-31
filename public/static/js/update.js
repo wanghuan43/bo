@@ -49,7 +49,9 @@
     });
 
     $("#ipt-company-name").click(function(){
+        $(".f-layer-back").show();
         if($(".f-layer-company").length>0) {
+            $(".f-layer-back").hide();
             $(".f-layer-company-back").show();
             $(".f-layer-company").addClass("show");
         }else {
@@ -58,6 +60,7 @@
                 method: "post",
                 dataType: "json",
                 success: function (res) {
+                    $(".f-layer-back").hide();
                     $("#popDIV").append(res.content);
                     $(".f-layer-company .close").click(function () {
                         $(".f-layer-company-back").hide();
@@ -82,14 +85,17 @@
     });
 
     $("#ipt-project-name").click(function(){
+        $(".f-layer-back").show();
         if($(".f-layer-project").length>0){
-            $(".flayer-project-back").show();
+            $(".f-layer-back").hide();
+            $(".f-layer-project-back").show();
             $(".f-layer-project").addClass("show");
         }else{
             $.ajax({
                 url:"project/searchProject.html",
                 dataType:'json',
                 success:function(res){
+                    $(".f-layer-back").hide();
                     $("#popDIV").append(res.content);
                     $(".f-layer-project .close").click(function () {
                         $(".f-layer-project-back").hide();
@@ -125,7 +131,9 @@
     });
 
     $("#inputDepartment").click(function(){
+        $(".f-layer-back").show();
         if($(".f-layer-department").length>0) {
+            $(".f-layer-back").hide();
             $(".f-layer-department-back").show();
             $(".f-layer-department").addClass("show");
         }else {
@@ -134,6 +142,7 @@
                 method: "post",
                 dataType: "json",
                 success: function (res) {
+                    $(".f-layer-back").hide();
                     $("#popDIV").append(res.content);
                     $(".f-layer-department .close").click(function () {
                         $(".f-layer-department-back").hide();
@@ -158,6 +167,7 @@
     });
 
     $("#ipt-member-name").click(function(){
+        $(".f-layer-back").show();
         if($(".f-layer-member-1").length>0){
             custom.showFilter(".f-layer-member-1");
         }else{

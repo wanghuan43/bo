@@ -13,13 +13,7 @@
                     <input type="checkbox" id="lists-all-checked" value="all"/>
                 <{/if}>
             </th>
-            <th>合同号</th>
-            <th>合同名称</th>
-            <th width="400">对方名称</th>
-            <th>合同类型</th>
-            <th class="date">签约日期</th>
-            <th class="money">合同金额</th>
-            <th class="money">未对应订单金额</th>
+            <{include file="contract/list/common_th"}>
             <{if $listType == 2}>
             <th style="width:8em;"></th>
             <{/if}>

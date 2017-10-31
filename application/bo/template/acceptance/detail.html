@@ -2,7 +2,7 @@
     <div class="clearfix header">
         <h2>验收单管理.数据查看</h2>
         <div class="btn-pannel">
-            <button type="submit" class="btn">保存</button>
+            <{/*button type="submit" class="btn">保存</button*/}>
             <button type="button" href="#contract/all" class="btn red">取消</button>
         </div>
         <!--div class="link-pannel">
@@ -30,21 +30,21 @@
                     <td width="64">验收单号:</td>
                     <td><input type="text" name="no" value="<{$data.a_no}>" class="no-border" readonly/><input type="hidden" name="id" value="<{$data.a_id}>"/> </td>
                     <td style="padding-left:20px;width:84px;">验收日期:</td>
-                    <td><input type="text" name="date" value="<{$data.a_date|date='Y-m-d',###}>" name="date"/></td>
+                    <td><input type="text" value="<{$data.a_date|date='Y-m-d',###}>"  readonly class="no-border"/></td>
                     <td style="padding-left:20px;width:84px">总金额:</td>
-                    <td><input type="text" value="<{$data.a_money}>" name="money"<{if $orders}> class="no-border" readonly<{/if}>/></td>
+                    <td><input type="text" value="<{$data.a_money}>" name="money" class="no-border" readonly/></td>
                 </tr>
                 <tr>
                     <td>销售/采销:</td>
                     <td>
-                        <select name="type">
+                        <select name="type" disabled>
                             <option value="1"<{if $data.a_type == 1}> selected<{/if}>>销售</option>
                             <option value="2"<{if $data.a_type == 2}> selected<{/if}>>采销</option>
                         </select>
                     </td>
                     <td style="padding-left:20px;">对方名称:</td>
                     <td>
-                        <input type="text" value="<{$data.a_coname}>" name="coname" id="ipt-company-name" readonly/>
+                        <input type="text" value="<{$data.a_coname}>" name="coname" readonly class="no-border"/>
                         <input type="hidden" name="coid" value="<{$data.a_coid}>" id="ipt-company-id">
                     </td>
                     <td style="padding-left:20px;">责任人:</td>
