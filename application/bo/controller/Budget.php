@@ -3,6 +3,8 @@
 namespace app\bo\controller;
 
 use app\bo\libs\BoController;
+use app\bo\model\BudgetColumn;
+use app\bo\model\BudgetTable;
 use app\bo\model\BudgetTemplate;
 use think\Request;
 use app\bo\libs\BudgetEntity;
@@ -143,4 +145,58 @@ class Budget extends BoController
         }
         return $return;
     }
+
+    public function export($type='template',$id=false)
+    {
+
+
+        $model = new BudgetColumn();
+        $isTemplate = $type == 'template'?1:0;
+        if($isTemplate==1){
+            $tplModel = new BudgetTemplate();
+            $res = $tplModel->where($tplModel->getPk(),'=',$id)->find();
+            $title = $res->t_title;
+        }else{
+            $tblModel = new BudgetTable();
+            $res = $tblModel->where($tblModel->getPk(),'=',$id)->find();
+            $title = $res->title;
+        }
+        $res = $model->where('c_isTemplate','=',$isTemplate)->where('c_tid','=',$id)->select();
+        $excel = new \PHPExcel();
+        $excel->getProperties()->setCreator('新智云商机系统')
+                ->setLastModifiedBy('新智云商机系统')
+                ->setTitle($title)
+                ->setSubject($title)
+                ->setDescription('新智云商机系统-'.$title.'-'.date('Y-m-d h:i:s'));
+
+        $excel->setActiveSheetIndex(0);
+        $activeSheet = $excel->getActiveSheet();
+        $activeSheet->setTitle($title);
+
+        foreach($res as $cell){
+            $colIndex = $cell->c_row;
+            $col = \PHPExcel_Cell::stringFromColumnIndex($colIndex-1);
+            $row = $cell->c_col;
+            $cSpan = $cell->c_colspan;
+            $rSpan = $cell->c_rowspan;
+            if( $cSpan || $rSpan ){
+                $sRow = $row + $rSpan-1;
+                $sCol = \PHPExcel_Cell::stringFromColumnIndex($colIndex + $cSpan - 2);
+                $activeSheet->mergeCells($col.$row.':'.$sCol.$sRow);
+            }
+            $val = $cell->c_value;
+            $activeSheet->setCellValue($col.$row,$val);
+        }
+
+        header('Content-Type: application/vnd.ms-excel');
+        header('Content-Disposition: attachment;filename="'.$title.'.xlsx"');
+        header('Cache-Control: max-age=0');
+
+        $objWriter = \PHPExcel_IOFactory::createWriter($excel, 'Excel2007');
+        $objWriter->save('php://output');
+
+        exit;
+
+    }
+
 }

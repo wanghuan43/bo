@@ -2,9 +2,9 @@
     <h2></h2>
     <div class="link-pannel">
         <ul>
-            <li>
+            <{/*li>
                 <a href="#"><i class="fa fa-file-excel-o"></i>导出</a>
-            </li>
+            </li*/}>
             <li>
                 <a href="<{:url("/budget/templateAdd")}>"><i class="fa fa-plus"></i>添加</a>
             </li>
@@ -17,32 +17,38 @@
     </nav>
     <table class="list" cellspacing="0">
         <colgroup>
+            <{/*col width="24px"*/}>
             <col width="150px">
             <col width="40px">
             <col width="40px">
             <col width="150px">
             <col width="150px">
             <col width="150px">
+            <col width="30px">
         </colgroup>
         <thead>
         <tr>
+            <!--th></th-->
             <th style="text-align: center;">模板名称</th>
             <th>行</th>
             <th>列</th>
             <th>责任人</th>
             <th>创建日期</th>
             <th>修改日期</th>
+            <th style="width:30px;"></th>
         </tr>
         </thead>
         <tbody>
         <{foreach $lists as $val}>
         <tr>
+            <{/*td><input type="radio" name="id" value=""/></td*/}>
             <td><a href="/budget/templateAdd?tid=<{$val['t_id']}>"><{$val['t_title']}></a></td>
             <td><{$val['t_col']}></td>
             <td><{$val['t_row']}></td>
             <td><{$val['t_mname']}></td>
             <td><{$val['create_time']}></td>
             <td><{$val['update_time']}></td>
+            <td><a href="<{:url('/budget/export/type/template/id/'.$val['t_id'])}>" target="_blank">导出</a></td>
         </tr>
         <{/foreach}>
         </tbody>
