@@ -17,7 +17,11 @@ class Permissions extends BoModel
         foreach($tmp as $key=>$value){
             $value = $value->toArray();
             if(empty($value['parent_id'])){
-                $value['children'] = array();
+                if(isset($menus[$value['id']])){
+                    $value['children'] = $menus[$value['id']]['children'];
+                }else{
+                    $value['children'] = array();
+                }
                 $menus[$value['id']] = $value;
             }else{
                 $menus[$value['parent_id']]['children'][] = $value;
