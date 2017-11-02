@@ -79,11 +79,28 @@ abstract class BoModel extends Model
 
         $ret['validate'] = $res;
 
-        $ret['res'] = $this->saveAll($dataset);
+        //$ret['res'] = $this->saveAll($dataset);
 
-        foreach($ret['res'] as $item){
-            $log = 'SUCCESS - '.serialize($item->getData());
-            CustomUtils::writeImportLog($log,strtolower($this->name));
+        if( method_exists($this,'doImport')){
+
+            $ret['res'] = $this->doImport($dataset);
+
+            foreach($ret['res'] as $item){
+                $log = 'SUCCESS - '.serialize($item);
+                CustomUtils::writeImportLog($log,strtolower($this->name));
+            }
+
+        }else{
+            try{
+                $ret['res'] = $this->saveAll($dataset);
+                foreach($ret['res'] as $item){
+                    $log = 'SUCCESS - '.serialize($item->getData());
+                    CustomUtils::writeImportLog($log,strtolower($this->name));
+                }
+            }catch (\Exception $e){
+                $log = 'ERROR - '.$e->getMessage();
+                CustomUtils::writeImportLog($log,strtolower($this->name));
+            }
         }
 
         return $ret;

@@ -15,13 +15,13 @@ class Project extends Validate
 {
 
     protected $rule = [
-        'p_no' => 'require|unique:\\app\\bo\\model\\Project',
+        'p_no' => 'require',
         'p_name' => 'require'
     ];
 
     protected $message = [
         'p_no.require' => '编号不能为空',
-        'p_no.unique' => '编号已存在',
+        //'p_no.unique' => '编号已存在',
         'p_name' => '名称不能为空'
     ];
 
