@@ -12,14 +12,14 @@ class Permissions extends BoModel
             $this->where("p.member_id", "=", $member_id);
         }
         $tmp = $this->field("m.*")->alias("p")->join("__MENU__ m","p.menu_id = m.id","LEFT")
-                ->where("m.is_show", "=", "1")->order("m.list_order", "ASC")->select();
+                ->where("m.is_show", "=", "1")->order("m.parent_id", "ASC")->order("m.list_order", "ASC")->select();
         $menus = array();
         foreach($tmp as $key=>$value){
             $value = $value->toArray();
             if(empty($value['parent_id'])){
                 $value['children'] = array();
                 $menus[$value['id']] = $value;
-            }elseif(isset($menus[$value['parent_id']])){
+            }else{
                 $menus[$value['parent_id']]['children'][] = $value;
             }
         }
