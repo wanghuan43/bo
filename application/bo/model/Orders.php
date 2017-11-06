@@ -34,6 +34,13 @@ class   Orders extends BoModel
                 '=' => '等于'
             ]
         ],
+        'o_type' => [
+            'name' => '购销',
+            'type' => 'type',
+            'operators' => [
+                '=' => '等于'
+            ]
+        ],
         'o_cno' => [
             'name' => '合同编号',
             'type' => 'text',

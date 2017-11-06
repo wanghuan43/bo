@@ -132,6 +132,10 @@
         switch (type){
             case 'date':
                 setDateField(id, opt, input);
+                break;
+            case 'type':
+                setTypeField(id,opt,input);
+                break;
             default:
                 cutInput(input,opt,type);
                 break;
@@ -198,5 +202,17 @@
             });
             datePlugin[it] = tmp;
         }
+    }
+    function setTypeField(id,opt,input) {
+        var name = $(id).attr("name");
+        var pNode = $(id).parent();
+        $(id).remove();
+        var sel  = "<select name='"+name+"' id='"+id+"' style='width:200px;'>" +
+            "<option value=''>--</option>" +
+            "<option value='1'>销售</option>" +
+            "<option value='2'>采购</option>" +
+            "</select>";
+        console.log(sel);
+        pNode.append(sel);
     }
 </script>
