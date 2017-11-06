@@ -90,6 +90,14 @@ class Contract extends BoModel
         $mCompany = new Company();
         $mMember = new Member();
         foreach ($dataset as $key=>$data){
+            if(isset($data['status'])){
+                if($data['status']=='C合同'){
+                    unset($data['status']);
+                }else{
+                    unset($dataset[$key]);
+                    continue;
+                }
+            }
             if(empty($data['c_no'])){//合同号和项目号不能为空
                 unset($dataset[$key]);
             }else{
@@ -109,7 +117,9 @@ class Contract extends BoModel
                 $co_code = isset($data['co_code'])?$data['co_code']:false;
                 $co_name = isset($data['c_coname'])?$data['c_coname']:false;
                 $company = $mCompany->getCompany($co_code,$co_name,$co_type);
+
                 if(isset($data['co_code'])) unset($data['co_code']);
+
                 if(!!$company){
                     $data['c_coid'] = $company->co_id;
                 }else{

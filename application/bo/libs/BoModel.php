@@ -85,10 +85,10 @@ abstract class BoModel extends Model
 
             $ret['res'] = $this->doImport($dataset);
 
-            foreach($ret['res'] as $item){
-                $log = 'SUCCESS - '.serialize($item);
-                CustomUtils::writeImportLog($log,strtolower($this->name));
-            }
+            //foreach($ret['res'] as $item){
+            $log = 'SUCCESS - '.serialize($ret['res']);
+            CustomUtils::writeImportLog($log,strtolower($this->name));
+            //}
 
         }else{
             try{
@@ -104,6 +104,87 @@ abstract class BoModel extends Model
         }
 
         return $ret;
+    }
+
+    public function insertDuplicate($dataset=false)
+    {
+
+        if(empty($dataset)){
+            return false;
+        }
+        $fields = $this->getFieldsType();
+        $numCols = [];
+        $numTypes = ['tinyint','smallint','mediumint','int','bigint','float','double','decimal'];
+        foreach ($fields as $field=>$type) {
+            $match = [];
+            if(preg_match('/\w+/',$type,$match)) {
+                $type = $match[0];
+                if( in_array($type,$numTypes) ){
+                    $numCols[] = $field;
+                }
+            }
+        }
+        $cols = array_keys($dataset[0]);
+        $sqlPrev = "INSERT INTO `".$this->getTable()."` (".implode(',',$cols).") VALUES ";
+
+        foreach($cols as $key => $col){
+            $values[$key] = $col.'=VALUES('.$col.')';
+        }
+        $sqlSuffix = " ON DUPLICATE KEY UPDATE ".implode(',',$values);
+
+        $i = 0;
+        $values = '';
+
+        $db = $this->getQuery();
+        $db->startTrans();
+        try {
+            foreach ($dataset as $data) {
+
+                if (!empty($values))
+                    $values .= ",";
+
+                $values .= "(" ;
+
+                $vals = [];
+
+                foreach($cols as $col){
+                    if(isset($data[$col]) && in_array($col,$numCols)){
+                        $vals[] = $data[$col];
+                    }elseif (isset($data[$col])){
+                        $vals[] = "'".$data[$col]."'";
+                    }else{
+                        $vals[] = "default";
+                    }
+                }
+                $values .= implode(',',$vals);
+
+                $values .= ")";
+                $i++;
+                if ($i%1000 == 0) { //1000条数据操作一次
+                    $sql = $sqlPrev . $values . $sqlSuffix;
+                    CustomUtils::writeImportLog('SQL - '.$sql,strtolower($this->name));
+                    $res[] = $db->query($sql);
+                    $i = 0;
+                    $values = '';
+                }
+
+            }
+
+            if (!empty($values)) {
+                $sql = $sqlPrev . $values . $sqlSuffix;var_dump($sql);//die;
+                CustomUtils::writeImportLog('SQL - '.$sql,strtolower($this->name));
+                $res[] = $db->query($sql);
+            }
+            $db->commit();
+            return $res;
+
+        }catch (\Exception $e){
+            $db->rollback();
+            $log = 'Exception - '. $e->getMessage();
+            CustomUtils::writeImportLog($log,'project');
+            return false;
+        }
+
     }
 
     public function getModelName(){

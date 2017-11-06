@@ -100,10 +100,25 @@ class DataImport
                 }
             }
 
-            $dataset[] = $data;
+            if(isset($config['validate'])){
+                foreach( $config['validate'] as $field=>$val ){
+                    if( is_array($val) ){
+                        if(!in_array($data[$field],$val)){
+                            $data = false;
+                        }
+                    }else{
+                        if($data[$field]!=$val){
+                            $data = false;
+                        }
+                    }
+                }
+            }
+
+            if( $data )
+                $dataset[] = $data;
 
         }
-
+        //var_dump($dataset);die;
         $res = null;
 
         if( isset($config['model']) ){

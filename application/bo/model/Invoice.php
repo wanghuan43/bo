@@ -82,20 +82,29 @@ class Invoice extends BoModel
         $mCompany = new Company();
         $mMember = new Member();
 
+        $arr = [];
+
         foreach ($dataset as $data){
+            if(empty($data['i_no'])){
+                continue;
+            }
             $coCode = $data['co_code'];
             unset($data['co_code']);
             $pNo = $data['p_no'];
             unset($data['p_no']);
-            $cNo = $data['c_no'];
-            unset($data['c_no']);
-            //$cName = $data['c_name'];
-            unset($data['c_name']);
-            $project  = $mProject->where('p_no','=',$pNo)->find();
+            if( isset($data['c_no']) ) {
+                $cNo = $data['c_no'];
+                unset($data['c_no']);
+            }
+            if( isset($data['c_name']) ) {
+                $cName = $data['c_name'];
+                unset($data['c_name']);
+            }
+            /*$project  = $mProject->where('p_no','=',$pNo)->find();
             if(empty($project)){
                 CustomUtils::writeImportLog('ERORR : PROJECT EMPTY'.serialize($data),$this->name);
                 continue;
-            }
+            }*/
             //$contract = $mContract->where('c_no','=',$cNo)->find();
             //if(empty($contract)) continue;
             $company = $mCompany->where('co_name','=',$data['i_coname'])->where('co_type','=',$data['i_type'])
@@ -165,7 +174,8 @@ class Invoice extends BoModel
             if(isset($data['o_csname']))
                 unset($data['o_csname']);
 
-            $iid = $this->insertGetId($data);
+            //$iid = $this->insertGetId($data);
+            $arr[] = $data;
 
             /*$oid = $orderModel->insertGetId($order);
 
@@ -181,6 +191,12 @@ class Invoice extends BoModel
 
             $ouModel ->insert( $ou );*/
 
+        }
+
+        if(empty($arr)){
+            return ;
+        }else{
+            return $this->insertDuplicate($arr);
         }
 
     }

@@ -117,22 +117,23 @@ return [
             ]
         ],
         'purchase-contract' => [ //采销、采购合同
-            'file' => 'uploads/xlsx/最终版-主数据.xlsx',
+            'file' => 'uploads/xlsx/采购跟踪表1031最终.xls',
             'model' => 'contract',
-            'index' => 6,
+            'index' => 2,
             'fields' => [
                 //'c_pname' => '',
-                'c_money' => 'E',
-                'c_coname' => 'G',
-                'co_code' => 'F',
-                'c_mname' => 'J',
-                'd_name' => 'K',
-                'c_date' => 'I',
-                'c_no' => 'C',
-                'c_name' => 'D',
-                'c_type' => 'H',
-                'd_name' => 'K',
-                'p_no' => 'A'
+                'c_money' => 'M',
+                'c_coname' => 'E',
+                'co_code' => 'X',
+                'c_mname' => 'B',
+                //'d_name' => 'A',
+                'c_date' => 'N',
+                'c_no' => 'U',
+                'c_name' => 'V',
+                'c_type' => 'L',
+                'd_name' => 'A',
+                'p_no' => 'C',
+                'status' => 'P',
             ],
             'dateFields' => ['c_date'],
             'moneyFields' => ['c_money'],
@@ -140,6 +141,8 @@ return [
                 'c_type' => [
                     '采购合同' => 2,
                     '销售合同' => 1,
+                    '销'      => 1,
+                    '购'      => 2,
                     'default' => 0
                 ]
             ]
@@ -165,23 +168,24 @@ return [
             'moneyFields' => ['c_money']
         ],
         'order-chance' =>[ //主数据商机表
-            'file' => 'uploads/xlsx/最终版-主数据.xlsx',
+            'file' => 'uploads/xlsx/采购跟踪表1031最终.xls',
             'model' => 'orders',
-            'index' => 7,
+            'index' => 2,
             'fields' => [
-                'o_no' => 'A',
-                'o_mname' => 'C',
-                'm_department' => 'B',
-                'p_no' => 'D',
-                'o_pname' => 'E',
-                'o_type' => 'M',
-                'o_lie' => 'H',
-                'o_coname' => 'F',
-                'o_dname' => 'B',
-                'o_date' => 'O',
-                'o_money' => 'N',
-                'o_deal' => 'I',
-                'o_status' => 'J'
+                'o_no' => 'X',
+                'o_mname' => 'B',
+                'm_department' => 'A',
+                'p_no' => 'C',
+                'o_pname' => 'D',
+                'o_type' => 'L',
+                'o_lie' => 'X',
+                'o_coname' => 'E',
+                'o_dname' => 'A',
+                'o_date' => 'N',
+                'o_money' => 'M',
+                'o_cno'  => 'U',
+                //'o_deal' => 'I',
+                'o_status' => 'P'
             ],
             'dateFields' => ['o_date'],
             'moneyFields' => ['o_money'],
@@ -201,12 +205,16 @@ return [
                     '3发标' => 4,
                     '4定标' => 5,
                     '5合同' => 6,
+                    'C合同' => 6,
                     'default' => 1,
                 ],
                 'flag' => [
                     'C合同' => 1,
                     'default' => 0
                 ]
+            ],
+            'validate' => [
+                'o_status' => 6
             ]
         ],
         'order-purchase-chance' => [ //采购商机表
@@ -267,6 +275,26 @@ return [
             ],
             'dateFields' => ['i_date'],
             'defaultFields' => ['i_type'=>1,'o_csid'=>6,'o_csname'=>'C合同'],
+            'moneyFields' => ['i_money']
+        ],
+        'invoice1105' => [ //11月3号导入发票
+            'file' => 'uploads/xlsx/invoice1.xlsx',
+            'model' => 'invoice',
+            'index' => 1,
+            'fields' => [
+                'i_no' => 'Y',
+                'i_mname' => 'T',
+                'i_content' => 'J',
+                'i_coname' => 'D',
+                'co_code' => 'C',
+                'i_money' => 'F',
+                'i_date' => 'Z',
+                'p_no' => 'A',
+                //'c_no' => 'AB',
+                //'c_name' => 'AC'
+            ],
+            'dateFields' => ['i_date'],
+            'defaultFields' => ['i_type'=>1,'i_tax'=>3],
             'moneyFields' => ['i_money']
         ],
     ],
