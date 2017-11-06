@@ -10,6 +10,30 @@ class   Orders extends BoModel
     protected $pk = 'o_id';
 
     protected $searchable = [
+        'o_pname' => [
+            'name' => '项目名称',
+            'type' => 'text',
+            'operators' => [
+                'like' => '包含',
+                '=' => '等于'
+            ]
+        ],
+        'o_no' => [
+            'name' => '订单号',
+            'type' => 'text',
+            'operators' => [
+                'like' => '包含',
+                '=' => '等于'
+            ]
+        ],
+        'o_mname' => [
+            'name' => '责任人',
+            'type' => 'text',
+            'operators' => [
+                'like' => '包含',
+                '=' => '等于'
+            ]
+        ],
         'o_cno' => [
             'name' => '合同编号',
             'type' => 'text',
