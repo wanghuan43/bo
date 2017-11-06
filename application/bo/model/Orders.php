@@ -248,6 +248,4 @@ class   Orders extends BoModel
     {
         return $this->insertDuplicate($dataset);
     }
-
-
 }

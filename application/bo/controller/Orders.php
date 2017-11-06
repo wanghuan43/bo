@@ -61,6 +61,7 @@ class Orders extends BoController
         $baseMonth = getMonth();
         $fmodel = new \app\bo\model\Favorite();
         $order = $this->ordersModel->get($op_id);
+        $isAdmin = true;
         if (!empty($op_id) AND $op == "edit") {
             $tmp = $tagLinkModel->getList($op_id, "orders");
             foreach ($tmp as $key => $value) {
@@ -79,7 +80,9 @@ class Orders extends BoController
             $f = getFirstCharter($value['tl_name']);
             $tagList[$f][] = $value;
         }
-        $isAdmin = $this->current->m_isAdmin ? true : ($this->current->m_id == $order->o_mid ? true : false);
+        if(!empty($op_id)){
+            $isAdmin = $this->current->m_isAdmin ? true : ($this->current->m_id == $order->o_mid ? true : false);
+        }
         $this->assign('order', $order);
         $this->assign('typeList', getTypeList());
         $this->assign('taxList', getTaxList());
@@ -224,8 +227,8 @@ class Orders extends BoController
         }
         $log['l_old']['o_tax'] = isset($log['l_old']['o_tax']) ? getTaxList($log['l_old']['o_tax']) : "未知";
         $log['l_new']['o_tax'] = isset($log['l_new']['o_tax']) ? getTaxList($log['l_new']['o_tax']) : "未知";
-        $log['l_old']['o_deal'] = isset($log['l_old']['o_deal']) ? $chancesModle->getChanges($log['l_old']['o_deal']) : "未知";
-        $log['l_new']['o_deal'] = isset($log['l_new']['o_deal']) ? $chancesModle->getChanges($log['l_new']['o_deal']) : $log['l_old']['o_deal'];
+        $log['l_old']['o_deal'] = !empty($log['l_old']['o_deal']) ? $chancesModle->getChanges($log['l_old']['o_deal']) : ["cs_id"=>"0", "cs_name"=>"无"];
+        $log['l_new']['o_deal'] = !empty($log['l_new']['o_deal']) ? $chancesModle->getChanges($log['l_new']['o_deal']) : ["cs_id"=>"0", "cs_name"=>"无"];
         $log['l_old']['o_status'] = isset($log['l_old']['o_status']) ? getStatusList($log['l_old']['o_status']) : "未知";
         $log['l_new']['o_status'] = isset($log['l_new']['o_status']) ? getStatusList($log['l_new']['o_status']) : $log['l_old']['o_status'];
         $log['l_old']['o_lie'] = isset($log['l_old']['o_lie']) ? getLieList($log['l_old']['o_lie']) : "未知";

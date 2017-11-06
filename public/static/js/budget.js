@@ -173,10 +173,11 @@ function setTable(row, col, baseTable) {
                 if (baseTable[i][j].c_display == "none") {
                     crspan += 'style="display:"' + baseTable[i][j].c_display + '" ';
                 }
-                if (baseTable[i][j].c_readonly != "1") {
+
+                if (baseTable[i][j].c_value.indexOf("=") == 0 && !noreadOnly){
                     readOnlyHtml = ' readonly="readonly" ';
                 }
-                if (baseTable[i][j].c_value.indexOf("=") == 0 && noreadOnly !== true){
+                if (baseTable[i][j].c_readonly != "1") {
                     readOnlyHtml = ' readonly="readonly" ';
                 }
                 if (type == "table") {
@@ -204,6 +205,7 @@ function setTable(row, col, baseTable) {
     html += '</table>\n';
     settingTable = $(html);
     $("#table").html(settingTable);
+    funChange();
     bindClick();
 }
 
@@ -224,9 +226,14 @@ function bindClick() {
         setCheck(0, 0, $(this).prop("checked"));
     });
     $(settingTable).find(".stcol").change(function () {
-        valueChange($(this));
-        funChange($(this));
+        try{
+            valueChange($(this));
+        }catch(err){
+            console.log($(this));
+        }
+        // funChange($(this));
     });
+    // $(settingTable).find(".stcol").change();
     $(settingTable).find(".stcol").each(function(index, element){
         $(element).change();
     });
@@ -287,7 +294,7 @@ function valueChange(input) {
         $(input).attr("data", $.trim($(input).val()));
         val = arrangeValue(val, fun, input);
         if (val === false) {
-            custom.alert("格式有误。")
+            custom.alert("格式有误。");
             return false;
         }
         calculateValue(val, fun, input);
@@ -355,10 +362,10 @@ function funExcelFormat(tmp, input) {
     var hasColon = tmp.indexOf(":") >= 0 ? true : false, tt = [];
     if (hasColon) {
         tmp = tmp.split(":");
-        if (!/^[a-zA-Z0-9]*$/g.test(tmp[0])) {
+        if (!/^[a-zA-Z0-9]*$/g.test(tmp[0]) || $.trim(tmp[0]) == "") {
             return false;
         }
-        if (!/^[a-zA-Z0-9]*$/g.test(tmp[1])) {
+        if (!/^[a-zA-Z0-9]*$/g.test(tmp[1]) || $.trim(tmp[1]) == "") {
             return false;
         }
         var charB = splitCharToNum(tmp[0].match(/^[a-zA-Z]+|[0-9]+/g)[0].toLocaleLowerCase()),

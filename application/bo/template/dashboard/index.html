@@ -34,6 +34,7 @@
                 </ul>
             </li>
             <{volist name="menuList" id="menu"}>
+            <{if condition="isset($menu['name'])"}>
             <li>
                 <a <{if condition="!empty($menu['url'])"}>href="#<{$menu['url']}>"<{/if}>><i class="fa fa-lg fa-fw <{$menu['flag']}>"></i> <span
                         class="menu-item-parent"><{$menu['name']}></span><b class="collapse-sign"><em
@@ -48,6 +49,7 @@
                 </ul>
                 <{/if}>
             </li>
+            <{/if}>
             <{/volist}>
         </ul>
     </nav>
