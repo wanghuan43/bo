@@ -14,7 +14,7 @@ class Chances extends BoModel
         if(!$current->m_isAdmin){
             $this->where("cs_mid", "=", $current->m_id);
         }
-        if (!empty($id)) {
+        if ($id != "") {
             $this->where("cs_id", "=", $id);
             $result = $this->find();
         } else {
