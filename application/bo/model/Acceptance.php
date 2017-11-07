@@ -10,6 +10,22 @@ class Acceptance extends BoModel
     protected $pk = "a_id";
 
     protected $searchable = array(
+        'a_no' => array(
+            'name' => '验收单号',
+            'type' => 'text',
+            'operators' => [
+                'like' => '包含',
+                '=' => '等于'
+            ]
+        ),
+        'a_coname' => array(
+            'name' => '对方公司',
+            'type' => 'text',
+            'operators' => [
+                'like' => '包含',
+                '=' => '等于'
+            ]
+        ),
         "a_date" => array(
             "name" => "验收日期",
             "type" => "date",
@@ -72,6 +88,25 @@ class Acceptance extends BoModel
     {
         $data = $this->getDataById($id);
         return ['code'=>$data['a_no'],'name'=>'验收单'.$data['a_no']];
+    }
+
+    public function doImport($dataset=false)
+    {
+        foreach ($dataset as $key=>$data){
+            if(isset($data['a_mname']) && isset($data['d_name'])){
+                $model = new Member();
+                $member = $model->getMemberByName($data['a_mname'],$data['d_name']);
+                if($member) $data['a_mid'] = $member->m_id;
+                unset($data['d_name']);
+            }elseif (isset($data['a_mname'])){
+                $model = new Member();
+                $member = $model->getMemberByName($data['a_mname']);
+                if($member) $data['a_mid'] = $member->m_id;
+            }
+            $data['a_noused'] = $data['a_money'];
+            $dataset[$key] = $data;
+        }
+        return $this->insertDuplicate($dataset);
     }
 
 }

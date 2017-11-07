@@ -2,7 +2,7 @@
 <{assign name="listType" value="1"}>
 <{/if}>
 
-<div class="btn-pannel paginate">
+<div class="paginate">
     <{$lists->render()}>
 </div>
 
@@ -15,10 +15,11 @@
                 <input type="checkbox" id="lists-all-checked" value="all"/>
                 <{/if}>
             </th>
-            <th>回款号</th>
+            <th>付/回款单号</th>
             <th>对方名称</th>
-            <th class="date">回款日期</th>
-            <th class="money">回款金额</th>
+            <th>类型</th>
+            <th class="date">付/回款日期</th>
+            <th class="money">付/回款金额</th>
             <th class="money">未对应订单金额</th>
             <{if $listType == 2}>
             <th></th>
@@ -45,6 +46,7 @@
             <td><{$val.r_no}></td>
             <{/if}>
             <td><{$val.r_coname}></td>
+            <td><?php echo getTypeList($val['r_type']); ?></td>
             <td><?php echo date("Y-m-d", $val['r_date']); ?></td>
             <td class="money"><{$val.r_money|number_format=2}></td>
             <td class="money"><{$val.r_noused|number_format=2}></td>
@@ -57,7 +59,7 @@
     </table>
 </div>
 
-<div class="btn-pannel paginate">
+<div class="paginate">
     <{$lists->render()}>
 </div>
 

@@ -111,6 +111,7 @@ class DataImport
                             $data = false;
                         }
                     }
+                    unset($data[$field]);
                 }
             }
 

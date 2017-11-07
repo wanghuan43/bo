@@ -277,25 +277,75 @@ return [
             'defaultFields' => ['i_type'=>1,'o_csid'=>6,'o_csname'=>'C合同'],
             'moneyFields' => ['i_money']
         ],
-        'invoice1105' => [ //11月3号导入发票
-            'file' => 'uploads/xlsx/invoice1.xlsx',
+        'invoice1107' => [ //11月3号导入发票
+            'file' => 'uploads/xlsx/采购跟踪表1031最终.xls',
             'model' => 'invoice',
             'index' => 1,
             'fields' => [
                 'i_no' => 'Y',
-                'i_mname' => 'T',
-                'i_content' => 'J',
+                'i_mname' => 'B',
+                'i_content' => 'K',
                 'i_coname' => 'D',
-                'co_code' => 'C',
-                'i_money' => 'F',
-                'i_date' => 'Z',
-                'p_no' => 'A',
-                //'c_no' => 'AB',
-                //'c_name' => 'AC'
+                //'co_code' => 'C',
+                'i_money' => 'M',
+                'i_date' => 'N',
+                //'d_no' => 'A',
+                'p_no' => 'C',
+                'flag1' => 'P',
+                'flag2' => 'Q'
             ],
             'dateFields' => ['i_date'],
-            'defaultFields' => ['i_type'=>1,'i_tax'=>3],
-            'moneyFields' => ['i_money']
+            'defaultFields' => ['i_type'=>2,'i_tax'=>1,'co_code'=>''],
+            'moneyFields' => ['i_money'],
+            'validate' => [
+                'flag1' => 'I开票',
+                'flag2' => '1'
+            ]
+        ],
+        'acceptance1107' => [ //11月3号导入发票
+            'file' => 'uploads/xlsx/采购跟踪表1031最终.xls',
+            'model' => 'acceptance',
+            'index' => 1,
+            'fields' => [
+                'a_no' => 'Y',
+                'a_mname' => 'B',
+                'a_content' => 'K',
+                'a_coname' => 'D',
+                'a_money' => 'M',
+                'a_date' => 'N',
+                'd_name' => 'A',
+                'flag1' => 'P',
+                'flag2' => 'Q'
+            ],
+            'dateFields' => ['a_date'],
+            'defaultFields' => ['a_type'=>2],
+            'moneyFields' => ['a_money'],
+            'validate' => [
+                'flag1' => 'D交付',
+                'flag2' => '1'
+            ]
+        ],
+        'received' => [ //11月7号导入付款单
+            'file' => 'uploads/xlsx/采购跟踪表1031最终.xls',
+            'model' => 'received',
+            'index' => 1,
+            'fields' => [
+                'r_no' => 'Y',
+                'r_mname' => 'B',
+                'r_coname' => 'D',
+                'r_money' => 'M',
+                'r_date' => 'N',
+                'd_name' => 'A',
+                'flag1' => 'P',
+                'flag2' => 'Q'
+            ],
+            'dateFields' => ['r_date'],
+            'defaultFields' => ['r_type'=>2],
+            'moneyFields' => ['r_money'],
+            'validate' => [
+                'flag1' => 'P付款',
+                'flag2' => '1'
+            ]
         ],
     ],
 ];

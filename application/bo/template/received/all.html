@@ -8,7 +8,7 @@
                 <a href="<{:url('/received/export')}>" id="link-export" target="_blank" data-type="received" data-list-type="3"><i class="fa fa-file-excel-o"></i>导出</a>
             </li>
             <li>
-                <a href="#"><i class="fa fa-filter"></i>筛选</a>
+                <a href="<{:url("/received/searchReceivedNoList")}>" target="_blank" id="searchList" stype="<{$stype}>"><i class="fa fa-filter"></i>筛选</a>
             </li>
             <li>
                 <a href="/circulation/add/type/received" id="btn-circulation" target="_blank" onclick="return false;"><i class="fa fa-users"></i>传阅<i class="fa fa-sort-desc"></i></a>
