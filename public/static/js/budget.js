@@ -146,8 +146,12 @@ function spliTable() {
         $(".stcol[row='" + rowStart + "'][col='" + colStart + "']").css({
             height: "30px",
             lineHeight: "30px",
+            top: "-30px"
         });
         $(".stcol[row='" + rowStart + "'][col='" + colStart + "']").prev().css({
+            height: "30px",
+        });
+        $(".stcol[row='" + rowStart + "'][col='" + colStart + "']").parent().css({
             height: "30px",
         });
         $("#settingTable input[type='checkbox']").prop("checked", false);
@@ -170,10 +174,9 @@ function setTable(row, col, baseTable) {
                 if (parseInt(baseTable[i][j].c_rowspan) > 0) {
                     crspan += 'rowspan="' + baseTable[i][j].c_rowspan + '" ';
                 }
-                if (baseTable[i][j].c_display == "none") {
-                    crspan += 'style="display:"' + baseTable[i][j].c_display + '" ';
+                if(baseTable[i][j].c_display == "none"){
+                    crspan += 'style="display:' + baseTable[i][j].c_display + '" ';
                 }
-
                 if (baseTable[i][j].c_value.indexOf("=") == 0 && !noreadOnly){
                     readOnlyHtml = ' readonly="readonly" ';
                 }
@@ -205,7 +208,6 @@ function setTable(row, col, baseTable) {
     html += '</table>\n';
     settingTable = $(html);
     $("#table").html(settingTable);
-    funChange();
     bindClick();
 }
 
@@ -226,17 +228,13 @@ function bindClick() {
         setCheck(0, 0, $(this).prop("checked"));
     });
     $(settingTable).find(".stcol").change(function () {
-        try{
-            valueChange($(this));
-        }catch(err){
-            console.log($(this));
-        }
-        // funChange($(this));
+        // valueChange($(this));
+        funChange();
     });
     // $(settingTable).find(".stcol").change();
-    $(settingTable).find(".stcol").each(function(index, element){
-        $(element).change();
-    });
+    // $(settingTable).find(".stcol").each(function(index, element){
+    //     $(element).change();
+    // });
     $(settingTable).find("td").mousedown(function (e) {
         if (e.button == 2) {
             rclickTD = $(this);
@@ -270,14 +268,20 @@ function bindClick() {
     $(settingTable).find(".stcol").mouseout(function () {
         $(".showTips").hide();
     });
+    funChange();
 }
 
 function funChange(thisElement) {
     $(settingTable).find(".stcol").each(function (i, e) {
-        if ($(e).attr("data") != undefined && !$(thisElement).is($(e))) {
-            var data = $(e).attr("data");
-            $(e).val(data);
+        var val = $.trim($(e).val()), data = $.trim($(e).attr("data"));
+        if(val.indexOf("=") == 0){
+            $(e).attr("data", val);
             valueChange($(e));
+        }else if(data != undefined){
+            if(data.indexOf("=") == 0){
+                $(e).val(data);
+                valueChange($(e));
+            }
         }
     });
 }

@@ -35,7 +35,6 @@ class Budget extends BoController
         }
         $lists = $this->budgetEntity->getTemplateList(false, $filter);
         $template = $this->budgetEntity->getTemplateByID($tid, true);
-
         $this->assign("tid", $tid);
         $this->assign("lists", $lists);
         $this->assign("template", $template);

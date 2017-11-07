@@ -202,7 +202,7 @@ class BudgetEntity extends BoModel
     {
         $colsTmp = [];
         foreach ($cols as $val) {
-            $colsTmp[$val['c_col']][] = $val;
+            $colsTmp[$val['c_row']][] = $val;
         }
         return json_encode(array_values($colsTmp));
     }
