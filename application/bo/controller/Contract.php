@@ -49,8 +49,12 @@ class Contract extends BoController
         $data['c_date'] = strtotime($post['date']);
         $data['c_coid'] = trim($post['coid']);
         $data['c_coname'] = trim($post['coname']);
-        $data['c_pid'] = $post['pid'];
-        $data['c_pname'] = $post['pname'];
+        if(isset($post['pid']))
+            $data['c_pid'] = $post['pid'];
+        else
+            $data['c_pid'] = 0;
+        if(isset($post['pname']))
+            $data['c_pname'] = $post['pname'];
 
         $data['c_mid'] = $this->current->m_id;
         $data['c_mname'] = $this->current->m_name;
