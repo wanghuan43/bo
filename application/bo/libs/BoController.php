@@ -262,7 +262,7 @@ class BoController extends Controller
         if (empty($this->model)) {
             $ret = '<h2>Error Page!</h2>';
         } else {
-            $list = $this->model->paginate($this->limit);
+            $list = $this->model->getList([],$this->limit);
             $this->assign('lists', $list);
             $this->assign('types',getTypeList());
             $ret = $this->fetch();
