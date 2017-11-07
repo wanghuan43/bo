@@ -569,3 +569,6 @@ table.list tr.hover{
     margin:0;
     padding-right:.8em;
 }
+.wrong{
+    border-color: red !important;
+}

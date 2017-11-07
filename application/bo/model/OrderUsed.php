@@ -50,8 +50,8 @@ class OrderUsed extends BoModel
         $array = array();
         foreach ($data as $key => $value) {
             $table = $this->ka[$key];
+            $i = new $table();
             foreach ($value['date'] as $k => $val) {
-                $i = new $table();
                 if ($i->checkUsed($value['ot_id'][$k], $value['value'][$k])) {
                     $tmp['ou_oid'] = $id;
                     $tmp['ou_date'] = strtotime($val);

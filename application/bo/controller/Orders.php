@@ -80,7 +80,7 @@ class Orders extends BoController
             $f = getFirstCharter($value['tl_name']);
             $tagList[$f][] = $value;
         }
-        if(!empty($op_id)){
+        if (!empty($op_id)) {
             $isAdmin = $this->current->m_isAdmin ? true : ($this->current->m_id == $order->o_mid ? true : false);
         }
         $this->assign('order', $order);
@@ -130,9 +130,12 @@ class Orders extends BoController
         } else {
             $post['o_no'] = $this->ordersModel->getOrderNO($post['o_pid'], $post['o_type']);
             $result = $this->ordersModel->save($post, $where);
-            if($result AND $post['o_lie'] == '2'){
+            if ($result AND $post['o_lie'] == '2') {
                 $nO = new \app\bo\model\Orders();
-                $oldI = $post['o_did'];$oldN = $post['o_dname'];$newI = $post['o_coid'];$newN = $post['o_coname'];
+                $oldI = $post['o_did'];
+                $oldN = $post['o_dname'];
+                $newI = $post['o_coid'];
+                $newN = $post['o_coname'];
                 $post['o_did'] = $newI;
                 $post['o_dname'] = $newN;
                 $post['o_coid'] = $oldI;
@@ -151,13 +154,17 @@ class Orders extends BoController
 
     public function delete($opID)
     {
-        $orders = $this->ordersModel->where("o_id", "=", $opID)->find();
-        $oum = new OrderUsed();
-        $tmp = $oum->getOrderUesd($opID);
-        $ret = ["status" => "false", "message" => "订单删除失败，请先去除订单的关系数据。"];
-        if (count($tmp[1]) == 0 AND count($tmp[2]) == 0 AND count($tmp[3]) == 0 AND $orders->o_status != 6) {
-            $orders->delete();
-            $ret = ["status" => "true", "message" => "订单删除成功"];
+        $order = $this->ordersModel->find($opID);
+        if ($order->o_mid != $this->current->m_id AND empty($this->current->m_isAdmin)) {
+            $ret = ["status" => "false", "message" => "只有订单责任人和管理员可以删除订单"];
+        } else {
+            $oum = new OrderUsed();
+            $tmp = $oum->getOrderUesd($opID);
+            $ret = ["status" => "false", "message" => "订单删除失败，请先去除订单的关系数据。"];
+            if (count($tmp[1]) == 0 AND count($tmp[2]) == 0 AND count($tmp[3]) == 0) {
+                $this->ordersModel->deleteOrders($opID);
+                $ret = ["status" => "true", "message" => "订单删除成功"];
+            }
         }
         return $ret;
     }
@@ -206,9 +213,9 @@ class Orders extends BoController
         } else {
             $log['l_new']['cList'] = [];
         }
-        if($log['l_opt'] == "add"){
+        if ($log['l_opt'] == "add") {
             $log['l_old'] = $log['l_new'];
-        }else{
+        } else {
             $log['l_old'] = unserialize($log['l_old']);
             if (isset($log['l_old']['tagList']) AND is_array($log['l_old']['tagList'])) {
                 foreach ($log['l_old']['tagList'] as $key => $value) {
@@ -227,8 +234,8 @@ class Orders extends BoController
         }
         $log['l_old']['o_tax'] = isset($log['l_old']['o_tax']) ? getTaxList($log['l_old']['o_tax']) : "未知";
         $log['l_new']['o_tax'] = isset($log['l_new']['o_tax']) ? getTaxList($log['l_new']['o_tax']) : "未知";
-        $log['l_old']['o_deal'] = !empty($log['l_old']['o_deal']) ? $chancesModle->getChanges($log['l_old']['o_deal']) : ["cs_id"=>"0", "cs_name"=>"无"];
-        $log['l_new']['o_deal'] = !empty($log['l_new']['o_deal']) ? $chancesModle->getChanges($log['l_new']['o_deal']) : ["cs_id"=>"0", "cs_name"=>"无"];
+        $log['l_old']['o_deal'] = !empty($log['l_old']['o_deal']) ? $chancesModle->getChanges($log['l_old']['o_deal']) : ["cs_id" => "0", "cs_name" => "无"];
+        $log['l_new']['o_deal'] = !empty($log['l_new']['o_deal']) ? $chancesModle->getChanges($log['l_new']['o_deal']) : ["cs_id" => "0", "cs_name" => "无"];
         $log['l_old']['o_status'] = isset($log['l_old']['o_status']) ? getStatusList($log['l_old']['o_status']) : "未知";
         $log['l_new']['o_status'] = isset($log['l_new']['o_status']) ? getStatusList($log['l_new']['o_status']) : $log['l_old']['o_status'];
         $log['l_old']['o_lie'] = isset($log['l_old']['o_lie']) ? getLieList($log['l_old']['o_lie']) : "未知";
@@ -243,13 +250,20 @@ class Orders extends BoController
     {
         $post = Request::instance()->post();
         $log = Logs::get($post['id']);
-        $data = unserialize($log['l_new']);
+        $new = unserialize($log['l_new']);
+        $old = unserialize($log['l_old']);
         $oum = new OrderUsed();
         if ($post['val'] == "1") {
             $log->l_panding = 2;
-            $data['o_id'] = $log->l_otid;
+            $new['o_id'] = $log->l_otid;
             $oum->resetOrderUsed($log->l_otid);
-            $this->ordersModel->save($data, ["o_id" => $log->l_otid]);
+            if ($new['o_cid'] != $old['o_cid']) {
+                $con = \app\bo\model\Contract::get($old['o_cid']);
+                $con->c_noused += $old['o_money'];
+                $con->c_used -= $old['o_money'];
+                $con->save();
+            }
+            $this->ordersModel->save($new);
             $message = "审核通过";
         } else {
             $log->l_panding = 1;
@@ -276,7 +290,7 @@ class Orders extends BoController
             case "contract":
                 $this->title = "合同订单";
                 $this->ordersModel->where("o.o_status", "=", "6");
-                if(!$this->current->m_isAdmin){
+                if (!$this->current->m_isAdmin) {
                     $this->ordersModel->where("o.o_mid", "=", $this->current->m_id);
                 }
                 break;
@@ -284,20 +298,30 @@ class Orders extends BoController
                 $this->title = "我的收藏";
                 $this->ordersModel->join("__FAVORITE__ f", "o.o_id = f.f_oid", "LEFT");
 //                if(!$this->current->m_isAdmin){
-                    $this->ordersModel->where("f.f_mid", "=", $this->current->m_id);
+                $this->ordersModel->where("f.f_mid", "=", $this->current->m_id);
 //                }
                 break;
             case "circulate":
                 $this->title = "我的传阅";
                 $this->ordersModel->join("__CIRCULATION__ c", "o.o_id = c.ci_otid AND c.ci_type = 'orders'", "LEFT");
 //                if(!$this->current->m_isAdmin){
-                    $this->ordersModel->where("c.ci_mid", "=", $this->current->m_id);
+                $this->ordersModel->where("c.ci_mid", "=", $this->current->m_id);
 //                }
+                break;
+            case "panding":
+                $this->title = "带审核订单";
+                $this->ordersModel->join("__LOGS__ l", "l.l_otid = o.o_id", "LEFT");
+                $this->ordersModel->join("__MEMBER__ m", "o.o_mid = m.m_id", "LEFT");
+                $this->ordersModel->join("__DEPARTMENT__ d", "m.m_did = d.d_id", "LEFT");
+                if (!$this->current->m_isAdmin) {
+                    $this->ordersModel->where("d.m_code", "=", $this->current->m_code);
+                }
+                $this->ordersModel->where("l.l_panding", "=", "0");
                 break;
             default:
                 $this->title = "商机订单";
                 $this->ordersModel->where("o.o_status", "<>", "6");
-                if(!$this->current->m_isAdmin){
+                if (!$this->current->m_isAdmin) {
                     $this->ordersModel->where("o.o_mid", "=", $this->current->m_id);
                 }
                 break;
@@ -307,55 +331,55 @@ class Orders extends BoController
         }
     }
 
-    public  function export()
+    public function export()
     {
-        if($this->request->post('operator')=='export'){
+        if ($this->request->post('operator') == 'export') {
 
             ini_set("memory_limit", "1024M");
 
-            $type = $this->request->param('type')?:'orders';
+            $type = $this->request->param('type') ?: 'orders';
             $post = $this->request->post();
-            $search = $this->getSearch($post,$type);
+            $search = $this->getSearch($post, $type);
 
             $ids = [];
-            if( isset($post['ids']) ){
+            if (isset($post['ids'])) {
                 $ids = $post['ids'];
-            }else{
+            } else {
                 $res = $this->model->getList($search);
-                foreach( $res as $i )
+                foreach ($res as $i)
                     $ids[] = $i->o_id;
             }
 
-            $ids = implode(',',$ids);
+            $ids = implode(',', $ids);
 
-            $view = $type == 'orders'?'kj_vw_my_orders':'kj_vw_my_contract';
+            $view = $type == 'orders' ? 'kj_vw_my_orders' : 'kj_vw_my_contract';
 
-            $sql = 'SELECT * FROM '.$view.' WHERE `o_id` IN ('.$ids.') ORDER BY `o_updatetime` DESC';
+            $sql = 'SELECT * FROM ' . $view . ' WHERE `o_id` IN (' . $ids . ') ORDER BY `o_updatetime` DESC';
 
             $res = $this->model->query($sql);
 
 
             $arr = [];
-            foreach( $res as $item ){
+            foreach ($res as $item) {
                 $arr[$item['o_id']][] = $item;
             }
             $res = [];
-            foreach( $arr as $key => $val ){
+            foreach ($arr as $key => $val) {
                 $arr1 = $val[0];
-                if($type == 'orders') {
+                if ($type == 'orders') {
                     $arr1['op_type'] = 'C合同';
                     $arr1['op_used'] = 0;
                     $arr1['o_date'] = $arr1['op_date'] = date('Y/m/d', $arr1['o_date']);
-                }else{
+                } else {
                     $arr1['ou_type'] = 'C合同';
                     $arr1['ou_used'] = $arr1['c_used'];
-                    $arr1['ou_date'] = date('Y/m/d',$arr1['c_date'] );
-                    $arr1['o_date'] = date('Y/m/d',$arr1['o_date']);
+                    $arr1['ou_date'] = date('Y/m/d', $arr1['c_date']);
+                    $arr1['o_date'] = date('Y/m/d', $arr1['o_date']);
                 }
                 $types = getTypeList();
                 $arr1['o_type'] = $types[$arr1['o_type']];
-                foreach( $val as $k=>$i ){
-                    if( $type == 'orders' ) {
+                foreach ($val as $k => $i) {
+                    if ($type == 'orders') {
                         if ($i['op_type'] == 1) {
                             $arr1['op_used'] += $i['op_used'];
                             $i['op_type'] = 'I发票';
@@ -363,58 +387,58 @@ class Orders extends BoController
                             $i['op_type'] = '付款单';
                         } elseif ($i['op_type'] == 3) {
                             $i['op_type'] = '验收单';
-                        }else{
+                        } else {
                             $i['op_type'] = '';
                         }
                         $i['op_date'] = date('Y/m/d', $i['op_date']);
-                    }else{
-                        if($i['ou_type'] == 1){
+                    } else {
+                        if ($i['ou_type'] == 1) {
                             $i['ou_type'] = '已开票';
-                        }elseif($i['ou_type'] ==  2){
+                        } elseif ($i['ou_type'] == 2) {
                             $i['ou_type'] = '已交付';
-                        }elseif( $i['ou_type']==3 ){
+                        } elseif ($i['ou_type'] == 3) {
                             $i['ou_type'] = '已付款';
-                        }else{
-                            $i['ou_type'] = '' ;
+                        } else {
+                            $i['ou_type'] = '';
                         }
-                        $i['ou_date'] = date('Y/m/d',$i['ou_date']);
+                        $i['ou_date'] = date('Y/m/d', $i['ou_date']);
                     }
-                    if($i['o_status']==1){
+                    if ($i['o_status'] == 1) {
                         $arr1['o_status'] = $i['o_status'] = '1接洽';
-                    }elseif( $i['o_status'] == 2 ){
+                    } elseif ($i['o_status'] == 2) {
                         $arr1['o_status'] = $i['o_status'] = '2意向';
-                    }elseif( $i['o_status'] == 3 ){
+                    } elseif ($i['o_status'] == 3) {
                         $arr1['o_status'] = $i['o_status'] = '3立项';
-                    }elseif( $i['o_status'] == 4 ){
+                    } elseif ($i['o_status'] == 4) {
                         $arr1['o_status'] = $i['o_status'] = '4招标';
-                    }elseif( $i['o_status'] == 5 ){
+                    } elseif ($i['o_status'] == 5) {
                         $arr1['o_status'] = $i['o_status'] = '5定向';
-                    }elseif( $i['o_status'] == 6 ){
+                    } elseif ($i['o_status'] == 6) {
                         $arr1['o_status'] = $i['o_status'] = '6合同';
                     }
-                    if($i['o_lie'] == 1){
+                    if ($i['o_lie'] == 1) {
                         $arr1['o_lie'] = $i['o_lie'] = '内';
-                    }elseif( $i['o_lie'] == 2 ){
+                    } elseif ($i['o_lie'] == 2) {
                         $arr1['o_lie'] = $i['o_lie'] = '外';
-                    }else{
+                    } else {
                         $arr1['o_lie'] = $i['o_lie'] = '';
                     }
                     $i['o_type'] = $types[$i['o_type']];
-                    $i['o_date'] = date('Y/m/d',$i['o_date']);
+                    $i['o_date'] = date('Y/m/d', $i['o_date']);
 
                     $i['c_no'] = '';
                     $i['c_name'] = '';
 
                     $val[$k] = $i;
                 }
-                $val = array_merge([$arr1],$val);
+                $val = array_merge([$arr1], $val);
                 $arr[$key] = $val;
             }
 
-            if( $type == 'orders' ) {
+            if ($type == 'orders') {
                 $title = '商机表';
-            }else {
-                $type = 'orders-'.$type;
+            } else {
+                $type = 'orders-' . $type;
                 $title = '合同跟踪表';
             }
 
@@ -427,27 +451,27 @@ class Orders extends BoController
                 ->setTitle($title)
                 ->setSubject($title)
                 ->setDescription($title);
-            $config = Config::load(APP_PATH.'bo'.DS.'excelExport.php','boExcel');
+            $config = Config::load(APP_PATH . 'bo' . DS . 'excelExport.php', 'boExcel');
             $config = $config['boExcel'][$type];
             $obj->setActiveSheetIndex(0);
             $activeSheet = $obj->getActiveSheet();
-            foreach( $config as $k=>$i ){
-                $activeSheet->setCellValue($k.'1',$i['title']);
+            foreach ($config as $k => $i) {
+                $activeSheet->setCellValue($k . '1', $i['title']);
             }
             $col = 2;
-            foreach($res as $group){
-                foreach ( $group as $row ){
-                    foreach($config as $k => $i ){
+            foreach ($res as $group) {
+                foreach ($group as $row) {
+                    foreach ($config as $k => $i) {
                         $val = $row[$i['key']];
-                        $activeSheet->setCellValue($k.$col,$val);
+                        $activeSheet->setCellValue($k . $col, $val);
                     }
-                    $col ++;
+                    $col++;
                 }
             }
             $activeSheet->setTitle($title);
-            $fileName = $title.'-'.date('ymdHis');
+            $fileName = $title . '-' . date('ymdHis');
             header('Content-Type: application/vnd.ms-excel');
-            header('Content-Disposition: attachment;filename="'.$fileName.'.xlsx"');
+            header('Content-Disposition: attachment;filename="' . $fileName . '.xlsx"');
             header('Cache-Control: max-age=0');
 
             $objWriter = PHPExcel_IOFactory::createWriter($obj, 'Excel2007');
@@ -455,7 +479,7 @@ class Orders extends BoController
 
             exit;
 
-        }else {
+        } else {
             return $this->filter("export", 3);
         }
     }

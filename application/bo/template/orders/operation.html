@@ -443,7 +443,9 @@
             $(cla + "-back").remove();
         })
         $("#o_profits").change(function(){
-            $(this).val($(this).val()+"%");
+            if($(this).val().indexOf("%") < 0){
+                $(this).val($(this).val()+"%");
+            }
         });
         $("#favorite").click(function(){
             var url = "<{:url("/favorite/saveFavorite/opID/".$op_id)}>"
@@ -506,6 +508,7 @@
         $("#o_did").change();
         $(".mstag").select2();
         $(".msmember").select2();
+        initUsed();
         $("#o_money").change(function () {
             var val = $(this).val().replace(",","");
             if(isNaN(val) === true){
@@ -534,50 +537,61 @@
                 valueChange(this);
             });
         });
+        $(".content:eq(0) input").focus(function(){
+            $(this).removeClass("wrong");
+            $(this).next(".wrongMsg").remove();
+        });
         $("#opform").submit(function(){
-            var o_pname = $("#o_pname");
-            var o_subject = $("#o_subject");
-            var o_coname = $("#o_coname");
-            var o_date = $("#o_date");
-            var o_money = $("#o_money");
-            var o_num = $("#o_num");
-            var o_profits = $("#o_profits");
-            var url = $(this).attr("action");
-            var par = $(this).serialize();
+            $(".content:eq(0) .wrongMsg").remove(),$(".content:eq(0) input").removeClass("wrong");
+            var o_pname = $("#o_pname"),o_subject = $("#o_subject"),
+                o_coname = $("#o_coname"),o_date = $("#o_date"),o_money = $("#o_money"),o_num = $("#o_num"),
+                o_profits = $("#o_profits"),url = $(this).attr("action"),par = $(this).serialize(),check=false;
             if($(o_pname).val() == ""){
-                custom.alert('项目不能为空');
-                return false;
+                $(o_pname).attr("class", "wrong");
+                $(o_pname).after('<span class="wrongMsg" style="color: red;padding-right: 10px;">项目不能为空</span>');
+                check = true;
             }
             if($(o_subject).val() == ""){
-                custom.alert('订单标题不能为空');
-                return false;
+                $(o_subject).attr("class", "wrong");
+                $(o_subject).after('<span class="wrongMsg" style="color: red;padding-right: 10px;">订单标题不能为空</span>');
+                check = true;
             }
             if($(o_coname).val() == ""){
-                custom.alert('对方名称不能为空');
-                return false;
+                $(o_coname).attr("class", "wrong");
+                $(o_coname).after('<span class="wrongMsg" style="color: red;padding-right: 10px;">对方名称不能为空</span>');
+                check = true;
             }
             if($(o_date).val() == ""){
-                custom.alert('日期不能为空');
-                return false;
+                $(o_date).attr("class", "wrong");
+                $(o_date).after('<span class="wrongMsg" style="color: red;padding-right: 10px;">日期不能为空</span>');
+                check = true;
             }
             if($(o_money).val() == ""){
-                custom.alert('金额不能为空');
-                return false;
+                $(o_money).attr("class", "wrong");
+                $(o_money).after('<span class="wrongMsg" style="color: red;padding-right: 10px;">金额不能为空</span>');
+                check = true;
             }
             if(isNaN($(o_money).val())){
-                custom.alert('金额必须是数字');
-                return false;
+                $(o_money).attr("class", "wrong");
+                $(o_money).after('<span class="wrongMsg" style="color: red;padding-right: 10px;">金额必须是数字</span>');
+                check = true;
             }
             if($(o_num).val() == ""){
-                custom.alert('数量不能为空');
-                return false;
+                $(o_num).attr("class", "wrong");
+                $(o_num).after('<span class="wrongMsg" style="color: red;padding-right: 10px;">数量不能为空</span>');
+                check = true;
             }
             if(isNaN($(o_num).val())){
-                custom.alert('数量必须是数字');
-                return false;
+                $(o_num).attr("class", "wrong");
+                $(o_num).after('<span class="wrongMsg" style="color: red;padding-right: 10px;">数量必须是数字</span>');
+                check = true;
             }
             if($(o_profits).val() == ""){
-                custom.alert('利润率不能为空');
+                $(o_profits).attr("class", "wrong");
+                $(o_profits).after('<span class="wrongMsg" style="color: red;padding-right: 10px;">利润率不能为空</span>');
+                check = true;
+            }
+            if(check){
                 return false;
             }
             $(this).prop("disabled", "true");
@@ -683,8 +697,31 @@
                     });
                     $(cla + " .moreSave").click(function(){
                         var ci = $(cla + " .search-result input:checked");
-                        var jdata = JSON.parse(decodeURIComponent($(ci).attr("json")));
-                        baseUTR($(cla), jdata, type);
+                        if(ci.length > 0){
+                            var jdata = JSON.parse(decodeURIComponent($(ci).attr("json"))),classT="",checkT=false;
+                            switch (type){
+                                case "invoice":
+                                    classT = type+"_1";
+                                    break;
+                                case "acceptance":
+                                    classT = type+"_2";
+                                    break;
+                                case "received":
+                                    classT = type+"_3";
+                                    break;
+                            }
+                            $("."+classT+" .fa-minus-circle").each(function(index, element){
+                                if($(element).attr("data") == jdata.id){
+                                    custom.alert("当前凭证已经选择过，不可重复选择！");
+                                    checkT = true;
+                                    return false;
+                                }
+                            });
+                            if(checkT){
+                                return false;
+                            }
+                            baseUTR($(cla), jdata, type);
+                        }
                         $(cla).removeClass("show");
                         $(cla + "-back").hide();
                     });
@@ -752,7 +789,7 @@
         var cla = "."+type+"_"+i;
         var total = parseFloat($("#o_money").val());
         var val = $(element).find(".m_class").val();
-        var html = '<tr><td><i class="fa fa-minus-circle"></i></td>' +
+        var html = '<tr><td><i class="fa fa-minus-circle" data="'+data.id+'"></i></td>' +
                 '<td><?php echo date("Y-m-d"); ?></td>' +
                 '<td class="mony-'+type+'">'+parseFloat(val).toFixed(2)+'</td>' +
                 '<td><a href="'+url+'" target="_blank" style="color: blue;">'+data.id+'</a>' +
@@ -766,7 +803,7 @@
         });
         var persent = 100-((total-plus)/total*100);
         $(cla).find("tr:first").find("td:eq(2)").html(parseFloat(plus).toFixed(2));
-        $(cla).find("tr:first").find("td:eq(3)").html(Math.round(persent)+"%");
+        $(cla).find("tr:first").find("td:eq(3)").html(persent.toFixed(2)+"%");
         bindRemove();
     }
     function bindRemove(){
@@ -994,5 +1031,21 @@
             }
         });
         $(ele).parent().next().find("input").val( $( ele ).slider( "value" ).toFixed(2) );
+    }
+    function initUsed(){
+        var base = ["invoice","acceptance","received"],total=parseFloat($("#o_money").val());
+        if(total <= 0){
+            return false;
+        }
+        for(var i=0;i<3;i++){
+            var ii = i+1,cla = "."+base[i]+"_"+ii,plus=0;
+            $(cla).find(".mony-"+base[i]).each(function(index, element){
+                plus += parseFloat($(element).html());
+            });
+            var persent = 100-((total-plus)/total*100);
+            $(cla).find("tr:first").find("td:eq(2)").html(parseFloat(plus).toFixed(2));
+            $(cla).find("tr:first").find("td:eq(3)").html(persent.toFixed(2)+"%");
+        }
+
     }
 </script>

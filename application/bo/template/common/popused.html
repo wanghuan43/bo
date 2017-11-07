@@ -119,7 +119,15 @@
                                 money = jdata.noused;
                             }else if(money < jdata.noused){
                                 money = money;
+                                $(".mony-<{$type}>").each(function(index, element){
+                                    money -= parseFloat($(element).html());
+                                });
                             }
+                            if(money <= 0){
+                                custom.alert("金额不能小于等于0");
+                                return false;
+                            }
+                            money = money.toFixed(2);
                             $(cla).find(".on_class").html(jdata.id);
                             $(cla).find(".cp_class").html(jdata.coname);
                             $(cla).find(".money_class").html(jdata.money);
