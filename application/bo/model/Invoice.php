@@ -10,6 +10,30 @@ class Invoice extends BoModel
     protected $pk = "i_id";
 
     protected $searchable = array(
+        'i_no' => array(
+            'name' => '发票号',
+            'type' => 'text',
+            'operators' => array(
+                'like' => '包含',
+                '=' => '等于'
+            )
+        ),
+        'i_coname' => array(
+            'name' => '对方名称',
+            'type' => 'text',
+            'operators' => array(
+                'like' => '包含',
+                '=' => '等于'
+            )
+        ),
+        'i_content' => array(
+            'name' => '开票摘要',
+            'type' => 'text',
+            'operators' => array(
+                'like' => '包含',
+                '=' => '等于'
+            )
+        ),
         "i_date" => array(
             "name" => "发票日期",
             "type" => "date",
@@ -32,7 +56,7 @@ class Invoice extends BoModel
         ),
     );
 
-    public function getList($search, $limit)
+    public function getList($search, $limit,$order=['i_date'=>'desc'])
     {
         $member = $this->getCurrent();
         $this->alias('i');
@@ -44,6 +68,7 @@ class Invoice extends BoModel
         foreach ($search as $key => $value) {
             $this->where("i." . $value['field'], $value['opt'], $value['val']);
         }
+        $this->order($order);
         if( $limit===false ){
             $list = $this->select();
         }else {
