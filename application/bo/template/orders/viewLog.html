@@ -191,13 +191,13 @@
             <{volist name="log['l_old']['used'][1]" id="value" key="k"}>
             <tr>
                 <td>
-                    <{$value.op_month}>
+                    <{$value.ou_date|date='Y-m-d',###}>
                 </td>
                 <td>
-                    <{$value.op_percent}>
+                    <{$value.ou_used}>
                 </td>
                 <td>
-                    <{$value.op_used}>
+                    <{$value.ou_otid}>
                 </td>
             </tr>
             <{/volist}>
@@ -249,13 +249,13 @@
             <{volist name="log['l_old']['used'][2]" id="value" key="k"}>
             <tr>
                 <td>
-                    <{$value.op_month}>
+                    <{$value.ou_date|date='Y-m-d',###}>
                 </td>
                 <td>
-                    <{$value.op_percent}>
+                    <{$value.ou_used}>
                 </td>
                 <td>
-                    <{$value.op_used}>
+                    <{$value.ou_otid}>
                 </td>
             </tr>
             <{/volist}>
@@ -307,13 +307,13 @@
             <{volist name="log['l_old']['used'][3]" id="value" key="k"}>
             <tr>
                 <td>
-                    <{$value.op_month}>
+                    <{$value.ou_date|date='Y-m-d',###}>
                 </td>
                 <td>
-                    <{$value.op_percent}>
+                    <{$value.ou_used}>
                 </td>
                 <td>
-                    <{$value.op_used}>
+                    <{$value.ou_otid}>
                 </td>
             </tr>
             <{/volist}>
@@ -531,6 +531,7 @@
         $(".l_panding").click(function(){
             var val = $(this).attr("value");
             var id = $("#id").val();
+            loading.show();
             $.ajax({
                 url:"<{:url("/orders/savePanding")}>",
                 data:{
@@ -540,8 +541,9 @@
                 type:"json",
                 method:"post",
                 success:function(data){
+                    loading.hide();
                     custom.alert(data.message);
-//                    window.setTimeout("location.reload()", 800);
+                    window.setTimeout("location.reload()", 800);
                 }
             })
         });

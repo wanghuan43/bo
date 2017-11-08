@@ -79,7 +79,12 @@ class Invoice extends BoModel
 
     public function checkUsed($id, $money, $op = "-")
     {
-        $tmp = $this->find($id)->toArray();
+        $tmp = $this->find($id);
+        if(!$tmp){
+            return true;
+        }else{
+            $tmp = $tmp->toArray();
+        }
         $return = true;
         if ($op == "-") {
             if ($tmp['i_noused'] - $money < 0) {

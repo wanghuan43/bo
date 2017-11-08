@@ -228,7 +228,7 @@
                         <i class="fa fa-minus-circle" data="<{$value['ou_id']}>"></i>
                     </td>
                     <td><?php echo date("Y-m-d", $value['ou_date']); ?></td>
-                    <td class="mony-invoice"><{$value['ou_used']}></td>
+                    <td class="mony-acceptance"><{$value['ou_used']}></td>
                     <td>
                         <a href="/#acceptance/detail?id=<{$value['ou_otid']}>" target="_blank" style="color: blue;"><{$value['ou_otid']}></a>
                         <input type="hidden" name="used[2][date][]" value="<?php echo date("Y-m-d", $value['ou_date']); ?>">
@@ -265,7 +265,7 @@
                         <i class="fa fa-minus-circle" data="<{$value['ou_id']}>"></i>
                     </td>
                     <td><?php echo date("Y-m-d", $value['ou_date']); ?></td>
-                    <td class="mony-invoice"><{$value['ou_used']}></td>
+                    <td class="mony-received"><{$value['ou_used']}></td>
                     <td>
                         <a href="/#received/detail?id=<{$value['ou_otid']}>" target="_blank" style="color: blue;"><{$value['ou_otid']}></a>
                         <input type="hidden" name="used[3][date][]" value="<?php echo date("Y-m-d", $value['ou_date']); ?>">
