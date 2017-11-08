@@ -25,10 +25,14 @@
         </ul>
     </div>
 </div>
-<nav aria-label="Page navigation">
-    <{$lists->render()}>
-</nav>
+<div class="search-panel">
+    <{include file="common/allfilter"}>
+</div>
+
 <div class="main-pannel">
+    <nav aria-label="Page navigation">
+        <{$lists->render()}>
+    </nav>
     <table class="list" cellspacing="0">
         <thead>
         <tr>
@@ -55,9 +59,9 @@
         <{/volist}>
         </tbody>
     </table>
+    <nav aria-label="Page navigation">
+        <{$lists->render()}>
+    </nav>
 </div>
-<nav aria-label="Page navigation">
-    <{$lists->render()}>
-</nav>
 
 <{load href="/static/js/plugin/select/select.min.js,/static/js/lists.js,/static/css/select.min.css"}>

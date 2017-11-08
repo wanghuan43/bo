@@ -27,6 +27,11 @@ abstract class BoModel extends Model
         return array("fields" => $fields, "operators" => $operators, "length" => count($fields));
     }
 
+    public function getSearchableDefine()
+    {
+        return $this->searchable;
+    }
+
     public function getSearchableByKey($key)
     {
         if(empty($key)){

@@ -7,9 +7,9 @@
             <li>
                 <a href="<{:url('/invoice/export')}>" target="_blank" data-type="invoice" data-list-type="3" id="link-export"><i class="fa fa-file-excel-o"></i>导出</a>
             </li>
-            <li>
+            <!--li>
                 <a href="<{:url("/invoice/searchInvoiceNoList")}>" target="_blank" id="searchList" stype="<{$stype}>"><i class="fa fa-filter"></i>筛选</a>
-            </li>
+            </li-->
             <li>
                 <a href="/circulation/add/type/invoice" id="btn-circulation" target="_blank" onclick="return false;"><i class="fa fa-users"></i>传阅<i class="fa fa-sort-desc"></i></a>
             </li>
@@ -25,6 +25,9 @@
         </ul>
     </div>
 </div>
+<nav aria-label="Page navigation">
+    <{$lists->render()}>
+</nav>
 <div class="main-pannel" id="main-pannel">
     <{assign name="listType" value="2"}>
     <{include file="invoice/list"}>

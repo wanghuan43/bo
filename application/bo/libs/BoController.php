@@ -263,7 +263,31 @@ class BoController extends Controller
         if (empty($this->model)) {
             $ret = '<h2>Error Page!</h2>';
         } else {
-            $list = $this->model->getList([],$this->limit);
+
+            $params = $this->request->param();
+
+            $sort = [];
+
+            if( isset($params['sort']) ){
+                if($params['order'] == 1){
+                    $sort[$params['sort']] ='asc';
+                }else{
+                    $sort[$params['sort']] ='desc';
+                }
+                $this->model->order($sort);
+            }
+
+            $modelName = strtolower($this->model->getModelName());
+            $search = $this->getSearch();//var_dump($search);die;
+            $list = $this->model->getList($search,$this->limit);
+            $this->assign('sort',$sort);
+            $this->assign('search',$this->model->getSearchableDefine());
+            $this->assign('searchable',$this->model->getSearchable());
+            $this->assign('searchValues',$search);
+            $this->assign('formUrl','/'.$modelName.'/all');
+            $this->assign('modelName',$modelName);
+            $this->assign('type',$modelName);
+            $this->assign('other','main-pannel');
             $this->assign('lists', $list);
             $this->assign('types',getTypeList());
             $ret = $this->fetch();

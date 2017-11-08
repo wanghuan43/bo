@@ -7,26 +7,22 @@
             <li>
                 <a href="<{:url('/project/export')}>" target="_blank" id="link-export" data-type="project" data-list-type="3"><i class="fa fa-file-excel-o"></i>导出</a>
             </li>
-            <li>
-                <a href="<{:url("/project/searchProjectNoList")}>" target="_blank" id="searchList" stype="<{$stype}>"><i class="fa fa-filter"></i>筛选</a>
-            </li>
+
             <li>
                 <a href="/circulation/add/type/project" id="btn-circulation" target="_blank" onclick="return false;"><i class="fa fa-users"></i>传阅<i class="fa fa-sort-desc"></i></a>
             </li>
-            <!--li>
-                <a href="#"><i class="fa fa-tags"></i>标签<i class="fa fa-sort-desc"></i></a>
-            </li-->
             <li>
                 <a href="/project/del" id="lists-delete" target="_blank" onclick="return false;"><i class="fa fa-trash"></i>删除</a>
             </li>
-            <!--li>
-                <a href="/project/add"><i class="fa fa-file-text-o"></i>新建</a>
-            </li-->
         </ul>
     </div>
 </div>
+
+<div class="search-panel">
+    <{include file="common/allfilter"}>
+</div>
+
 <div class="main-pannel" id="main-pannel">
-    <{assign name="listType" value="2" /}>
-    <{include file="project/list"/}>
+    <{include file="project/list/2"/}>
 </div>
 <{load href="/static/js/plugin/select/select.min.js,/static/js/lists.js,/static/css/select.min.css"}>

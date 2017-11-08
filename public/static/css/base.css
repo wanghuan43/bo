@@ -279,6 +279,19 @@ th.icon {
     opacity: 0;
     transition: all 0.3s;
 }
+.search-panel{
+    margin:20px 0 10px;
+}
+.search-panel .f-layer{
+    position:static;
+    opacity:1;
+    -webkit-transform: scale(1);
+    -ms-transform: scale(1);
+    transform: scale(1);
+    width:100%;
+    box-shadow: 0 0px 5px #777;
+    margin-bottom: 10px
+}
 .f-layer .checked-result{
     display:none;
 }
@@ -513,6 +526,15 @@ table.list td:first-child {
 }
 table a{
     color:#00f;
+}
+table th a{
+    color:#000;
+}
+table th i{
+    margin-left:.4em;
+}
+.gray{
+    color:#BFBFBF;
 }
 #checked-result{
     padding-left:2%;
