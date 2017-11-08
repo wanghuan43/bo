@@ -54,7 +54,7 @@ class Received extends BoModel
         $this->alias('r');
         if (!$member->m_isAdmin) {
             $this->join('__CIRCULATION__ c', "r.r_id = c.ci_otid AND c.ci_type = 'received'");
-            $this->where("c.ci_mid", "=", $member->m_id);
+            $this->where("c.ci_mid", "=", $member->m_id)->whereOr("r.r_mid", "=", $member->m_id);
         }
         $this->field("r.*");
         foreach ($search as $key => $value) {

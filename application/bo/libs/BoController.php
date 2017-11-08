@@ -259,6 +259,7 @@ class BoController extends Controller
 
     public function all()
     {
+        $this->assign("empty", "<tr><td>无数据</td></tr>");
         if (empty($this->model)) {
             $ret = '<h2>Error Page!</h2>';
         } else {

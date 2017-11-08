@@ -61,8 +61,8 @@ class Invoice extends BoModel
         $member = $this->getCurrent();
         $this->alias('i');
         if (!$member->m_isAdmin) {
-            $this->join('__CIRCULATION__ c', "i.i_id = c.ci_otid AND c.ci_type = 'invoice'");
-            $this->where("c.ci_mid", "=", $member->m_id);
+            $this->join('__CIRCULATION__ c', "i.i_id = c.ci_otid AND c.ci_type = 'invoice'", "left");
+            $this->where("c.ci_mid", "=", $member->m_id)->whereOr("i.i_mid", "=", $member->m_id);
         }
         $this->field("i.*");
         foreach ($search as $key => $value) {
