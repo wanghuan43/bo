@@ -1,0 +1,56 @@
+<nav aria-label="Page navigation">
+    <{$lists->render()}>
+</nav>
+<div class="search-result">
+    <table cellspacing="0" class="list">
+        <thead>
+        <tr>
+            <th style="min-width: 50px;text-align:center;padding-right:4px;">
+                <input type="checkbox" id="lists-all-checked" value="all"/>
+            </th>
+            <{if condition="(isset($sort['p_no'])) AND ($sort['p_no']=='asc')"}>
+            <th width="100"><a href="/project/all/sort/p_no/order/2">项目号<i class="fa fa-caret-down"></i></a></th>
+            <{elseif condition="(isset($sort['p_no'])) AND ($sort['p_no'] == 'desc')"}>
+            <th width="100"><a href="/project/all/sort/p_no/order/1">项目号<i class="fa fa-caret-up"></i></a></th>
+            <{else}>
+            <th width="100"><a href="/project/all/sort/p_no/order/1">项目号<i class="fa fa-caret-up gray"></i></a></th>
+            <{/if}>
+            <{if condition="(isset($sort['p_name'])) AND ($sort['p_name']=='asc')"}>
+            <th style="width: auto;"><a href="/project/all/sort/p_name/order/2">项目名称<i class="fa fa-caret-down"></i></a></th>
+            <{elseif condition="(isset($sort['p_name'])) AND ($sort['p_name'] == 'desc')"}>
+            <th style="width: auto;"><a href="/project/all/sort/p_name/order/1">项目名称<i class="fa fa-caret-up"></i></a></th>
+            <{else}>
+            <th style="width: auto;"><a href="/project/all/sort/p_name/order/1">项目名称<i class="fa fa-caret-up gray"></i></a></th>
+            <{/if}>
+
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        <{volist name="lists" id="val" empty="<td colspan='4'>暂无数据</td>"}>
+        <tr>
+            <td>
+                <input type="checkbox" value="<{$val.p_id}>" class="lists-id">
+            </td>
+            <td>
+                <a href="/project/detail?id=<{$val.p_id}>"><{$val.p_no}></a>
+            </td>
+            <td><{$val.p_name}></td>
+            <td><a href="/circulation/list/type/project/id/<{$val.p_id}>">传阅列表</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a href="/project/detail?id=<{$val.p_id}>">查看</a></td>
+        </tr>
+        <{/volist}>
+        </tbody>
+    </table>
+</div>
+<nav aria-label="Page navigation">
+    <{$lists->render()}>
+</nav>
+<script>
+    (function($){
+        $("#lists-all-checked").unbind("click");
+        $("#lists-all-checked").click(function () {
+            var _this = $(this);
+            $(".lists-id").prop("checked", _this.prop("checked"));
+        });
+    })(jQuery);
+</script>
