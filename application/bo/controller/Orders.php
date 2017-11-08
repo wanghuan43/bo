@@ -172,7 +172,7 @@ class Orders extends BoController
     public function myLogList($opId = "")
     {
         $logModel = new Logs();
-        $logModel->where("l_model", "=", "orders")->where("l_mid", "=", $this->current->m_id)->where("l_otid", "=", $opId);
+        $logModel->where("l_model", "=", "orders")->where("l_otid", "=", $opId);
         $loglist = $logModel->paginate($this->limit);
         $this->assign("loglist", $loglist);
         $this->assign("title", "日志");
