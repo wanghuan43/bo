@@ -173,9 +173,9 @@ class Budget extends BoController
         $activeSheet->setTitle($title);
 
         foreach($res as $cell){
-            $colIndex = $cell->c_row;
+            $colIndex = $cell->c_col;
             $col = \PHPExcel_Cell::stringFromColumnIndex($colIndex-1);
-            $row = $cell->c_col;
+            $row = $cell->c_row;
             $cSpan = $cell->c_colspan;
             $rSpan = $cell->c_rowspan;
             if( $cSpan || $rSpan ){
