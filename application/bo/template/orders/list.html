@@ -51,7 +51,9 @@
                 type: "json",
                 success: function (data) {
                     custom.alert(data.message);
-                    window.setTimeout("location.reload()", 800);
+                    if(data.status == "true"){
+                        window.setTimeout("location.reload()", 800);
+                    }
                 }
             });
             return false;
