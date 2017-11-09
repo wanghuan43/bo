@@ -65,8 +65,8 @@ class Contract extends BoModel
                 ->where("c.ci_mid", "=", $member->m_id)->whereOr("ct.c_mid", "=", $member->m_id);
         }
         $this->field("ct.*,p.p_no,cp.co_type");
-        $this->join('__PROJECT__ p', "ct.c_pid = p.p_id");
-        $this->join('__COMPANY__ cp', "ct.c_coid = cp.co_id");
+        $this->join('__PROJECT__ p', "ct.c_pid = p.p_id",'left');
+        $this->join('__COMPANY__ cp', "ct.c_coid = cp.co_id",'left');
         foreach ($search as $key => $value) {
             $this->where("ct." . $value['field'], $value['opt'], $value['val']);
         }
@@ -75,6 +75,7 @@ class Contract extends BoModel
         }else {
             $list = $this->paginate($limit, false, array("query" => ["c_type" => Request::instance()->get("c_type")]));
         }
+
         return $list;
     }
 
