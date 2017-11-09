@@ -5,6 +5,8 @@ use app\bo\libs\BoModel;
 
 class Circulation extends BoModel
 {
+    protected $pk = 'ci_id';
+
     public function getList($ot_id, $model = "orders", $isArray = false)
     {
         $list = $this->alias('kc')

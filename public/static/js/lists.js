@@ -40,7 +40,7 @@
     $("#lists-delete").click(function () {
 
         var ids = new Array(), $this = $(this);
-        $(".lists-id:checked").each(function () {
+        $(".main-pannel .lists-id:checked").each(function () {
             ids.push($(this).val());
         });
 
