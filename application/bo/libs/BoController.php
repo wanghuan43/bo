@@ -159,22 +159,22 @@ class BoController extends Controller
 
     }
 
-    protected function getSearch($post=false,$type=false)
+    protected function getSearch($post=false,$mName=false)
     {
         if(empty($post)){
             $post = $this->request->post();
         }
-        if(empty($type)){
-            $param = $this->request->param();
+        if(empty($mName)){
             $mName = strtolower($this->model->getModelName());
-            $type = isset($param['type'])?$param['type']:$mName;
         }
+        $param = $this->request->param();
+        $type = isset($param['type'])?$param['type']:false;
 
         $search = array();
         if (isset($post['fields'])) {
-            foreach ($post['fields'][$type] as $key => $value) {
-                $val = count($post['values'][$type][$key]) > 1 ? $post['values'][$type][$key] : trim($post['values'][$type][$key][0]);
-                $opt = trim($post['operators'][$type][$key]);
+            foreach ($post['fields'][$mName] as $key => $value) {
+                $val = count($post['values'][$mName][$key]) > 1 ? $post['values'][$mName][$key] : trim($post['values'][$mName][$key][0]);
+                $opt = trim($post['operators'][$mName][$key]);
                 $val = is_array($val) ? ((empty($val['0']) AND empty($val['1'])) ? "" : $val) : $val;
                 if (!empty($val)) {
                     if ($opt == "between") {
@@ -191,13 +191,13 @@ class BoController extends Controller
             }
         }
 
-        if($type == "orders"){
+        if($mName == "orders"){
             $search[] = [
                 'field' => 'o_status',
                 'opt'   => '<>',
                 'val'   => 6
             ];
-        }elseif ($this->model->getModelName()=='Orders' && $type == 'contract'){
+        }elseif ($mName=='orders' && $type == 'contract'){
             $search[] = [
                 'field' => 'o_status',
                 'opt'   => '=',
@@ -205,7 +205,7 @@ class BoController extends Controller
             ];
         }
 
-        if($type == 'company'){
+        if($mName == 'company'){
             $co_type = $this->request->param('type');
             $search[] = [
                 'field' => 'co_type',
@@ -284,9 +284,9 @@ class BoController extends Controller
             $this->assign('search',$this->model->getSearchableDefine());
             $this->assign('searchable',$this->model->getSearchable());
             $this->assign('searchValues',$search);
-            $this->assign('formUrl','/'.$modelName.'/all');
+            //$this->assign('formUrl','/'.$modelName.'/all');
             $this->assign('modelName',$modelName);
-            $this->assign('type',$modelName);
+            //$this->assign('type',$modelName);
             $this->assign('other','main-pannel');
             $this->assign('lists', $list);
             $this->assign('types',getTypeList());
