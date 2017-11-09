@@ -755,6 +755,12 @@
             }
         });
         $("#o_lie").change(function(){
+            if($(this).val() == 2){
+                $("#o_type option:eq(0)").prop("selected", true);
+                $("#o_type option:eq(1)").prop("disabled", true);
+            }else{
+                $("#o_type option:eq(1)").prop("disabled", false);
+            }
             $("#o_coname").val("");
             $("#o_coid").val("");
             $("#o_coname").parent().prev().find("i").eq(0).show();
@@ -775,15 +781,15 @@
         switch(type){
             case "invoice":
                 i=1;
-                url = "/invoice/detail?id="+data.id;
+                url = "/#invoice/detail?id="+data.id;
                 break;
             case "acceptance":
                 i=2;
-                url = "/acceptance/detail?id="+data.id;
+                url = "/#acceptance/detail?id="+data.id;
                 break;
             case "received":
                 i=3;
-                url = "/received/detail?id="+data.id;
+                url = "/#received/detail?id="+data.id;
                 break;
         }
         var cla = "."+type+"_"+i;
