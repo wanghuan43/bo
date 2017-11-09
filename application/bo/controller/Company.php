@@ -68,13 +68,13 @@ class Company extends BoController
     public function all()
     {
         $type = $this->request->param('type');
-        $list = $this->model->where('co_type','=',$type)->paginate($this->limit);
+        $this->model->where('co_type','=',$type);
         $titleName = $type == '2'?'客户':'供应商';
-        $this->assign('lists', $list);
         $this->assign('titleName',$titleName);
         $this->assign('type',$type);
         $this->assign("stype", "company");
-        return $this->fetch('all');
+        $this->assign('formUrl','/company/all/type/'.$type);
+        return parent::all();
     }
 
     public function detail($id)

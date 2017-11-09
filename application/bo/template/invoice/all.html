@@ -25,9 +25,9 @@
         </ul>
     </div>
 </div>
-<nav aria-label="Page navigation">
-    <{$lists->render()}>
-</nav>
+<div class="search-panel">
+    <{include file="common/allfilter"}>
+</div>
 <div class="main-pannel" id="main-pannel">
     <{assign name="listType" value="2"}>
     <{include file="invoice/list"}>

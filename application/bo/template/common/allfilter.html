@@ -1,5 +1,5 @@
-<div class="f-layer f-layer-<{$type}>" style="display: block;">
-    <form action="/<{$modelName}>/all" id="<{$type}>AllForm">
+<div class="f-layer f-layer-<{$modelName}>-all" style="display: block;">
+    <form action="<{if isset($formUrl)}><{$formUrl}><{else}>/<{$modelName}>/all<{/if}>" id="<{$modelName}>AllForm">
         <div class="clearfix header">
             <h2>搜索条件:</h2>
             <div class="btn-pannel">
@@ -10,32 +10,31 @@
         <div class="search-condition clearfix">
             <{for start="0" end="$searchable.length"}>
             <div class="search-block">
-                <select class="fields" name="fields[<{$type}>][<{$i}>]">
+                <select class="fields" name="fields[<{$modelName}>][<{$i}>]">
                     <?php $ii=0;foreach($searchable['fields'] as $key=>$value): ?>
                     <option value="<{$key}>" <{eq name="$ii" value="$i"}>selected<{/eq}> data="<{$value.type}>"><{$value.name}></option>
                     <?php $ii++; ?>
                     <?php endforeach ?>
                 </select>
-                <select class="operators" name="operators[<{$type}>][<{$i}>]">
+                <select class="operators" name="operators[<{$modelName}>][<{$i}>]">
                 </select>
-                <input type="text" id="<?php echo "tmp",mt_rand(1000,100000); ?>" name="values[<{$type}>][<{$i}>][]" value=""/>
+                <input type="text" id="<?php echo "tmp",mt_rand(1000,100000); ?>" name="values[<{$modelName}>][<{$i}>][]" value=""/>
             </div>
             <{/for}>
         </div>
     </form>
-    <div id="<{$type}>List">
+    <div id="<{$modelName}>List">
     </div>
 </div>
 
-<!-- 弹窗 END -->
 <script>
-    var operators<{$type}> = <?php echo json_encode($searchable['operators']); ?>;
-    var fields<{$type}> = <?php echo json_encode($searchable['fields']); ?>;
+    var operators<{$modelName}> = <?php echo json_encode($searchable['operators']); ?>;
+    var fields<{$modelName}> = <?php echo json_encode($searchable['fields']); ?>;
     var datePlugin = {};
     $(document).ready(function(){
-        $('.f-layer-<{$type}> .fields').change(function(){
+        $('.f-layer-<{$modelName}>-all .fields').change(function(){
             var val = $(this).val();
-            var lists = eval("operators<{$type}>."+val);
+            var lists = eval("operators<{$modelName}>."+val);
             var opt = "";
             for(var i in lists){
                 opt += "<option value=\""+i+"\">"+lists[i]+"</option>";
@@ -43,12 +42,12 @@
             $(this).next().html(opt);
             operatorsChange($(this).next());
         });
-        $('.f-layer-<{$type}>  .operators').change(function(){
+        $('.f-layer-<{$modelName}>-all  .operators').change(function(){
             operatorsChange(this);
         });
-        $('.f-layer-<{$type}>  .fields').change();
+        $('.f-layer-<{$modelName}>-all  .fields').change();
 
-        $("#<{$type}>AllForm").submit(function() {
+        $("#<{$modelName}>AllForm").submit(function() {
             var data = $(this).serialize();
             var url = $(this).attr("action");
             var tt = {
