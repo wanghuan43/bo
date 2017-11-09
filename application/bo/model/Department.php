@@ -32,10 +32,10 @@ class Department extends BoModel
     {
         $member = $this->getCurrent();
         $this->alias('d');
-        if (!$member->m_isAdmin) {
-            $this->join('__CIRCULATION__ c', "d.d_id = c.ci_otid AND c.ci_type = 'project'");
+        /*if (!$member->m_isAdmin) {
+            $this->join('__CIRCULATION__ c', "d.d_id = c.ci_otid AND c.ci_type = 'department'");
             $this->where("c.ci_mid", "=", $member->m_id);
-        }
+        }*/
         $this->field("d.*");
         foreach ($search as $key => $value) {
             $this->where('d.' . $value['field'], $value['opt'], $value['val']);
