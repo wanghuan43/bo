@@ -60,6 +60,7 @@
 <div id="dialog-box"></div>
 <div id="loading"><img src="/static/images/loading.gif" /></div>
 <div class="f-layer-back" style="display:none;background-color: black;opacity: 0.5;width: 100%;height: 100%;position: fixed;top: 0;z-index:999"></div>
+<div id="btn-close-menu-tree"><a href="javascript:;" title="关闭左侧菜单"><i class="fa fa-angle-double-left"></i></a></div>
 <script>
     var detectBack = {
         initialize: function() {
@@ -79,6 +80,24 @@
         }
     }
     $(document).ready(function () {
+
+        $("#btn-close-menu-tree").click(function(){
+            var e = $(this).find("i.fa");
+            if(e.hasClass("fa-angle-double-left")){
+                e.removeClass("fa-angle-double-left").addClass("fa-angle-double-right");
+                $("#left-pannel").css("margin-left","-220px");
+                $(this).css("left","0");
+                $("#main-container").css("margin-left","10px");
+                $("body").css("background","none");
+            }else{
+                e.removeClass("fa-angle-double-right").addClass("fa-angle-double-left");
+                $("#left-pannel").css("margin-left",0);
+                $(this).css("left","220px");
+                $("#main-container").css("margin-left","230px");
+                $("body").css("background","url(/static/images/body-bg.png) repeat-y");
+            }
+        });
+
         detectBack.initialize();
         var lh = location.href;
         var i = lh.indexOf("/#");
@@ -168,7 +187,7 @@
             });
             return false;
         });
-    })
+    });
     function contentAjax(id,ajaxData,jump){
         if(id == 'main-container'){
             $("#popDIV").html("");

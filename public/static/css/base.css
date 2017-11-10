@@ -594,3 +594,23 @@ table.list tr.hover{
 .wrong{
     border-color: red !important;
 }
+#btn-close-menu-tree{
+    position:absolute;
+    top:48px;
+    left:220px;
+    z-index:999;
+    background:url(../images/body-bg.png) repeat;
+    height:18px;
+    width:18px;
+    transition: all 0.3s;
+}
+#btn-close-menu-tree a{
+    color:#fff;
+    display: block;
+    width:18px;
+    height:18px;
+    line-height: 18px;
+    text-align: center;
+    font-weight: 900;
+    font-size:14px;
+}
