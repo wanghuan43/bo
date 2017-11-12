@@ -165,22 +165,5 @@
                 }
             });
         });
-        $(".stcol").mouseover(function(event){
-            var data = $(this).attr("data");
-            if(data != "" && data != undefined){
-                $(".showTips").html(data);
-                $(".showTips").css({
-                    left: (parseFloat(event.clientX)+10)+"px",
-                    top: (parseFloat(event.clientY)-30)+"px",
-                    display: "block",
-                });
-            }
-        });
-        $(".stcol").mouseout(function(event){
-            $(".showTips").hide();
-        });
-        $("td").each(function(index, element){
-            resetTable(element);
-        });
     });
 </script>

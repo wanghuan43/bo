@@ -103,16 +103,13 @@ function combine() {
     $("#settingTable input[type='checkbox']").prop("checked", false);
     $("#settingTable").attr("border", "0");
     setTimeout(function () {
-        resetTable(td)
+        resetTable()
     }, 1);
     funChange();
 }
 
-function resetTable(td) {
+function resetTable() {
     $("#settingTable").attr("border", "1");
-    var height = (parseInt($(td).height()) + 2), width = $(td).find("div:eq(0)").width();
-    $(td).find(".stcol").css({height: height + "px", lineHeight: height + "px",top: "-"+height + "px", width:width+"px"});
-    $(td).find("div").css("height", height + "px");
 }
 
 function spliTable() {
@@ -143,19 +140,11 @@ function spliTable() {
             rowspan: 0,
             colspan: 0,
         });
-        $(".stcol[row='" + rowStart + "'][col='" + colStart + "']").css({
-            height: "30px",
-            lineHeight: "30px",
-            top: "-30px"
-        });
-        $(".stcol[row='" + rowStart + "'][col='" + colStart + "']").prev().css({
-            height: "30px",
-        });
-        $(".stcol[row='" + rowStart + "'][col='" + colStart + "']").parent().css({
-            height: "30px",
-        });
         $("#settingTable input[type='checkbox']").prop("checked", false);
     })
+    setTimeout(function () {
+        resetTable()
+    }, 1);
 }
 
 function setTable(row, col, baseTable) {
@@ -208,6 +197,7 @@ function setTable(row, col, baseTable) {
     html += '</table>\n';
     settingTable = $(html);
     $("#table").html(settingTable);
+    resetTable();
     bindClick();
 }
 
@@ -241,15 +231,22 @@ function bindClick() {
         }
     });
     $(settingTable).find(".stcol").mouseover(function (event) {
-        var data = $(this).attr("data");
-        if (data != "" && data != undefined) {
+        var data = $.trim($(this).attr("data")),val = $.trim($(this).val()),display="none";
+        if(data != "" && data != undefined){
             $(".showTips").html(data);
-            $(".showTips").css({
-                left: (parseFloat(event.clientX) + 10) + "px",
-                top: (parseFloat(event.clientY) - 30) + "px",
-                display: "block",
-            });
+            display = "block";
+        }else if(val != ""){
+            $(".showTips").html(val);
+            display = "block";
         }
+        $(".showTips").css({
+            left: (parseFloat(event.clientX)+10)+"px",
+            top: (parseFloat(event.clientY)-30)+"px",
+            display: display,
+        });
+    });
+    $(settingTable).find(".stcol").mouseout(function () {
+        $(".showTips").hide();
     });
     $(settingTable).find(".stcol").focus(function () {
         var data = $(this).attr("data"), val = $(this).val();
@@ -264,9 +261,6 @@ function bindClick() {
             $(this).val(data);
             $(this).attr("data", val);
         }
-    });
-    $(settingTable).find(".stcol").mouseout(function () {
-        $(".showTips").hide();
     });
     funChange();
 }
@@ -331,6 +325,7 @@ function calculateValue(val, fun, input) {
             nums = eval(val);
             break;
     }
+    nums = parseFloat(nums).toFixed(2);
     $(input).val(nums);
 }
 
@@ -453,7 +448,7 @@ function ascTochar(char) {
 function tablePermissions(op) {
     var pcrLists = $(".pcrLists"), html = "",
         pcr = JSON.parse(decodeURIComponent($("#pcr").val())), count = pcr.length;
-    for (var i = 0; i < count; i++) {
+    for (var i in pcr) {
         var tmp = pcr[i], char = ascTochar(tmp.col) + tmp.row + ":" + tmp.data, blockColor = "";
         if (op) {
             char += "-" + $("#tableBud option[value='" + tmp.tid + "']").attr("data");
@@ -473,13 +468,14 @@ function tablePermissions(op) {
     $(pcrLists).html(html);
     $(pcrLists).find(".pcrClose").unbind("click");
     $(pcrLists).find(".pcrClose").click(function () {
-        var check = $(this).attr("check"), pcr = JSON.parse(decodeURIComponent($("#pcr").val()));
-        $(pcr).each(function (index, element) {
-            if (element.check == check) {
-                pcr.splice(index, 1);
+        var check = $(this).attr("check"), pcr = JSON.parse(decodeURIComponent($("#pcr").val())),count=0;
+        for(var i in pcr){
+            if (pcr[i].check == check) {
+                eval("delete pcr['"+i+"']");
             }
-        });
-        if (pcr.length == 0) {
+            count++;
+        }
+        if (count == 0) {
             $(".pcrLists").css("border", "none");
             $("#pcr").val("");
         } else {
@@ -521,11 +517,22 @@ function batchPermissions() {
 }
 
 function rdoly(op) {
-    var input = rclickTD.find(".stcol");
-    if (op == 1) {
-        $(input).prop("readonly", true);
-    } else {
-        $(input).prop("readonly", false);
+    var input = rclickTD.find(".stcol"),checkLength = $(".cbTool:checked").length;
+    if(checkLength > 0){
+        $(".cbTool:checked").each(function(i, e){
+            var ei = $(e).parent().next();
+            if (op == 1) {
+                $(ei).prop("readonly", true);
+            } else {
+                $(ei).prop("readonly", false);
+            }
+        });
+    }else{
+        if (op == 1) {
+            $(input).prop("readonly", true);
+        } else {
+            $(input).prop("readonly", false);
+        }
     }
 }
 
@@ -543,26 +550,22 @@ $(".submitPermissions").click(function () {
         return false;
     }
     var cols = $(".cbTool:checked"), pcr = $("#pcr").val(),
-        pcr = pcr != "" ? JSON.parse(decodeURIComponent($("#pcr").val())) : [], count = pcr.length;
+        pcr = pcr != "" ? JSON.parse(decodeURIComponent($("#pcr").val())) : {}, count = pcr.length;
     $("#permissions option:selected").each(function (index, element) {
         var mid = $(element).val();
         cols.each(function (i, e) {
-            var cid = $(e).attr("cid");
-            for (var ii = 0; ii < pcr.length; ii++) {
-                if (cid == pcr[ii].cid && mid == pcr[ii].mid) {
-                    pcr.splice(ii, 1);
-                }
-            }
-            pcr.push({
+            var c = $(e).attr("col") + "A" + $(e).attr("row") + "A" + $("#rw").val();
+            var da = {
                 col: $(e).attr("col"),
                 row: $(e).attr("row"),
                 tid: $("#id").val(),
                 mid: $(element).val(),
                 data: $(element).attr("data"),
-                check: $(e).attr("col") + "-" + $(e).attr("row") + "-" + $(element).val(),
+                check: $(e).attr("col") + "-" + $(e).attr("row") + "-" + $("#rw").val(),
                 rw: $("#rw").val(),
                 cid: $(e).attr("cid"),
-            });
+            };
+            eval("pcr['"+c+"']=da;");
         });
     });
     $(".permissionDiv").hide();
