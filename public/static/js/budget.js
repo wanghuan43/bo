@@ -163,10 +163,10 @@ function setTable(row, col, baseTable) {
                 if (parseInt(baseTable[i][j].c_rowspan) > 0) {
                     crspan += 'rowspan="' + baseTable[i][j].c_rowspan + '" ';
                 }
-                if(baseTable[i][j].c_display == "none"){
+                if (baseTable[i][j].c_display == "none") {
                     crspan += 'style="display:' + baseTable[i][j].c_display + '" ';
                 }
-                if (baseTable[i][j].c_value.indexOf("=") == 0 && !noreadOnly){
+                if (baseTable[i][j].c_value.indexOf("=") == 0 && !noreadOnly) {
                     readOnlyHtml = ' readonly="readonly" ';
                 }
                 if (baseTable[i][j].c_readonly != "1") {
@@ -231,17 +231,17 @@ function bindClick() {
         }
     });
     $(settingTable).find(".stcol").mouseover(function (event) {
-        var data = $.trim($(this).attr("data")),val = $.trim($(this).val()),display="none";
-        if(data != "" && data != undefined){
+        var data = $.trim($(this).attr("data")), val = $.trim($(this).val()), display = "none";
+        if (data != "" && data != undefined) {
             $(".showTips").html(data);
             display = "block";
-        }else if(val != ""){
+        } else if (val != "") {
             $(".showTips").html(val);
             display = "block";
         }
         $(".showTips").css({
-            left: (parseFloat(event.clientX)+10)+"px",
-            top: (parseFloat(event.clientY)-30)+"px",
+            left: (parseFloat(event.clientX) + 10) + "px",
+            top: (parseFloat(event.clientY) - 30) + "px",
             display: display,
         });
     });
@@ -268,11 +268,11 @@ function bindClick() {
 function funChange(thisElement) {
     $(settingTable).find(".stcol").each(function (i, e) {
         var val = $.trim($(e).val()), data = $.trim($(e).attr("data"));
-        if(val.indexOf("=") == 0){
+        if (val.indexOf("=") == 0) {
             $(e).attr("data", val);
             valueChange($(e));
-        }else if(data != undefined){
-            if(data.indexOf("=") == 0){
+        } else if (data != undefined) {
+            if (data.indexOf("=") == 0) {
                 $(e).val(data);
                 valueChange($(e));
             }
@@ -468,10 +468,10 @@ function tablePermissions(op) {
     $(pcrLists).html(html);
     $(pcrLists).find(".pcrClose").unbind("click");
     $(pcrLists).find(".pcrClose").click(function () {
-        var check = $(this).attr("check"), pcr = JSON.parse(decodeURIComponent($("#pcr").val())),count=0;
-        for(var i in pcr){
+        var check = $(this).attr("check"), pcr = JSON.parse(decodeURIComponent($("#pcr").val())), count = 0;
+        for (var i in pcr) {
             if (pcr[i].check == check) {
-                eval("delete pcr['"+i+"']");
+                eval("delete pcr['" + i + "']");
             }
             count++;
         }
@@ -517,9 +517,9 @@ function batchPermissions() {
 }
 
 function rdoly(op) {
-    var input = rclickTD.find(".stcol"),checkLength = $(".cbTool:checked").length;
-    if(checkLength > 0){
-        $(".cbTool:checked").each(function(i, e){
+    var input = rclickTD.find(".stcol"), checkLength = $(".cbTool:checked").length;
+    if (checkLength > 0) {
+        $(".cbTool:checked").each(function (i, e) {
             var ei = $(e).parent().next();
             if (op == 1) {
                 $(ei).prop("readonly", true);
@@ -527,13 +527,56 @@ function rdoly(op) {
                 $(ei).prop("readonly", false);
             }
         });
-    }else{
+    } else {
         if (op == 1) {
             $(input).prop("readonly", true);
         } else {
             $(input).prop("readonly", false);
         }
     }
+}
+
+function deleteTable(type) {
+    var row = rclickTD.find(".stcol").attr("row"), col = rclickTD.find(".stcol").attr("col"),
+        t_col = parseInt($("#t_col").val()), t_row = parseInt($("#t_row").val());
+    if (type == "row") {
+        $(rclickTD).parents("tr").remove();
+    } else {
+        $(settingTable).find(".stcol[col='" + col + "']").parents("td").remove();
+        $(settingTable).find(".colCheck[data='" + col + "']").parents("td").remove();
+    }
+    switch (type) {
+        case "col":
+            var html = '', t_col = t_col - 1;
+            html = setColName(t_col, html);
+            $(settingTable).find("tr:eq(0)").before(html);
+            $(settingTable).find("tr:eq(1)").remove();
+            $(settingTable).find("tr").each(function (index, element) {
+                $(element).find("td").each(function (i, e) {
+                    var c = isNaN(parseInt($(e).attr("col"))) ? 0 : parseInt($(e).attr("col"));
+                    if(col < c){
+                        $(e).attr("col", c - 1);
+                        $(e).find("input").attr("col", c - 1);
+                    }
+                });
+            });
+            $("#t_col").val(t_col);
+            break;
+        case "row":
+            $(settingTable).find("tr").each(function (i, e) {
+                if ((i + 1) > row) {
+                    var r = parseInt($(e).attr("row"));
+                    $(e).find("td:eq(0)").html($(e).find("td:eq(0)").html().replace(r + '&nbsp;', (r - 1) + '&nbsp;'));
+                    $(e).attr("row", r - 1);
+                    $(e).find(".rowCheck").attr("data", r - 1);
+                    $(e).find("input").attr("row", r - 1);
+                }
+            });
+            $("#t_row").val(t_row - 1);
+            break;
+    }
+    bindClick();
+    funChange();
 }
 
 $(".permissionDiv .pcd").click(function () {
@@ -565,7 +608,7 @@ $(".submitPermissions").click(function () {
                 rw: $("#rw").val(),
                 cid: $(e).attr("cid"),
             };
-            eval("pcr['"+c+"']=da;");
+            eval("pcr['" + c + "']=da;");
         });
     });
     $(".permissionDiv").hide();
