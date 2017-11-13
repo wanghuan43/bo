@@ -49,6 +49,9 @@
     <command label="插入一行" onclick="insertTable('row')">
         <command label="插入一列" onclick="insertTable('col')">
             <hr>
+            <command label="删除一行" onclick="deleteTable('row')">
+                <command label="删除一列" onclick="deleteTable('col')">
+                    <hr>
     <{/if}>
             <command label="设置只读" onclick="rdoly(1)">
                 <command label="解除只读" onclick="rdoly(0)">
@@ -164,23 +167,6 @@
                     funChange();
                 }
             });
-        });
-        $(".stcol").mouseover(function(event){
-            var data = $(this).attr("data");
-            if(data != "" && data != undefined){
-                $(".showTips").html(data);
-                $(".showTips").css({
-                    left: (parseFloat(event.clientX)+10)+"px",
-                    top: (parseFloat(event.clientY)-30)+"px",
-                    display: "block",
-                });
-            }
-        });
-        $(".stcol").mouseout(function(event){
-            $(".showTips").hide();
-        });
-        $("td").each(function(index, element){
-            resetTable(element);
         });
     });
 </script>

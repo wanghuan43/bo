@@ -103,16 +103,13 @@ function combine() {
     $("#settingTable input[type='checkbox']").prop("checked", false);
     $("#settingTable").attr("border", "0");
     setTimeout(function () {
-        resetTable(td)
+        resetTable()
     }, 1);
     funChange();
 }
 
-function resetTable(td) {
+function resetTable() {
     $("#settingTable").attr("border", "1");
-    var height = (parseInt($(td).height()) + 2), width = $(td).find("div:eq(0)").width();
-    $(td).find(".stcol").css({height: height + "px", lineHeight: height + "px",top: "-"+height + "px", width:width+"px"});
-    $(td).find("div").css("height", height + "px");
 }
 
 function spliTable() {
@@ -143,19 +140,11 @@ function spliTable() {
             rowspan: 0,
             colspan: 0,
         });
-        $(".stcol[row='" + rowStart + "'][col='" + colStart + "']").css({
-            height: "30px",
-            lineHeight: "30px",
-            top: "-30px"
-        });
-        $(".stcol[row='" + rowStart + "'][col='" + colStart + "']").prev().css({
-            height: "30px",
-        });
-        $(".stcol[row='" + rowStart + "'][col='" + colStart + "']").parent().css({
-            height: "30px",
-        });
         $("#settingTable input[type='checkbox']").prop("checked", false);
     })
+    setTimeout(function () {
+        resetTable()
+    }, 1);
 }
 
 function setTable(row, col, baseTable) {
@@ -174,10 +163,10 @@ function setTable(row, col, baseTable) {
                 if (parseInt(baseTable[i][j].c_rowspan) > 0) {
                     crspan += 'rowspan="' + baseTable[i][j].c_rowspan + '" ';
                 }
-                if(baseTable[i][j].c_display == "none"){
+                if (baseTable[i][j].c_display == "none") {
                     crspan += 'style="display:' + baseTable[i][j].c_display + '" ';
                 }
-                if (baseTable[i][j].c_value.indexOf("=") == 0 && !noreadOnly){
+                if (baseTable[i][j].c_value.indexOf("=") == 0 && !noreadOnly) {
                     readOnlyHtml = ' readonly="readonly" ';
                 }
                 if (baseTable[i][j].c_readonly != "1") {
@@ -208,6 +197,7 @@ function setTable(row, col, baseTable) {
     html += '</table>\n';
     settingTable = $(html);
     $("#table").html(settingTable);
+    resetTable();
     bindClick();
 }
 
@@ -241,15 +231,22 @@ function bindClick() {
         }
     });
     $(settingTable).find(".stcol").mouseover(function (event) {
-        var data = $(this).attr("data");
+        var data = $.trim($(this).attr("data")), val = $.trim($(this).val()), display = "none";
         if (data != "" && data != undefined) {
             $(".showTips").html(data);
-            $(".showTips").css({
-                left: (parseFloat(event.clientX) + 10) + "px",
-                top: (parseFloat(event.clientY) - 30) + "px",
-                display: "block",
-            });
+            display = "block";
+        } else if (val != "") {
+            $(".showTips").html(val);
+            display = "block";
         }
+        $(".showTips").css({
+            left: (parseFloat(event.clientX) + 10) + "px",
+            top: (parseFloat(event.clientY) - 30) + "px",
+            display: display,
+        });
+    });
+    $(settingTable).find(".stcol").mouseout(function () {
+        $(".showTips").hide();
     });
     $(settingTable).find(".stcol").focus(function () {
         var data = $(this).attr("data"), val = $(this).val();
@@ -265,20 +262,17 @@ function bindClick() {
             $(this).attr("data", val);
         }
     });
-    $(settingTable).find(".stcol").mouseout(function () {
-        $(".showTips").hide();
-    });
     funChange();
 }
 
 function funChange(thisElement) {
     $(settingTable).find(".stcol").each(function (i, e) {
         var val = $.trim($(e).val()), data = $.trim($(e).attr("data"));
-        if(val.indexOf("=") == 0){
+        if (val.indexOf("=") == 0) {
             $(e).attr("data", val);
             valueChange($(e));
-        }else if(data != undefined){
-            if(data.indexOf("=") == 0){
+        } else if (data != undefined) {
+            if (data.indexOf("=") == 0) {
                 $(e).val(data);
                 valueChange($(e));
             }
@@ -331,6 +325,7 @@ function calculateValue(val, fun, input) {
             nums = eval(val);
             break;
     }
+    nums = parseFloat(nums).toFixed(2);
     $(input).val(nums);
 }
 
@@ -453,7 +448,7 @@ function ascTochar(char) {
 function tablePermissions(op) {
     var pcrLists = $(".pcrLists"), html = "",
         pcr = JSON.parse(decodeURIComponent($("#pcr").val())), count = pcr.length;
-    for (var i = 0; i < count; i++) {
+    for (var i in pcr) {
         var tmp = pcr[i], char = ascTochar(tmp.col) + tmp.row + ":" + tmp.data, blockColor = "";
         if (op) {
             char += "-" + $("#tableBud option[value='" + tmp.tid + "']").attr("data");
@@ -473,13 +468,14 @@ function tablePermissions(op) {
     $(pcrLists).html(html);
     $(pcrLists).find(".pcrClose").unbind("click");
     $(pcrLists).find(".pcrClose").click(function () {
-        var check = $(this).attr("check"), pcr = JSON.parse(decodeURIComponent($("#pcr").val()));
-        $(pcr).each(function (index, element) {
-            if (element.check == check) {
-                pcr.splice(index, 1);
+        var check = $(this).attr("check"), pcr = JSON.parse(decodeURIComponent($("#pcr").val())), count = 0;
+        for (var i in pcr) {
+            if (pcr[i].check == check) {
+                eval("delete pcr['" + i + "']");
             }
-        });
-        if (pcr.length == 0) {
+            count++;
+        }
+        if (count == 0) {
             $(".pcrLists").css("border", "none");
             $("#pcr").val("");
         } else {
@@ -521,12 +517,66 @@ function batchPermissions() {
 }
 
 function rdoly(op) {
-    var input = rclickTD.find(".stcol");
-    if (op == 1) {
-        $(input).prop("readonly", true);
+    var input = rclickTD.find(".stcol"), checkLength = $(".cbTool:checked").length;
+    if (checkLength > 0) {
+        $(".cbTool:checked").each(function (i, e) {
+            var ei = $(e).parent().next();
+            if (op == 1) {
+                $(ei).prop("readonly", true);
+            } else {
+                $(ei).prop("readonly", false);
+            }
+        });
     } else {
-        $(input).prop("readonly", false);
+        if (op == 1) {
+            $(input).prop("readonly", true);
+        } else {
+            $(input).prop("readonly", false);
+        }
     }
+}
+
+function deleteTable(type) {
+    var row = rclickTD.find(".stcol").attr("row"), col = rclickTD.find(".stcol").attr("col"),
+        t_col = parseInt($("#t_col").val()), t_row = parseInt($("#t_row").val());
+    if (type == "row") {
+        $(rclickTD).parents("tr").remove();
+    } else {
+        $(settingTable).find(".stcol[col='" + col + "']").parents("td").remove();
+        $(settingTable).find(".colCheck[data='" + col + "']").parents("td").remove();
+    }
+    switch (type) {
+        case "col":
+            var html = '', t_col = t_col - 1;
+            html = setColName(t_col, html);
+            $(settingTable).find("tr:eq(0)").before(html);
+            $(settingTable).find("tr:eq(1)").remove();
+            $(settingTable).find("tr").each(function (index, element) {
+                $(element).find("td").each(function (i, e) {
+                    var c = isNaN(parseInt($(e).attr("col"))) ? 0 : parseInt($(e).attr("col"));
+                    if(col < c){
+                        $(e).attr("col", c - 1);
+                        $(e).find("input").attr("col", c - 1);
+                    }
+                });
+            });
+            $("#t_col").val(t_col);
+            break;
+        case "row":
+            $(settingTable).find("tr").each(function (i, e) {
+                if ((i + 1) > row) {
+                    var r = parseInt($(e).attr("row"));
+                    $(e).find("td:eq(0)").html($(e).find("td:eq(0)").html().replace(r + '&nbsp;', (r - 1) + '&nbsp;'));
+                    $(e).attr("row", r - 1);
+                    $(e).find(".rowCheck").attr("data", r - 1);
+                    $(e).find("input").attr("row", r - 1);
+                }
+            });
+            $("#t_row").val(t_row - 1);
+            break;
+    }
+    bindClick();
+    funChange();
 }
 
 $(".permissionDiv .pcd").click(function () {
@@ -543,26 +593,22 @@ $(".submitPermissions").click(function () {
         return false;
     }
     var cols = $(".cbTool:checked"), pcr = $("#pcr").val(),
-        pcr = pcr != "" ? JSON.parse(decodeURIComponent($("#pcr").val())) : [], count = pcr.length;
+        pcr = pcr != "" ? JSON.parse(decodeURIComponent($("#pcr").val())) : {}, count = pcr.length;
     $("#permissions option:selected").each(function (index, element) {
         var mid = $(element).val();
         cols.each(function (i, e) {
-            var cid = $(e).attr("cid");
-            for (var ii = 0; ii < pcr.length; ii++) {
-                if (cid == pcr[ii].cid && mid == pcr[ii].mid) {
-                    pcr.splice(ii, 1);
-                }
-            }
-            pcr.push({
+            var c = $(e).attr("col") + "A" + $(e).attr("row") + "A" + $("#rw").val();
+            var da = {
                 col: $(e).attr("col"),
                 row: $(e).attr("row"),
                 tid: $("#id").val(),
                 mid: $(element).val(),
                 data: $(element).attr("data"),
-                check: $(e).attr("col") + "-" + $(e).attr("row") + "-" + $(element).val(),
+                check: $(e).attr("col") + "-" + $(e).attr("row") + "-" + $("#rw").val(),
                 rw: $("#rw").val(),
                 cid: $(e).attr("cid"),
-            });
+            };
+            eval("pcr['" + c + "']=da;");
         });
     });
     $(".permissionDiv").hide();
