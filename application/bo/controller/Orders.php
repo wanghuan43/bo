@@ -309,7 +309,7 @@ class Orders extends BoController
 //                }
                 break;
             case "panding":
-                $this->title = "带审核订单";
+                $this->title = "待审核订单";
                 $this->ordersModel->join("__LOGS__ l", "l.l_otid = o.o_id", "LEFT");
                 $this->ordersModel->join("__MEMBER__ m", "o.o_mid = m.m_id", "LEFT");
                 $this->ordersModel->join("__DEPARTMENT__ d", "m.m_did = d.d_id", "LEFT");
