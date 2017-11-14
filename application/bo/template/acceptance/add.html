@@ -12,9 +12,9 @@
     </div>
 
     <div class="form-group">
-        <label for="txtContent" class="col-sm-2 control-label">描述</label>
+        <label class="col-sm-2 control-label">主题</label>
         <div class="col-sm-10">
-            <textarea class="form-control" rows="3" name="content" id="txtContent"></textarea>
+            <input type="text" class="form-control" name="subject"/>
         </div>
     </div>
 
@@ -22,7 +22,7 @@
         <label class="col-sm-2 control-label">类型</label>
         <div class="col-sm-10">
             <select class="form-control" name="type">
-                <{foreach name=":getTypeList()" item="type" key="k"}>
+                <{foreach name=":getTypeList2()" item="type" key="k"}>
                 <option value="<{$k}>"><{$type}></option>
                 <{/foreach}>
             </select>
@@ -44,22 +44,25 @@
         </div>
     </div>
 
-    <!--div class="form-group">
-        <label class="col-sm-2 control-label">已用金额</label>
-        <div class="col-sm-10">
-            <input type="text" class="form-control" name="used"/>
-        </div>
-    </div>
-    <div class="form-group">
-        <label class="col-sm-2 control-label">剩余金额</label>
-        <div class="col-sm-10">
-            <input type="text" class="form-control" name="noused"/>
-        </div>
-    </div-->
     <div class="form-group">
         <label class="col-sm-2 control-label">验收时间</label>
         <div class="col-sm-10">
             <input type="text" class="form-control" name="date" id="inputDate"/>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-sm-2 control-label">附件</label>
+        <div class="col-sm-10">
+            <input type="file" name="attachment"/>
+            <p class="help-block">请上传相关图片</p>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label for="txtContent" class="col-sm-2 control-label">描述</label>
+        <div class="col-sm-10">
+            <textarea class="form-control" rows="3" name="content" id="txtContent"></textarea>
         </div>
     </div>
 

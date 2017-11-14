@@ -22,6 +22,20 @@ function getTypeList($key = null)
     return $return;
 }
 
+function getTypeList2($key = null)
+{
+    Config::load(APP_PATH . "bo" . DS . "commonField.php", "", "commonField");
+    $return = Config::get("type2", "commonField");
+    if ($key !== null) {
+        if(array_key_exists($key, $return)){
+            $return = $return[$key];
+        }else{
+            $return = "";
+        }
+    }
+    return $return;
+}
+
 function getTaxList($key = null)
 {
     Config::load(APP_PATH . "bo" . DS . "commonField.php", "", "commonField");

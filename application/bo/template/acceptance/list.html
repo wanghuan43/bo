@@ -44,7 +44,7 @@
             <td><{$val.a_no}></td>
         <{/if}>
             <td><{$val.a_coname}></td>
-            <td><?php echo getTypeList($val['a_type']); ?></td>
+            <td><?php echo getTypeList2($val['a_type']); ?></td>
             <td><?php echo date("Y-m-d", $val['a_date']); ?></td>
             <td class="money"><{$val.a_money|number_format=2}></td>
             <td class="money"><{$val.a_noused|number_format=2}></td>

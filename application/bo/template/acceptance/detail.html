@@ -5,22 +5,6 @@
             <{/*button type="submit" class="btn">保存</button*/}>
             <button type="button" href="#contract/all" class="btn red">取消</button>
         </div>
-        <!--div class="link-pannel">
-            <ul>
-                <li>
-                    <a href="#"><i class="fa fa-calendar-check-o"></i>日志</a>
-                </li>
-                <li>
-                    <a href="#"><i class="fa fa-pencil"></i>批注</a>
-                </li>
-                <li>
-                    <a href="#"><i class="fa fa-share-square-o"></i>分享</a>
-                </li>
-                <li>
-                    <a href="#"><i class="fa fa-star"></i>收藏</a>
-                </li>
-            </ul>
-        </div-->
     </div>
     <div class="main-pannel">
         <h3>基本信息</h3>
@@ -38,8 +22,8 @@
                     <td>销售/采销:</td>
                     <td>
                         <select name="type" disabled>
-                            <option value="1"<{if $data.a_type == 1}> selected<{/if}>>销售</option>
-                            <option value="2"<{if $data.a_type == 2}> selected<{/if}>>采销</option>
+                            <option value="1"<{if $data.a_type == 1}> selected<{/if}>><{:getTypeList2(1)}></option>
+                            <option value="2"<{if $data.a_type == 2}> selected<{/if}>><{:getTypeList2(2)}></option>
                         </select>
                     </td>
                     <td style="padding-left:20px;">对方名称:</td>
@@ -51,6 +35,18 @@
                     <td>
                         <input type="text" value="<{$data.a_mname}>" name="mname" class="no-border" readonly/>
                         <input type="hidden" value="<{$data.a_mid}>" name="mid"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td>主题:</td>
+                    <td><{$data.a_subject}></td>
+                </tr>
+                <tr>
+                    <td>附件:</td>
+                    <td colspan="5">
+                        <{if $data.a_attachment}>
+                            <img src="<{$data.a_attachment}>" style="max-width: 1080px;"/>
+                        <{/if}>
                     </td>
                 </tr>
             </table>

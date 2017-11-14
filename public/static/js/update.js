@@ -28,10 +28,14 @@
             form.find("option:first-child").attr("selected", true);
         };
 
+        var data = new FormData(form[0]);
+
         $.ajax({
             url:form.attr("action"),
             method:form.attr("method"),
-            data:form.serialize(),
+            data:data,
+            contentType: false,
+            processData: false,
             dataType:"json",
             success:function(res) {
                 custom.alert(res.msg);

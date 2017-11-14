@@ -2,6 +2,7 @@
 namespace app\bo\controller;
 
 use app\bo\libs\BoController;
+use app\bo\libs\CustomUtils;
 use app\bo\model\OrderUsed;
 use think\Request;
 
@@ -42,6 +43,7 @@ class Acceptance extends BoController
 
         $data['a_no'] = trim($post['no']);
         $data['a_content'] = trim($post['content']);
+        $data['a_subject'] = trim($post['subject']);
         $data['a_type'] = $post['type'];
         $data['a_money'] = floatval(trim($post['money']));
         //$data['a_used'] = floatval(trim($post['used']));
@@ -56,11 +58,41 @@ class Acceptance extends BoController
         $validate = validate('Acceptance');
 
         if($validate->check($data)){
-            if( $res = $this->model->insert($data) ){
-                $ret = ['flag'=>1,'msg'=>'添加成功'];
-            }else{
-                $ret = ['flag'=>0,'msg'=>'添加失败'];
+
+            $file = $this->request->file('attachment');
+
+            $info =true;
+
+            if(!empty($file)) {
+                $baseFolder = DS . 'attachment' ;
+
+                $folder = ROOT_PATH . DS . 'public' . $baseFolder;
+
+                if (!is_dir($folder)) {
+                    CustomUtils::mkdir_p($folder);
+                }
+
+                if(!$file->checkImg()){
+                    $info = false;
+                }else {
+                    $info = $file->move($folder);
+                }
             }
+
+            if($info) {
+                if( $info !== true ) {
+                    $data['a_attachment'] = $baseFolder . DS . $info->getSaveName();
+                }
+
+                if ($res = $this->model->insert($data)) {
+                    $ret = ['flag' => 1, 'msg' => '添加成功'];
+                } else {
+                    $ret = ['flag' => 0, 'msg' => '添加失败'];
+                }
+            }else{
+                $ret = ['flag'=>0,'msg'=>'附件上传失败'];
+            }
+
         }else{
             $ret = ['flag'=>0,'msg'=>$validate->getError()];
         }
