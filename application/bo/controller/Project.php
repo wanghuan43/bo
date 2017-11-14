@@ -62,7 +62,14 @@ class Project extends BoController
                     $ret['msg'] = '该项目名已存在';
                 }
             } else {
-                $res = $this->model->insert(['p_no' => $no, 'p_name' => $name]);
+                $data = [
+                    'p_no' => $no,
+                    'p_name' => $name,
+                    'p_mid' => $this->current->m_id,
+                    'p_mname' => $this->current->m_name,
+                    'p_createtime' => time(),
+                ];
+                $res = $this->model->insert($data);
                 if ($res) {
                     $ret['flag'] = 1;
                     $ret['msg'] = '添加成功';

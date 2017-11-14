@@ -1,0 +1,58 @@
+<nav aria-label="Page navigation">
+    <{$lists->render()}>
+</nav>
+<table cellspacing="0" class="list">
+    <thead>
+    <tr>
+        <th style="width: 50px;text-align:center;padding-right:4px;"><input type="checkbox" id="lists-all-checked" value="all"/></th>
+        <th>
+            <a href="/acceptance/all/sort/a_no/order/<{:getSortOrder($sort,'a_no')}>">
+                验收单号<i class="<{:getSortClass($sort,'a_no')}>"></i>
+            </a>
+        </th>
+        <th>
+            <a href="/acceptance/all/sort/a_coname/order/<{:getSortOrder($sort,'a_coname')}>">
+                对方名称<i class="<{:getSortClass($sort,'a_coname')}>"></i>
+            </a>
+        </th>
+        <th>
+            <a href="/acceptance/all/sort/a_type/order/<{:getSortOrder($sort,'a_type')}>">
+                类型<i class="<{:getSortClass($sort,'a_type')}>"></i>
+            </a>
+        </th>
+        <th class="date">
+            <a href="/acceptance/all/sort/a_date/order/<{:getSortOrder($sort,'a_date')}>">
+                验收日期<i class="<{:getSortClass($sort,'a_date')}>"></i>
+            </a>
+        </th>
+        <th class="money">
+            <a href="/acceptance/all/sort/a_money/order/<{:getSortOrder($sort,'a_money')}>">
+                验收金额<i class="<{:getSortClass($sort,'a_money')}>"></i>
+            </a>
+        </th>
+        <th class="money">
+            <a href="/acceptance/all/sort/a_noused/order/<{:getSortOrder($sort,'a_noused')}>">
+                未对应订单金额<i class="<{:getSortClass($sort,'a_noused')}>"></i>
+            </a>
+        </th>
+        <th></th>
+    </tr>
+    </thead>
+    <tbody>
+    <{volist name="lists" id="val" empty="$empty"}>
+    <tr>
+        <td><input type="checkbox" value="<{$val.a_id}>" class="lists-id"></td>
+        <td><a href="/acceptance/detail?id=<{$val.a_id}>"><{$val.a_no}></a></td>
+        <td><{$val.a_coname}></td>
+        <td><?php echo getTypeList($val['a_type']); ?></td>
+        <td><?php echo date("Y-m-d", $val['a_date']); ?></td>
+        <td class="money"><{$val.a_money|number_format=2}></td>
+        <td class="money"><{$val.a_noused|number_format=2}></td>
+        <td><a href="/circulation/list/type/acceptance/id/<{$val.a_id}>">传阅列表</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a href="/acceptance/detail?id=<{$val.a_id}>">查看</a></td>
+    </tr>
+    <{/volist}>
+    </tbody>
+</table>
+<nav aria-label="Page navigation">
+    <{$lists->render()}>
+</nav>

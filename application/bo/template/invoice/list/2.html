@@ -1,0 +1,66 @@
+<nav aria-label="Page navigation">
+    <{$lists->render()}>
+</nav>
+<table cellspacing="0" class="list">
+    <thead>
+    <tr>
+        <th style="width: 50px;text-align:center;padding-right:4px;">
+            <input type="checkbox" id="lists-all-checked" value="all"/>
+        </th>
+        <th>
+            <a href="/invoice/all/sort/i_no/order/<{:getSortOrder($sort,'i_no')}>">
+                发票号<i class="<{:getSortClass($sort,'i_no')}>"></i>
+            </a>
+        </th>
+        <th>
+            <a href="/invoice/all/sort/i_content/order/<{:getSortOrder($sort,'i_content')}>">
+                开票摘要<i class="<{:getSortClass($sort,'i_content')}>"></i>
+            </a>
+        </th>
+        <th>
+            <a href="/invoice/all/sort/i_coname/order/<{:getSortOrder($sort,'i_coname')}>">
+                对方名称<i class="<{:getSortClass($sort,'i_coname')}>"></i>
+            </a>
+        </th>
+        <th>
+            <a href="/invoice/all/sort/i_tax/order/<{:getSortOrder($sort,'i_tax')}>">
+                税率<i class="<{:getSortClass($sort,'i_tax')}>"></i>
+            </a>
+        </th>
+        <th>
+            <a href="/invoice/all/sort/i_date/order/<{:getSortOrder($sort,'i_date')}>">
+                开票日期<i class="<{:getSortClass($sort,'i_date')}>"></i>
+            </a>
+        </th>
+        <th>
+            <a href="/invoice/all/sort/i_money/order/<{:getSortOrder($sort,'i_money')}>">
+                开票金额<i class="<{:getSortClass($sort,'i_money')}>"></i>
+            </a>
+        </th>
+        <th>
+            <a href="/invoice/all/sort/i_noused/order/<{:getSortOrder($sort,'i_noused')}>">
+                未对应订单金额<i class="<{:getSortClass($sort,'i_noused')}>"></i>
+            </a>
+        </th>
+        <th></th>
+    </tr>
+    </thead>
+    <tbody>
+    <{volist name="lists" id="val" empty="$empty"}>
+    <tr>
+        <td><input type="checkbox" value="<{$val.i_id}>" class="lists-id"></td>
+        <td><a href="/invoice/detail?id=<{$val.i_id}>"><{$val.i_no}></a></td>
+        <td><{$val.i_content}></td>
+        <td><{$val.i_coname}></td>
+        <td><?php echo getTaxList($val['i_tax']); ?></td>
+        <td><?php echo date("Y-m-d", $val['i_date']); ?></td>
+        <td class="money"><{$val.i_money|number_format=2}></td>
+        <td class="money"><{$val.i_noused|number_format=2}></td>
+        <td><a href="/circulation/list/type/invoice/id/<{$val.i_id}>">传阅列表</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a href="/invoice/detail?id=<{$val.i_id}>">查看</a></td>
+    </tr>
+    <{/volist}>
+    </tbody>
+</table>
+<nav aria-label="Page navigation">
+    <{$lists->render()}>
+</nav>

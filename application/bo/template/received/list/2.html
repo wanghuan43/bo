@@ -1,0 +1,64 @@
+<div class="paginate">
+    <{$lists->render()}>
+</div>
+
+<div class="search-result">
+    <table cellspacing="0" class="list">
+        <thead>
+        <tr>
+            <th style="width: 50px;text-align:center;padding-right:4px;">
+                <input type="checkbox" id="lists-all-checked" value="all"/>
+            </th>
+            <th>
+                <a href="/received/all/sort/r_no/order/<{:getSortOrder($sort,'r_no')}>">
+                    付/回款单号<i class="<{:getSortClass($sort,'r_no')}>"></i>
+                </a>
+            </th>
+            <th>
+                <a href="/received/all/sort/r_coname/order/<{:getSortOrder($sort,'r_coname')}>">
+                    对方名称<i class="<{:getSortClass($sort,'r_coname')}>"></i>
+                </a>
+            </th>
+            <th>
+                <a href="/received/all/sort/r_type/order/<{:getSortOrder($sort,'r_type')}>">
+                    类型<i class="<{:getSortClass($sort,'r_type')}>"></i>
+                </a>
+            </th>
+            <th class="date">
+                <a href="/received/all/sort/r_date/order/<{:getSortOrder($sort,'r_date')}>">
+                    付/回款日期<i class="<{:getSortClass($sort,'r_date')}>"></i>
+                </a>
+            </th>
+            <th class="money">
+                <a href="/received/all/sort/r_money/order/<{:getSortOrder($sort,'r_money')}>">
+                    付/回款金额<i class="<{:getSortClass($sort,'r_money')}>"></i>
+                </a>
+            </th>
+            <th class="money">
+                <a href="/received/all/sort/r_noused/order/<{:getSortOrder($sort,'r_noused')}>">
+                    未对应订单金额<i class="<{:getSortClass($sort,'r_noused')}>"></i>
+                </a>
+            </th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        <{volist name="lists" id="val" empty="$empty"}>
+        <tr>
+            <td><input type="checkbox" value="<{$val.r_id}>" class="lists-id"></td>
+            <td><a href="/received/detail?id=<{$val.r_id}>"><{$val.r_no}></a></td>
+            <td><{$val.r_coname}></td>
+            <td><?php echo getTypeList($val['r_type']); ?></td>
+            <td><?php echo date("Y-m-d", $val['r_date']); ?></td>
+            <td class="money"><{$val.r_money|number_format=2}></td>
+            <td class="money"><{$val.r_noused|number_format=2}></td>
+            <td><a href="/circulation/list/type/received/id/<{$val.r_id}>">传阅列表</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a href="/received/detail?id=<{$val.r_id}>">查看</a</td>
+        </tr>
+        <{/volist}>
+        </tbody>
+    </table>
+</div>
+
+<div class="paginate">
+    <{$lists->render()}>
+</div>

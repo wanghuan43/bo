@@ -8,21 +8,18 @@
             <th style="min-width: 50px;text-align:center;padding-right:4px;">
                 <input type="checkbox" id="lists-all-checked" value="all"/>
             </th>
-            <{if condition="(isset($sort['p_no'])) AND ($sort['p_no']=='asc')"}>
-            <th width="100"><a href="/project/all/sort/p_no/order/2">项目号<i class="fa fa-caret-down"></i></a></th>
-            <{elseif condition="(isset($sort['p_no'])) AND ($sort['p_no'] == 'desc')"}>
-            <th width="100"><a href="/project/all/sort/p_no/order/1">项目号<i class="fa fa-caret-up"></i></a></th>
-            <{else}>
-            <th width="100"><a href="/project/all/sort/p_no/order/1">项目号<i class="fa fa-caret-up gray"></i></a></th>
-            <{/if}>
-            <{if condition="(isset($sort['p_name'])) AND ($sort['p_name']=='asc')"}>
-            <th style="width: auto;"><a href="/project/all/sort/p_name/order/2">项目名称<i class="fa fa-caret-down"></i></a></th>
-            <{elseif condition="(isset($sort['p_name'])) AND ($sort['p_name'] == 'desc')"}>
-            <th style="width: auto;"><a href="/project/all/sort/p_name/order/1">项目名称<i class="fa fa-caret-up"></i></a></th>
-            <{else}>
-            <th style="width: auto;"><a href="/project/all/sort/p_name/order/1">项目名称<i class="fa fa-caret-up gray"></i></a></th>
-            <{/if}>
-
+            <th width="100">
+                <a href="/project/all/sort/p_no/order/<{:getSortOrder($sort,'p_no')}>">项目号<i class="<{:getSortClass($sort,'p_no')}>"></i></a>
+            </th>
+            <th style="width:auto;">
+                <a href="/project/all/sort/p_name/order/<{:getSortOrder($sort,'p_name')}>">项目名称<i class="<{:getSortClass($sort,'p_name')}>"></i></a>
+            </th>
+            <th>
+                <a href="/project/all/sort/p_mname/order/<{:getSortOrder($sort,'p_mname')}>">创建人<i class="<{:getSortClass($sort,'p_mname')}>"></i></a>
+            </th>
+            <th>
+                <a href="/project/all/sort/p_createtime/order/<{:getSortOrder($sort,'p_createtime')}>">创建时间<i class="<{:getSortClass($sort,'p_createtime')}>"></i></a>
+            </th>
             <th></th>
         </tr>
         </thead>
@@ -36,6 +33,8 @@
                 <a href="/project/detail?id=<{$val.p_id}>"><{$val.p_no}></a>
             </td>
             <td><{$val.p_name}></td>
+            <td><{$val.p_mname}></td>
+            <td><{$val.p_createtime|date='Y-m-d H:i:s',###}></td>
             <td><a href="/circulation/list/type/project/id/<{$val.p_id}>">传阅列表</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a href="/project/detail?id=<{$val.p_id}>">查看</a></td>
         </tr>
         <{/volist}>

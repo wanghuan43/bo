@@ -5,14 +5,46 @@
     <thead>
     <tr>
         <th style="min-width: 50px;text-align:center;padding-right:4px;"><input type="checkbox" id="lists-all-checked" value="all"/></th>
-        <th>姓名</th>
-        <th>编码</th>
-        <th>Email</th>
-        <th>电话</th>
-        <th>部门</th>
-        <th>科室</th>
-        <th>科室领导</th>
-        <th>管理员</th>
+        <th>
+            <a href="/member/all/sort/m_name/order/<{:getSortOrder($sort,'m_name')}>">
+                姓名<i class="<{:getSortClass($sort,'m_name')}>"></i>
+            </a>
+        </th>
+        <th>
+            <a href="/member/all/sort/m_code/order/<{:getSortOrder($sort,'m_code')}>">
+                编码<i class="<{:getSortClass($sort,'m_code')}>"></i>
+            </a>
+        </th>
+        <th>
+            <a href="/member/all/sort/m_email/order/<{:getSortOrder($sort,'m_email')}>">
+                Email<i class="<{:getSortClass($sort,'m_email')}>"></i>
+            </a>
+        </th>
+        <th>
+            <a href="/member/all/sort/m_phone/order/<{:getSortOrder($sort,'m_phone')}>">
+                电话<i class="<{:getSortClass($sort,'m_phone')}>"></i>
+            </a>
+        </th>
+        <th>
+            <a href="/member/all/sort/m_office/order/<{:getSortOrder($sort,'m_office')}>">
+                部门<i class="<{:getSortClass($sort,'m_office')}>"></i>
+            </a>
+        </th>
+        <th>
+            <a href="/member/all/sort/m_department/order/<{:getSortOrder($sort,'m_department')}>">
+                科室<i class="<{:getSortClass($sort,'m_department')}>"></i>
+            </a>
+        </th>
+        <th>
+            <a href="/member/all/sort/m_is_lead/order/<{:getSortOrder($sort,'m_is_lead')}>">
+                科室领导<i class="<{:getSortClass($sort,'m_is_lead')}>"></i>
+            </a>
+        </th>
+        <th>
+            <a href="/member/all/sort/m_isAdmin/order/<{:getSortOrder($sort,'m_isAdmin')}>">
+                管理员<i class="<{:getSortClass($sort,'m_isAdmin')}>"></i>
+            </a>
+        </th>
         <th style="width:8em;"></th>
     </tr>
     </thead>

@@ -387,11 +387,12 @@ table.list td:first-child {
 
 .search-block select {
     width: 100px;
-    padding-left: 10px;
+    margin-right:5px;
 }
-
+.search-block select.values,
 .search-block input {
     width: 200px;
+    vertical-align: top;
 }
 
 .divBlock {

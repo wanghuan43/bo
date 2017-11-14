@@ -54,6 +54,18 @@ class Contract extends BoModel
                 "=" => "等于",
             ),
         ),
+        "c_type" => array(
+            "name" => "类型",
+            "type" => "select",
+            "operators" => array(
+                "=" => "等于",
+            ),
+            "options" => array(
+                "0" => "-- --",
+                "1" => "收入",
+                "2" => "支出"
+            )
+        )
     );
 
     public function getList($search, $limit)

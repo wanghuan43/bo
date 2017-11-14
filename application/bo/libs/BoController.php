@@ -284,13 +284,15 @@ class BoController extends Controller
             $this->assign('search',$this->model->getSearchableDefine());
             $this->assign('searchable',$this->model->getSearchable());
             $this->assign('searchValues',$search);
-            //$this->assign('formUrl','/'.$modelName.'/all');
             $this->assign('modelName',$modelName);
-            //$this->assign('type',$modelName);
             $this->assign('other','main-pannel');
             $this->assign('lists', $list);
             $this->assign('types',getTypeList());
-            $ret = $this->fetch();
+            if(isset($params['fields']) || isset($params['page']) || isset($params['sort'])){
+                $ret = $this->fetch($modelName.'/list/2');
+            }else {
+                $ret = $this->fetch();
+            }
         }
         return $ret;
     }

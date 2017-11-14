@@ -127,3 +127,25 @@ function encryptPassword($password)
     $key = Config::get("baseKey", "commonField");
     return md5($password.md5($key));
 }
+
+function getSortOrder($sort,$key)
+{
+    $ret = "1";
+    if( isset($sort[$key]) && $sort[$key] == "asc" ) {
+        $ret = "2";
+    }
+    return $ret;
+}
+
+function getSortClass($sort,$key)
+{
+    $ret = 'fa fa-caret-up';
+    if(isset($sort[$key])){
+        if($sort[$key]=='asc'){
+            $ret = 'fa fa-caret-down';
+        }
+    }else{
+        $ret .=' gray';
+    }
+    return $ret;
+}
