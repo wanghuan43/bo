@@ -64,7 +64,7 @@ class Acceptance extends BoController
             $info =true;
 
             if(!empty($file)) {
-                $baseFolder = DS . 'attachment' ;
+                $baseFolder = DS.'attachment'.DS.date('Y') ;
 
                 $folder = ROOT_PATH . DS . 'public' . $baseFolder;
 
