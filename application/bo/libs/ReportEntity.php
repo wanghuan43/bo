@@ -124,7 +124,7 @@ class ReportEntity extends BoModel
                     }
                     $begin = $begin + 1;
                     $count = $model->reportList($tmp["orders"], $activeSheet, $type, $begin, $id);
-                    $begin = $count + 1;
+                    $begin = $count;
                 }
                 break;
         }
