@@ -36,9 +36,14 @@ class   Orders extends BoModel
         ],
         'o_type' => [
             'name' => '购销',
-            'type' => 'type',
+            'type' => 'select',
             'operators' => [
                 '=' => '等于'
+            ],
+            'options' => [
+                '0' => '-请选择-',
+                '1' => '收入',
+                '2' => '支出',
             ]
         ],
         'o_cno' => [

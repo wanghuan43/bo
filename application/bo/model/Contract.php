@@ -61,7 +61,7 @@ class Contract extends BoModel
                 "=" => "等于",
             ),
             "options" => array(
-                "0" => "-- --",
+                "0" => "-请选择-",
                 "1" => "收入",
                 "2" => "支出"
             )

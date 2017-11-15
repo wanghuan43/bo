@@ -9,22 +9,11 @@
             </div>
         </div>
         <div class="search-condition clearfix">
-            <{for start="0" end="$searchable.length"}>
-            <div class="search-block">
-                <select class="fields" name="fields[<{$type}>][<{$i}>]">
-                    <?php $ii=0;foreach($searchable['fields'] as $key=>$value): ?>
-                    <option value="<{$key}>" <{eq name="$ii" value="$i"}>selected<{/eq}> data="<{$value.type}>"><{$value.name}></option>
-                    <?php $ii++; ?>
-                    <?php endforeach ?>
-                </select>
-                <select class="operators" name="operators[<{$type}>][<{$i}>]">
-                </select>
-                <input type="text" id="<?php echo "tmp",mt_rand(1000,100000); ?>" name="values[<{$type}>][<{$i}>][]" value=""/>
-            </div>
-            <{/for}>
         </div>
         <div class="checked-result">
-            <label for="sel-<{$type.'-'.$listType}>-ids">已选择:</label><select name="ids[]" id="sel-<{$type.'-'.$listType}>-ids" multiple></select>
+            <label for="sel-<{$type.'-'.$listType}>-ids">已选择:</label><select name="ids[]"
+                                                                             id="sel-<{$type.'-'.$listType}>-ids"
+                                                                             multiple></select>
         </div>
     </form>
     <div id="<{$type.'-'.$listType}>-list">
@@ -32,131 +21,42 @@
     </div>
 </div>
 <script>
-    (function($){
+    (function ($) {
 
-    var fLayer = ".f-layer-<{$type.'-'.$listType}>";
-    var form  = "#<{$type.'-'.$listType}>-form";
-    var operators<{$type}> = eval('(<{$searchable["operators"]|json_encode=###}>)');
-    var fields<{$type}> = eval('(<{$searchable["fields"]|json_encode=###}>)');
-    var datePlugin = {};
-    $(document).ready(function(){
+        var fLayer = ".f-layer-<{$type.'-'.$listType}>";
+        var form = "#<{$type.'-'.$listType}>-form";
 
-        $(fLayer).find(".fields").change(function(){
-            var val = $(this).val();
-            var lists = eval("operators<{$type}>."+val);
-            var opt = "";
-            for(var i in lists){
-                opt += "<option value=\""+i+"\">"+lists[i]+"</option>";
-            }
-            $(this).next().html(opt);
-            operatorsChange($(this).next());
-        }).change();
+        var mName = "<{$type}>";
+        var search = eval('(<{$searchable|json_encode=###}>)');
+        $(".f-layer-" + mName + "-<{$listType}> .search-condition").initSearchable(search, mName);
 
-        $(fLayer).find('.operators').change(function(){
-            operatorsChange(this);
-        });
-
-        $(fLayer).find(".btn.close").click(function(){
-            $(this).parents(".f-layer").removeClass("show");
-            $(".f-layer-back").hide();
-        });
-
-        $(fLayer).find(".btn.search").click(function(){
-            var listid = "<{$type.'-'.$listType}>-list";
-            $(form).find("input[name='operator']").remove();
-            var param = {
-                url:$(form).attr("action"),
-                method:"POST",
-                data:$(form).serialize(),
-            };
-            contentAjax(listid,param,"jump");
-            return false;
-        });
-
-        $(fLayer).find(".btn.export").click(function(){
-            console.log('export');
-            if($(form).find('input[name=operator]').length == 0 ) {
-                $(form).append("<input type='hidden' name='operator' value='export' />");
-            }
-            $(form).submit();
-        });
-
-     });
-
-    function operatorsChange(ele){
-        var opt = $(ele).val();
-        var type = $(ele).prev().find("option:selected").attr("data");
-        var id = '#'+$(ele).parent().find("input").attr("id");
-        var input = $(ele).parent().find("input");
-        switch (type){
-            case 'date':
-                setDateField(id, opt, input);
-            default:
-                cutInput(input,opt,type);
-                break;
-        }
-    }
-    function cutInput(input,opt,type){
-        $(input).attr("fliter", type);
-        $(input).val("");
-        var tmp = $(input).clone();
-        var id = $(input).attr("id");
-        var inputs = $(input).parent().find("input");
-        var it = id.replace("#","");
-        var parent = $(input).parent();
-        if(type != "date"){
-            if(datePlugin[it] != undefined) {
-                delete datePlugin[it];
-                $(input).remove();
-                $(parent).append(tmp);
-            }
-            $(input).removeAttr("readonly");
-            if(opt=="between"){
-                $(input).css("width", "100px");
-                $(input).attr("id", id+"-1");
-                $(tmp).css("width", "100px");
-                $(tmp).attr("id", id+"-2");
-                $(input).parent().append(tmp);
-            }else{
-                if(inputs.length > 1){
-                    $(inputs).eq("1").remove();
-                    $(input).css("width", "200px");
-                    $(input).attr("id", id.replace("-1", ""));
-                }
-            }
-        }else{
-            $(input).attr("readonly");
-            var inputs = $(input).parent().find("input");
-            if(inputs.length > 1){
-                $(inputs).eq("1").remove();
-                $(input).css("width", "200px");
-                $(input).attr("id", id.replace("-1", ""));
-            }
-        }
-    }
-    function setDateField(id,opt,input){
-        var range = false;
-        var it = id.replace("#","");
-        var val = $(input).val();
-        if(opt == "between"){
-            range = "~";
-        }
-        if(datePlugin[it] != undefined){
-            datePlugin[it].config.range = range;
-            if(range === false && val.indexOf("~") > 0){
-                $(input).val(val.substr(0, val.indexOf("~")-1));
-            }else if(range !== false && val.indexOf("~") < 0){
-                $(input).val("");
-            }
-        }else{
-            var tmp = laydate.render({
-                elem:id,
-                range:range,
-                value:val,
-                format: 'yyyy-MM-dd'
+        $(document).ready(function () {
+            $(fLayer).find(".btn.close").click(function () {
+                $(this).parents(".f-layer").removeClass("show");
+                $(".f-layer-back").hide();
             });
-            datePlugin[it] = tmp;
-        }
-    }
+
+            $(fLayer).find(".btn.search").click(function () {
+                var listid = "<{$type.'-'.$listType}>-list";
+                $(form).find("input[name='operator']").remove();
+                var param = {
+                    url: $(form).attr("action"),
+                    method: "POST",
+                    data: $(form).serialize(),
+                };
+                contentAjax(listid, param, "jump");
+                return false;
+            });
+
+            $(fLayer).find(".btn.export").click(function () {
+                console.log('export');
+                if ($(form).find('input[name=operator]').length == 0) {
+                    $(form).append("<input type='hidden' name='operator' value='export' />");
+                }
+                $(form).submit();
+            });
+
+        });
+
     })(jQuery);
 </script>

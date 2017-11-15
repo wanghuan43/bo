@@ -83,6 +83,7 @@ class BoController extends Controller
         $list = $model->getList($search, $this->limit);
         $this->assign("lists", $list);
         $this->assign("empty", '<tr><td colspan="' . $colspan . '">暂无数据</td></tr>');
+
         if (Request::instance()->isAjax()) {
             if (count($post) > 0 OR $page) {
                 if($this->request->get('listType')=='all'){
@@ -281,8 +282,7 @@ class BoController extends Controller
             $search = $this->getSearch();//var_dump($search);die;
             $list = $this->model->getList($search,$this->limit);
             $this->assign('sort',$sort);
-            $this->assign('search',$this->model->getSearchableDefine());
-            $this->assign('searchable',$this->model->getSearchable());
+            $this->assign('search',$this->model->getSearchable());
             $this->assign('searchValues',$search);
             $this->assign('modelName',$modelName);
             $this->assign('other','main-pannel');
