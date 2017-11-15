@@ -615,3 +615,17 @@ table.list tr.hover{
     font-weight: 900;
     font-size:14px;
 }
+div.selected-ids{
+    padding:10px;
+}
+div.selected-ids h2{
+    display:block;
+    float: none;
+}
+div.selected-ids>.clearfix{
+    margin-left:2%;
+    margin-top:10px;
+}
+div.selected-ids select{
+    width:100%;
+}

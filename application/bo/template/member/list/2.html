@@ -4,7 +4,7 @@
 <table class="list" cellspacing="0">
     <thead>
     <tr>
-        <th style="min-width: 50px;text-align:center;padding-right:4px;"><input type="checkbox" id="lists-all-checked" value="all"/></th>
+        <th style="min-width: 50px;text-align:center;padding-right:4px;"><input type="checkbox" class="checkAll" value="all"/></th>
         <th>
             <a href="/member/all/sort/m_name/order/<{:getSortOrder($sort,'m_name')}>">
                 姓名<i class="<{:getSortClass($sort,'m_name')}>"></i>
@@ -51,7 +51,7 @@
     <tbody>
     <{volist name="lists" id="vo" empty="<tr><td colspan='11'>暂无数据</td></tr>"}>
     <tr>
-        <td><input type="checkbox" value="<{$vo.m_id}>" class="lists-id"></td>
+        <td><input type="checkbox" value="<{$vo.m_id}>" class="lists-id" data-name="<{$vo.m_name}>"></td>
         <td><a href="/member/detail?id=<{$vo.m_id}>"><{$vo.m_name}></a></td>
         <td><{$vo.m_code}></td>
         <td><{$vo.m_email}></td>
@@ -68,3 +68,4 @@
 <nav aria-label="Page navigation">
     <{$lists->render()}>
 </nav>
+<{load href="/static/js/all.js"}>

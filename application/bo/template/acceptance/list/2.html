@@ -4,7 +4,7 @@
 <table cellspacing="0" class="list">
     <thead>
     <tr>
-        <th style="width: 50px;text-align:center;padding-right:4px;"><input type="checkbox" id="lists-all-checked" value="all"/></th>
+        <th style="width: 50px;text-align:center;padding-right:4px;"><input type="checkbox" class="checkAll" value="all"/></th>
         <th>
             <a href="/acceptance/all/sort/a_no/order/<{:getSortOrder($sort,'a_no')}>">
                 验收单号<i class="<{:getSortClass($sort,'a_no')}>"></i>
@@ -41,7 +41,7 @@
     <tbody>
     <{volist name="lists" id="val" empty="$empty"}>
     <tr>
-        <td><input type="checkbox" value="<{$val.a_id}>" class="lists-id"></td>
+        <td><input type="checkbox" value="<{$val.a_id}>" class="lists-id" data-name="<{$val.a_no}>"></td>
         <td><a href="/acceptance/detail?id=<{$val.a_id}>"><{$val.a_no}></a></td>
         <td><{$val.a_coname}></td>
         <td><?php echo getTypeList2($val['a_type']); ?></td>
@@ -56,3 +56,4 @@
 <nav aria-label="Page navigation">
     <{$lists->render()}>
 </nav>
+<{load href="/static/js/all.js"}>

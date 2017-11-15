@@ -4,7 +4,7 @@
 <table class="list" cellspacing="0">
     <thead>
     <tr>
-        <th style="min-width: 50px;text-align:center;padding-right:4px;"><input type="checkbox" id="lists-all-checked" value="all"/></th>
+        <th style="min-width: 50px;text-align:center;padding-right:4px;"><input type="checkbox" class="checkAll" value="all"/></th>
         <th>
             <a href="/company/all/type/<{$type}>/sort/co_code/order/<{:getSortOrder($sort,'co_code')}>">
                 编码<i class="<{:getSortClass($sort,'co_code')}>"></i>
@@ -33,7 +33,7 @@
     <tbody>
     <{volist name="lists" id="vo" empty="<tr><td colspan='11'>暂无数据</td></tr>"}>
     <tr>
-        <td><input type="checkbox" value="<{$vo.co_id}>" class="lists-id"></td>
+        <td><input type="checkbox" value="<{$vo.co_id}>" class="lists-id" data-name="<{$vo.co_code}>"></td>
         <td><a href="/company/detail?id=<{$vo.co_id}>"><{$vo.co_code}></a></td>
         <td><{$vo.co_name}></td>
         <td><{if $vo.co_status == 1}><span style="color:green">核准</span><{else}><span style="color:red;">禁用</span><{/if}></td>
@@ -56,3 +56,4 @@
 <nav aria-label="Page navigation">
     <{$lists->render()}>
 </nav>
+<{load href="/static/js/all.js"}>

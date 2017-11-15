@@ -6,7 +6,7 @@
         <thead>
         <tr>
             <th style="min-width: 50px;text-align:center;padding-right:4px;">
-                <input type="checkbox" id="lists-all-checked" value="all"/>
+                <input type="checkbox" class="checkAll" value="all"/>
             </th>
             <th width="100">
                 <a href="/project/all/sort/p_no/order/<{:getSortOrder($sort,'p_no')}>">项目号<i class="<{:getSortClass($sort,'p_no')}>"></i></a>
@@ -27,7 +27,7 @@
         <{volist name="lists" id="val" empty="<td colspan='4'>暂无数据</td>"}>
         <tr>
             <td>
-                <input type="checkbox" value="<{$val.p_id}>" class="lists-id">
+                <input type="checkbox" value="<{$val.p_id}>" class="lists-id" data-name="<{$val.p_no}>">
             </td>
             <td>
                 <a href="/project/detail?id=<{$val.p_id}>"><{$val.p_no}></a>
@@ -44,12 +44,4 @@
 <nav aria-label="Page navigation">
     <{$lists->render()}>
 </nav>
-<script>
-    (function($){
-        $("#lists-all-checked").unbind("click");
-        $("#lists-all-checked").click(function () {
-            var _this = $(this);
-            $(".lists-id").prop("checked", _this.prop("checked"));
-        });
-    })(jQuery);
-</script>
+<{load href="/static/js/all.js"}>

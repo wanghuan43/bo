@@ -78,7 +78,15 @@
                 }
             }, false);
         }
-    }
+    };
+    var in_array = function(search,arr){
+        for(var i in arr){
+            if(search == arr[i]){
+                return true;
+            }
+        }
+        return false;
+    };
     $(document).ready(function () {
 
         $("#btn-close-menu-tree").click(function(){

@@ -7,7 +7,7 @@
         <thead>
         <tr>
             <th style="width: 50px;text-align:center;padding-right:4px;">
-                <input type="checkbox" id="lists-all-checked" value="all"/>
+                <input type="checkbox" class="checkAll" value="all"/>
             </th>
             <th>
                 <a href="/received/all/sort/r_no/order/<{:getSortOrder($sort,'r_no')}>">
@@ -45,7 +45,7 @@
         <tbody>
         <{volist name="lists" id="val" empty="$empty"}>
         <tr>
-            <td><input type="checkbox" value="<{$val.r_id}>" class="lists-id"></td>
+            <td><input type="checkbox" value="<{$val.r_id}>" class="lists-id" data-name="<{$val.r_no}>"></td>
             <td><a href="/received/detail?id=<{$val.r_id}>"><{$val.r_no}></a></td>
             <td><{$val.r_coname}></td>
             <td><?php echo getTypeList($val['r_type']); ?></td>
@@ -62,3 +62,4 @@
 <div class="paginate">
     <{$lists->render()}>
 </div>
+<{load href="/static/js/all.js"}>

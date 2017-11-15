@@ -1,3 +1,4 @@
+<{load href="/static/js/plugin/select/select.min.js,/static/css/select.min.css"}>
 <div class="f-layer f-layer-<{$modelName}>-all" style="display: block;">
     <form action="<{if isset($formUrl)}><{$formUrl}><{else}>/<{$modelName}>/all<{/if}>" id="<{$modelName}>AllForm">
         <div class="clearfix header">
@@ -9,23 +10,37 @@
         </div>
         <div class="search-condition clearfix"></div>
     </form>
-    <div class="selected-ids"></div>
+    <div class="selected-ids">
+        <h2>已选择:</h2>
+        <div class="clearfix">
+            <select name="selected-ids" multiple>
+            </select>
+        </div>
+    </div>
 </div>
-
 <script>
-    (function($){
+    (function ($) {
         var mName = "<{$modelName}>";
         var search = eval('(<{$search|json_encode=###}>)');
-        $(".f-layer-"+mName+"-all .search-condition").initSearchable(search,mName);
-        $(".f-layer-"+mName+"-all .btn.search").click(function() {
-            var form = $(".f-layer-"+mName+"-all form");
+        $(".f-layer-" + mName + "-all .search-condition").initSearchable(search, mName);
+        $(".f-layer-" + mName + "-all .btn.search").click(function () {
+            var form = $(".f-layer-" + mName + "-all form");
             var param = {
                 url: form.attr("action"),
-                method:"POST",
-                data:form.serialize()
+                method: "POST",
+                data: form.serialize()
             };
-            contentAjax("main-pannel",param,"jump");
+            contentAjax("main-pannel", param, "jump");
             return false;
+        });
+        $(".f-layer-" + mName + "-all .selected-ids select").select2().change(function(){
+            var val = $(this).val();
+            $(this).find("option").each(function () {
+                if(in_array($(this).attr("value"),val) == false){
+                    $("#main-pannel").find("input[value="+$(this).val()+"]").prop("checked",false);
+                    $(this).remove();
+                }
+            });
         });
     })(jQuery);
 </script>

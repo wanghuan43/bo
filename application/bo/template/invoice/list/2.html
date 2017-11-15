@@ -5,7 +5,7 @@
     <thead>
     <tr>
         <th style="width: 50px;text-align:center;padding-right:4px;">
-            <input type="checkbox" id="lists-all-checked" value="all"/>
+            <input type="checkbox" class="checkAll" value="all"/>
         </th>
         <th>
             <a href="/invoice/all/sort/i_no/order/<{:getSortOrder($sort,'i_no')}>">
@@ -48,7 +48,7 @@
     <tbody>
     <{volist name="lists" id="val" empty="$empty"}>
     <tr>
-        <td><input type="checkbox" value="<{$val.i_id}>" class="lists-id"></td>
+        <td><input type="checkbox" value="<{$val.i_id}>" class="lists-id" data-name="<{$val.i_no}>"></td>
         <td><a href="/invoice/detail?id=<{$val.i_id}>"><{$val.i_no}></a></td>
         <td><{$val.i_content}></td>
         <td><{$val.i_coname}></td>
@@ -64,3 +64,4 @@
 <nav aria-label="Page navigation">
     <{$lists->render()}>
 </nav>
+<{load href="/static/js/all.js"}>
