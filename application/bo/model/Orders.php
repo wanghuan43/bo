@@ -8,6 +8,7 @@ use think\Exception;
 class   Orders extends BoModel
 {
     protected $pk = 'o_id';
+    protected $ouList = "";
 
     protected $searchable = [
         'o_pname' => [
@@ -84,7 +85,7 @@ class   Orders extends BoModel
         ],
     ];
 
-    public function getList($search, $limit=false)
+    public function getList($search, $limit = false)
     {
         $member = $this->getCurrent();
         $this->alias('o');
@@ -96,9 +97,9 @@ class   Orders extends BoModel
         foreach ($search as $key => $value) {
             $this->where("o." . $value['field'], $value['opt'], $value['val']);
         }
-        if(empty($limit)){
+        if (empty($limit)) {
             $list = $this->select();
-        }else {
+        } else {
             $list = $this->paginate($limit);
         }
         return $list;
@@ -163,12 +164,12 @@ class   Orders extends BoModel
             $c = $con->where("c_id", "=", $data['o_cid'])->find();
             $c->c_used = $c->c_used + $data['o_money'];
             $c->c_noused = $c->c_money - $c->c_used;
-            if($c->c_noused < 0){
+            if ($c->c_noused < 0) {
                 return -10;
             }
             $c->save();
         }
-        if(!empty($id)){
+        if (!empty($id)) {
             $this->isUpdate(true);
         }
         $result = parent::save($data, $where, $sequence);
@@ -182,9 +183,9 @@ class   Orders extends BoModel
     public function deleteOrders($id)
     {
         $order = $this->find($id);
-        if(!empty($order->o_cid)){
+        if (!empty($order->o_cid)) {
             $cont = Contract::get($order->o_cid);
-            if($cont){
+            if ($cont) {
                 $cont->c_used -= $order->o_money;
                 $cont->c_noused += $order->o_money;
                 $cont->isUpdate(true);
@@ -207,57 +208,57 @@ class   Orders extends BoModel
         $mCompany = new Company();
         $mDepartment = new Department();
         $mContract = new Contract();
-        foreach ($dataset as $key => $data){
-            if(isset($data['flag']) && $data['flag']!=1){
+        foreach ($dataset as $key => $data) {
+            if (isset($data['flag']) && $data['flag'] != 1) {
                 unset($dataset[$key]);
                 continue;
-            }else{
+            } else {
                 unset($data['flag']);
             }
-            if(!isset($data['o_deal']) || empty($data['o_deal'])){
+            if (!isset($data['o_deal']) || empty($data['o_deal'])) {
                 $data['o_deal'] = 0;
-            }else {
+            } else {
                 $data['o_deal'] = $mChances->getIdByName($data['o_deal']);
             }
-            if($data['o_mname']){ //责任人存在
-                $member = $mMember->getMemberByName($data['o_mname'],$data['m_department']);
-                if($member)
+            if ($data['o_mname']) { //责任人存在
+                $member = $mMember->getMemberByName($data['o_mname'], $data['m_department']);
+                if ($member)
                     $data['o_mid'] = $member->m_id;
             }
             unset($data['m_department']);
-            if($data['p_no']){
-                $project = $mProject->getProject($data['p_no'],$data['o_pname']);
-                if($project){
+            if ($data['p_no']) {
+                $project = $mProject->getProject($data['p_no'], $data['o_pname']);
+                if ($project) {
                     $data['o_pid'] = $project->p_id;
                     $data['o_pname'] = $project->p_name;
                 }
                 unset($data['p_no']);
             }
-            if(!isset($data['o_no']) || empty($data['o_no'])){
-                if(!isset($data['o_pid'])){
+            if (!isset($data['o_no']) || empty($data['o_no'])) {
+                if (!isset($data['o_pid'])) {
                     unset($dataset[$key]);
                     continue;
-                }else{
-                    $data['o_no'] = $this->getOrderNO($data['o_pid'],$data['o_type']);
+                } else {
+                    $data['o_no'] = $this->getOrderNO($data['o_pid'], $data['o_type']);
                 }
             }
-            if($data['o_coname']){
-                $co_type = $data['o_type'] == 1?2:1;
-                $company = $mCompany->where('co_name','=',$data['o_coname'])->where('co_status','=',1)
-                                    ->where('co_type','=',$co_type)->find();
-                if($company){
+            if ($data['o_coname']) {
+                $co_type = $data['o_type'] == 1 ? 2 : 1;
+                $company = $mCompany->where('co_name', '=', $data['o_coname'])->where('co_status', '=', 1)
+                    ->where('co_type', '=', $co_type)->find();
+                if ($company) {
                     $data['o_coid'] = $company->co_id;
                 }
             }
-            if($data['o_dname']){
-                $d = $mDepartment->where('d_name','=',$data['o_dname'])->find();
-                if($d){
+            if ($data['o_dname']) {
+                $d = $mDepartment->where('d_name', '=', $data['o_dname'])->find();
+                if ($d) {
                     $data['o_did'] = $d->d_id;
                 }
             }
-            if(isset($data['o_cno'])){
-                $contract = $mContract->where('c_no','=',$data['o_cno'])->find();
-                if($contract){
+            if (isset($data['o_cno'])) {
+                $contract = $mContract->where('c_no', '=', $data['o_cno'])->find();
+                if ($contract) {
                     $data['o_cid'] = $contract->c_id;
                 }
             }
@@ -268,8 +269,115 @@ class   Orders extends BoModel
         return parent::import($dataset); // TODO: Change the autogenerated stub
     }
 
-    protected function doImport($dataset=false)
+    protected function doImport($dataset = false)
     {
         return $this->insertDuplicate($dataset);
+    }
+
+    public function reportList($cols, &$obj, $type = "", $begin = "2", $id = "")
+    {
+        $this->getOu();
+        $count = $begin;
+        switch ($type) {
+            case "project":
+                $this->where("o_pid", "=", $id);
+                break;
+            case "contract":
+                $this->where("o_cid", "=", $id);
+                break;
+            case "invoice":
+            case "received":
+            case "acceptance":
+                $this->where("o_id", "=", $id);
+                break;
+        }
+        $list = $this->limit(0,10)->select();
+        foreach ($list as $key => $value) {
+            $count = $cell = intval($begin) + intval($key);
+            $this->setCellValues($cell, $cols, $value, $obj);
+        }
+        return $count;
+    }
+
+    private function setCellValues($cell, $cols, $value, &$obj)
+    {
+        foreach ($cols as $key => $val) {
+            if (isset($value[$val])) {
+                $obj->setCellValue($key . $cell, $value[$val]);
+            } else {
+                $obj->setCellValue($key . $cell, $this->customCellValue($value, $val));
+            }
+        }
+    }
+
+    private function customCellValue($value, $val)
+    {
+        $v = "";
+        $tax = intval(getTaxList($value['o_tax'])) / 100;
+        $list = [1 => "0", 2 => "0", 3 => "0"];
+        if (isset($this->ouList[$value['o_id']])) {
+            foreach ($this->ouList[$value['o_id']] as $key=>$t) {
+                $list[$key] = $t;
+            }
+        }
+        switch ($val) {
+            case "o_money" . $value['o_type'] . "_tax":
+                $v = $value['o_money'];
+                break;
+            case "o_money" . $value['o_type']:
+                $v = $value['o_money'] - $value['o_money'] * $tax;
+                break;
+            case "o_cmoney" . $value['o_type'] . "_tax":
+                if (!empty($value['o_cid'])) {
+                    $v = $value['o_money'];
+                } else {
+                    $v = 0;
+                }
+                break;
+            case "o_cmoney" . $value['o_type']:
+                if (!empty($value['o_cid'])) {
+                    $v = $value['o_money'] - $value['o_money'] * $tax;
+                } else {
+                    $v = 0;
+                }
+                break;
+            case "o_amoney" . $value['o_type'] . "_tax":
+                $v = $list[2];
+                break;
+            case "o_amoney" . $value['o_type']:
+                $v = $list[2] - $list[2] * $tax;
+                break;
+            case "o_imoney" . $value['o_type'] . "_tax":
+                $v = $list[1] - $list[1];
+                break;
+            case "o_imoney" . $value['o_type']:
+                $v = $list[1] - $list[1] * $tax;
+                break;
+            case "o_rmoney" . $value['o_type'] . "_tax":
+                $v = $list[3] - $list[3];
+                break;
+            case "o_rmoney" . $value['o_type']:
+                $v = $list[3] - $list[3] * $tax;
+                break;
+            case "o_wmoney" . $value['o_type']:
+                $v = 0;
+                break;
+            case "o_wimoney" . $value['o_type']:
+                $v = $value['o_money'] - $list[1];
+                break;
+        }
+        return $v;
+    }
+
+    private function getOu()
+    {
+        $ou = new OrderUsed();
+        $tmp = $ou->field("sum(ou_used) as su,ou_type,ou_oid")
+            ->group("ou_oid,ou_type")->order("ou_type")->select();
+        $list = [];
+        foreach ($tmp as $value) {
+            $list[$value['ou_oid']][$value['ou_type']] = $value['su'];
+        }
+        $this->ouList = $list;
     }
 }

@@ -1,0 +1,182 @@
+<?php
+/**
+ * Created by PhpStorm.
+ * User: jerry
+ * Date: 2017/11/16
+ * Time: 03:33
+ */
+
+namespace app\bo\libs;
+
+
+use app\bo\model\Orders;
+use PHPExcel;
+use PHPExcel_IOFactory;
+use think\Config;
+
+class ReportEntity extends BoModel
+{
+    var $cols;
+
+    /**
+     * @param $type
+     */
+    public function getReportCols($type)
+    {
+        if (!isset($this->cols[$type])) {
+            Config::load(APP_PATH . "bo" . DS . "reportExcel.php", "", "reportExcel");
+            $this->cols[$type] = Config::get($type, "reportExcel");
+        }
+    }
+
+    /**
+     * @param $type
+     */
+    public function doReport($type)
+    {
+        set_time_limit(0);
+        ini_set('memory_limit', '1024M');
+        $this->getReportCols($type);
+        $title = $this->switchTitle($type);
+        $obj = new PHPExcel();
+        $obj->getProperties()->setCreator("新智云商机管理系统")
+            ->setLastModifiedBy("新智云商机管理系统")
+            ->setTitle($title)
+            ->setSubject($title)
+            ->setDescription($title);
+        $obj->setActiveSheetIndex(0);
+        $activeSheet = $obj->getActiveSheet();
+        $fcols = $this->getColsName(count($this->cols[$type]));
+        $cols = array_keys($this->cols[$type]);
+        foreach ($fcols as $k => $i) {
+            $activeSheet->setCellValue($i . "1", $cols[$k]);
+        }
+        $tmp = [];
+        $i = 0;
+        foreach ($this->cols[$type] as $key => $value) {
+            $tmp[$value['by']][$fcols[$i]] = $value['col'];
+            $i++;
+        }
+        $model = new Orders();
+        switch ($type) {
+            case "orders":
+                $model->reportList($tmp[$type], $activeSheet, $type, 2, "");
+                break;
+            default:
+                $mname = "app\\bo\\model\\" . ucfirst($type);
+                $mtmp = new $mname();
+                $lists = $mtmp->select();
+                $begin = 2;
+                $id = "";
+                $tmps = $model->field("SUM(o_money) as om,o_pid,o_type")->where("o_cid", "<>", "0")
+                    ->group("o_pid,o_type")->select();
+                $clist = [];
+                foreach ($tmps as $val) {
+                    $clist[$val['o_pid']][$val["o_type"]] = $val['om'];
+                }
+                $tmps = $model->field("o_money,o_tax,o_pid")->where("o_cid", "=", "0")->select();
+                $cclist = [];
+                foreach ($tmps as $val) {
+                    if (isset($cclist[$val['o_pid']])) {
+                        $tax = intval(getTaxList($val['o_tax'])) / 100;
+                        $cclist[$val['o_pid']] += $val['o_money'] - $val['o_money'] * $tax;
+                    }
+                }
+                foreach ($lists as $key => $value) {
+                    switch ($type) {
+                        case "project":
+                            $id = $value['p_id'];
+                            break;
+                        case "contract":
+                            $id = $value['c_id'];
+                            break;
+                        case "invoice":
+                        case "received":
+                        case "acceptance":
+                            $id = $value['ou_oid'];
+                            break;
+                    }
+                    $begin += $key;
+                    foreach ($tmp[$type] as $k => $val) {
+                        $v = "";
+                        if (isset($value[$val])) {
+                            $v = $value[$val];
+                        } else {
+                            switch ($val) {
+                                case "p_ileft":
+                                    if (isset($clist[$value['p_id']][1])) {
+                                        $v = $value['p_income'] - $clist[$value['p_id']][1];
+                                    }
+                                    break;
+                                case "p_pleft":
+                                    if (isset($clist[$value['p_id']][2])) {
+                                        $v = $value['p_pay'] - $clist[$value['p_id']][2];
+                                    }
+                                    break;
+                                case "p_total":
+                                    if (isset($cclist[$value['p_id']])) {
+                                        $v = $cclist[$value['p_id']];
+                                    }
+                                    break;
+                            }
+                        }
+                        $activeSheet->setCellValue($k . $begin, $v);
+                    }
+                    $begin = $begin + 1;
+                    $count = $model->reportList($tmp["orders"], $activeSheet, $type, $begin, $id);
+                    $begin = $count + 1;
+                }
+                break;
+        }
+        $activeSheet->setTitle($title);
+        $fileName = $title . '-' . date('ymdHis');
+        header('Content-Type: application/vnd.ms-excel');
+        header('Content-Disposition: attachment;filename="' . $fileName . '.xlsx"');
+        header('Cache-Control: max-age=0');
+        $objWriter = PHPExcel_IOFactory::createWriter($obj, 'Excel2007');
+        $objWriter->save('php://output');
+        exit;
+    }
+
+    private function getColsName($col)
+    {
+        $asc = 65;
+        $round = ceil($col / 26);
+        $left = $col % 26;
+        $r = [];
+        for ($i = 0; $i < $round; $i++) {
+            $count = $col < 26 ? $col : ($i == ($round - 1) ? ($round == 1 ? 26 : $left) : 26);
+            $before = $i == 0 ? "" : chr($asc + ($i - 1));
+            for ($j = 0; $j < $count; $j++) {
+                $r[] = $before . chr($asc + $j);
+            }
+        }
+        return $r;
+    }
+
+    private function switchTitle($type)
+    {
+        $title = "";
+        switch ($type) {
+            case "project":
+                $title = "项目汇总报表";
+                break;
+            case "orders":
+                $title = "订单汇总报表";
+                break;
+            case "contract":
+                $title = "合同汇总报表";
+                break;
+            case "invoice":
+                $title = "发票汇总报表";
+                break;
+            case "received":
+                $title = "收付款汇总报表";
+                break;
+            case "acceptance":
+                $title = "交付汇总报表";
+                break;
+        }
+        return $title;
+    }
+}

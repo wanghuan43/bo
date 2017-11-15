@@ -1,0 +1,35 @@
+<!--<div style="height: 500px;margin-top: 20px;padding-left: 20px;">-->
+    <!--<div style="float: left;width: 40%;">-->
+        <!--<select multiple style="width: 90%;height: 500px;">-->
+            <!--<option>1</option>-->
+            <!--<option>2</option>-->
+            <!--<option>3</option>-->
+            <!--<option>4</option>-->
+        <!--</select>-->
+    <!--</div>-->
+    <!--<div style="float: left;width: 10%">-->
+        <!--<button>上移</button>-->
+        <!--<button>添加</button>-->
+        <!--<button>下移</button>-->
+    <!--</div>-->
+    <!--<div style="float: left;width: 40%;">-->
+        <!--<select multiple style="width: 90%;height: 500px">-->
+            <!--<option>1</option>-->
+            <!--<option>2</option>-->
+            <!--<option>3</option>-->
+            <!--<option>4</option>-->
+        <!--</select>-->
+    <!--</div>-->
+<!--</div>-->
+<div class="page-header">
+    <h2><{$title}></h2>
+</div>
+<form class="form-horizontal form-default form-add" id="form-report" action="/report/doReport/type/<{$type}>" method="post" target="_blank">
+
+    <div class="form-group">
+        <div class="col-sm-offset-2 col-sm-10">
+            <button class="btn btn-default" id="btn-report" type="submit">导出</button>
+        </div>
+    </div>
+
+</form>
