@@ -33,6 +33,12 @@
             contentAjax("main-pannel", param, "jump");
             return false;
         });
+        $(".f-layer-"+mName+"-all .btn[type=reset]").click(function(){
+            var form = $(".f-layer-" + mName + "-all form");
+            form[0].reset();
+            $(".f-layer-" + mName + "-all .btn.search").click();
+            return false;
+        });
         $(".f-layer-" + mName + "-all .selected-ids select").select2().change(function(){
             var val = $(this).val();
             $(this).find("option").each(function () {
