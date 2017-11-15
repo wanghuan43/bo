@@ -38,6 +38,7 @@
             $(this).find("option").each(function () {
                 if(in_array($(this).attr("value"),val) == false){
                     $("#main-pannel").find("input[value="+$(this).val()+"]").prop("checked",false);
+                    $("#main-pannel").find(".checkAll").prop("checked",false);
                     $(this).remove();
                 }
             });

@@ -30,20 +30,16 @@ class Orders extends BoController
 
     public function index($type = "orders")
     {
-        $filters = Session::get('filtersOrders');
-        $params = Request::instance()->param();
-        $filters = empty($filters) ? array() : $filters;
-        unset($params['page']);
-        $params = array_merge($filters, $params);
-        $this->setType($type, $params);
-        session("filtersOrders", $params);
-        $lists = $this->ordersModel->paginate($this->limit);
-        $this->assign("lists", $lists);
+        $this->setType($type,[]);
         $this->assign("title", $this->title);
         $this->assign("type", $type);
         $this->assign("stype", "orders");
-        $this->assign("empty", '<tr><td colspan="11">无数据.</td></tr>');
-        return $this->fetch("index");
+        $formUrl = "/orders";
+        if($type !== 'orders' ){
+            $formUrl = '/orders/index/type/'.$type;
+        }
+        $this->assign('formUrl',$formUrl);
+        return $this->all();
     }
 
     public function operation($op = "add", $op_id = 0)
@@ -329,6 +325,7 @@ class Orders extends BoController
         foreach ($params as $key => $value) {
             $this->ordersModel->where("o." . $key, $value['op'], $value['val']);
         }
+        $this->model = $this->ordersModel;
     }
 
     public function export()

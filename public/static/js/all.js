@@ -26,7 +26,7 @@
         }
     });
 
-    if(allChecked==true){
+    if(allChecked==true && $("#main-container .lists-id").length > 0){
         $("#main-container .checkAll").prop("checked",true);
     }
 
@@ -37,6 +37,9 @@
                 ret = false;
             }
         });
+        if($("#main-container .lists-id").length == 0){
+            ret = false;
+        }
         return ret;
     };
 

@@ -1,0 +1,41 @@
+<nav aria-label="Page navigation">
+    <{$lists->render()}>
+</nav>
+<table class="list" cellspacing="0">
+    <thead>
+    <tr>
+        <th style="text-align: center;padding-right: 4px;"><input type="checkbox" class="checkAll"></th>
+        <th>阶段</th>
+        <th>订单号</th>
+        <th>项目名称</th>
+        <th>订单标题</th>
+        <th>购销</th>
+        <th>对方名称</th>
+        <th>责任人</th>
+        <th class="date">发生日期</th>
+        <th class="money">发生金额</th>
+        <th style="width: 40px;">操作</th>
+    </tr>
+    </thead>
+    <tbody>
+    <{volist name="lists" id="vo" empty="<td colspan='11'>暂无数据</td>"}>
+    <tr>
+        <td><input type="checkbox" value="<{$vo.o_id}>" class="lists-id" data-name="<{$vo.o_no}>"></td>
+        <td><?php echo getStatusList($vo['o_status']);?></td>
+        <td><a href="#orders/operation?op=edit&op_id=<{$vo.o_id}>" style="color:blue;"><{$vo.o_no}></a></td>
+        <td><{$vo.o_pname}></td>
+        <td><{$vo.o_subject}></td>
+        <td><?php echo getTypeList($vo['o_type']);?></td>
+        <td><{$vo.o_coname}></td>
+        <td><{$vo.o_mname}></td>
+        <td><?php echo date("Y-m-d", $vo['o_date']);?></td>
+        <td class="money"><{$vo.o_money|number_format=2}></td>
+        <td><a href="<{:url("/orders/delete/opID/".$vo['o_id'])}>" target="_blank" class="deleteOrders" style="color: blue;">删除</a></td>
+    </tr>
+    <{/volist}>
+    </tbody>
+</table>
+<nav aria-label="Page navigation">
+    <{$lists->render()}>
+</nav>
+<{load file='/static/js/all.js'}>

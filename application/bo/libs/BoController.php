@@ -192,16 +192,16 @@ class BoController extends Controller
             }
         }
 
-        if($mName == "orders"){
-            $search[] = [
-                'field' => 'o_status',
-                'opt'   => '<>',
-                'val'   => 6
-            ];
-        }elseif ($mName=='orders' && $type == 'contract'){
+        if($mName == "orders" && $type == 'contract'){
             $search[] = [
                 'field' => 'o_status',
                 'opt'   => '=',
+                'val'   => 6
+            ];
+        }elseif ($mName=='orders' && empty($type)){
+            $search[] = [
+                'field' => 'o_status',
+                'opt'   => '<>',
                 'val'   => 6
             ];
         }
@@ -279,7 +279,7 @@ class BoController extends Controller
             }
 
             $modelName = strtolower($this->model->getModelName());
-            $search = $this->getSearch();//var_dump($search);die;
+            $search = $this->getSearch();
             $list = $this->model->getList($search,$this->limit);
             $this->assign('sort',$sort);
             $this->assign('search',$this->model->getSearchable());
