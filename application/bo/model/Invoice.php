@@ -71,6 +71,7 @@ class Invoice extends BoModel
                 '=' => '等于',
             ),
             'options' => array(
+                '0' => '-请选择-',
                 '1' => '3%',
                 '2' => '5%',
                 '3' => '6%',
