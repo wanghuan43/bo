@@ -302,11 +302,26 @@ class   Orders extends BoModel
     private function setCellValues($cell, $cols, $value, &$obj)
     {
         foreach ($cols as $key => $val) {
+            $v = "";
             if (isset($value[$val])) {
-                $obj->setCellValue($key . $cell, $value[$val]);
+                switch ($val){
+                    case "o_lie":
+                        $v = getLieList($value[$val]);
+                        break;
+                    case "o_tax":
+                        $v = getTaxList($value[$val]);
+                        break;
+                    case "o_date":
+                        $v = date("Y-m-d", $value[$val]);
+                        break;
+                    default:
+                        $v = $value[$val];
+                        break;
+                }
             } else {
-                $obj->setCellValue($key . $cell, $this->customCellValue($value, $val));
+                $v = $this->customCellValue($value, $val);
             }
+            $obj->setCellValue($key . $cell, $v);
         }
     }
 
@@ -314,7 +329,7 @@ class   Orders extends BoModel
     {
         $v = "";
         $tax = intval(getTaxList($value['o_tax'])) / 100;
-        $list = [1 => "0", 2 => "0", 3 => "0"];
+        $list = [1 => [0,0], 2 => [0,0], 3 => [0,0]];
         if (isset($this->ouList[$value['o_id']])) {
             foreach ($this->ouList[$value['o_id']] as $key=>$t) {
                 $list[$key] = $t;
@@ -342,28 +357,37 @@ class   Orders extends BoModel
                 }
                 break;
             case "o_amoney" . $value['o_type'] . "_tax":
-                $v = $list[2];
+                $v = $list[2][0];
                 break;
             case "o_amoney" . $value['o_type']:
-                $v = $list[2] - $list[2] * $tax;
+                $v = $list[2][0] - $list[2][0] * $tax;
                 break;
             case "o_imoney" . $value['o_type'] . "_tax":
-                $v = $list[1] - $list[1];
+                $v = $list[1][0] - $list[1][0];
                 break;
             case "o_imoney" . $value['o_type']:
-                $v = $list[1] - $list[1] * $tax;
+                $v = $list[1][0] - $list[1][0] * $tax;
                 break;
             case "o_rmoney" . $value['o_type'] . "_tax":
-                $v = $list[3] - $list[3];
+                $v = $list[3][0] - $list[3][0];
                 break;
             case "o_rmoney" . $value['o_type']:
-                $v = $list[3] - $list[3] * $tax;
+                $v = $list[3][0] - $list[3][0] * $tax;
                 break;
-            case "o_wmoney" . $value['o_type']:
-                $v = 0;
+            case "o_wmoney1":
+                $v = $value['o_money'] - $list[1][0];
                 break;
-            case "o_wimoney" . $value['o_type']:
-                $v = $value['o_money'] - $list[1];
+            case "o_wimoney2":
+                $v = $value['o_money'] - $list[3][0];
+                break;
+            case "o_cr_date":
+                $v = $list[2][1];
+                break;
+            case "o_ci_date":
+                $v = $list[1][1];
+                break;
+            case "o_ca_date":
+                $v = $list[3][1];
                 break;
         }
         return $v;
@@ -372,11 +396,11 @@ class   Orders extends BoModel
     private function getOu()
     {
         $ou = new OrderUsed();
-        $tmp = $ou->field("sum(ou_used) as su,ou_type,ou_oid")
-            ->group("ou_oid,ou_type")->order("ou_type")->select();
+        $tmp = $ou->field("sum(ou_used) as su,ou_type,ou_oid,ou_date")
+            ->group("ou_oid,ou_type")->order("ou_date", "desc")->select();
         $list = [];
         foreach ($tmp as $value) {
-            $list[$value['ou_oid']][$value['ou_type']] = $value['su'];
+            $list[$value['ou_oid']][$value['ou_type']] = [$value['su'],date("Y-m-d", $value['ou_date'])];
         }
         $this->ouList = $list;
     }
