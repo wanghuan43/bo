@@ -41,7 +41,7 @@
             $("#for-export").html(form.clone());
             form = $("#for-export").find("form");
             form.attr({ 'id':type+'AllForm2',"action":action,"method":"POST"});
-            form.find(".selected-ids select").attr("name","ids");
+            form.find(".selected-ids select").attr("name","ids[]");
             form.append("<input type='hidden' name='operator' value='export'/>");
             form.submit();
         });
