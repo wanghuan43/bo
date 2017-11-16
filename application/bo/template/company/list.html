@@ -1,5 +1,5 @@
 <{if $listType == 2}>
-<{include file="company/all_list"}>
+<{include file="company/list/2"}>
 <{else}>
 <div class="search-result">
     <nav aria-label="Page navigation">
@@ -19,8 +19,8 @@
             <th>工商注册号</th>
             <th>法人代表</th>
             <th>集团内公司名称</th>
-            <th>创建时间</th>
-            <th>内部</th>
+            <th class="date">创建时间</th>
+            <th style="width: 2em">内部</th>
             <{if $type == 1}>
             <th>委外商</th>
             <{/if}>
@@ -40,7 +40,7 @@
             <td><{$vo.co_reg_id}></td>
             <td><{$vo.co_lr}></td>
             <td><{$vo.co_internal_name}></td>
-            <td><{$vo.co_create_time|date='Y-m-d',###}></td>
+            <td class="date"><{$vo.co_create_time|date='Y-m-d',###}></td>
             <td><{if $vo.co_internal_flag == 1}><span style="color:green;">是</span><{else}><span style="color: #f00;">否</span><{/if}></td>
             <{if $type == 1}>
             <td><{if $vo.co_flag==1}><span style="color:green;">是</span><{else}><span style="color: #f00;">否</span><{/if}></td>
