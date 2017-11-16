@@ -4,7 +4,11 @@
 <table class="list" cellspacing="0">
     <thead>
     <tr>
+        <{if condition="(isset($hideSelected)) AND ($hideSelected == false)"}>
         <th style="text-align: center;padding-right: 4px;"><input type="checkbox" class="checkAll"></th>
+        <{else/}>
+        <th style="width:1em;"></th>
+        <{/if}>
         <{if $type == 'contract'}>
         <th>内/外</th>
         <{else/}>
@@ -25,7 +29,11 @@
     <tbody>
     <{volist name="lists" id="vo" empty="<td colspan='11'>暂无数据</td>"}>
     <tr>
+        <{if condition="(isset($hideSelected)) AND ($hideSelected == false)"}>
         <td><input type="checkbox" value="<{$vo.o_id}>" class="lists-id" data-name="<{$vo.o_no}>"></td>
+        <{else/}>
+        <td></td>
+        <{/if}>
         <{if $type == 'contract'}>
         <td><{if $vo.o_lie == 1}>内部<{else/}>外部<{/if}></td>
         <{else/}>

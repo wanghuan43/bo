@@ -38,6 +38,11 @@ class Orders extends BoController
         if($type !== 'orders' ){
             $formUrl = '/orders/index/type/'.$type;
         }
+        if($type == 'orders' || $type == 'contract'){
+            $this->assign('hideSelected',false);
+        }else{
+            $this->assign('hideSelected',true);
+        }
         $this->assign('formUrl',$formUrl);
         return $this->all();
     }

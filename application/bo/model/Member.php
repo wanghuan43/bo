@@ -33,7 +33,7 @@ class Member extends BoModel
                 "=" => "等于",
             ),
         ),
-        "m_department" => array(
+        "m_office" => array(
             "name" => "用户部门",
             "type" => "text",
             "operators" => array(
@@ -41,6 +41,33 @@ class Member extends BoModel
                 "=" => "等于",
             ),
         ),
+        'm_phone' => array(
+            'name' => '电话',
+            'type' => 'text',
+            'operators' => array(
+                'like' => '包含',
+                '=' => '等于'
+            )
+        ),
+        'm_department' => array(
+            'name' => '科室',
+            'type' => 'text',
+            'operators' => array(
+                'like' => '包含',
+                '=' => '等于'
+            )
+        ),
+        'm_isAdmin' => array(
+            'name' => '管理员',
+            'type' => 'select',
+            'operators' => array(
+                '=' => '等于',
+            ),
+            'options' => array(
+                '0' => '否',
+                '1' => '是'
+            )
+        )
     );
 
     public function loginMember($data)

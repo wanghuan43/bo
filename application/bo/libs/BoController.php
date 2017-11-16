@@ -86,10 +86,10 @@ class BoController extends Controller
 
         if (Request::instance()->isAjax()) {
             if (count($post) > 0 OR $page) {
-                if($this->request->get('listType')=='all'){
-                    $this->assign('listType',2);
-                }else{
-                    $this->assign('listType',1);
+                if ($this->request->get('listType') == 'all') {
+                    $this->assign('listType', 2);
+                } else {
+                    $this->assign('listType', 1);
                 }
                 $content = $this->fetch("list");
             } else {
@@ -112,64 +112,64 @@ class BoController extends Controller
      * @param string $file
      * @return mixed
      */
-    protected function filter($operator,$listType=1,$listContainer=false,$model=false,$file="common/filter")
+    protected function filter($operator, $listType = 1, $listContainer = false, $model = false, $file = "common/filter")
     {
         $post = $this->request->post();
         $get = $this->request->get();
         $param = $this->request->param();
 
-        if(!empty($this->model))
+        if (!empty($this->model))
             $model = $this->model;
 
         $mName = strtolower($this->model->getModelName());
-        $type = isset($param['type'])?$param['type']:$mName;
+        $type = isset($param['type']) ? $param['type'] : $mName;
 
-        if($mName == 'company'){
+        if ($mName == 'company') {
             $type = 'company';
         }
-        $listFile = $mName.'/list/'.$listType;
+        $listFile = $mName . '/list/' . $listType;
 
-        $search = $this->getSearch($post,$type);
+        $search = $this->getSearch($post, $type);
 
-        if(isset($post['fields']) || isset($get['page'])){
+        if (isset($post['fields']) || isset($get['page'])) {
             $file = $listFile;
         }
 
-        if( empty($listContainer) || isset($post['fields']) || isset($get['page'])) {
+        if (empty($listContainer) || isset($post['fields']) || isset($get['page'])) {
             $list = $model->getList($search, $this->limit);
             $this->assign("lists", $list);
         }
 
-        if($operator == 'export'){
-            $this->assign('btnSaveText','导出');
-        }elseif($operator == 'select'){
-            $this->assign('btnSaveText','保存');
+        if ($operator == 'export') {
+            $this->assign('btnSaveText', '导出');
+        } elseif ($operator == 'select') {
+            $this->assign('btnSaveText', '保存');
         }
 
-        $this->assign('type',$type);
-        $this->assign('listContainer',$listContainer);
-        $this->assign('operator',$operator);
-        $this->assign('listType',$listType);
+        $this->assign('type', $type);
+        $this->assign('listContainer', $listContainer);
+        $this->assign('operator', $operator);
+        $this->assign('listType', $listType);
         $this->assign("searchable", $model->getSearchable());
-        $this->assign('url',$this->request->url());
+        $this->assign('url', $this->request->url());
 
         $listHtml = $this->fetch($listFile);
-        $this->assign('listHtml',$listHtml);
+        $this->assign('listHtml', $listHtml);
 
         return $this->fetch($file);
 
     }
 
-    protected function getSearch($post=false,$mName=false)
+    protected function getSearch($post = false, $mName = false)
     {
-        if(empty($post)){
+        if (empty($post)) {
             $post = $this->request->post();
         }
-        if(empty($mName)){
+        if (empty($mName)) {
             $mName = strtolower($this->model->getModelName());
         }
         $param = $this->request->param();
-        $type = isset($param['type'])?$param['type']:false;
+        $type = isset($param['type']) ? $param['type'] : false;
 
         $search = array();
         if (isset($post['fields'])) {
@@ -192,30 +192,32 @@ class BoController extends Controller
             }
         }
 
-        if($mName == "orders" && $type == 'contract'){
+        if ($mName == "orders" && $type == 'contract') {
             $search[] = [
                 'field' => 'o_status',
-                'opt'   => '=',
-                'val'   => 6
+                'opt' => '=',
+                'val' => 6
             ];
-        }elseif ($mName=='orders' && empty($type)){
-            $search[] = [
-                'field' => 'o_status',
-                'opt'   => '<>',
-                'val'   => 6
-            ];
+        } elseif ($mName == 'orders') {
+            if (empty($type) || $type == 'orders') {
+                $search[] = [
+                    'field' => 'o_status',
+                    'opt' => '<>',
+                    'val' => 6
+                ];
+            }
         }
 
-        if($mName == 'company'){
+        if ($mName == 'company') {
             $co_type = $this->request->param('type');
             $search[] = [
                 'field' => 'co_type',
-                'opt'   => '=',
-                'val'   => $co_type
+                'opt' => '=',
+                'val' => $co_type
             ];
         }
 
-        $this->formartSearch($this->model,$search);
+        $this->formartSearch($this->model, $search);
         return $search;
     }
 
@@ -269,28 +271,28 @@ class BoController extends Controller
 
             $sort = [];
 
-            if( isset($params['sort']) ){
-                if($params['order'] == 1){
-                    $sort[$params['sort']] ='asc';
-                }else{
-                    $sort[$params['sort']] ='desc';
+            if (isset($params['sort'])) {
+                if ($params['order'] == 1) {
+                    $sort[$params['sort']] = 'asc';
+                } else {
+                    $sort[$params['sort']] = 'desc';
                 }
                 $this->model->order($sort);
             }
 
             $modelName = strtolower($this->model->getModelName());
             $search = $this->getSearch();
-            $list = $this->model->getList($search,$this->limit);
-            $this->assign('sort',$sort);
-            $this->assign('search',$this->model->getSearchable());
-            $this->assign('searchValues',$search);
-            $this->assign('modelName',$modelName);
-            $this->assign('other','main-pannel');
+            $list = $this->model->getList($search, $this->limit);
+            $this->assign('sort', $sort);
+            $this->assign('search', $this->model->getSearchable());
+            $this->assign('searchValues', $search);
+            $this->assign('modelName', $modelName);
+            $this->assign('other', 'main-pannel');
             $this->assign('lists', $list);
-            $this->assign('types',getTypeList());
-            if(isset($params['fields']) || isset($params['page']) || isset($params['sort'])){
-                $ret = $this->fetch($modelName.'/list/2');
-            }else {
+            $this->assign('types', getTypeList());
+            if (isset($params['fields']) || isset($params['page']) || isset($params['sort'])) {
+                $ret = $this->fetch($modelName . '/list/2');
+            } else {
                 $ret = $this->fetch();
             }
         }
@@ -378,17 +380,17 @@ class BoController extends Controller
 
     protected function doExport()
     {
-        if($this->request->post('operator') == 'export'){
+        if ($this->request->post('operator') == 'export') {
 
             ini_set("memory_limit", "1024M");
             $post = $this->request->post();
             $type = strtolower($this->model->getModelName());
 
-            if( isset($post['ids']) ){
-                $res = $this->model->where($this->model->getPk(),'IN',$post['ids'])->select();
-            }else{
-                $search = $this->getSearch($post,$type);
-                $res = $this->model->getList($search,false);
+            if (isset($post['ids'])) {
+                $res = $this->model->where($this->model->getPk(), 'IN', $post['ids'])->select();
+            } else {
+                $search = $this->getSearch($post, $type);
+                $res = $this->model->getList($search, false);
             }
 
             $title = ucfirst($type);
@@ -399,31 +401,31 @@ class BoController extends Controller
                 ->setTitle($title)
                 ->setSubject($title)
                 ->setDescription($title);
-            $config = Config::load(APP_PATH.'bo'.DS.'excelExport.php','boExcel');
-            if( $type == 'company' ){
+            $config = Config::load(APP_PATH . 'bo' . DS . 'excelExport.php', 'boExcel');
+            if ($type == 'company') {
                 $co_type = $this->request->param('type');
-                $config = $config['boExcel'][$type.'-'.$co_type];
-            }else {
+                $config = $config['boExcel'][$type . '-' . $co_type];
+            } else {
                 $config = $config['boExcel'][$type];
             }
             $obj->setActiveSheetIndex(0);
             $activeSheet = $obj->getActiveSheet();
-            foreach( $config as $k=>$i ){
-                $activeSheet->setCellValue($k.'1',$i['title']);
+            foreach ($config as $k => $i) {
+                $activeSheet->setCellValue($k . '1', $i['title']);
             }
             $col = 2;
             $types = getTypeList();
-            foreach($res as $item){
+            foreach ($res as $item) {
 
-                foreach($config as $k => $i ){
+                foreach ($config as $k => $i) {
                     $val = $item->getData($i['key']);
-                    if(isset($i['type'])){
-                        if( is_array($i['type']) ){
-                            if( isset($i['type'][$val]) )
+                    if (isset($i['type'])) {
+                        if (is_array($i['type'])) {
+                            if (isset($i['type'][$val]))
                                 $val = $i['type'][$val];
                             else
                                 $val = '';
-                        }else {
+                        } else {
                             if ($i['type'] == 'type') {
                                 if (isset($types[$val]))
                                     $val = $types[$val];
@@ -434,14 +436,14 @@ class BoController extends Controller
                             }
                         }
                     }
-                    $activeSheet->setCellValue($k.$col,$val);
+                    $activeSheet->setCellValue($k . $col, $val);
                 }
-                $col ++;
+                $col++;
             }
             $activeSheet->setTitle($type);
-            $fileName = $title.'-'.date('ymdHis');
+            $fileName = $title . '-' . date('ymdHis');
             header('Content-Type: application/vnd.ms-excel');
-            header('Content-Disposition: attachment;filename="'.$fileName.'.xlsx"');
+            header('Content-Disposition: attachment;filename="' . $fileName . '.xlsx"');
             header('Cache-Control: max-age=0');
 
             $objWriter = \PHPExcel_IOFactory::createWriter($obj, 'Excel2007');
@@ -449,10 +451,10 @@ class BoController extends Controller
 
             exit;
 
-        }else {
-            if($this->model->getModelName() == 'Company' && $this->request->param('type') == 2 ){
+        } else {
+            if ($this->model->getModelName() == 'Company' && $this->request->param('type') == 2) {
                 $listType = 4;
-            }else{
+            } else {
                 $listType = 3;
             }
             return $this->filter('export', $listType);

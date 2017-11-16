@@ -1,19 +1,19 @@
 <div class="clearfix header">
     <h2><{$title}></h2>
     <div class="link-pannel">
+        <{if condition="in_array($type, array('contract', 'orders'))"}>
         <ul>
             <li>
                 <a href="<{:url('/orders/export/type/'.$type)}>" target="_blank" id="link-export" data-type="<{$type}>" data-list-type="3"><i class="fa fa-file-excel-o"></i>导出</a>
             </li>
-            <{if condition="in_array($type, array('contract', 'orders'))"}>
             <li>
                 <a href="<{:url("/circulation/add/type/orders")}>" target="_blank" id="btn-circulation"><i class="fa fa-users"></i>传阅<i class="fa fa-sort-desc"></i></a>
             </li>
             <li>
                 <a href="#"><i class="fa fa-tags"></i>标签<i class="fa fa-sort-desc"></i></a>
             </li>
-            <{/if}>
         </ul>
+        <{/if}>
     </div>
 </div>
 
