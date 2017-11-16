@@ -54,6 +54,44 @@ class Invoice extends BoModel
                 "<" => "小于",
             ),
         ),
+        'i_noused' => array(
+            'name' => '未对应订单金额',
+            'type' => 'price',
+            'operators' => array(
+                'between' => '介于',
+                '=' => '等于',
+                '>' => '大于',
+                '<' => '小于'
+            )
+        ),
+        'i_tax' => array(
+            'name' => '税率',
+            'type' => 'select',
+            'operators' => array(
+                '=' => '等于',
+            ),
+            'options' => array(
+                '1' => '3%',
+                '2' => '5%',
+                '3' => '6%',
+                '4' => '11%',
+                '5' => '13%',
+                '6' => '17%',
+                '7' => '普票'
+            )
+        ),
+        'i_type' => array(
+            'name' => '类型',
+            'type' => 'select',
+            'operators' => array(
+                '=' => '等于'
+            ),
+            'options' => array(
+                '0' => '-请选择-',
+                '1' => '收入',
+                '2' => '支出'
+            )
+        )
     );
 
     public function getList($search, $limit,$order=['i_date'=>'desc'])
