@@ -328,11 +328,11 @@ return [
         'received' => [ //11月7号导入付款单
             'file' => 'uploads/xlsx/采购跟踪表1031最终.xls',
             'model' => 'received',
-            'index' => 1,
+            'index' => 2,
             'fields' => [
                 'r_no' => 'Y',
                 'r_mname' => 'B',
-                'r_coname' => 'D',
+                'r_coname' => 'E',
                 'r_money' => 'M',
                 'r_date' => 'N',
                 'd_name' => 'A',
