@@ -54,41 +54,12 @@
         $("#<{$type}>Form").submit(function() {
             var data = $(this).serialize();
             var url = $(this).attr("action");
-            if($("#o_type").length >= 1){
-//                if(url.indexOf("?") >= 0){
-//                    url.replace("&c_type="+$("#o_type").val(), "");
-//                    url = "&c_type="+$("#o_type").val();
-//                }else{
-//                    url.replace("?c_type="+$("#o_type").val(), "");
-//                    url = "?c_type="+$("#o_type").val();
-//                }
-            }
+
             var tt = {
                 url: url,
                 dataType: "json",
                 method: "post",
                 data: data,
-                success:function(data){
-                    $("#<{if condition="!empty($other)"}><{$other}><{else}><{$type}>List<{/if}>").html(data.content);
-                    $("#<{if condition="!empty($other)"}><{$other}><{else}><{$type}>List<{/if}> a").click(function(){
-                        var href = $(this).attr("href");
-                        if(href != "" && href != "#" && href != undefined){
-                            href = href.replace("#", "/");
-                            var tts = {
-                                url: href,
-                                method: "get",
-                                dataType:"json"
-                            }
-                            contentAjax("<{if condition="!empty($other)"}><{$other}><{else}><{$type}>List<{/if}>", tts, 'jump');
-                        }
-                        return false;
-                    });
-                <{if condition="!empty($other)"}>
-                    loading.hide();
-                    $(".f-layer-<{$type}>").removeClass("show");
-                    $(".f-layer-<{$type}>-back").hide();
-                <{/if}>
-                }
             };
             contentAjax("<{if condition="!empty($other)"}><{$other}><{else}><{$type}>List<{/if}>", tt, 'jump');
             return false;
