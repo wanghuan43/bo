@@ -109,6 +109,10 @@ class Orders extends BoController
         $message = "保存成功";
         $post['o_mid'] = $this->current->m_id;
         $post['o_mname'] = $this->current->m_name;
+        $zc_name = $post['zc_name'];
+        $zc_id = $post['zc_id'];
+        unset($post['zc_name']);
+        unset($post['zc_id']);
         if ($op == "edit") {
             $search = [
                 "l_otid" => $op_id,
@@ -128,17 +132,12 @@ class Orders extends BoController
             $result = $this->ordersModel->save($post, $where);
             if ($result AND $post['o_lie'] == '2') {
                 $nO = new \app\bo\model\Orders();
-                $oldI = $post['o_did'];
-                $oldN = $post['o_dname'];
-                $newI = $post['o_coid'];
-                $newN = $post['o_coname'];
-                $post['o_did'] = $newI;
-                $post['o_dname'] = $newN;
-                $post['o_coid'] = $oldI;
-                $post['o_coname'] = $oldN;
+                $post['o_pid'] = $zc_id;
+                $post['o_pname'] = $zc_name;
                 $post['o_type'] = $post['o_type'] == '1' ? '2' : '1';
                 $post['o_no'] = $nO->getOrderNO($post['o_pid'], $post['o_type']);
                 $result = $nO->save($post, $where);
+                $nO->o_id;
             }
             $logModel->saveLogs($post, array(), $this->ordersModel->o_id, "orders", "add");
         }
