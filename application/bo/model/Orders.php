@@ -291,7 +291,7 @@ class   Orders extends BoModel
                 $this->where("o_id", "=", $id);
                 break;
         }
-        $list = $this->limit(0,10)->select();
+        $list = $this->select();
         foreach ($list as $key => $value) {
             $count = $cell = intval($begin) + intval($key);
             $this->setCellValues($cell, $cols, $value, $obj);
