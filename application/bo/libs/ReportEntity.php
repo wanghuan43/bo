@@ -100,7 +100,41 @@ class ReportEntity extends BoModel
                     foreach ($tmp[$type] as $k => $val) {
                         $v = "";
                         if (isset($value[$val])) {
-                            $v = $value[$val];
+                            switch ($val){
+                                case "p_date":
+                                    $v = date("Y-m-d",$value[$val]);
+                                    break;
+                                case "c_date":
+                                    $v = date("Y-m-d",$value[$val]);
+                                    break;
+                                case "c_type":
+                                    $v = getTypeList2($value[$val]);
+                                    break;
+                                case "i_date":
+                                    $v = date("Y-m-d",$value[$val]);
+                                    break;
+                                case "i_type":
+                                    $v = getTypeList2($value[$val]);
+                                    break;
+                                case "i_tax":
+                                    $v = getTaxList($value[$val]);
+                                    break;
+                                case "r_date":
+                                    $v = date("Y-m-d",$value[$val]);
+                                    break;
+                                case "r_type":
+                                    $v = getTypeList2($value[$val]);
+                                    break;
+                                case "a_date":
+                                    $v = date("Y-m-d",$value[$val]);
+                                    break;
+                                case "a_type":
+                                    $v = getTypeList2($value[$val]);
+                                    break;
+                                default:
+                                    $v = $value[$val];
+                                    break;
+                            }
                         } else {
                             switch ($val) {
                                 case "p_ileft":
