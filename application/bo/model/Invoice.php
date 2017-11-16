@@ -88,8 +88,8 @@ class Invoice extends BoModel
             ),
             'options' => array(
                 '0' => '-请选择-',
-                '1' => '收入',
-                '2' => '支出'
+                '1' => '销售',
+                '2' => '采购'
             )
         )
     );
