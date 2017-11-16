@@ -15,25 +15,37 @@
 
     $("#link-export").click(function(){
         var type = $(this).attr("data-type");
-        var listType = $(this).attr("data-list-type");
-        var url = $(this).attr("href");
-        var ele = ".f-layer-"+type+"-"+listType;
-        if( $(ele).length > 0 ){
-            custom.showFilter(ele);
-        }else {
-            $.ajax({
-                url: url,
-                method: "POST",
-                success: function (res) {
-                    if (res.content) {
-                        $("body").append(res.content);
-                    } else {
-                        $("body").append(res);
-                    }
-                    custom.showFilter(ele,1);
-                }
-            });
+        var action = $(this).attr("href");
+        var form = $("#"+type+"AllForm");
+        var values = false;
+
+        form.find(".values").each(function(){
+            var val = $(this).val();
+            if(val != '' && val != 0 && val != undefined){
+                values = true;
+            }
+        });
+
+        var sIDs = form.find(".selected-ids select").val();
+
+        if(sIDs.length>0){
+            msg = '是否要导出选中的内容?';
+        }else{
+            if(values){
+                msg = '是否要导出符合条件的内容?';
+            }else{
+                msg = '是否要导出全部内容?';
+            }
         }
+        custom.confirm(msg,function(){
+            $("#for-export").html(form.clone());
+            form = $("#for-export").find("form");
+            form.attr({ 'id':type+'AllForm2',"action":action,"method":"POST"});
+            form.find(".selected-ids select").attr("name","ids");
+            form.append("<input type='hidden' name='operator' value='export'/>");
+            form.submit();
+        });
+
         return false;
     });
 

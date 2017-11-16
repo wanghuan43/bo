@@ -9,14 +9,13 @@
             </div>
         </div>
         <div class="search-condition clearfix"></div>
-    </form>
-    <div class="selected-ids"<{if condition="(isset($hideSelected)) AND ($hideSelected == true)"}> style="display:none;"<{/if}>>
-        <h2>已选择:</h2>
-        <div class="clearfix">
-            <select name="selected-ids" multiple>
-            </select>
+        <div class="selected-ids"<{if condition="(isset($hideSelected)) AND ($hideSelected == true)"}> style="display:none;"<{/if}>>
+            <h2>已选择:</h2>
+            <div class="clearfix">
+                <select name="selected-ids" multiple></select>
+            </div>
         </div>
-    </div>
+    </form>
 </div>
 <script>
     (function ($) {

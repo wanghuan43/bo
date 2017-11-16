@@ -4,7 +4,7 @@
         <{if condition="in_array($type, array('contract', 'orders'))"}>
         <ul>
             <li>
-                <a href="<{:url('/orders/export/type/'.$type)}>" target="_blank" id="link-export" data-type="<{$type}>" data-list-type="3"><i class="fa fa-file-excel-o"></i>导出</a>
+                <a href="<{:url('/orders/export/type/'.$type)}>" target="_blank" id="link-export" data-type="<{$stype}>" data-list-type="3"><i class="fa fa-file-excel-o"></i>导出</a>
             </li>
             <li>
                 <a href="<{:url("/circulation/add/type/orders")}>" target="_blank" id="btn-circulation"><i class="fa fa-users"></i>传阅<i class="fa fa-sort-desc"></i></a>
