@@ -5,7 +5,9 @@
     <thead>
     <tr>
         <th style="text-align: center;padding-right: 4px;"><input type="checkbox" class="checkAll"></th>
+        <{if $type != 'contract'}>
         <th>阶段</th>
+        <{/if}>
         <th>订单号</th>
         <th>项目名称</th>
         <th>订单标题</th>
@@ -21,7 +23,9 @@
     <{volist name="lists" id="vo" empty="<td colspan='11'>暂无数据</td>"}>
     <tr>
         <td><input type="checkbox" value="<{$vo.o_id}>" class="lists-id" data-name="<{$vo.o_no}>"></td>
+        <{if $type != 'contract'}>
         <td><?php echo getStatusList($vo['o_status']);?></td>
+        <{/if}>
         <td><a href="#orders/operation?op=edit&op_id=<{$vo.o_id}>" style="color:blue;"><{$vo.o_no}></a></td>
         <td><{$vo.o_pname}></td>
         <td><{$vo.o_subject}></td>
