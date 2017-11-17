@@ -1,18 +1,24 @@
 (function($){
 
     laydate.render({
-        elem:"input[name='date']"
+        elem:"input[name='date']",
+        min:'1970-01-01 08:00:00',
+        max:0
     });
 
     $("#form-update [type='submit']").click(function(){
         var form = $("#form-update");
-        $.ajax({
-            url:form.attr("action"),
-            method:form.attr("method"),
-            data:form.serialize(),
-            dataType:"json",
-            success:function (res) {
-                custom.alert(res.msg);
+        form.validate({
+            'submitHandler':function(){
+                $.ajax({
+                    url:form.attr("action"),
+                    method:form.attr("method"),
+                    data:form.serialize(),
+                    dataType:"json",
+                    success:function (res) {
+                        custom.alert(res.msg);
+                    }
+                });
             }
         });
     });
@@ -21,34 +27,30 @@
 
         var form = $(".form-add:first");
 
-        var reset = function(){
-            form.find("input[type='text']").val("");
-            form.find("textarea").val("");
-            form.find("option").attr("selected", false);
-            form.find("option:first-child").attr("selected", true);
-        };
-
-        var data = new FormData(form[0]);
-
-        $.ajax({
-            url:form.attr("action"),
-            method:form.attr("method"),
-            data:data,
-            contentType: false,
-            processData: false,
-            dataType:"json",
-            success:function(res) {
-                custom.alert(res.msg);
-                if(res.flag == 1){
-                    $(".dialog-box").click(function(){
-                        reset();
-                    });
-                    $(".dialog-box-mask").click(function() {
-                        reset();
-                    });
-                }
+        form.validate({
+            'submitHandler':function(){
+                var data = new FormData(form[0]);
+                $.ajax({
+                    url:form.attr("action"),
+                    method:form.attr("method"),
+                    data:data,
+                    contentType: false,
+                    processData: false,
+                    dataType:"json",
+                    success:function(res) {
+                        custom.alert(res.msg);
+                        if(res.flag == 1){
+                            $(".dialog-box").click(function(){
+                                form[0].reset();
+                            });
+                            $(".dialog-box-mask").click(function() {
+                                form[0].reset();
+                            });
+                        }
+                    }
+                })
             }
-        })
+        });
 
     });
 

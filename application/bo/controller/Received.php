@@ -42,10 +42,8 @@ class Received extends BoController
 
         $data['r_no'] = trim($post['no']);
         $data['r_type'] = $post['type'];
-        $data['r_money'] = floatval(trim($post['money']));
-        //$data['r_used'] = floatval(trim($post['used']));
-        //$data['r_noused'] = floatval(trim($post['noused']))?:$data['r_money'];
-        $data['r_date'] = strtotime($post['date']);
+        $data['r_money'] = trim($post['money']);
+        $data['r_date'] = trim($post['date']);
         $data['r_coid'] = trim($post['coid']);
         $data['r_coname'] = trim($post['coname']);
 
@@ -55,7 +53,11 @@ class Received extends BoController
         $validate = validate('Received');
 
         if($validate->check($data)){
-            if( $res = $this->model->insert($data) ){
+
+            $data['r_date'] = strtotime($data['r_date']);
+            $data['r_money'] = $data['r_noused'] = floatval($data['r_money']);
+
+            if( $res = $this->model->save($data) ){
                 $ret = ['flag'=>1,'msg'=>'添加成功'];
             }else{
                 $ret = ['flag'=>0,'msg'=>'发生错误'];

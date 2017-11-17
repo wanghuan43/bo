@@ -45,10 +45,10 @@ class Acceptance extends BoController
         $data['a_content'] = trim($post['content']);
         $data['a_subject'] = trim($post['subject']);
         $data['a_type'] = $post['type'];
-        $data['a_money'] = floatval(trim($post['money']));
+        $data['a_money'] = trim($post['money']);
         //$data['a_used'] = floatval(trim($post['used']));
         //$data['a_noused'] = floatval(trim($post['noused']))?:$data['a_money'];
-        $data['a_date'] = strtotime($post['date']);
+        $data['a_date'] = trim($post['date']);
         $data['a_coid'] = trim($post['coid']);
         $data['a_coname'] = trim($post['coname']);
 
@@ -58,6 +58,9 @@ class Acceptance extends BoController
         $validate = validate('Acceptance');
 
         if($validate->check($data)){
+
+            $data['a_date'] = strtotime($data['a_date']);
+            $data['a_money'] = $data['a_noused'] = floatval($data['a_money']);
 
             $file = $this->request->file('attachment');
 

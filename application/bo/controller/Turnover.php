@@ -35,7 +35,7 @@ class Turnover extends BoController
     {
         $tmpModel = new Chances();
         $where = array();
-        $post = Request::instance()->post();
+        $post = $this->request->post();
         $data = [
             'cs_mid' => $this->current->m_id,
             'cs_mname' => $this->current->m_name,
@@ -45,22 +45,23 @@ class Turnover extends BoController
         ];
         if (!empty($post['cs_id'])) {
             $where['cs_id'] = $post['cs_id'];
-            $tmpModel->where('cs_id', '<>', $post['cs_id']);
+            $data['cs_id'] = $post['cs_id'];
         }
-        $res = 0;
-        $c = $tmpModel->where('cs_name', '=', $post['cs_name'])->count();
-        if ($c == 0) {
-            $res = $this->tModel->save($data, $where);
-            if ($res) {
-                $res = 1;
-                $message = '保存成功';
-            } else {
-                $message = '保存失败';
+
+        $validate = validate('Chances');
+
+        if($validate->check($data)){
+            if($tmpModel->save($data,$where)){
+                $ret = ['status'=>1,'message'=>'保存成功'];
+            }else{
+                $ret = ['status'=>0,'message'=>'保存失败'];
             }
-        } else {
-            $message = "名称重复";
+        }else{
+            $ret = ['status'=>0,'message'=>$validate->getError()];
         }
-        return ["status" => $res, 'message' => $message];
+
+        return $ret;
+
     }
 
     public function del()

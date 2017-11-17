@@ -5,9 +5,9 @@
 <form class="form-horizontal form-default" id="form-add-turnover" action="/turnover/doOpt" method="post" onsubmit="return false;">
 
     <div class="form-group">
-        <label for="cs_name" class="col-sm-2 control-label">名称</label>
+        <label for="cs_name" class="col-sm-2 control-label"><i class="asterisk">*</i>名称</label>
         <div class="col-sm-10">
-            <input type="text" class="form-control" id="cs_name" name="cs_name" value="<{$chances.cs_name}>">
+            <input type="text" class="form-control" id="cs_name" name="cs_name" value="<{$chances.cs_name}>" required>
         </div>
     </div>
 
@@ -34,16 +34,20 @@
         }
         var form = $("#form-add-turnover");
         $("#btn-add-turnover").click(function(){
-            $.ajax({
-                'url':form.attr("action"),
-                'method':'POST',
-                'dataType':'json',
-                'data': form.serialize(),
-                'success':function(res){
-                    custom.alert(res.message)
-                    if( res.flag == 1 ) {
-                        historyBack();
-                    }
+            $("#form-add-turnover").validate({
+                'submitHandler':function(){
+                    $.ajax({
+                        'url':form.attr("action"),
+                        'method':'POST',
+                        'dataType':'json',
+                        'data': form.serialize(),
+                        'success':function(res){
+                            custom.alert(res.message)
+                            if( res.flag == 1 ) {
+                                historyBack();
+                            }
+                        }
+                    });
                 }
             });
         });

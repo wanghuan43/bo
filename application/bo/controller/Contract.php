@@ -43,10 +43,10 @@ class Contract extends BoController
         $data['c_name'] = trim($post['name']);
         $data['c_bakup'] = trim($post['bakup']);
         $data['c_type'] = $post['type'];
-        $data['c_money'] = floatval(trim($post['money']));
+        $data['c_money'] = trim($post['money']);
         //$data['c_used'] = floatval(trim($post['used']));
-        //$data['c_noused'] = floatval(trim($post['noused']))?:$data['c_money'];
-        $data['c_date'] = strtotime($post['date']);
+        //$data['c_noused'] = $data['c_money'];
+        $data['c_date'] = $post['date'];
         $data['c_coid'] = trim($post['coid']);
         $data['c_coname'] = trim($post['coname']);
         if(isset($post['pid']))
@@ -64,7 +64,9 @@ class Contract extends BoController
         $validate = validate('Contract');
 
         if($validate->check($data)){
-            if( $res = $this->model->insert($data) ){
+            $data['c_money'] = $data['c_noused'] = floatval($data['c_money']);
+            $data['c_date'] = strtotime($data['c_date']);
+            if( $res = $this->model->save($data) ){
                 $ret = ['flag'=>1,'msg'=>'添加成功'];
             }else{
                 $ret = ['flag'=>0,'msg'=>'添加失败'];

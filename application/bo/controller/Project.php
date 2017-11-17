@@ -46,39 +46,26 @@ class Project extends BoController
         $no = trim($this->request->post('no'));
         $name = trim($this->request->post('name'));
 
-        $validate = \validate('Project');
+        $validate = validate('Project');
 
-        if( $validate->check(['p_no'=>$no,'p_name'=>$name]) ) {
+        $data = [
+            'p_no'=>$no,
+            'p_name'=>$name,
+            'p_mname'=>$this->current->m_name,
+            'p_mid'=>$this->current->m_id,
+            'p_createtime'=>time()
+        ];
 
-            $res = $this->model->whereOr('p_no', '=', $no)->whereOr('p_name', '=', $name)->find();
+        if( $validate->check($data) ) {
 
-            if ($res) {
-                $data = $res->getData();
-                if ($no == $data['p_no'] && $name == $data['p_name']) {
-                    $ret['msg'] = '该项目已存在';
-                } elseif ($no == $data['p_no']) {
-                    $ret['msg'] = '该项目编号已存在';
-                } else {
-                    $ret['msg'] = '该项目名已存在';
-                }
-            } else {
-                $data = [
-                    'p_no' => $no,
-                    'p_name' => $name,
-                    'p_mid' => $this->current->m_id,
-                    'p_mname' => $this->current->m_name,
-                    'p_createtime' => time(),
-                ];
-                $res = $this->model->insert($data);
-                if ($res) {
-                    $ret['flag'] = 1;
-                    $ret['msg'] = '添加成功';
-                } else {
-                    $ret['msg'] = '添加失败';
-                }
+            if($this->model->save($data)){
+                $ret = ['flag'=>1,'msg'=>'添加成功'];
+            }else{
+                $ret = ['flag'=>0,'msg'=>'添加失败'];
             }
+
         }else{
-            $ret = ['flag'=>'0','msg'=>$validate->getError()];
+            $ret = ['flag'=>0,'msg'=>$validate->getError()];
         }
 
         return $ret;
@@ -108,15 +95,23 @@ class Project extends BoController
 
         $id = $post['id'];
 
-        $data['p_no'] = $post['no'];
-        $data['p_name'] = $post['name'];
+        $data = [
+            'p_id' => $id,
+            'p_no' => trim($post['no']),
+            'p_name' => trim($post['name'])
+        ];
 
-        $res = $this->model->save($data,['p_id'=>$id]);
+        $validate = validate('Project');
 
-        if($res){
-            $ret = ['flag'=>1,'msg'=>'更新成功'];
+        if($validate->check($data)) {
+            $res = $this->model->save($data,['p_id'=>$id]);
+            if ($res) {
+                $ret = ['flag' => 1, 'msg' => '更新成功'];
+            } else {
+                $ret = ['flag' => 0, 'msg' => '更新失败'];
+            }
         }else{
-            $ret = ['flag'=>0,'msg'=>'更新失败'];
+            $ret = ['flag'=>0,'msg'=>$validate->getError()];
         }
 
         return $ret;

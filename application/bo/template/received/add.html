@@ -5,9 +5,9 @@
 <form class="form-horizontal form-default form-add" id="form-add-received" action="/received/add" method="post" onsubmit="return false;">
 
     <div class="form-group">
-        <label for="inputNo" class="col-sm-2 control-label">付款单号</label>
+        <label for="inputNo" class="col-sm-2 control-label"><i class="asterisk">*</i>付款单号</label>
         <div class="col-sm-10">
-            <input type="text" class="form-control" id="inputNo"  name="no" />
+            <input type="text" class="form-control" id="inputNo"  name="no" required/>
         </div>
     </div>
 
@@ -23,17 +23,17 @@
     </div>
 
     <div class="form-group">
-        <label class="col-sm-2 control-label">公司</label>
+        <label class="col-sm-2 control-label"><i class="asterisk">*</i>对方公司</label>
         <div class="col-sm-10">
-            <input type="text" class="form-control" name="coname" id="ipt-company-name" readonly/>
+            <input type="text" class="form-control" name="coname" id="ipt-company-name" readonly required/>
             <input type="hidden" name="coid" />
         </div>
     </div>
 
     <div class="form-group">
-        <label class="col-sm-2 control-label">总金额</label>
+        <label class="col-sm-2 control-label"><i class="asterisk">*</i>总金额</label>
         <div class="col-sm-10">
-            <input type="text" class="form-control" name="money"/>
+            <input type="text" class="form-control" name="money" required/>
         </div>
     </div>
 
@@ -50,9 +50,9 @@
         </div>
     </div*/}>
     <div class="form-group">
-        <label class="col-sm-2 control-label">发生时间</label>
+        <label class="col-sm-2 control-label"><i class="asterisk">*</i>发生日期</label>
         <div class="col-sm-10">
-            <input type="text" class="form-control" name="date" id="inputDate"/>
+            <input type="text" class="form-control" name="date" id="inputDate" required readonly/>
         </div>
     </div>
 

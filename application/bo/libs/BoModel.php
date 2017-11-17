@@ -62,7 +62,7 @@ abstract class BoModel extends Model
 
         if($validate){
             foreach ($dataset as $key=>$data){
-                if(!$validate->check($data)) {
+                if(!$validate->scene('import')->check($data)) {
                     $res[$key]['data'] = $data;
                     $res[$key]['msg'] = $validate->getError();
                     CustomUtils::writeImportLog('FAILED  - '.serialize($res[$key]),strtolower($this->name));

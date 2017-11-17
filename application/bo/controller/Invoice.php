@@ -45,11 +45,9 @@ class Invoice extends BoController
         $data['i_no'] = trim($post['no']);
         $data['i_content'] = trim($post['content']);
         $data['i_type'] = $post['type'];
-        $data['i_money'] = floatval(trim($post['money']));
+        $data['i_money'] = trim($post['money']);
         $data['i_tax'] = trim($post['tax']);
-        //$data['i_used'] = floatval(trim($post['used']));
-        //$data['i_noused'] = floatval(trim($post['noused']))?:$data['i_money'];
-        $data['i_date'] = strtotime($post['date']);
+        $data['i_date'] = trim($post['date']);
         $data['i_coid'] = trim($post['coid']);
         $data['i_coname'] = trim($post['coname']);
 
@@ -59,7 +57,11 @@ class Invoice extends BoController
         $validate = validate('Invoice');
 
         if($validate->check($data)){
-            if( $res = $this->model->insert($data) ){
+
+            $data['i_date'] = strtotime($data['i_date']);
+            $data['i_money'] = $data['i_noused'] = floatval($data['i_money']);
+
+            if( $res = $this->model->save($data) ){
                 $ret = ['flag'=>1,'msg'=>'添加成功'];
             }else{
                 $ret = ['flag'=>0,'msg'=>'发生错误'];

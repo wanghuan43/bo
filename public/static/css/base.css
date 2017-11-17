@@ -573,6 +573,9 @@ table th i{
 .form-control[readonly]{
     background:#fff;
 }
+.form-control.error[readonly]{
+    background: #fff8f7;
+}
 table .no-border{
     border-color:#fff;
 }
@@ -628,4 +631,30 @@ div.selected-ids>.clearfix{
 }
 div.selected-ids select{
     width:100%;
+}
+i.asterisk{
+    color:#f5694b;
+    margin-right:.3em;
+}
+label.error{
+    color:#f5694b;
+    border: none;
+    background: none;
+    font-weight: 500;
+    font-size:12px;
+    font: normal normal normal 12px/1 FontAwesome;
+}
+label.error:before{
+    content: "\f0a6";
+}
+#form-update td{
+    position: relative;
+}
+#form-update label.error{
+    position: absolute;
+    left:0;
+    top:24px;
+    font-size: 10px;
+    font: normal normal normal 10px/1 FontAwesome;
+    z-index:9;
 }

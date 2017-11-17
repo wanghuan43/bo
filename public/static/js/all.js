@@ -24,13 +24,11 @@
     });
 
     $("table.list td a").attr("target","_blank").click(function(){
-        $.ajax({
+        var params = {
             url:$(this).attr("href"),
-            method:"POST",
-            success:function(res){
-                $("#main-container").html(res);
-            }
-        });
+            method:"POST"
+        }
+        contentAjax("main-container",params,"jump");
         return false;
     });
 
