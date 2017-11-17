@@ -203,22 +203,5 @@
         });
         return false;
     });
-    $(".main-pannel.all-page .pagination a").attr("target","_blank").click(function(){
-        var url = $(this).attr("href");
-        url = url.replace("#","/");
-        var params = {
-            url:url,
-            method:"POST",
-        };
-        contentAjax("main-pannel",params,"jump");
-        return false;
-    });
-    $(".all-page th a").attr("target","_blank").click(function(){
-        var params = {
-            url:$(this).attr("href"),
-            method:"POST"
-        };
-        contentAjax("main-pannel",params,"jump");
-        return false;
-    });
+
 })(jQuery);
