@@ -168,7 +168,7 @@ class ReportEntity extends BoModel
                         $activeSheet->setCellValue($k . $begin, $v);
                     }
                     $begin = $begin + 1;
-                    if (is_array($id)) {
+                    if (is_array($id) AND isset($tmp["orders"])) {
                         foreach ($id as $ii) {
                             $count = $model->reportList($tmp["orders"], $activeSheet, $type, $begin, $ii->o_id);
                         }
@@ -177,7 +177,7 @@ class ReportEntity extends BoModel
                         }else{
                             $begin = $count;
                         }
-                    } else {
+                    } elseif(isset($tmp["orders"])) {
                         $count = $model->reportList($tmp["orders"], $activeSheet, $type, $begin, $id);
                         if($count == $begin){
                             $begin = $begin -1;
