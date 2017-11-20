@@ -25,6 +25,18 @@ class Company extends BoModel
                 "like" => "包含",
                 "=" => "等于",
             ),
+        ),
+        'co_type' => array(
+            'name' => '类型',
+            'type' => 'select',
+            'operators' => array(
+                '=' => '等于'
+            ),
+            'options' => array(
+                '0' => '-请选择-',
+                '1' => '供应商',
+                '2' => '客户'
+            )
         )
     );
 
