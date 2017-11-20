@@ -64,7 +64,7 @@
             <tr>
                 <td class="txt">订单主题:</td>
                 <td colspan="5"><input type="text" name="o_subject" id="o_subject" value="<{$order.o_subject}>"/></td>
-                <td class="txt">销售/采销:</td>
+                <td class="txt">收入/支出:</td>
                 <td>
                     <select name="o_type" id="o_type" <{if condition="!empty($order.o_type)"}>disabled<{/if}>>
                         <{foreach name="typeList" id="tl" key="k"}>
