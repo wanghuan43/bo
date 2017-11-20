@@ -1,21 +1,21 @@
-(function($){
+(function ($) {
 
     laydate.render({
-        elem:"input[name='date']",
-        min:'1970-01-01 08:00:00',
-        max:0
+        elem: "input[name='date']",
+        min: '1970-01-01 08:00:00',
+        max: 0
     });
 
-    $("#form-update [type='submit']").click(function(){
+    $("#form-update [type='submit']").click(function () {
         var form = $("#form-update");
         form.validate({
-            'submitHandler':function(){
+            'submitHandler': function () {
                 $.ajax({
-                    url:form.attr("action"),
-                    method:form.attr("method"),
-                    data:form.serialize(),
-                    dataType:"json",
-                    success:function (res) {
+                    url: form.attr("action"),
+                    method: form.attr("method"),
+                    data: form.serialize(),
+                    dataType: "json",
+                    success: function (res) {
                         custom.alert(res.msg);
                     }
                 });
@@ -23,27 +23,27 @@
         });
     });
 
-    $(".form-add [type='submit']").click(function(){
+    $(".form-add [type='submit']").click(function () {
 
         var form = $(".form-add:first");
 
         form.validate({
-            'submitHandler':function(){
+            'submitHandler': function () {
                 var data = new FormData(form[0]);
                 $.ajax({
-                    url:form.attr("action"),
-                    method:form.attr("method"),
-                    data:data,
+                    url: form.attr("action"),
+                    method: form.attr("method"),
+                    data: data,
                     contentType: false,
                     processData: false,
-                    dataType:"json",
-                    success:function(res) {
+                    dataType: "json",
+                    success: function (res) {
                         custom.alert(res.msg);
-                        if(res.flag == 1){
-                            $(".dialog-box").click(function(){
+                        if (res.flag == 1) {
+                            $(".dialog-box").click(function () {
                                 form[0].reset();
                             });
-                            $(".dialog-box-mask").click(function() {
+                            $(".dialog-box-mask").click(function () {
                                 form[0].reset();
                             });
                         }
@@ -54,95 +54,96 @@
 
     });
 
-    $("#ipt-company-name").click(function(){
+    $("#ipt-company-name").click(function () {
         $(".f-layer-back").show();
-        if($(".f-layer-company").length>0) {
+        if ($(".f-layer-company").length > 0) {
             $(".f-layer-back").hide();
-            $(".f-layer-company-back").show();
-            $(".f-layer-company").addClass("show");
-        }else {
-            $.ajax({
-                url: "/company/searchCompany",
-                method: "post",
-                dataType: "json",
-                success: function (res) {
-                    $(".f-layer-back").hide();
-                    $("#popDIV").append(res.content);
-                    $(".f-layer-company .close").click(function () {
-                        $(".f-layer-company-back").hide();
-                        $(".f-layer-company").removeClass("show");
-                    });
-                    $(".f-layer-company .save").click(function () {
-                        var radio = $("#companyList .selectRadio:checked");
-                        if (radio.length > 0) {
-                            $("input[name='coid']").val(radio.val());
-                            $("input[name='coname']").val(radio.attr('data'));
-                            $(".f-layer-company .close").click();
-                        } else {
-                            custom.alert('请至少选择一项');
-                        }
-
-                    });
-                    $(".f-layer-company-back").show();
-                    setTimeout('$(".f-layer-company").addClass("show")', 500);
-                }
-            });
+            $(".f-layer-company-back").remove();
+            $(".f-layer-company").remove();
         }
+        var type = $(this).parents("form").find('select[name="type"]').val();
+        $.ajax({
+            url: "/company/searchCompany?c_type="+type,
+            method: "post",
+            dataType: "json",
+            success: function (res) {
+                $(".f-layer-back").hide();
+                $("#popDIV").append(res.content);
+                $(".f-layer-company .close").click(function () {
+                    $(".f-layer-company-back").hide();
+                    $(".f-layer-company").removeClass("show");
+                });
+                $(".f-layer-company .save").click(function () {
+                    var radio = $("#companyList .selectRadio:checked");
+                    if (radio.length > 0) {
+                        $("input[name='coid']").val(radio.val());
+                        $("input[name='coname']").val(radio.attr('data'));
+                        $(".f-layer-company .close").click();
+                    } else {
+                        custom.alert('请至少选择一项');
+                    }
+
+                });
+                $(".f-layer-company-back").show();
+                setTimeout('$(".f-layer-company").addClass("show")', 500);
+            }
+        });
+
     });
 
-    $("#ipt-project-name").click(function(){
+    $("#ipt-project-name").click(function () {
         $(".f-layer-back").show();
-        if($(".f-layer-project").length>0){
+        if ($(".f-layer-project").length > 0) {
             $(".f-layer-back").hide();
             $(".f-layer-project-back").show();
             $(".f-layer-project").addClass("show");
-        }else{
+        } else {
             $.ajax({
-                url:"project/searchProject.html",
-                dataType:'json',
-                success:function(res){
+                url: "project/searchProject.html",
+                dataType: 'json',
+                success: function (res) {
                     $(".f-layer-back").hide();
                     $("#popDIV").append(res.content);
                     $(".f-layer-project .close").click(function () {
                         $(".f-layer-project-back").hide();
                         $(".f-layer-project").removeClass("show");
                     });
-                    $(".f-layer-project .save").click(function(){
+                    $(".f-layer-project .save").click(function () {
                         var radio = $("#projectList .selectRadio:checked");
-                        if( radio.length>0 ){
+                        if (radio.length > 0) {
                             $("input[name='pid']").val(radio.val());
                             $("input[name='pname']").val(radio.attr('data'));
                             $(".f-layer-project .close").click();
-                        }else{
+                        } else {
                             custom.alert('请至少选择一项');
                         }
 
                     });
                     $(".f-layer-project-back").show();
-                    setTimeout('$(".f-layer-project").addClass("show")',500);
+                    setTimeout('$(".f-layer-project").addClass("show")', 500);
                 }
             })
         }
     });
 
-    $("#form-company-add input[name='type']").change(function(){
+    $("#form-company-add input[name='type']").change(function () {
 
         var p = $("#form-company-add [name='flag']").parents(".form-group");
-        if( $(this).val() == 2 ){
+        if ($(this).val() == 2) {
             p.hide();
-        }else{
+        } else {
             p.show();
         }
 
     });
 
-    $("#inputDepartment").click(function(){
+    $("#inputDepartment").click(function () {
         $(".f-layer-back").show();
-        if($(".f-layer-department").length>0) {
+        if ($(".f-layer-department").length > 0) {
             $(".f-layer-back").hide();
             $(".f-layer-department-back").show();
             $(".f-layer-department").addClass("show");
-        }else {
+        } else {
             $.ajax({
                 url: "/department/searchDepartment",
                 method: "post",
@@ -172,28 +173,28 @@
         }
     });
 
-    $("#ipt-member-name").click(function(){
+    $("#ipt-member-name").click(function () {
         $(".f-layer-back").show();
-        if($(".f-layer-member-1").length>0){
+        if ($(".f-layer-member-1").length > 0) {
             custom.showFilter(".f-layer-member-1");
-        }else{
+        } else {
             $.ajax({
-                url:"/member/selectMember",
-                method:"POST",
-                success:function (res) {
+                url: "/member/selectMember",
+                method: "POST",
+                success: function (res) {
                     $("body").append(res);
-                    $(".f-layer-member-1 .btn.save").click(function(){
+                    $(".f-layer-member-1 .btn.save").click(function () {
                         var radio = $(".f-layer-member-1 .selectRadio:checked");
-                        if(radio.length>0){
+                        if (radio.length > 0) {
                             $("input[name='mname']").val(radio.parent().parent().find("td:eq(1)").html());
                             $("input[name='mcode']").val(radio.parent().parent().find("td:eq(2)").html());
                             custom.hideFilter(".f-layer-member-1");
-                        }else{
+                        } else {
                             custom.alert("请至少选择一项");
                         }
                         return false;
                     });
-                    custom.showFilter(".f-layer-member-1",1);
+                    custom.showFilter(".f-layer-member-1", 1);
                 }
             });
         }
