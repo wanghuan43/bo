@@ -96,7 +96,13 @@
                 <td>
                     <select name="o_did" id="o_did">
                         <{volist name="dList" id="dl"}>
-                        <option value="<{$dl.d_id}>" <{eq name="$dl.d_id" value="$order.o_did"}>selected<{/eq}>><{$dl.d_name}></option>
+                        <option value="<{$dl.d_id}>"
+                        <{if condition="empty($op_id)"}>
+                        <{eq name="$md" value="$dl.d_id"}>selected<{/eq}>
+                        <{else}>
+                        <{eq name="$dl.d_id" value="$order.o_did"}>selected<{/eq}>
+                        <{/if}>
+                        ><{$dl.d_name}></option>
                         <{/volist}>
                     </select>
                     <input type="hidden" name="o_dname" id="o_dname" value="<{$order.o_dname}>"/>
@@ -169,7 +175,7 @@
                         <{/volist}>
                     </select>
                 </td>
-                <td class="txt">利润率:</td>
+                <td class="txt"><i class="asterisk">*</i>利润率:</td>
                 <td>
                     <input type="text" name="o_profits" id="o_profits" value="<{$order.o_profits}>"/>
                 </td>
@@ -470,7 +476,20 @@
         acceptance: "<{:url("/acceptance/searchAcceptance")}>",
         received:"<{:url("/received/searchReceived")}>",
     }
+
     $(document).ready(function () {
+    <{if condition="!empty($op_id)"}>
+        $("#o_deal option").each(function(index, element){
+            if(parseInt($(element).val()) < parseInt("<{$order.o_deal}>")){
+                $(element).prop("disabled", true);
+            }
+        });
+        $("#o_status option").each(function(index, element){
+            if(parseInt($(element).val()) < parseInt("<{$order.o_status}>")){
+                $(element).prop("disabled", true);
+            }
+        });
+    <{/if}>
         bindRemove();
         $("#o_type").change(function(){
             var cla = ".f-layer-company",lie = $("#o_lie").val();
@@ -640,7 +659,7 @@
                 $(o_profits).after('<span class="wrongMsg" style="color: red;padding-right: 10px;">利润率不能为空</span>');
                 check = true;
             }
-            if($(".zproject").is(":hidden")){
+            if(!$(".zproject").is(":hidden")){
                 if($("#zc_name").val() == ""){
                     $("#zc_name").attr("class", "wrong");
                     $("#zc_name").after('<span class="wrongMsg" style="color: red;padding-right: 10px;">支出项目不能为空</span>');

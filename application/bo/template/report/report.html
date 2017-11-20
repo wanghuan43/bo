@@ -1,35 +1,105 @@
-<!--<div style="height: 500px;margin-top: 20px;padding-left: 20px;">-->
-    <!--<div style="float: left;width: 40%;">-->
-        <!--<select multiple style="width: 90%;height: 500px;">-->
-            <!--<option>1</option>-->
-            <!--<option>2</option>-->
-            <!--<option>3</option>-->
-            <!--<option>4</option>-->
-        <!--</select>-->
-    <!--</div>-->
-    <!--<div style="float: left;width: 10%">-->
-        <!--<button>上移</button>-->
-        <!--<button>添加</button>-->
-        <!--<button>下移</button>-->
-    <!--</div>-->
-    <!--<div style="float: left;width: 40%;">-->
-        <!--<select multiple style="width: 90%;height: 500px">-->
-            <!--<option>1</option>-->
-            <!--<option>2</option>-->
-            <!--<option>3</option>-->
-            <!--<option>4</option>-->
-        <!--</select>-->
-    <!--</div>-->
-<!--</div>-->
+<{load href="/static/css/report.css"/}>
 <div class="page-header">
     <h2><{$title}></h2>
 </div>
-<form class="form-horizontal form-default form-add" id="form-report" action="/report/doReport/type/<{$type}>" method="post" target="_blank">
-
+<form class="form-horizontal form-default form-add" id="form-report" action="/report/doReport/type/<{$type}>"
+      method="post" target="_blank">
     <div class="form-group">
         <div class="col-sm-offset-2 col-sm-10">
-            <button class="btn btn-default" id="btn-report" type="submit">导出</button>
+            <button class="btn btn-default" id="btn-report">导出</button>
         </div>
     </div>
+    <div class="cell">
+        <div class="selectCell">
+            <select multiple>
+                <{foreach name="cols" key="k" item="val"}>
+                <option value="<?php echo urlencode(json_encode([$k=>$val])); ?>"><{$k}></option>
+                <{/foreach}>
+            </select>
+        </div>
+        <div class="selectMiddel">
+            <button class="allLeft"><<</button>
+            <button class="oneLeft"><</button>
+            <button class="oneRight">></button>
+            <button class="allRight">>></button>
+            <button class="cellTop">上移</button>
+            <button class="cellDow">下移</button>
+        </div>
+        <div class="selectCell">
+            <select multiple>
 
+            </select>
+        </div>
+    </div>
+    <input type="hidden" name="selectCell" id="selectCell" value="">
 </form>
+<script>
+    $(document).ready(function () {
+        $(".allLeft").click(function () {
+            $(".selectCell:eq(1) select option").each(function (index, element) {
+                $(".selectCell:eq(0) select").append($(element));
+            })
+            return false;
+        });
+        $(".oneLeft").click(function () {
+            $(".selectCell:eq(1) select option:selected").each(function (index, element) {
+                var ele = $(element).clone();
+                $(".selectCell:eq(0) select").append(ele);
+                $(element).remove();
+            })
+            return false;
+        });
+        $(".oneRight").click(function () {
+            $(".selectCell:eq(0) select option:selected").each(function (index, element) {
+                var ele = $(element).clone();
+                $(".selectCell:eq(1) select").append(ele);
+                $(element).remove();
+            })
+            return false;
+        });
+        $(".allRight").click(function () {
+            $(".selectCell:eq(0) select option").each(function (index, element) {
+                $(".selectCell:eq(1) select").append($(element));
+            })
+            return false;
+        });
+        $(".cellTop").click(function () {
+            $(".selectCell:eq(0) select option:selected").each(function (index, element) {
+                var ele = $(element).clone(), prev = $(element).prev();
+                $(ele).insertBefore($(prev));
+                $(element).remove();
+            })
+            $(".selectCell:eq(1) select option:selected").each(function (index, element) {
+                var ele = $(element).clone(), prev = $(element).prev();
+                $(ele).insertBefore($(prev));
+                $(element).remove();
+            })
+            return false;
+        });
+        $(".cellDow").click(function () {
+            $(".selectCell:eq(0) select option:selected").each(function (index, element) {
+                var ele = $(element).clone(), next = $(element).next();
+                $(ele).insertAfter($(next));
+                $(element).remove();
+            })
+            $(".selectCell:eq(1) select option:selected").each(function (index, element) {
+                var ele = $(element).clone(), next = $(element).next();
+                $(ele).insertAfter($(next));
+                $(element).remove();
+            })
+            return false;
+        });
+        $("#form-report").submit(function () {
+            var list = [];
+            $(".selectCell:eq(1) select option").each(function (i, e) {
+                var v = JSON.parse(decodeURIComponent($(e).val()));
+                list.push(v);
+            });
+            if (list.length == 0) {
+                custom.alert("请至少选择一列");
+                return false;
+            }
+            $("#selectCell").val(JSON.stringify(list));
+        });
+    });
+</script>

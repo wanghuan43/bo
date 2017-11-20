@@ -29,20 +29,23 @@ class Postil extends BoController
     public function save($opID)
     {
         $post = Request::instance()->post();
-        $file = $this->saveFile($_FILES['p_attachment']);
-        if(!$file['status']){
-            return $file;
-        }
         $data = [
             "p_oid" => $opID,
             "p_mid" => $this->current->m_id,
             "p_mname" => $this->current->m_name,
             "p_title" => $post['p_title'],
             "p_content" => $post['p_content'],
-            "p_filename" => $file['data']['filename'],
-            "p_attachment" => $file['data']['path'],
             "p_createtime" => time(),
         ];
+        if ($_FILES['p_attachment']['size'] > 0) {
+            $file = $this->saveFile($_FILES['p_attachment']);
+            if (!$file['status']) {
+                return $file;
+            }else{
+                $data['p_filename'] = $file['data']['filename'];
+                $data['p_attachment'] = $file['data']['path'];
+            }
+        }
         $this->pmodel->save($data);
         return array("status" => true, "message" => "批注成功");
     }

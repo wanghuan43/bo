@@ -27,16 +27,16 @@ class ReportEntity extends BoModel
             Config::load(APP_PATH . "bo" . DS . "reportExcel.php", "", "reportExcel");
             $this->cols[$type] = Config::get($type, "reportExcel");
         }
+        return $this->cols[$type];
     }
 
     /**
      * @param $type
      */
-    public function doReport($type)
+    public function doReport($type, $sendCells)
     {
         set_time_limit(0);
         ini_set('memory_limit', '1024M');
-        $this->getReportCols($type);
         $title = $this->switchTitle($type);
         $obj = new PHPExcel();
         $obj->getProperties()->setCreator("新智云商机管理系统")
@@ -46,14 +46,14 @@ class ReportEntity extends BoModel
             ->setDescription($title);
         $obj->setActiveSheetIndex(0);
         $activeSheet = $obj->getActiveSheet();
-        $fcols = $this->getColsName(count($this->cols[$type]));
-        $cols = array_keys($this->cols[$type]);
+        $fcols = $this->getColsName(count($sendCells));
+        $cols = array_keys($sendCells);
         foreach ($fcols as $k => $i) {
             $activeSheet->setCellValue($i . "1", $cols[$k]);
         }
         $tmp = [];
         $i = 0;
-        foreach ($this->cols[$type] as $key => $value) {
+        foreach ($sendCells as $key => $value) {
             $tmp[$value['by']][$fcols[$i]] = $value['col'];
             $i++;
         }
@@ -67,7 +67,7 @@ class ReportEntity extends BoModel
                 $mname = "app\\bo\\model\\" . ucfirst($type);
                 $mtmp = new $mname();
                 $lists = $mtmp->select();
-                $begin = 2;
+                $begin = 1;
                 $id = "";
                 $tmps = $model->field("SUM(o_money) as om,o_pid,o_type")->where("o_cid", "<>", "0")
                     ->group("o_pid,o_type")->select();
@@ -170,10 +170,20 @@ class ReportEntity extends BoModel
                     $begin = $begin + 1;
                     if (is_array($id)) {
                         foreach ($id as $ii) {
-                            $begin = $model->reportList($tmp["orders"], $activeSheet, $type, $begin, $ii->o_id);
+                            $count = $model->reportList($tmp["orders"], $activeSheet, $type, $begin, $ii->o_id);
+                        }
+                        if($count == $begin){
+                            $begin = $begin -1;
+                        }else{
+                            $begin = $count;
                         }
                     } else {
-                        $begin = $model->reportList($tmp["orders"], $activeSheet, $type, $begin, $id);
+                        $count = $model->reportList($tmp["orders"], $activeSheet, $type, $begin, $id);
+                        if($count == $begin){
+                            $begin = $begin -1;
+                        }else{
+                            $begin = $count;
+                        }
                     }
                 }
                 break;

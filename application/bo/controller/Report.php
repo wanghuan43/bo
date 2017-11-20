@@ -27,7 +27,15 @@ class Report extends BoController
 
     public function doReport($type)
     {
-        $this->reportEntity->doReport($type);
+        $cols = Request::instance()->post("selectCell");
+        $cols = json_decode($cols, true);
+        $tmp = [];
+        foreach($cols as $val){
+            foreach($val as $k=>$v){
+                $tmp[$k] = $v;
+            }
+        }
+        $this->reportEntity->doReport($type, $tmp);
     }
 
     private function switchType($type)

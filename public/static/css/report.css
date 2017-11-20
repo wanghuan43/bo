@@ -1,0 +1,36 @@
+#form-report .cell {
+    width: 700px;
+    margin-top: 20px;
+    padding-left: 100px;
+}
+
+#form-report .selectMiddel {
+    float: left;
+    width: 10%;
+    margin-right: 15px;
+}
+
+#form-report .selectCell {
+    float: left;
+    width: 40%;
+}
+
+#form-report button {
+    float: left;
+    display: inline-block;
+    width: 50px;
+    height: 50px;
+    margin-bottom: 10px;
+}
+
+#form-report select {
+    width: 90%;
+    height: 500px;
+    padding: 5px;
+}
+
+#form-report option {
+    height: 25px;
+    text-indent: 5px;
+    padding: 5px;
+}

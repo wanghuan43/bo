@@ -44,6 +44,11 @@ class Budget extends BoController
     public function addTemplate()
     {
         $post = Request::instance()->post();
+        $tmp = new BudgetTemplate();
+        $count = $tmp->where("t_title", "like", trim($post['t_title'])."-%")->count();
+        if($count > 0){
+            $post['t_title'] = trim($post['t_title'])."-".$count;
+        }
         $result = $this->budgetEntity->saveTemplate($post);
         $return = ["status" => $result, "message" => ($result ? "保存成功" : "保存失败")];
         return $return;
@@ -83,6 +88,11 @@ class Budget extends BoController
     public function addTable()
     {
         $post = Request::instance()->post();
+        $tmp = new BudgetTable();
+        $count = $tmp->where("title", "like", trim($post['title'])."-%")->count();
+        if($count > 0){
+            $post['title'] = trim($post['title'])."-".$count;
+        }
         $result = $this->budgetEntity->saveTable($post);
         $return = ["status" => $result, "message" => ($result ? "保存成功" : "保存失败")];
         return $return;
