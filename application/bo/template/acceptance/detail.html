@@ -47,7 +47,7 @@
                     <td>附件:</td>
                     <td colspan="5">
                         <{if $data.a_attachment}>
-                            <img src="<{$data.a_attachment}>" style="max-width: 1080px;"/>
+                            <img src="<{$data.a_attachment}>" width="240" data-action="zoom"/>
                         <{/if}>
                     </td>
                 </tr>
@@ -91,4 +91,4 @@
         </div>
     </div>
 </form>
-<{load file="/static/js/update.js"}}>
+<{load file="/static/js/update.js,/static/js/plugin/zoom/zoom.min.js"}}>
