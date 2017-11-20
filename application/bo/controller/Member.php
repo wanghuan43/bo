@@ -47,6 +47,13 @@ class Member extends BoController
         $validate = new \app\bo\validate\Member();
 
         if ($validate->check($data)) {
+
+            if(empty($data['m_password'])){
+                $data['m_password'] = encryptPassword('123123');
+            }else{
+                $data['m_password'] = encryptPassword($data['m_password']);
+            }
+
             if ($this->model->insert($data)) {
                 $ret = ['flag' => 1, 'msg' => '添加成功'];
             } else {
@@ -92,16 +99,22 @@ class Member extends BoController
             $member['m_' . $k] = trim($post[$k]);
         }
 
-        if(!$member['m_password']){
-            unset($member['m_password']);
-        }else{
-            $member['m_password'] = encryptPassword($member['m_password']);
-        }
+        $validate = validate('Member');
 
-        if ( $this->model->save($member, ['m_id'=>$post['id']]) ) {
-            $ret = ['flag' => 1, 'msg' => '更新成功'];
-        } else {
-            $ret = ['flag' => 0, 'msg' => '更新失败'];
+        if($validate->check($member)) {
+            if (!$member['m_password']) {
+                unset($member['m_password']);
+            } else {
+                $member['m_password'] = encryptPassword($member['m_password']);
+            }
+
+            if ($this->model->save($member, ['m_id' => $post['id']])) {
+                $ret = ['flag' => 1, 'msg' => '更新成功'];
+            } else {
+                $ret = ['flag' => 0, 'msg' => '更新失败'];
+            }
+        }else{
+            $ret = ['flag'=>0,'msg'=>$validate->getError()];
         }
 
 

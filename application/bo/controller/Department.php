@@ -32,16 +32,16 @@ class Department extends BoController
     {
 
         $post = $this->request->post();
-        $data['d_name'] = $post['name'];
-        $data['d_code'] = $post['code'];
-        $data['m_name'] = $post['mname'];
-        $data['m_code'] = $post['mcode'];
-        $data['d_cname'] = $post['cname'];
+        $data['d_name'] = trim($post['name']);
+        $data['d_code'] = trim($post['code']);
+        $data['m_name'] = trim($post['mname']);
+        $data['m_code'] = trim($post['mcode']);
+        $data['d_cname'] = trim($post['cname']);
 
         $validate = new \app\bo\validate\Department();
 
         if ($validate->check($data)) {
-            if ($this->model->insert($data)) {
+            if ($this->model->save($data)) {
                 if(!empty($data['m_code'])) {
                     Member::update(['m_is_lead'=>1],['m_code'=>$data['m_code']]);
                 }
@@ -71,6 +71,7 @@ class Department extends BoController
         $post = $this->request->post();
 
         $data = [
+            'd_id' => $post['id'],
             'd_name' => trim($post['name']),
             'd_code' => trim($post['code']),
             'm_name' => trim($post['mname']),
@@ -78,18 +79,23 @@ class Department extends BoController
             'd_cname' => trim($post['cname'])
         ];
 
-        $oldMemCode = trim($post['o-mcode']);
+        $validate = validate('Department');
 
-        if ( $this->model->save($data, ['d_id'=>$post['id']]) ) {
-            if( !empty($data['m_code']) ) {
-                if( $oldMemCode != $data['m_code'] ){
-                    if(!!$oldMemCode) Member::update(['m_is_lead'=>0],['m_code'=>$oldMemCode]);
-                    if(!!$data['m_code']) Member::update(['m_is_lead'=>1],['m_code'=>$data['m_code']]);
+        if($validate->check($data)) {
+            $oldMemCode = trim($post['o-mcode']);
+            if ($this->model->save($data, ['d_id' => $post['id']])) {
+                if (!empty($data['m_code'])) {
+                    if ($oldMemCode != $data['m_code']) {
+                        if (!!$oldMemCode) Member::update(['m_is_lead' => 0], ['m_code' => $oldMemCode]);
+                        if (!!$data['m_code']) Member::update(['m_is_lead' => 1], ['m_code' => $data['m_code']]);
+                    }
                 }
+                $ret = ['flag' => 1, 'msg' => '更新成功'];
+            } else {
+                $ret = ['flag' => 0, 'msg' => '更新失败'];
             }
-            $ret = ['flag' => 1, 'msg' => '更新成功'];
-        } else {
-            $ret = ['flag' => 0, 'msg' => '更新失败'];
+        }else{
+            $ret = ['flag'=>0 , 'msg' => $validate->getError()];
         }
 
         return $ret;

@@ -19,4 +19,9 @@ class BoValidate extends Validate
         return $this->regex($value,'/^(([1-9][0-9]*)|(([0]\.\d{0,2}|[1-9][0-9]*\.\d{0,2})))$/');
     }
 
+    protected function phone($vale,$rule,$data)
+    {
+        return $this->regex($vale,'/^((13[0-9])|(14[5|7])|(15([0-3]|[5-9]))|(18[0,5-9]))\\d{8}$/');
+    }
+
 }

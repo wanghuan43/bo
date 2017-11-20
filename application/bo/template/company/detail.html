@@ -25,10 +25,10 @@
                     </td>
                 </tr>
                 <tr>
-                    <td>编号:</td>
-                    <td><input type="text" name="code" value="<{$data.co_code}>"/><input type="hidden" name="id" value="<{$data.co_id}>"/> </td>
-                    <td style="width:84px;">名称:</td>
-                    <td><input type="text" name="name" value="<{$data.co_name}>"/></td>
+                    <td><i class="asterisk">*</i>编号:</td>
+                    <td><input type="text" name="code" value="<{$data.co_code}>" required/><input type="hidden" name="id" value="<{$data.co_id}>"/> </td>
+                    <td style="width:84px;"><i class="asterisk">*</i>名称:</td>
+                    <td><input type="text" name="name" value="<{$data.co_name}>" required/></td>
                     <td>简称:</td>
                     <td><input type="text" name="remark" value="<{$data.co_remark}>"/></td>
                     <td style="width:84px">助记码:</td>

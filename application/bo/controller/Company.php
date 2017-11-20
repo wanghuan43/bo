@@ -52,7 +52,7 @@ class Company extends BoController
         $validate = validate('Company');
 
         if($validate->check($data)){
-            if( $res = $this->model->insert($data) ){
+            if( $res = $this->model->save($data) ){
                 $ret = ['flag'=>1,'msg'=>'添加成功'];
             }else{
                 $ret = ['flag'=>0,'msg'=>'添加失败'];
@@ -82,6 +82,42 @@ class Company extends BoController
         $data = $this->model->getDataById($id);
         $this->assign('data',$data);
         return $this->fetch();
+    }
+
+    public function update(){
+        $post = $this->request->post();
+        $arr = ['code','name','mnemonic_code','industry','address','tax_id','reg_id','lr','internal_name','create_org','remark'];
+
+        foreach( $arr as $item ){
+            $data['co_'.$item] = trim($post[$item]);
+        }
+
+        $arr = ['type','internal_flag','flag','status'];
+
+        foreach( $arr as $item ){
+            $data['co_'.$item] = intval($post[$item]);
+        }
+
+        if( $data['co_type'] == 2 ){
+            unset($data['co_flag']);
+        }
+
+        $data['co_id'] = intval($post['id']);
+
+        $validate = validate('Company');
+
+        if($validate->check($data)){
+            if( $res = $this->model->save($data,['co_id'=>$data['co_id']]) ){
+                $ret = ['flag'=>1,'msg'=>'更新成功'];
+            }else{
+                $ret = ['flag'=>0,'msg'=>'更新失败'];
+            }
+        }else{
+            $ret = ['flag'=>0,'msg'=>$validate->getError()];
+        }
+
+        return $ret;
+
     }
 
     public function export()
