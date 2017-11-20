@@ -107,7 +107,7 @@ class ReportEntity extends BoModel
                                 ->where("ou.ou_type", "=", "2")->select();
                             break;
                     }
-                    $begin += $key;
+                    $begin += 1;
                     foreach ($tmp[$type] as $k => $val) {
                         $v = "";
                         if (isset($value[$val])) {
