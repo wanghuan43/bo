@@ -17,7 +17,7 @@ class Received extends BoController
     public function searchReceived()
     {
         $receivedModel = new \app\bo\model\Received();
-        $receivedModel->where("r.r_noused", ">", "0");
+        $receivedModel->where("r.r_noused", "<>", "0");
         $this->assign("type", "received");
         return $this->search($receivedModel, "common/popused");
     }

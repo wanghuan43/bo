@@ -66,7 +66,7 @@
                     "success": function (res) {
                         custom.alert(res.msg);
                         if (res.flag == 1)
-                            $(".lists-id:checked").parents("tr").remove();
+                            window.setTimeout("location.reload()", 800);
                     }
                 });
             });

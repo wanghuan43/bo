@@ -58,6 +58,9 @@ class ReportEntity extends BoModel
             $i++;
         }
         $model = new Orders();
+        $omodel = new Orders();
+        $omodel->alias("o")->join("__ORDER_USED__ ou", "o.o_id = ou.ou_oid", "left")
+            ->field("o.o_id");
         switch ($type) {
             case "orders":
                 $model->reportList($tmp[$type], $activeSheet, $type, 2, "");
@@ -91,27 +94,34 @@ class ReportEntity extends BoModel
                             $id = $value['c_id'];
                             break;
                         case "invoice":
+                            $id = $omodel->where("ou.ou_otid", "=", $value['i_id'])
+                                ->where("ou.ou_type", "=", "1")->select();
+                            break;
                         case "received":
+                            $id = $omodel->where("ou.ou_otid", "=", $value['r_id'])
+                                ->where("ou.ou_type", "=", "3")->select();
+                            break;
                         case "acceptance":
-                            $id = $value['ou_oid'];
+                            $id = $omodel->where("ou.ou_otid", "=", $value['a_id'])
+                                ->where("ou.ou_type", "=", "2")->select();
                             break;
                     }
                     $begin += $key;
                     foreach ($tmp[$type] as $k => $val) {
                         $v = "";
                         if (isset($value[$val])) {
-                            switch ($val){
+                            switch ($val) {
                                 case "p_date":
-                                    $v = date("Y-m-d",$value[$val]);
+                                    $v = date("Y-m-d", $value[$val]);
                                     break;
                                 case "c_date":
-                                    $v = date("Y-m-d",$value[$val]);
+                                    $v = date("Y-m-d", $value[$val]);
                                     break;
                                 case "c_type":
                                     $v = getTypeList2($value[$val]);
                                     break;
                                 case "i_date":
-                                    $v = date("Y-m-d",$value[$val]);
+                                    $v = date("Y-m-d", $value[$val]);
                                     break;
                                 case "i_type":
                                     $v = getTypeList2($value[$val]);
@@ -120,13 +130,13 @@ class ReportEntity extends BoModel
                                     $v = getTaxList($value[$val]);
                                     break;
                                 case "r_date":
-                                    $v = date("Y-m-d",$value[$val]);
+                                    $v = date("Y-m-d", $value[$val]);
                                     break;
                                 case "r_type":
                                     $v = getTypeList2($value[$val]);
                                     break;
                                 case "a_date":
-                                    $v = date("Y-m-d",$value[$val]);
+                                    $v = date("Y-m-d", $value[$val]);
                                     break;
                                 case "a_type":
                                     $v = getTypeList2($value[$val]);
@@ -157,8 +167,13 @@ class ReportEntity extends BoModel
                         $activeSheet->setCellValue($k . $begin, $v);
                     }
                     $begin = $begin + 1;
-                    $count = $model->reportList($tmp["orders"], $activeSheet, $type, $begin, $id);
-                    $begin = $count;
+                    if (is_array($id)) {
+                        foreach ($id as $ii) {
+                            $begin = $model->reportList($tmp["orders"], $activeSheet, $type, $begin, $ii->o_id);
+                        }
+                    } else {
+                        $begin = $model->reportList($tmp["orders"], $activeSheet, $type, $begin, $id);
+                    }
                 }
                 break;
         }

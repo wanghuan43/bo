@@ -25,7 +25,7 @@ class Invoice extends BoController
     public function searchInvoice()
     {
         $invoiceModel = new ModelInvoice();
-        $invoiceModel->where("i.i_noused", ">", "0");
+        $invoiceModel->where("i.i_noused", "<>", "0");
         $this->assign("type", "invoice");
         return $this->search($invoiceModel, "common/popused");
     }

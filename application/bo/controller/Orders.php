@@ -30,20 +30,20 @@ class Orders extends BoController
 
     public function index($type = "orders")
     {
-        $this->setType($type,[]);
+        $this->setType($type, []);
         $this->assign("title", $this->title);
         $this->assign("type", $type);
         $this->assign("stype", "orders");
         $formUrl = "/orders";
-        if($type !== 'orders' ){
-            $formUrl = '/orders/index/type/'.$type;
+        if ($type !== 'orders') {
+            $formUrl = '/orders/index/type/' . $type;
         }
-        if($type == 'orders' || $type == 'contract'){
-            $this->assign('hideSelected',false);
-        }else{
-            $this->assign('hideSelected',true);
+        if ($type == 'orders' || $type == 'contract') {
+            $this->assign('hideSelected', false);
+        } else {
+            $this->assign('hideSelected', true);
         }
-        $this->assign('formUrl',$formUrl);
+        $this->assign('formUrl', $formUrl);
         return $this->all();
     }
 
@@ -114,10 +114,20 @@ class Orders extends BoController
         $message = "保存成功";
         $post['o_mid'] = $this->current->m_id;
         $post['o_mname'] = $this->current->m_name;
-        $zc_name = $post['zc_name'];
-        $zc_id = $post['zc_id'];
+        $zc = [
+            "zc_name" => $post['zc_name'],
+            "zc_id" => $post['zc_id'],
+            "zc_dname" => $post['zc_dname'],
+            "zc_did" => $post['zc_did'],
+            "zc_mid" => $post['zc_mid'],
+            "zc_mname" => $post['zc_mname'],
+        ];
         unset($post['zc_name']);
         unset($post['zc_id']);
+        unset($post['zc_dname']);
+        unset($post['zc_did']);
+        unset($post['zc_mid']);
+        unset($post['zc_mname']);
         if ($op == "edit") {
             $search = [
                 "l_otid" => $op_id,
@@ -137,12 +147,19 @@ class Orders extends BoController
             $result = $this->ordersModel->save($post, $where);
             if ($result AND $post['o_lie'] == '2') {
                 $nO = new \app\bo\model\Orders();
-                $post['o_pid'] = $zc_id;
-                $post['o_pname'] = $zc_name;
+                if ($post['o_type'] == "1") {
+                    $post['o_pid'] = $zc['zc_id'];
+                    $post['o_pname'] = $zc['zc_name'];
+                    $post['o_did'] = $zc['zc_did'];
+                    $post['o_dname'] = $zc['zc_dname'];
+                    $post['o_mid'] = $zc['zc_mid'];
+                    $post['o_mname'] = $zc['zc_mname'];
+                    $post['o_foreign'] = $this->ordersModel->o_id;
+                }
                 $post['o_type'] = $post['o_type'] == '1' ? '2' : '1';
                 $post['o_no'] = $nO->getOrderNO($post['o_pid'], $post['o_type']);
                 $result = $nO->save($post, $where);
-                $nO->o_id;
+                $this->ordersModel->where("o_id", "=", $this->ordersModel->o_id)->update(["o_foreign" => $nO->o_id]);
             }
             $logModel->saveLogs($post, array(), $this->ordersModel->o_id, "orders", "add");
         }

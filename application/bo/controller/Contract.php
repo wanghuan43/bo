@@ -22,6 +22,7 @@ class Contract extends BoController
     public function searchContract()
     {
         $contractModel = new \app\bo\model\Contract();
+        $contractModel->where("c_noused", "<>", "0");
         $this->assign("type", "contract");
         return $this->search($contractModel);
     }

@@ -17,9 +17,9 @@
             <li>
                 <a href="<{:url("/postil/index/opID/".$op_id)}>"><i class="fa fa-pencil"></i>批注</a>
             </li>
-            <li>
-                <a href="#"><i class="fa fa-share-square-o"></i>分享</a>
-            </li>
+            <!--<li>-->
+                <!--<a href="#"><i class="fa fa-share-square-o"></i>分享</a>-->
+            <!--</li>-->
             <li>
                 <a href="#" id="favorite" data="<{$isFavorite}>"><i class="fa fa-star"></i><{if condition="empty($isFavorite)"}>收藏<{else/}>取消收藏<{/if}></a>
             </li>
@@ -47,6 +47,7 @@
             </tr>
             <tr>
                 <td class="txt">
+                    <i class="asterisk">*</i>
                     <i class="fa fa-search" data="project"></i>
                     <i class="fa fa-minus-square" style="color: red;display: none;" data="project"></i>
                     项目名称:</td>
@@ -62,7 +63,7 @@
                 </td>
             </tr>
             <tr>
-                <td class="txt">订单主题:</td>
+                <td class="txt"><i class="asterisk">*</i>订单主题:</td>
                 <td colspan="5"><input type="text" name="o_subject" id="o_subject" value="<{$order.o_subject}>"/></td>
                 <td class="txt">收入/支出:</td>
                 <td>
@@ -75,6 +76,7 @@
             </tr>
             <tr>
                 <td class="txt">
+                    <i class="asterisk">*</i>
                     <i class="fa fa-search" data="company"></i>
                     <i class="fa fa-minus-square" style="color: red;display: none;" data="company"></i>
                     对方名称:</td>
@@ -100,13 +102,46 @@
                     <input type="hidden" name="o_dname" id="o_dname" value="<{$order.o_dname}>"/>
                 </td>
             </tr>
+            <tr class="zproject" style="display: none;">
+                <td class="txt">
+                    <i class="asterisk">*</i>
+                    <i class="fa fa-search" data="project"></i>
+                    <i class="fa fa-minus-square" style="color: red;display: none;" data="project"></i>
+                    支出项目:</td>
+                <td colspan="3">
+                    <input name="zc_name" id="zc_name" type="text" value="" readonly/>
+                    <input type="hidden" name="zc_id" id="zc_id" value=""/>
+                </td>
+                <td class="txt">
+                    支出部门:</td>
+                <td>
+
+                    <select name="zc_did" id="zc_did">
+                        <{volist name="dList" id="dl"}>
+                        <option value="<{$dl.d_id}>" <{eq name="$dl.d_id" value="$order.o_did"}>selected<{/eq}>><{$dl.d_name}></option>
+                        <{/volist}>
+                    </select>
+                    <input type="hidden" name="zc_dname" id="zc_dname" value=""/>
+                </td>
+                <td class="txt">
+                    支出负责人:</td>
+                <td>
+
+                    <select name="zc_mid" id="zc_mid">
+                        <{volist name="memberList" id="dl"}>
+                        <option value="<{$dl.m_id}>" <{eq name="$dl.m_id" value="$order.o_mid"}>selected<{/eq}>><{$dl.m_name}></option>
+                        <{/volist}>
+                    </select>
+                    <input type="hidden" name="zc_mname" id="zc_mname" value=""/>
+                </td>
+            </tr>
             <tr>
-                <td class="txt"><{if condition="$op=='add'"}>预计日期:<{else /}>签约日期:<{/if}></td>
+                <td class="txt"><i class="asterisk">*</i><{if condition="$op=='add'"}>预计日期:<{else /}>签约日期:<{/if}></td>
                 <td><input type="text" name="o_date" id="o_date" value="<?php echo (empty($order['o_date']) ? "" : date("Y-m-d", $order['o_date'])) ?>"/></td>
-                <td class="txt"><{if condition="$op=='add'"}>预计总金额:<{else /}>合同总金额:<{/if}></td>
+                <td class="txt"><i class="asterisk">*</i><{if condition="$op=='add'"}>预计总金额:<{else /}>合同总金额:<{/if}></td>
                 <td><input type="text" name="o_money" id="o_money" value="<{$order.o_money}>"/></td>
                 <!--<td><input type="text" name="o_money" id="o_money" value="1233"/></td>-->
-                <td class="txt">数量:</td>
+                <td class="txt"><i class="asterisk">*</i>数量:</td>
                 <td><input type="text" name="o_num" id="o_num" value="<{$order.o_num}>"/></td>
                 <td class="txt">税率:</td>
                 <td>
@@ -438,10 +473,24 @@
     $(document).ready(function () {
         bindRemove();
         $("#o_type").change(function(){
-            var cla = ".f-layer-company";
+            var cla = ".f-layer-company",lie = $("#o_lie").val();
             $(cla).remove();
             $(cla + "-back").remove();
-        })
+            if($(this).val() == "1" && lie == "2"){
+                $(".zproject").show();
+            }else{
+                $(".zproject").hide();
+            }
+        });
+        $("#o_type").change();
+        $("#zc_mid").change(function(){
+            $("#zc_mname").val($("#zc_mid option:selected").text());
+        });
+        $("#zc_mid").change();
+        $("#zc_did").change(function(){
+            $("#zc_dname").val($("#zc_did option:selected").text());
+        });
+        $("#zc_did").change();
         $("#o_profits").change(function(){
             if($(this).val().indexOf("%") < 0){
                 $(this).val($(this).val()+"%");
@@ -590,6 +639,13 @@
                 $(o_profits).attr("class", "wrong");
                 $(o_profits).after('<span class="wrongMsg" style="color: red;padding-right: 10px;">利润率不能为空</span>');
                 check = true;
+            }
+            if($(".zproject").is(":hidden")){
+                if($("#zc_name").val() == ""){
+                    $("#zc_name").attr("class", "wrong");
+                    $("#zc_name").after('<span class="wrongMsg" style="color: red;padding-right: 10px;">支出项目不能为空</span>');
+                    check = true;
+                }
             }
             if(check){
                 return false;
@@ -761,14 +817,20 @@
             }else{
                 $("#o_type option:eq(1)").prop("disabled", false);
             }
+            var o_type = $("#o_type").val();
+            if($(this).val() == "2" && o_type == "1"){
+                $(".zproject").show();
+            }else{
+                $(".zproject").hide();
+            }
             $("#o_coname").val("");
             $("#o_coid").val("");
-            $("#o_coname").parent().prev().find("i").eq(0).show();
-            $("#o_coname").parent().prev().find("i").eq(1).hide();
+            $("#o_coname").parent().prev().find("i").eq(1).show();
+            $("#o_coname").parent().prev().find("i").eq(2).hide();
         });
         $("#o_cno,#o_pname,#o_coname").each(function(index, element){
             if($(element).val() != ""){
-                $(element).parent().prev().find("i:eq(0)").click();
+                $(element).parent().prev().find("i:eq(1)").click();
             }
         });
 //        $("#o_cno,#o_pname,#o_coname").click(function(){
