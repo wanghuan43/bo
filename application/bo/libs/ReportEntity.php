@@ -59,8 +59,6 @@ class ReportEntity extends BoModel
         }
         $model = new Orders();
         $omodel = new Orders();
-        $omodel->alias("o")->join("__ORDER_USED__ ou", "o.o_id = ou.ou_oid", "left")
-            ->field("o.o_id");
         switch ($type) {
             case "orders":
                 $model->reportList($tmp[$type], $activeSheet, $type, 2, "");
@@ -94,15 +92,18 @@ class ReportEntity extends BoModel
                             $id = $value['c_id'];
                             break;
                         case "invoice":
-                            $id = $omodel->where("ou.ou_otid", "=", $value['i_id'])
+                            $id = $omodel->alias("o")->join("__ORDER_USED__ ou", "o.o_id = ou.ou_oid", "left")
+                                ->field("o.o_id")->where("ou.ou_otid", "=", $value['i_id'])
                                 ->where("ou.ou_type", "=", "1")->select();
                             break;
                         case "received":
-                            $id = $omodel->where("ou.ou_otid", "=", $value['r_id'])
+                            $id = $omodel->alias("o")->join("__ORDER_USED__ ou", "o.o_id = ou.ou_oid", "left")
+                                ->field("o.o_id")->where("ou.ou_otid", "=", $value['r_id'])
                                 ->where("ou.ou_type", "=", "3")->select();
                             break;
                         case "acceptance":
-                            $id = $omodel->where("ou.ou_otid", "=", $value['a_id'])
+                            $id = $omodel->alias("o")->join("__ORDER_USED__ ou", "o.o_id = ou.ou_oid", "left")
+                                ->field("o.o_id")->where("ou.ou_otid", "=", $value['a_id'])
                                 ->where("ou.ou_type", "=", "2")->select();
                             break;
                     }
