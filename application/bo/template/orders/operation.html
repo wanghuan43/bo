@@ -57,7 +57,7 @@
                 </td>
                 <td class="txt">订单责任人</td>
                 <td>
-                    <{$order.o_mname}>
+                    <{if condition="empty($order.o_mname)"}><{$mn}><{else}><{$order.o_mname}><{/if}>
                     <input type="hidden" name="o_mname" id="o_mname" value="<{$order.o_mname}>"/>
                     <input type="hidden" name="o_mid" id="o_mid" value="<{$order.o_mid}>"/>
                 </td>

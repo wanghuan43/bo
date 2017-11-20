@@ -102,6 +102,7 @@ class Orders extends BoController
         $this->assign('op_id', $op_id);
         $this->assign("isAdmin", $isAdmin);
         $this->assign("md", $this->current->m_did);
+        $this->assign("mn", $this->current->m_name);
         $this->assign("isFavorite", $fmodel->where("f_oid", "=", $op_id)->where("f_mid", "=", $this->current->m_id)->count());
         return $this->fetch("operation");
     }
