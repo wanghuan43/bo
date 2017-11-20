@@ -24,8 +24,10 @@
     });
 
     $("table.list td a").attr("target","_blank").click(function(){
+        var url = $(this).attr("href");
+        url = url.replace("#","/");
         var params = {
-            url:$(this).attr("href"),
+            url:url,
             method:"POST"
         }
         contentAjax("main-container",params,"jump");
