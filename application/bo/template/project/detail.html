@@ -12,7 +12,7 @@
             <table>
                 <tr>
                     <td width="64"><label for="ipt-no"><i class="asterisk">*</i>项目编号:</label></td>
-                    <td><input id="ipt-no" type="text" name="no" value="<{$data.p_no}>"<{if $readonly==true}> class="no-border" readonly<{/if}> required/><input type="hidden" name="id" value="<{$data.p_id}>"/> </td>
+                    <td><input id="ipt-no" type="text" name="no" value="<{$data.p_no}>"<{if $readonly==true}> class="no-border" readonly<{/if}> required onkeyup="toUpperCase(this)" rangelength="[8,32]"/><input type="hidden" name="id" value="<{$data.p_id}>"/> </td>
                     <td style="padding-left:20px;width:84px;"><label for="ipt-name"><i class="asterisk">*</i>项目名称:</label></td>
                     <td><input id="ipt-name" type="text" name="name" value="<{$data.p_name}>"<{if $readonly==true}> class="no-border" readonly<{/if}> required/></td>
                 </tr>

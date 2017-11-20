@@ -7,7 +7,7 @@
     <div class="form-group">
         <label for="inputNo" class="col-sm-2 control-label"><i class="asterisk">*</i>项目号</label>
         <div class="col-sm-10">
-            <input type="text" class="form-control" id="inputNo" name="no" required>
+            <input type="text" class="form-control" id="inputNo" name="no" required onkeyup="toUpperCase(this)" rangelength="[8,32]">
         </div>
     </div>
 

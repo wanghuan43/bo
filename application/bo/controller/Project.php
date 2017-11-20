@@ -43,7 +43,7 @@ class Project extends BoController
      */
     protected function doAdd()
     {
-        $no = trim($this->request->post('no'));
+        $no = strtoupper(trim($this->request->post('no')));
         $name = trim($this->request->post('name'));
 
         $validate = validate('Project');
@@ -97,7 +97,7 @@ class Project extends BoController
 
         $data = [
             'p_id' => $id,
-            'p_no' => trim($post['no']),
+            'p_no' => strtoupper(trim($post['no'])),
             'p_name' => trim($post['name'])
         ];
 
