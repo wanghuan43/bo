@@ -3,9 +3,11 @@
     $(".pagination a").attr("target","_blank").click(function(){
         var url = $(this).attr("href");
         url = url.replace("#","/");
+        var data = $("#main-container .f-layer form").serialize();
         $.ajax({
             url:url,
             method:"POST",
+            data:data,
             success:function(res){
                 $("#main-pannel").html(res);
             }
