@@ -93,7 +93,7 @@ class Orders extends BoController
         $this->assign('cIDList', $cIDList);
         $this->assign('baseMonth', json_encode($baseMonth));
         $this->assign('dList', $dModel->all());
-        $this->assign('chancesList', $chancesModel->all());
+        $this->assign('chancesList', $chancesModel->where("cs_isShow", "=","1")->select());
         $this->assign('memberList', $memberModel->all());
         $this->assign('tagList', $tagList);
         $this->assign('opject', $opm->getOrderProject($op_id));
