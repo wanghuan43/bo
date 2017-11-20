@@ -46,6 +46,8 @@ class Received extends BoController
         $data['r_date'] = trim($post['date']);
         $data['r_coid'] = trim($post['coid']);
         $data['r_coname'] = trim($post['coname']);
+        $data['r_subject'] = trim($post['subject']);
+        $data['r_content'] = trim($post['content']);
 
         $data['r_mid'] = $this->current->m_id;
         $data['r_mname'] = $this->current->m_name;

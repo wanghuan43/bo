@@ -14,6 +14,7 @@ class Acceptance extends BoValidate
 
     protected $rule = [
         'a_no' => 'require|alphaDash|unique:acceptance',
+        'a_subject' => 'require',
         'a_coname' => 'require',
         'a_money' => 'require|money',
         'a_date' => 'require|date'
@@ -23,6 +24,7 @@ class Acceptance extends BoValidate
         'a_no.require' => '验收单号不能为空',
         'a_no.alphaDash' => '验收单号格式不正确',
         'a_no.unique' => '验收单号已存在',
+        'a_subject' => '主题不能为空',
         'a_coname' => '对方公司不能为空',
         'a_money.require' => '总金额不能为空',
         'a_money.money' => '总金额格式不正确',

@@ -7,24 +7,16 @@
     <div class="form-group">
         <label for="inputNo" class="col-sm-2 control-label"><i class="asterisk">*</i>合同号</label>
         <div class="col-sm-10">
-            <input type="text" class="form-control" id="inputNo"  name="no" required/>
+            <input type="text" class="form-control" id="inputNo"  name="no" required onblur="toUpperCase(this)" onkeyup="toUpperCase(this)" rangelength="[8,32]"/>
         </div>
     </div>
 
     <div class="form-group">
         <label for="inputName" class="col-sm-2 control-label"><i class="asterisk">*</i>合同名</label>
         <div class="col-sm-10">
-            <input type="text" class="form-control" id="inputName"  name="name" required/>
+            <input type="text" class="form-control" id="inputName"  name="name" required minlength="4"/>
         </div>
     </div>
-
-    <{/*div class="form-group">
-        <label for="ipt-project-name" class="col-sm-2 control-label">项目</label>
-        <div class="col-sm-10">
-            <input type="text" class="form-control" id="ipt-project-name" name="pname" readonly/>
-            <input type="hidden" name="pid" />
-        </div>
-    </div*/}>
 
     <div class="form-group">
         <label class="col-sm-2 control-label" for="ipt-company-name"><i class="asterisk">*</i>对方公司</label>
@@ -52,18 +44,6 @@
         </div>
     </div>
 
-    <!--div class="form-group">
-        <label class="col-sm-2 control-label">已用金额</label>
-        <div class="col-sm-10">
-            <input type="text" class="form-control" name="used"/>
-        </div>
-    </div>
-    <div class="form-group">
-        <label class="col-sm-2 control-label">剩余金额</label>
-        <div class="col-sm-10">
-            <input type="text" class="form-control" name="noused"/>
-        </div>
-    </div-->
     <div class="form-group">
         <label class="col-sm-2 control-label"><i class="asterisk">*</i>签约日期</label>
         <div class="col-sm-10">

@@ -16,6 +16,7 @@ class Received extends BoValidate
 
     protected $rule = [
         'r_no' => 'require|alphaDash|unique:received',
+        'r_subject' => 'require',
         'r_coname' => 'require',
         'r_money' => 'require|money',
         'r_date' => 'require|date'
@@ -25,6 +26,7 @@ class Received extends BoValidate
         'r_no.require' => '付款单号不能为空',
         'r_no.alphaDash' => '付款单号格式不正确',
         'r_no.unique' => '付款单号已存在',
+        'r_subject' => '主题不能为空',
         'r_coname' => '对方公司不能为空',
         'r_money.require' => '总金额不能为空',
         'r_money.money' => '总金额格式不正确',

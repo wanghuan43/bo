@@ -5,27 +5,17 @@
             <{/*button type="submit" class="btn">保存</button*/}>
             <button type="button" href="#received/all" class="btn red">取消</button>
         </div>
-        <!--div class="link-pannel">
-            <ul>
-                <li>
-                    <a href="#"><i class="fa fa-calendar-check-o"></i>日志</a>
-                </li>
-                <li>
-                    <a href="#"><i class="fa fa-pencil"></i>批注</a>
-                </li>
-                <li>
-                    <a href="#"><i class="fa fa-share-square-o"></i>分享</a>
-                </li>
-                <li>
-                    <a href="#"><i class="fa fa-star"></i>收藏</a>
-                </li>
-            </ul>
-        </div-->
     </div>
     <div class="main-pannel">
         <h3>基本信息</h3>
         <div class="content">
             <table>
+                <tr>
+                    <td width="64">主题:</td>
+                    <td>
+                        <input type="text" name="subject" value="<{$data.r_subject}>" class="no-border" readonly/>
+                    </td>
+                </tr>
                 <tr>
                     <td width="64">付款单号:</td>
                     <td><input type="text" name="no" value="<{$data.r_no}>" class="no-border" readonly/><input type="hidden" name="id" value="<{$data.r_id}>"/> </td>
@@ -51,6 +41,12 @@
                     <td>
                         <input type="text" value="<{$data.r_mname}>" name="mname" class="no-border" readonly/>
                         <input type="hidden" value="<{$data.r_mid}>" name="mid"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td>摘要</td>
+                    <td colspan="3">
+                        <textarea name="content" style="width:100%;"><{$data.r_content}></textarea>
                     </td>
                 </tr>
             </table>
