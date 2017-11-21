@@ -50,6 +50,7 @@ class Invoice extends BoController
         $data['i_date'] = trim($post['date']);
         $data['i_coid'] = trim($post['coid']);
         $data['i_coname'] = trim($post['coname']);
+        $data['i_subject'] = trim($post['subject']);
 
         $data['i_mid'] = $this->current->m_id;
         $data['i_mname'] = $this->current->m_name;
@@ -61,10 +62,36 @@ class Invoice extends BoController
             $data['i_date'] = strtotime($data['i_date']);
             $data['i_money'] = $data['i_noused'] = floatval($data['i_money']);
 
-            if( $res = $this->model->save($data) ){
-                $ret = ['flag'=>1,'msg'=>'添加成功'];
+            $file = $this->request->file('attachment');
+            $info =true;
+
+            if(!empty($file)) {
+                $baseFolder = DS.'attachment'.DS.date('Y') ;
+
+                $folder = ROOT_PATH . DS . 'public' . $baseFolder;
+
+                if (!is_dir($folder)) {
+                    CustomUtils::mkdir_p($folder);
+                }
+
+                if(!$file->checkImg()){
+                    $info = false;
+                }else {
+                    $info = $file->move($folder);
+                }
+            }
+
+            if($info) {
+                if ($info !== true) {
+                    $data['i_attachment'] = $baseFolder . DS . $info->getSaveName();
+                }
+                if ($res = $this->model->save($data)) {
+                    $ret = ['flag' => 1, 'msg' => '添加成功'];
+                } else {
+                    $ret = ['flag' => 0, 'msg' => '发生错误'];
+                }
             }else{
-                $ret = ['flag'=>0,'msg'=>'发生错误'];
+                $ret = ['flag'=>0,'msg'=>'附件上传失败'];
             }
         }else{
             $ret = ['flag'=>0,'msg'=>$validate->getError()];

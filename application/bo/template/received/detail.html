@@ -49,6 +49,14 @@
                         <textarea name="content" style="width:100%;"><{$data.r_content}></textarea>
                     </td>
                 </tr>
+                <tr>
+                    <td>附件</td>
+                    <td>
+                        <{if $data.r_attachment}>
+                        <img src="<{$data.r_attachment}>" width="240" data-action="zoom"/>
+                        <{/if}>
+                    </td>
+                </tr>
             </table>
         </div>
     </div>

@@ -59,10 +59,36 @@ class Received extends BoController
             $data['r_date'] = strtotime($data['r_date']);
             $data['r_money'] = $data['r_noused'] = floatval($data['r_money']);
 
-            if( $res = $this->model->save($data) ){
-                $ret = ['flag'=>1,'msg'=>'添加成功'];
+            $file = $this->request->file('attachment');
+            $info =true;
+
+            if(!empty($file)) {
+                $baseFolder = DS.'attachment'.DS.date('Y') ;
+
+                $folder = ROOT_PATH . DS . 'public' . $baseFolder;
+
+                if (!is_dir($folder)) {
+                    CustomUtils::mkdir_p($folder);
+                }
+
+                if(!$file->checkImg()){
+                    $info = false;
+                }else {
+                    $info = $file->move($folder);
+                }
+            }
+
+            if($info) {
+                if ($info !== true) {
+                    $data['r_attachment'] = $baseFolder . DS . $info->getSaveName();
+                }
+                if ($res = $this->model->save($data)) {
+                    $ret = ['flag' => 1, 'msg' => '添加成功'];
+                } else {
+                    $ret = ['flag' => 0, 'msg' => '发生错误'];
+                }
             }else{
-                $ret = ['flag'=>0,'msg'=>'发生错误'];
+                $ret = ['flag'=>0,'msg'=>'附件上传失败'];
             }
         }else{
             $ret = ['flag'=>0,'msg'=>$validate->getError()];

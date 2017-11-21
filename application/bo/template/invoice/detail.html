@@ -47,6 +47,20 @@
                         <input type="hidden" value="<{$data.i_mid}>" name="mid"/>
                     </td>
                 </tr>
+                <tr>
+                    <td>摘要:</td>
+                    <td colspan="3">
+                        <textarea name="content" style="width:100%" readonly><{$data.i_content}></textarea>
+                    </td>
+                </tr>
+                <tr>
+                    <td>附件:</td>
+                    <td>
+                        <{if $data.i_attachment}>
+                        <img src="<{$data.i_attachment}>" width="240" data-action="zoom"/>
+                        <{/if}>
+                    </td>
+                </tr>
             </table>
         </div>
     </div>
@@ -87,4 +101,4 @@
         </div>
     </div>
 </form>
-<{load file="/static/js/update.js"}}>
+<{load file="/static/js/update.js"}>
