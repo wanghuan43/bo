@@ -129,7 +129,7 @@ class BoController extends Controller
         }
         $listFile = $mName . '/list/' . $listType;
 
-        $search = $this->getSearch($post, $type);
+        $search = $this->getSearch(false,$post, $type);
 
         if (isset($post['fields']) || isset($get['page'])) {
             $file = $listFile;
@@ -160,13 +160,16 @@ class BoController extends Controller
 
     }
 
-    protected function getSearch($post = false, $mName = false)
+    protected function getSearch( $model=false, $post = false, $mName = false)
     {
+        if(empty($model)){
+            $model = $this->model;
+        }
         if (empty($post)) {
             $post = $this->request->post();
         }
         if (empty($mName)) {
-            $mName = strtolower($this->model->getModelName());
+            $mName = strtolower($model->getModelName());
         }
         $param = $this->request->param();
         $type = isset($param['type']) ? $param['type'] : false;
@@ -217,7 +220,7 @@ class BoController extends Controller
             ];
         }
 
-        $this->formartSearch($this->model, $search);
+        $this->formartSearch($model, $search);
         return $search;
     }
 
@@ -389,7 +392,7 @@ class BoController extends Controller
             if (isset($post['ids'])) {
                 $res = $this->model->where($this->model->getPk(), 'IN', $post['ids'])->select();
             } else {
-                $search = $this->getSearch($post, $type);
+                $search = $this->getSearch(false,$post, $type);
                 $res = $this->model->getList($search, false);
             }
 

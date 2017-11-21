@@ -16,12 +16,49 @@ use think\Db;
 
 class BudgetEntity extends BoModel
 {
-    protected $searchable;
     protected $templateModel;
     protected $columnModel;
     protected $permissionsModel;
     protected $tableModel;
     protected $member;
+    protected $searchable = [
+        't_title' => [
+            'name' => '模板名称',
+            'type' => 'text',
+            'operators' => [
+                'like' => '包含',
+                '=' => '等于'
+            ]
+        ],
+        't_mname' => [
+            'name' => '责任人',
+            'type' => 'text',
+            'operators' => [
+                'like' => '包含',
+                '=' => '等于'
+            ]
+        ],
+        'create_time' => [
+            'name' => '创建日期',
+            'type' => 'date',
+            'operators' => [
+                'between' => '介于',
+                '=' => '等于',
+                '>' => '大于',
+                '<' => '小于'
+            ]
+        ],
+        'update_time' => [
+            'name' => '修改日期',
+            'type' => 'date',
+            'operators' => [
+                'between' => '介于',
+                '=' => '等于',
+                '>' => '大于',
+                '<' => '小于'
+            ]
+        ]
+    ];
 
     protected function initialize()
     {

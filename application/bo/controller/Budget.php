@@ -21,9 +21,24 @@ class Budget extends BoController
 
     public function template()
     {
-        $lists = $this->budgetEntity->getTemplateList($this->limit);
+        $params = $this->request->param();
+        $search = $this->getSearch($this->budgetEntity);
+        $filter = [];
+        foreach($search as $i){
+            $filter[$i['field']] = ['op'=>$i['opt'],'val'=>$i['val']];
+        }
+        $lists = $this->budgetEntity->getTemplateList($this->limit,$filter);
         $this->assign("lists", $lists);
-        return $this->fetch("budget/template/index");
+        $this->assign('search',$this->budgetEntity->getSearchable());
+        $this->assign('formUrl','/budget/template');
+        $this->assign('modelName',strtolower($this->budgetEntity->getModelName()));
+
+        if (isset($params['fields']) || isset($params['page']) || isset($params['sort'])) {
+            $ret = $this->fetch('budget/template/list/2');
+        } else {
+            $ret = $this->fetch('budget/template/index');
+        }
+        return $ret;
     }
 
     public function templateAdd()

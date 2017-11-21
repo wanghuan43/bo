@@ -1,5 +1,5 @@
 <div class="clearfix header">
-    <h2></h2>
+    <h2>财务预算.预算模板</h2>
     <div class="link-pannel">
         <ul>
             <{/*li>
@@ -11,50 +11,12 @@
         </ul>
     </div>
 </div>
+
+<div class="search-panel">
+    <{include file="common/allfilter"}>
+</div>
+
 <div class="main-pannel" id="main-pannel">
-    <nav aria-label="Page navigation">
-        <{$lists->render()}>
-    </nav>
-    <table class="list" cellspacing="0">
-        <colgroup>
-            <{/*col width="24px"*/}>
-            <col width="150px">
-            <col width="40px">
-            <col width="40px">
-            <col width="150px">
-            <col width="150px">
-            <col width="150px">
-            <col width="30px">
-        </colgroup>
-        <thead>
-        <tr>
-            <!--th></th-->
-            <th style="text-align: center;">模板名称</th>
-            <th>行</th>
-            <th>列</th>
-            <th>责任人</th>
-            <th>创建日期</th>
-            <th>修改日期</th>
-            <th style="width:30px;"></th>
-        </tr>
-        </thead>
-        <tbody>
-        <{foreach $lists as $val}>
-        <tr>
-            <{/*td><input type="radio" name="id" value=""/></td*/}>
-            <td><a href="/budget/templateAdd?tid=<{$val['t_id']}>"><{$val['t_title']}></a></td>
-            <td><{$val['t_row']}></td>
-            <td><{$val['t_col']}></td>
-            <td><{$val['t_mname']}></td>
-            <td><{$val['create_time']}></td>
-            <td><{$val['update_time']}></td>
-            <td><a href="<{:url('/budget/export/type/template/id/'.$val['t_id'])}>" target="_blank">导出</a></td>
-        </tr>
-        <{/foreach}>
-        </tbody>
-    </table>
-    <nav aria-label="Page navigation">
-        <{$lists->render()}>
-    </nav>
+    <{include file="budget/template/list/2"}>
 </div>
 <{load href="/static/js/plugin/select/select.min.js,/static/js/lists.js,/static/css/select.min.css"}>
