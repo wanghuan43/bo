@@ -14,10 +14,13 @@
         });
         return false;
     });
+
     $("table.list th a").attr("target","_blank").click(function(){
+        var data = $("#main-container .f-layer form").serialize();
         $.ajax({
             url:$(this).attr("href"),
             method:"POST",
+            data:data,
             success:function(res){
                 $(".main-pannel.all-page").html(res);
             }
