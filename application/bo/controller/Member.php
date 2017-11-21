@@ -44,6 +44,8 @@ class Member extends BoController
             $data['m_' . $item] = trim($post[$item]);
         }
 
+        //$arr['m_email'] = strtoupper($arr['m_email']);
+
         $validate = new \app\bo\validate\Member();
 
         if ($validate->check($data)) {
@@ -98,6 +100,8 @@ class Member extends BoController
         foreach ($arr as $k) {
             $member['m_' . $k] = trim($post[$k]);
         }
+
+        //$member['m_email'] = strtoupper($member['m_email']);
 
         $member['m_id'] = $post['id'];
 
