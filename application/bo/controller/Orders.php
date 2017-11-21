@@ -359,7 +359,7 @@ class Orders extends BoController
 
             $type = $this->request->param('type') ?: 'orders';
             $post = $this->request->post();
-            $search = $this->getSearch($post, $type);
+            $search = $this->getSearch(false,$post, $type);
 
             $ids = [];
             if (isset($post['ids'])) {
