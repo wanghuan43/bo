@@ -152,8 +152,8 @@
                 <td class="txt">税率:</td>
                 <td>
                     <select name="o_tax" id="o_tax">
-                        <{volist name="taxList" id="ll" key="k"}>
-                        <option value="<{$k}>" <{eq name="$k" value="$order.o_tax"}>selected<{/eq}>><{$ll}></option>
+                        <{volist name="taxList" id="ll"}>
+                        <option value="<{$key}>" <{if ($key == $order.o_tax) OR (empty($order.o_tax) AND $key==3)}>selected<{/if}>><{$ll}></option>
                         <{/volist}>
                     </select>
                 </td>
