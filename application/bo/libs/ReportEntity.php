@@ -169,10 +169,12 @@ class ReportEntity extends BoModel
                     }
                     if (is_array($id) AND isset($tmp["orders"])) {
                         $count = $begin = $begin + 1;
+                        $in = false;
                         foreach ($id as $ii) {
+                            $in = true;
                             $count = $model->reportList($tmp["orders"], $activeSheet, $type, $begin, $ii->o_id);
                         }
-                        if($count == $begin){
+                        if($count === false OR !$in){
                             $begin = $begin -1;
                         }else{
                             $begin = $count;
@@ -180,7 +182,7 @@ class ReportEntity extends BoModel
                     } elseif(isset($tmp["orders"])) {
                         $begin = $begin + 1;
                         $count = $model->reportList($tmp["orders"], $activeSheet, $type, $begin, $id);
-                        if($count == $begin){
+                        if($count === false){
                             $begin = $begin -1;
                         }else{
                             $begin = $count;

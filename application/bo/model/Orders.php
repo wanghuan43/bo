@@ -278,6 +278,7 @@ class   Orders extends BoModel
     {
         $this->getOu();
         $count = $begin;
+        $in = false;
         switch ($type) {
             case "project":
                 $this->where("o_pid", "=", $id);
@@ -293,10 +294,11 @@ class   Orders extends BoModel
         }
         $list = $this->select();
         foreach ($list as $key => $value) {
+            $in = true;
             $count = $cell = intval($begin) + intval($key);
             $this->setCellValues($cell, $cols, $value, $obj);
         }
-        return $count;
+        return ($in ? $count : $in);
     }
 
     private function setCellValues($cell, $cols, $value, &$obj)
