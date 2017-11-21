@@ -99,6 +99,8 @@ class Member extends BoController
             $member['m_' . $k] = trim($post[$k]);
         }
 
+        $member['m_id'] = $post['id'];
+
         $validate = validate('Member');
 
         if($validate->check($member)) {
