@@ -65,8 +65,8 @@
                     "dataType": "json",
                     "success": function (res) {
                         custom.alert(res.msg);
-                        if (res.flag == 1)
-                            window.setTimeout("location.reload()", 800);
+                        if (res.flag == 1 || res.status==1)
+                            window.setTimeout("location.reload()", 500);
                     }
                 });
             });

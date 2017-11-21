@@ -43,8 +43,9 @@
                         'data': form.serialize(),
                         'success':function(res){
                             custom.alert(res.message)
-                            if( res.flag == 1 ) {
-                                historyBack();
+                            if( res.status == 1 ) {
+                                //historyBack();
+                                form[0].reset();
                             }
                         }
                     });
