@@ -95,7 +95,7 @@ class Invoice extends BoModel
         )
     );
 
-    public function getList($search, $limit,$order=['i_date'=>'desc'])
+    public function getList($search, $limit)
     {
         $member = $this->getCurrent();
         $this->alias('i');
@@ -107,7 +107,6 @@ class Invoice extends BoModel
         foreach ($search as $key => $value) {
             $this->where("i." . $value['field'], $value['opt'], $value['val']);
         }
-        $this->order($order);
         if( $limit===false ){
             $list = $this->select();
         }else {
