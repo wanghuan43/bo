@@ -29,14 +29,18 @@
     });
 
     $("table.list td a").attr("target","_blank").click(function(){
-        var url = $(this).attr("href");
-        url = url.replace("#","/");
-        var params = {
-            url:url,
-            method:"POST"
+        if($this.hasClass("export")){
+            return true;
+        }else {
+            var url = $(this).attr("href");
+            url = url.replace("#", "/");
+            var params = {
+                url: url,
+                method: "POST"
+            }
+            contentAjax("main-container", params, "jump");
+            return false;
         }
-        contentAjax("main-container",params,"jump");
-        return false;
     });
 
     var selIDs = {
