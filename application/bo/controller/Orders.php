@@ -34,7 +34,7 @@ class Orders extends BoController
         $this->assign("title", $this->title);
         $this->assign("type", $type);
         $this->assign("stype", "orders");
-        $formUrl = "/orders";
+        $formUrl = "/orders/index/type/orders";
         if ($type !== 'orders') {
             $formUrl = '/orders/index/type/' . $type;
         }

@@ -14,15 +14,51 @@
         <{else/}>
         <th>阶段</th>
         <{/if}>
-        <th>订单号</th>
-        <th>项目名称</th>
-        <th>订单标题</th>
-        <th>收支</th>
-        <th>对方名称</th>
-        <th>责任人</th>
-        <th class="date">发生日期</th>
-        <th class="date">订单创建日期</th>
-        <th class="money">发生金额</th>
+        <th>
+            <a href="<{$formUrl}>/sort/o_no/order/<{:getSortOrder($sort,'o_no')}>">
+                订单号<i class="<{:getSortClass($sort,'o_no')}>"></i>
+            </a>
+        </th>
+        <th>
+            <a href="<{$formUrl}>/sort/o_pname/order/<{:getSortOrder($sort,'o_pname')}>">
+                项目名称<i class="<{:getSortClass($sort,'o_pname')}>"></i>
+            </a>
+        </th>
+        <th>
+            <a href="<{$formUrl}>/sort/o_subject/order/<{:getSortOrder($sort,'o_subject')}>">
+                订单标题<i class="<{:getSortClass($sort,'o_subject')}>"></i>
+            </a>
+        </th>
+        <th>
+            <a href="<{$formUrl}>/sort/o_type/order/<{:getSortOrder($sort,'o_type')}>">
+                收支<i class="<{:getSortClass($sort,'o_type')}>"></i>
+            </a>
+        </th>
+        <th>
+            <a href="<{$formUrl}>/sort/o_coname/order/<{:getSortOrder($sort,'o_coname')}>">
+                对方名称<i class="<{:getSortClass($sort,'o_coname')}>"></i>
+            </a>
+        </th>
+        <th>
+            <a href="<{$formUrl}>/sort/o_mname/order/<{:getSortOrder($sort,'o_mname')}>">
+                责任人<i class="<{:getSortClass($sort,'o_mname')}>"></i>
+            </a>
+        </th>
+        <th class="date">
+            <a href="<{$formUrl}>/sort/o_date/order/<{:getSortOrder($sort,'o_date')}>">
+                发生日期<i class="<{:getSortClass($sort,'o_date')}>"></i>
+            </a>
+        </th>
+        <th class="date">
+            <a href="<{$formUrl}>/sort/o_createtime/order/<{:getSortOrder($sort,'o_createtime')}>">
+                订单创建日期<i class="<{:getSortClass($sort,'o_createtime')}>"></i>
+            </a>
+        </th>
+        <th class="money">
+            <a href="<{$formUrl}>/sort/o_money/order/<{:getSortOrder($sort,'o_money')}>">
+                发生金额<i class="<{:getSortClass($sort,'o_money')}>"></i>
+            </a>
+        </th>
         <th style="width: 40px;">操作</th>
     </tr>
     </thead>
