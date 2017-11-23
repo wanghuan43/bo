@@ -146,6 +146,7 @@ class Orders extends BoController
             return array("status" => 1, "message" => "以保存此次提交,请等待审核");
         } else {
             $post['o_no'] = $this->ordersModel->getOrderNO($post['o_pid'], $post['o_type']);
+            $post['o_createtime'] = $post['o_updatetime'] = time();
             $result = $this->ordersModel->save($post, $where);
             if ($result AND $post['o_lie'] == '2') {
                 $nO = new \app\bo\model\Orders();
