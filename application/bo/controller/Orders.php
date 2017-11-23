@@ -360,7 +360,7 @@ class Orders extends BoController
 
             $type = $this->request->param('type') ?: 'orders';
             $post = $this->request->post();
-            $search = $this->getSearch(false,$post, $type);
+            $search = $this->getSearch(false,$post, 'orders');
 
             $ids = [];
             if (isset($post['ids'])) {
@@ -398,7 +398,8 @@ class Orders extends BoController
                     $arr1['o_date'] = date('Y/m/d', $arr1['o_date']);
                 }
                 $types = getTypeList();
-                $arr1['o_type'] = $types[$arr1['o_type']];
+                $arr1['o_type'] = isset($types[$arr1['o_type']])?$types[$arr1['o_type']]:'';
+
                 foreach ($val as $k => $i) {
                     if ($type == 'orders') {
                         if ($i['op_type'] == 1) {
@@ -444,7 +445,7 @@ class Orders extends BoController
                     } else {
                         $arr1['o_lie'] = $i['o_lie'] = '';
                     }
-                    $i['o_type'] = $types[$i['o_type']];
+                    $i['o_type'] = isset($types[$i['o_type']])?$types[$i['o_type']]:'';
                     $i['o_date'] = date('Y/m/d', $i['o_date']);
 
                     $i['c_no'] = '';
