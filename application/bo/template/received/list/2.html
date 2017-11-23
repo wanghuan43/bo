@@ -29,6 +29,11 @@
                     付/回款日期<i class="<{:getSortClass($sort,'r_date')}>"></i>
                 </a>
             </th>
+            <th class="date">
+                <a href="/received/all/sort/r_accdate/order/<{:getSortOrder($sort,'r_accdate')}>">
+                    记账月<i class="<{:getSortClass($sort,'r_accdate')}>"></i>
+                </a>
+            </th>
             <th class="money">
                 <a href="/received/all/sort/r_money/order/<{:getSortOrder($sort,'r_money')}>">
                     付/回款金额<i class="<{:getSortClass($sort,'r_money')}>"></i>
@@ -50,6 +55,7 @@
             <td><{$val.r_coname}></td>
             <td><?php echo getTypeList($val['r_type']); ?></td>
             <td><?php echo date("Y-m-d", $val['r_date']); ?></td>
+            <td><{$val.r_accdate}></td>
             <td class="money"><{$val.r_money|number_format=2}></td>
             <td class="money"><{$val.r_noused|number_format=2}></td>
             <td><a href="/circulation/list/type/received/id/<{$val.r_id}>">传阅列表</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a href="/received/detail?id=<{$val.r_id}>">查看</a</td>

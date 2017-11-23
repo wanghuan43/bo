@@ -25,6 +25,11 @@
                 验收日期<i class="<{:getSortClass($sort,'a_date')}>"></i>
             </a>
         </th>
+        <th>
+            <a href="/acceptance/all/sort/a_accdate/order/<{:getSortOrder($sort,'a_accdate')}>">
+                记账月<i class="<{:getSortClass($sort,'a_accdate')}>"></i>
+            </a>
+        </th>
         <th class="money">
             <a href="/acceptance/all/sort/a_money/order/<{:getSortOrder($sort,'a_money')}>">
                 验收金额<i class="<{:getSortClass($sort,'a_money')}>"></i>
@@ -46,6 +51,7 @@
         <td><{$val.a_coname}></td>
         <td><?php echo getTypeList2($val['a_type']); ?></td>
         <td><?php echo date("Y-m-d", $val['a_date']); ?></td>
+        <td><{$val['a_accdate']}></td>
         <td class="money"><{$val.a_money|number_format=2}></td>
         <td class="money"><{$val.a_noused|number_format=2}></td>
         <td><a href="/circulation/list/type/acceptance/id/<{$val.a_id}>">传阅列表</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a href="/acceptance/detail?id=<{$val.a_id}>">查看</a></td>

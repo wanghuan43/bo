@@ -51,7 +51,7 @@ class Invoice extends BoController
         $data['i_coid'] = trim($post['coid']);
         $data['i_coname'] = trim($post['coname']);
         $data['i_subject'] = trim($post['subject']);
-
+        $data['i_accdate'] = trim($post['accdate']);
         $data['i_mid'] = $this->current->m_id;
         $data['i_mname'] = $this->current->m_name;
 
@@ -60,6 +60,9 @@ class Invoice extends BoController
         if($validate->check($data)){
 
             $data['i_date'] = strtotime($data['i_date']);
+            if(empty($data['i_accdate'])){
+                $data['i_accdate'] = date('ym',$data['i_date']);
+            }
             $data['i_money'] = $data['i_noused'] = floatval($data['i_money']);
 
             $file = $this->request->file('attachment');

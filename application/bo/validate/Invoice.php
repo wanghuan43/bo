@@ -18,7 +18,8 @@ class Invoice extends BoValidate
         'i_subject' => 'require',
         'i_coname' => 'require',
         'i_money' => 'require|money',
-        'i_date' => 'require|date'
+        'i_date' => 'require|date',
+        'i_accdate' => 'accounting'
     ];
 
     protected $message = [
@@ -30,7 +31,8 @@ class Invoice extends BoValidate
         'i_money.require' => '总金额不能为空',
         'i_money.money' => '总金额格式不正确',
         'i_date.require' => '开票日期不能为空',
-        'i_date.date' => '开票日期格式不正确'
+        'i_date.date' => '开票日期格式不正确',
+        'i_accdate' => '记账月格式不正确'
     ];
 
     protected $scene = [

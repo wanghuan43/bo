@@ -21,6 +21,8 @@
                     <td><input type="text" name="no" value="<{$data.r_no}>" class="no-border" readonly/><input type="hidden" name="id" value="<{$data.r_id}>"/> </td>
                     <td style="padding-left:20px;width:84px;">验收日期:</td>
                     <td><input type="text" value="<{$data.r_date|date='Y-m-d',###}>" readonly class="no-border"/></td>
+                    <td style="padding-left:20px;width:84px">记账月:</td>
+                    <td><input type="text" value="<{$data.r_accdate}>" readonly class="no-border"></td>
                     <td style="padding-left:20px;width:84px">总金额:</td>
                     <td><input type="text" value="<{$data.r_money}>" name="money" class="no-border" readonly/></td>
                 </tr>
@@ -33,7 +35,7 @@
                         </select>
                     </td>
                     <td style="padding-left:20px;">对方名称:</td>
-                    <td>
+                    <td colspan="3">
                         <input type="text" value="<{$data.r_coname}>" name="coname" class="no-border" readonly/>
                         <input type="hidden" name="coid" value="<{$data.r_coid}>" id="ipt-company-id">
                     </td>
@@ -45,7 +47,7 @@
                 </tr>
                 <tr>
                     <td>摘要</td>
-                    <td colspan="3">
+                    <td colspan="5">
                         <textarea name="content" style="width:100%;"><{$data.r_content}></textarea>
                     </td>
                 </tr>

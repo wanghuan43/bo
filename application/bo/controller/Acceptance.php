@@ -51,7 +51,7 @@ class Acceptance extends BoController
         $data['a_date'] = trim($post['date']);
         $data['a_coid'] = trim($post['coid']);
         $data['a_coname'] = trim($post['coname']);
-
+        $data['a_accdate'] = trim($post['accdate']);
         $data['a_mid'] = $this->current->m_id;
         $data['a_mname'] = $this->current->m_name;
 
@@ -60,6 +60,11 @@ class Acceptance extends BoController
         if($validate->check($data)){
 
             $data['a_date'] = strtotime($data['a_date']);
+
+            if(empty($data['a_accdate'])){
+                $data['a_accdate'] = date('ym',$data['a_date']);
+            }
+
             $data['a_money'] = $data['a_noused'] = floatval($data['a_money']);
 
             $file = $this->request->file('attachment');

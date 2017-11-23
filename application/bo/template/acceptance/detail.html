@@ -15,6 +15,8 @@
                     <td><input type="text" name="no" value="<{$data.a_no}>" class="no-border" readonly/><input type="hidden" name="id" value="<{$data.a_id}>"/> </td>
                     <td style="padding-left:20px;width:84px;">验收日期:</td>
                     <td><input type="text" value="<{$data.a_date|date='Y-m-d',###}>"  readonly class="no-border"/></td>
+                    <td style="padding-left:20px;width:84px;">记账月:</td>
+                    <td><input type="text" value="<{$data.a_accdate}>" readonly class="no-border"/></td>
                     <td style="padding-left:20px;width:84px">总金额:</td>
                     <td><input type="text" value="<{$data.a_money}>" name="money" class="no-border" readonly/></td>
                 </tr>
@@ -27,7 +29,7 @@
                         </select>
                     </td>
                     <td style="padding-left:20px;">对方名称:</td>
-                    <td>
+                    <td colspan="3">
                         <input type="text" value="<{$data.a_coname}>" name="coname" readonly class="no-border"/>
                         <input type="hidden" name="coid" value="<{$data.a_coid}>" id="ipt-company-id">
                     </td>
@@ -41,7 +43,7 @@
                     <td>主题:</td>
                     <td><{$data.a_subject}></td>
                     <td style="padding-left:20px;">摘要:</td>
-                    <td colspan="3"><textarea class="form-control" rows="3" name="content" id="txtContent"><{$data.a_content}></textarea></td>
+                    <td colspan="5"><textarea class="form-control" rows="3" name="content" id="txtContent"><{$data.a_content}></textarea></td>
                 </tr>
                 <tr>
                     <td>附件:</td>

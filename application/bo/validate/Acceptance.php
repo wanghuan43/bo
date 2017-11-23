@@ -17,7 +17,8 @@ class Acceptance extends BoValidate
         'a_subject' => 'require',
         'a_coname' => 'require',
         'a_money' => 'require|money',
-        'a_date' => 'require|date'
+        'a_date' => 'require|date',
+        'a_accdate' => 'accounting'
     ];
 
     protected $message = [
@@ -29,7 +30,8 @@ class Acceptance extends BoValidate
         'a_money.require' => '总金额不能为空',
         'a_money.money' => '总金额格式不正确',
         'a_date.require' => '验收时间不能为空',
-        'a_date.date' => '验收日期格式不正确'
+        'a_date.date' => '验收日期格式不正确',
+        'a_accdate' => '记账月格式不正确'
     ];
 
     protected $scene = [

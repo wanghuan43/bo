@@ -15,6 +15,8 @@
                     <td><input type="text" name="no" value="<{$data.i_no}>" class="no-border" readonly/><input type="hidden" name="id" value="<{$data.i_id}>"/> </td>
                     <td style="padding-left:20px;width:84px;">开票日期:</td>
                     <td><input type="text" value="<{$data.i_date|date='Y-m-d',###}>" class="no-border" readonly/></td>
+                    <td style="padding-left:20px;width:84px">记账月</td>
+                    <td><input type="text" value="<{$data.i_accdate}>" name="accdate" class="no-border" readonly/></td>
                     <td style="padding-left:20px;width:84px">总金额:</td>
                     <td><input type="text" value="<{$data.i_money}>" name="money" class="no-border" readonly/></td>
                 </tr>
@@ -27,7 +29,7 @@
                         </select>
                     </td>
                     <td style="padding-left:20px;">对方名称:</td>
-                    <td>
+                    <td colspan="3">
                         <input type="text" value="<{$data.i_coname}>" name="coname" class="no-border" readonly/>
                         <input type="hidden" name="coid" value="<{$data.i_coid}>" id="ipt-company-id">
                     </td>
@@ -49,7 +51,7 @@
                 </tr>
                 <tr>
                     <td>摘要:</td>
-                    <td colspan="3">
+                    <td colspan="5">
                         <textarea name="content" style="width:100%" readonly><{$data.i_content}></textarea>
                     </td>
                 </tr>

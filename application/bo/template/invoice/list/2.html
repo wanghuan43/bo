@@ -38,6 +38,11 @@
             </a>
         </th>
         <th>
+            <a href="/invoice/all/sort/i_accdate/order/<{:getSortOrder($sort,'i_accdate')}>">
+                记账月<i class="<{:getSortClass($sort,'i_accdate')}>"></i>
+            </a>
+        </th>
+        <th>
             <a href="/invoice/all/sort/i_money/order/<{:getSortOrder($sort,'i_money')}>">
                 开票金额<i class="<{:getSortClass($sort,'i_money')}>"></i>
             </a>
@@ -60,6 +65,7 @@
         <td><?php echo getTaxList($val['i_tax']); ?></td>
         <td><{:getTypeList2($val.i_type)}></td>
         <td><?php echo date("Y-m-d", $val['i_date']); ?></td>
+        <td><{$val.i_accdate}></td>
         <td class="money"><{$val.i_money|number_format=2}></td>
         <td class="money"><{$val.i_noused|number_format=2}></td>
         <td><a href="/circulation/list/type/invoice/id/<{$val.i_id}>">传阅列表</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a href="/invoice/detail?id=<{$val.i_id}>">查看</a></td>

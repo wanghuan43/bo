@@ -48,7 +48,7 @@ class Received extends BoController
         $data['r_coname'] = trim($post['coname']);
         $data['r_subject'] = trim($post['subject']);
         $data['r_content'] = trim($post['content']);
-
+        $data['r_accdate'] = trim($post['accdate']);
         $data['r_mid'] = $this->current->m_id;
         $data['r_mname'] = $this->current->m_name;
 
@@ -57,6 +57,9 @@ class Received extends BoController
         if($validate->check($data)){
 
             $data['r_date'] = strtotime($data['r_date']);
+            if(empty($data['r_accdate'])){
+                $data['r_accdate'] = date('ym',$data['r_date']);
+            }
             $data['r_money'] = $data['r_noused'] = floatval($data['r_money']);
 
             $file = $this->request->file('attachment');

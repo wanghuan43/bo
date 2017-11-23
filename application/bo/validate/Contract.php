@@ -21,6 +21,7 @@ class Contract extends BoValidate
         'c_coname' => 'require',
         'c_money' => 'require|money',
         'c_date' => 'require|date',
+        'c_accdate' => 'accounting'
     ];
 
     protected $message = [
@@ -34,6 +35,7 @@ class Contract extends BoValidate
         'c_money.money' => '合同金额不正确',
         'c_date.require' => '签约日期不能为空',
         'c_date.date' => '签约日期格式不正确',
+        'c_accdate' => '记账月格式不正确'
     ];
 
     protected $scene = [
