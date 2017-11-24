@@ -439,9 +439,9 @@ class Orders extends BoController
                         $arr1['o_status'] = $i['o_status'] = '6合同';
                     }
                     if ($i['o_lie'] == 1) {
-                        $arr1['o_lie'] = $i['o_lie'] = '内';
+                        $arr1['o_lie'] = $i['o_lie'] = '1';
                     } elseif ($i['o_lie'] == 2) {
-                        $arr1['o_lie'] = $i['o_lie'] = '外';
+                        $arr1['o_lie'] = $i['o_lie'] = '';
                     } else {
                         $arr1['o_lie'] = $i['o_lie'] = '';
                     }
