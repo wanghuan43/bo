@@ -3,18 +3,30 @@
         <h2>项目管理.数据查看</h2>
         <div class="btn-pannel">
             <button type="button" href="/project/all" class="btn red">取消</button>
-            <button type="submit" class="btn">保存</button>
+            <button type="submit" class="btn"<{if $readonly}> disabled<{/if}>>保存</button>
         </div>
     </div>
     <div class="main-pannel">
         <h3>基本信息</h3>
         <div class="content">
-            <table>
+            <table class="detail">
                 <tr>
-                    <td width="64"><label for="ipt-no"><i class="asterisk">*</i>项目编号:</label></td>
-                    <td><input id="ipt-no" type="text" name="no" value="<{$data.p_no}>"<{if $readonly==true}> class="no-border" readonly<{/if}> required onkeyup="toUpperCase(this)" onBlur="toUpperCase(this)" rangelength="[8,32]"/><input type="hidden" name="id" value="<{$data.p_id}>"/> </td>
-                    <td style="padding-left:20px;width:84px;"><label for="ipt-name"><i class="asterisk">*</i>项目名称:</label></td>
-                    <td><input id="ipt-name" type="text" name="name" value="<{$data.p_name}>"<{if $readonly==true}> class="no-border" readonly<{/if}> required minlength="4"/></td>
+                    <td><label for="ipt-no"><i class="asterisk">*</i>项目编号:</label></td>
+                    <td><input id="ipt-no" class="<{if $readonly}>no-border<{else}>input-sm<{/if}>" type="text" name="no" value="<{$data.p_no}>"<{if $readonly}> readonly<{/if}> required onkeyup="toUpperCase(this)" onBlur="toUpperCase(this)" rangelength="[8,32]"/><input type="hidden" name="id" value="<{$data.p_id}>"/> </td>
+                    <td><label for="ipt-name"><i class="asterisk">*</i>项目名称:</label></td>
+                    <td><input id="ipt-name" class="<{if $readonly}>no-border<{else}>input-sm<{/if}>" type="text" name="name" value="<{$data.p_name}>"<{if $readonly==true}> readonly<{/if}> required minlength="4"/></td>
+                    <td><label><i class="asterisk">*</i>立项部门:</label></td>
+                    <td><input type="text" class="<{if $readonly}>no-border<{else}>input-sm<{/if}>" name="dname" id="inputDepartment" value="<{$data.p_dname}>" readonly<{if $readonly==true}> disabled<{/if}> required/><input type="hidden" name="did" value="<{$data.p_did}>"></td>
+                    <td><label>责任人:</label></td>
+                    <td><input type="text"  name="mname" value="<{$data.p_mname}>" readonly class="no-border"></td>
+                </tr>
+                <tr>
+                    <td><label>立项日期:</label></td>
+                    <td><input type="text" class="<{if $readonly}>no-border<{else}>input-sm<{/if}>" name="date" value="<{$data.p_date|date='Y-m-d',###}>" readonly<{if $readonly==true}> disabled<{/if}>></td>
+                    <td><label>总收入:</label></td>
+                    <td><input type="text" class="<{if $readonly}>no-border<{else}>input-sm<{/if}>" name="income" value="<{$data.p_income}>"<{if $readonly}> readonly<{/if}>/></td>
+                    <td><label>总支出:</label></td>
+                    <td><input type="text" class="<{if $readonly}>no-border<{else}>input-sm<{/if}>" name="pay" value="<{$data.p_pay}>"<{if $readonly}> readonly<{/if}>></td>
                 </tr>
             </table>
         </div>

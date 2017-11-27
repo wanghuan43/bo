@@ -19,7 +19,7 @@
             };
 
             var getOperatorHtml = function (field, i) {
-                var html = '<select class="operators" name="operators[' + modelName + '][' + i + ']">';
+                var html = '<select class="operators input-sm" name="operators[' + modelName + '][' + i + ']">';
                 for (var o in operators[field]) {
                     html += '<option value="' + o + '">' + operators[field][o] + '</option>';
                 }
@@ -32,10 +32,10 @@
                     operator = getFieldFirstOperator(field);
                 }
                 if (fields[field].type == "date") {
-                    return '<input type="text" name="values[' + modelName + '][' + i + '][]" class="values date" id="' + modelName + '-' + field + '"/>';
+                    return '<input type="text" name="values[' + modelName + '][' + i + '][]" class="values date input-sm" id="' + modelName + '-' + field + '"/>';
                 }
                 if (fields[field].type == "select") {
-                    var html = '<select name="values[' + modelName + '][' + i + '][]" class="values">';
+                    var html = '<select name="values[' + modelName + '][' + i + '][]" class="values input-sm">';
                     var options = fields[field].options;
                     for (var key in options) {
                         html += '<option value="' + key + '">' + options[key] + '</option>';
@@ -44,15 +44,15 @@
                     return html;
                 }
                 if (operator == 'between') {
-                    return '<input type="text" name="values[' + modelName + '][' + i + '][]" class="values" style="width:100px"/>'
-                        + '<input type="text" name="values[' + modelName + '][' + i + '][]" class="values" style="width: 100px"/>';
+                    return '<input type="text" name="values[' + modelName + '][' + i + '][]" class="values input-sm" style="width:100px"/>'
+                        + '<input type="text" name="values[' + modelName + '][' + i + '][]" class="values input-sm" style="width: 100px"/>';
                 } else {
-                    return '<input type="text" name="values[' + modelName + '][' + i + '][]" class="values"/>';
+                    return '<input type="text" name="values[' + modelName + '][' + i + '][]" class="values input-sm"/>';
                 }
             };
 
             var getFieldHtml = function (field, i) {
-                html = '<select class="fields" name="fields[' + modelName + '][' + i + ']">';
+                html = '<select class="fields input-sm" name="fields[' + modelName + '][' + i + ']">';
                 for (var f in fields) {
                     if (field == f) {
                         html += '<option value="' + f + '" selected>' + fields[f].name + '</option>';

@@ -43,6 +43,7 @@ class Project extends BoController
      */
     protected function doAdd()
     {
+        $post = $this->request->post();
         $no = strtoupper(trim($this->request->post('no')));
         $name = trim($this->request->post('name'));
 
@@ -51,12 +52,22 @@ class Project extends BoController
         $data = [
             'p_no'=>$no,
             'p_name'=>$name,
+            'p_date' => trim($post['date']),
+            'p_did' => $post['did'],
+            'p_dname' => $post['dname'],
+            'p_income' => trim($post['income']),
+            'p_pay' => trim($post['pay']),
             'p_mname'=>$this->current->m_name,
             'p_mid'=>$this->current->m_id,
-            'p_createtime'=>time()
+            'p_createtime'=>time(),
+            'p_updatetime'=>time()
         ];
 
         if( $validate->check($data) ) {
+
+            if(!empty($data['p_date'])){
+                $data['p_date'] = strtotime($data['p_date']);
+            }
 
             if($this->model->save($data)){
                 $ret = ['flag'=>1,'msg'=>'添加成功'];
@@ -77,10 +88,9 @@ class Project extends BoController
         $data = $this->model->getDataById($id);
         $mOrders = new Orders();
         $orders = $mOrders->where('o_pid','=',$id)->select();
-        if(empty($orders)){
+        $readonly = true;
+        if($this->current->m_isAdmin == 1 || $this->current->m_id == $data['p_mid'] ){
             $readonly = false;
-        }else{
-            $readonly = true;
         }
         $this->assign('readonly',$readonly);
         $this->assign('orders',$orders);
@@ -98,12 +108,21 @@ class Project extends BoController
         $data = [
             'p_id' => $id,
             'p_no' => strtoupper(trim($post['no'])),
-            'p_name' => trim($post['name'])
+            'p_name' => trim($post['name']),
+            'p_did' => $post['did'],
+            'p_dname' => $post['dname'],
+            'p_income' => trim($post['income']),
+            'p_pay' => trim($post['pay']),
+            'p_updatetime' => time(),
+            'p_date' => trim($post['date'])
         ];
 
         $validate = validate('Project');
 
         if($validate->check($data)) {
+            if(!empty($data['p_date'])){
+                $data['p_date'] = strtotime($data['p_date']);
+            }
             $res = $this->model->save($data,['p_id'=>$id]);
             if ($res) {
                 $ret = ['flag' => 1, 'msg' => '更新成功'];

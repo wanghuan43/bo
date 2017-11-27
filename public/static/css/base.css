@@ -290,7 +290,8 @@ th.icon {
     transform: scale(1);
     width:100%;
     box-shadow: 0 0px 5px #777;
-    margin-bottom: 10px
+    margin-bottom: 10px;
+    z-index: 1;
 }
 .f-layer .checked-result{
     display:none;
@@ -383,6 +384,11 @@ table.list td:first-child {
     padding-left: 2%;
     float: left;
     margin-bottom: 10px;
+    display:none;
+}
+
+.search-block:nth-child(-n+4){
+    display:block;
 }
 
 .search-block select {
@@ -590,10 +596,18 @@ table.list tr.hover{
 .bo-label{
     text-align: right;
 }
+.detail td:nth-child(2n+1){
+    width:84px;
+    text-align: right;
+    padding-right:.5em;
+}
 .detail label,
 .bo-label label{
     margin:0;
     padding-right:.8em;
+}
+.detail tr{
+    height:45px;
 }
 .wrong{
     border-color: red !important;
@@ -660,4 +674,16 @@ label.error:before{
 }
 #for-export{
     display: none;
+}
+
+@-moz-document url-prefix() {
+    select.input-sm {
+        -moz-appearance: none;
+        appearance: none;
+        background: url("../images/firefox_select_icon.png") no-repeat calc(100% - 7px) 50%;
+        background-size: 5% auto;
+        border-radius:3px;
+        padding:0;
+        border:solid 1px #d9d9d9;
+    }
 }

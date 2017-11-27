@@ -160,6 +160,7 @@
                         if (radio.length > 0) {
                             $("input[name='did']").val(radio.val());
                             $("input[name='department']").val(radio.attr('data'));
+                            $("input[name='dname']").val(radio.attr('data'));
                             $(".f-layer-department .close").click();
                         } else {
                             custom.alert('请至少选择一项');
