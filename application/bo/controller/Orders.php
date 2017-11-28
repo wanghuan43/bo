@@ -64,6 +64,7 @@ class Orders extends BoController
         $order = $this->ordersModel->get($op_id);
         $isAdmin = true;
         if (!empty($op_id) AND $op == "edit") {
+            $isAdmin = $this->current->m_isAdmin ? true : ($this->current->m_id == $order->o_mid ? true : false);
             $tmp = $tagLinkModel->getList($op_id, "orders");
             foreach ($tmp as $key => $value) {
                 $tagIDList[$value->tl_id] = $value->tl_id;
@@ -71,6 +72,9 @@ class Orders extends BoController
             $tmp = $cModel->getList($op_id, "orders");
             foreach ($tmp as $key => $value) {
                 $cIDList[$value->m_id] = $value->m_id;
+            }
+            if(!$isAdmin AND !isset($cIDList[$this->current->m_did])){
+                $this->error("你没有权限查看此订单", "/");
             }
         }
         $tmp = $tagListModel->all(function ($query) {
@@ -80,9 +84,6 @@ class Orders extends BoController
         foreach ($tmp as $value) {
             $f = getFirstCharter($value['tl_name']);
             $tagList[$f][] = $value;
-        }
-        if (!empty($op_id)) {
-            $isAdmin = $this->current->m_isAdmin ? true : ($this->current->m_id == $order->o_mid ? true : false);
         }
         $this->assign('order', $order);
         $this->assign('typeList', getTypeList());
