@@ -116,20 +116,6 @@ class Orders extends BoController
         $message = "保存成功";
         $post['o_mid'] = $this->current->m_id;
         $post['o_mname'] = $this->current->m_name;
-        $zc = [
-            "zc_name" => $post['zc_name'],
-            "zc_id" => $post['zc_id'],
-            "zc_dname" => $post['zc_dname'],
-            "zc_did" => $post['zc_did'],
-            "zc_mid" => $post['zc_mid'],
-            "zc_mname" => $post['zc_mname'],
-        ];
-        unset($post['zc_name']);
-        unset($post['zc_id']);
-        unset($post['zc_dname']);
-        unset($post['zc_did']);
-        unset($post['zc_mid']);
-        unset($post['zc_mname']);
         if ($op == "edit") {
             $search = [
                 "l_otid" => $op_id,
@@ -150,6 +136,20 @@ class Orders extends BoController
             $result = $this->ordersModel->save($post, $where);
             if ($result AND $post['o_lie'] == '2') {
                 $nO = new \app\bo\model\Orders();
+                $zc = [
+                    "zc_name" => $post['zc_name'],
+                    "zc_id" => $post['zc_id'],
+                    "zc_dname" => $post['zc_dname'],
+                    "zc_did" => $post['zc_did'],
+                    "zc_mid" => $post['zc_mid'],
+                    "zc_mname" => $post['zc_mname'],
+                ];
+                unset($post['zc_name']);
+                unset($post['zc_id']);
+                unset($post['zc_dname']);
+                unset($post['zc_did']);
+                unset($post['zc_mid']);
+                unset($post['zc_mname']);
                 if ($post['o_type'] == "1") {
                     $post['o_pid'] = $zc['zc_id'];
                     $post['o_pname'] = $zc['zc_name'];

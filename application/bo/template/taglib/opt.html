@@ -1,0 +1,22 @@
+<div class="page-header">
+    <h2>标签管理</h2>
+</div>
+
+<form class="form-horizontal form-default form-add" id="form-tag-add" action="/tag/doOpt" method="post" onsubmit="return false;">
+
+    <div class="form-group">
+        <label for="inputlName" class="col-sm-2 control-label"><i class="asterisk">*</i>标签名称</label>
+        <div class="col-sm-10">
+            <input type="text" class="form-control" id="inputlName" name="tl_name" value="<{$tl.tl_name}>" required/>
+        </div>
+    </div>
+    <input type="hidden" class="form-control" name="tl_id" value="<{$tl.tl_id}>"/>
+    <div class="form-group">
+        <div class="col-sm-offset-2 col-sm-10">
+            <button class="btn btn-default" id="btn-add-project" type="submit">确认</button>
+        </div>
+    </div>
+
+</form>
+
+<{load file="/static/js/update.js"}>

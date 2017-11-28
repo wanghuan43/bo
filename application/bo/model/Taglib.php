@@ -7,6 +7,15 @@ use app\bo\libs\BoModel;
 class Taglib extends BoModel
 {
     protected $pk = 'tl_id';
+    protected $searchable = [
+        'tl_name' => [
+            'name' => '标签名称',
+            'type' => 'text',
+            'operators' => [
+                'like' => '包含'
+            ]
+        ]
+    ];
 
     public function getList($search = array(), $limit = 20)
     {

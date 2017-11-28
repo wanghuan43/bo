@@ -277,7 +277,7 @@ class BudgetEntity extends BoModel
         }
         $_REQUEST['mid'] = $mid;
         $this->columnModel->alias("kbc")->join('__BUDGET_PERMISSIONS__ kbp', "kbc.c_id = kbp.cid", "LEFT")
-            ->where("kbp.mid", "=", $mid)->where("kbp.tid", "=", $id)->field("kbc.c_id,kbp.*");
+            ->where("kbp.mid", "=", $mid)->where("kbp.tid", "=", $id)->field("kbc.c_id,kbc.c_value,kbp.*");
         if ($limit) {
             $lists = $this->columnModel->paginate($limit);
         } else {

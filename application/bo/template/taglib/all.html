@@ -1,0 +1,19 @@
+<div class="clearfix header">
+
+    <h2>标签管理.标签列表</h2>
+
+    <div class="link-pannel">
+        <ul>
+            <li>
+                <a href="/taglib/del" id="lists-delete" target="_blank" onclick="return false;"><i class="fa fa-trash"></i>删除</a>
+            </li>
+        </ul>
+    </div>
+</div>
+<div class="search-panel">
+    <{include file="common/allfilter"}>
+</div>
+<div class="main-pannel all-page" id="main-pannel">
+    <{include file="taglib/list/2"}>
+</div>
+<{load href="/static/js/lists.js"}>
