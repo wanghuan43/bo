@@ -12,7 +12,7 @@
         <{if $type == 'contract'}>
         <th>内/外</th>
         <{else/}>
-        <th>阶段</th>
+        <th>状态</th>
         <{/if}>
         <th>
             <a href="<{$formUrl}>/sort/o_no/order/<{:getSortOrder($sort,'o_no')}>">
@@ -49,7 +49,7 @@
                 发生日期<i class="<{:getSortClass($sort,'o_date')}>"></i>
             </a>
         </th>
-        <th class="date">
+        <th class="datetime">
             <a href="<{$formUrl}>/sort/o_createtime/order/<{:getSortOrder($sort,'o_createtime')}>">
                 订单创建日期<i class="<{:getSortClass($sort,'o_createtime')}>"></i>
             </a>
@@ -75,14 +75,14 @@
         <{else/}>
         <td><?php echo getStatusList($vo['o_status']);?></td>
         <{/if}>
-        <td><a href="#orders/operation?op=edit&op_id=<{$vo.o_id}>" style="color:blue;"><{$vo.o_no}></a></td>
+        <td class="nowrap"><a href="#orders/operation?op=edit&op_id=<{$vo.o_id}>" style="color:blue;"><{$vo.o_no}></a></td>
         <td><{$vo.o_pname}></td>
         <td><{$vo.o_subject}></td>
         <td><?php echo getTypeList($vo['o_type']);?></td>
         <td><{$vo.o_coname}></td>
         <td><{$vo.o_mname}></td>
         <td class="date"><?php echo date("Y-m-d", $vo['o_date']);?></td>
-        <td class="date"><{$vo.o_createtime|date='Y-m-d H:i:s',###}></td>
+        <td><{$vo.o_createtime|date='Y-m-d H:i:s',###}></td>
         <td class="money"><{$vo.o_money|number_format=2}></td>
         <td><a href="<{:url("/orders/delete/opID/".$vo['o_id'])}>" target="_blank" class="deleteOrders" style="color: blue;">删除</a></td>
     </tr>

@@ -1,5 +1,6 @@
 <{load href="/static/css/select.min.css,/static/css/jquery-ui.min.css"/}>
-<form action="/orders/doOperation?op=<{$op}>&op_id=<{$op_id}>" method="post" id="opform">
+<form action="/orders/doOperation?op=<{$op}>&op_id=<{$op_id}>" method="post" id="opform"
+      xmlns="http://www.w3.org/1999/html">
 <div class="clearfix header">
     <h2>订单信息管理（商机阶段）</h2>
     <div class="btn-pannel">
@@ -30,44 +31,43 @@
 <div class="main-pannel">
     <h3>基本信息</h3>
     <div class="content">
-        <table>
+        <table class="detail order-detail">
             <tr>
-                <td class="txt">订单号:</td>
+                <td class="txt"><label>订单号:</label></td>
                 <td colspan="3"><{$order.o_no}></td>
                 <td class="txt">
-                    <i class="fa fa-search" data="contract"></i>
-                    <i class="fa fa-minus-square" style="color: red;display: none;" data="contract"></i>
-                    对应合同号:</td>
+                    <label for="o_cno">
+                    <{/*i class="fa fa-search" data="contract"></i>
+                    <i class="fa fa-minus-square" style="color: red;display: none;" data="contract"></i*/}>
+                    对应合同号:</label></td>
                 <td>
-                    <input type="text" name="o_cno" id="o_cno" value="<{$order.o_cno}>" readonly/>
+                    <input class="input-sm input-search" data="contract" type="text" name="o_cno" id="o_cno" value="<{$order.o_cno}>" readonly/>
                     <input type="hidden" name="o_cid" id="o_cid" value="<{$order.o_cid}>"/>
                 </td>
-                <td class="txt">最后更新日期:</td>
+                <td class="txt"><label>最后更新日期:</label></td>
                 <td><?php echo (empty($order['o_updatetime']) ? date("Y-m-d") : date("Y-m-d", $order['o_updatetime']));?></td>
             </tr>
             <tr>
                 <td class="txt">
-                    <i class="asterisk">*</i>
-                    <i class="fa fa-search" data="project"></i>
-                    <i class="fa fa-minus-square" style="color: red;display: none;" data="project"></i>
-                    项目名称:</td>
+                    <label for="o_pname"><i class="asterisk">*</i>项目名称:</label>
+                </td>
                 <td colspan="5">
-                    <input type="text" name="o_pname" id="o_pname" value="<{$order.o_pname}>" readonly/>
+                    <input class="input-sm input-search" data="project" type="text" name="o_pname" id="o_pname" value="<{$order.o_pname}>" readonly required/>
                     <input type="hidden" name="o_pid" id="o_pid" value="<{$order.o_pid}>"/>
                 </td>
-                <td class="txt">订单责任人</td>
+                <td class="txt"><label for="o_mname">订单责任人:</label></td>
                 <td>
                     <{if condition="empty($order.o_mname)"}><{$mn}><{else}><{$order.o_mname}><{/if}>
-                    <input type="hidden" name="o_mname" id="o_mname" value="<{$order.o_mname}>"/>
+                    <input class="input-sm" type="hidden" name="o_mname" id="o_mname" value="<{$order.o_mname}>"/>
                     <input type="hidden" name="o_mid" id="o_mid" value="<{$order.o_mid}>"/>
                 </td>
             </tr>
             <tr>
-                <td class="txt"><i class="asterisk">*</i>订单主题:</td>
-                <td colspan="5"><input type="text" name="o_subject" id="o_subject" value="<{$order.o_subject}>"/></td>
-                <td class="txt">收入/支出:</td>
+                <td class="txt"><label for="o_subject"><i class="asterisk">*</i>订单主题:</label></td>
+                <td colspan="5"><input class="input-sm" type="text" name="o_subject" id="o_subject" value="<{$order.o_subject}>" required/></td>
+                <td class="txt"><label for="o_type">收入/支出:</label></td>
                 <td>
-                    <select name="o_type" id="o_type" <{if condition="!empty($order.o_type)"}>disabled<{/if}>>
+                    <select class="input-sm" name="o_type" id="o_type" <{if condition="!empty($order.o_type)"}>disabled<{/if}>>
                         <{foreach name="typeList" id="tl" key="k"}>
                         <option value="<{$k}>" <{eq name="$k" value="$order.o_type"}>selected<{/eq}>><{$tl}></option>
                         <{/foreach}>
@@ -76,25 +76,23 @@
             </tr>
             <tr>
                 <td class="txt">
-                    <i class="asterisk">*</i>
-                    <i class="fa fa-search" data="company"></i>
-                    <i class="fa fa-minus-square" style="color: red;display: none;" data="company"></i>
-                    对方名称:</td>
+                    <label for="o_coname"><i class="asterisk">*</i>对方名称:</label>
+                </td>
                 <td colspan="3">
-                    <input name="o_coname" id="o_coname" type="text" value="<{$order.o_coname}>" readonly/>
+                    <input class="input-sm input-search" data="company" name="o_coname" id="o_coname" type="text" value="<{$order.o_coname}>" readonly required/>
                     <input type="hidden" name="o_coid" id="o_coid" value="<{$order.o_coid}>"/>
                 </td>
-                <td class="txt">外部/内部:</td>
+                <td class="txt"><label for="o_lie">外部/内部:</label></td>
                 <td>
-                    <select name="o_lie" id="o_lie" <{if condition="!empty($order.o_lie)"}>disabled<{/if}>>
+                    <select class="input-sm" name="o_lie" id="o_lie" <{if condition="!empty($order.o_lie)"}>disabled<{/if}>>
                         <{volist name="lieList" id="ll" key="k"}>
                         <option value="<{$k}>" <{eq name="$k" value="$order.o_lie"}>selected<{/eq}>><{$ll}></option>
                         <{/volist}>
                     </select>
                 </td>
-                <td class="txt">部门:</td>
+                <td class="txt"><label for="o_did">部门:</label></td>
                 <td>
-                    <select name="o_did" id="o_did">
+                    <select class="input-sm" name="o_did" id="o_did">
                         <{volist name="dList" id="dl"}>
                         <option value="<{$dl.d_id}>"
                         <{if condition="empty($op_id)"}>
@@ -108,21 +106,19 @@
                     <input type="hidden" name="o_dname" id="o_dname" value="<{$order.o_dname}>"/>
                 </td>
             </tr>
-            <tr class="zproject" style="display: none;">
+            <tr class="zproject" style="display: none">
                 <td class="txt">
-                    <i class="asterisk">*</i>
-                    <i class="fa fa-search" data="project"></i>
-                    <i class="fa fa-minus-square" style="color: red;display: none;" data="project"></i>
-                    支出项目:</td>
+                    <label for="zc_name"><i class="asterisk">*</i>支出项目:</label>
+                </td>
                 <td colspan="3">
-                    <input name="zc_name" id="zc_name" type="text" value="" readonly/>
+                    <input class="input-sm input-search" data="project" name="zc_name" id="zc_name" type="text" value="" readonly/>
                     <input type="hidden" name="zc_id" id="zc_id" value=""/>
                 </td>
                 <td class="txt">
-                    支出部门:</td>
+                    <label for="zc_did">支出部门:</label>
+                </td>
                 <td>
-
-                    <select name="zc_did" id="zc_did">
+                    <select class="input-sm" name="zc_did" id="zc_did">
                         <{volist name="dList" id="dl"}>
                         <option value="<{$dl.d_id}>" <{eq name="$dl.d_id" value="$order.o_did"}>selected<{/eq}>><{$dl.d_name}></option>
                         <{/volist}>
@@ -130,10 +126,10 @@
                     <input type="hidden" name="zc_dname" id="zc_dname" value=""/>
                 </td>
                 <td class="txt">
-                    支出负责人:</td>
+                    <label for="zc_mid">支出负责人:</label>
+                </td>
                 <td>
-
-                    <select name="zc_mid" id="zc_mid">
+                    <select class="input-sm" name="zc_mid" id="zc_mid">
                         <{volist name="memberList" id="dl"}>
                         <option value="<{$dl.m_id}>" <{eq name="$dl.m_id" value="$order.o_mid"}>selected<{/eq}>><{$dl.m_name}></option>
                         <{/volist}>
@@ -142,16 +138,16 @@
                 </td>
             </tr>
             <tr>
-                <td class="txt"><i class="asterisk">*</i><{if condition="$op=='add'"}>预计日期:<{else /}>签约日期:<{/if}></td>
-                <td><input type="text" name="o_date" id="o_date" value="<?php echo (empty($order['o_date']) ? "" : date("Y-m-d", $order['o_date'])) ?>"/></td>
-                <td class="txt"><i class="asterisk">*</i><{if condition="$op=='add'"}>预计总金额:<{else /}>合同总金额:<{/if}></td>
-                <td><input type="text" name="o_money" id="o_money" value="<{$order.o_money}>"/></td>
+                <td class="txt"><label for="o_date"><i class="asterisk">*</i><{if condition="$op=='add'"}>预计日期:<{else /}>签约日期:<{/if}></label></td>
+                <td><input class="input-sm" type="text" name="o_date" id="o_date" value="<?php echo (empty($order['o_date']) ? "" : date("Y-m-d", $order['o_date'])) ?>" required/></td>
+                <td class="txt"><label for="o_money"><i class="asterisk">*</i><{if condition="$op=='add'"}>预计总金额:<{else /}>合同总金额:<{/if}></label></td>
+                <td><input class="input-sm" type="text" name="o_money" id="o_money" value="<{$order.o_money}>" required number="true"/></td>
                 <!--<td><input type="text" name="o_money" id="o_money" value="1233"/></td>-->
-                <td class="txt"><i class="asterisk">*</i>数量:</td>
-                <td><input type="text" name="o_num" id="o_num" value="<{$order.o_num}>"/></td>
-                <td class="txt">税率:</td>
+                <td class="txt"><label for="o_num"><i class="asterisk">*</i>数量:</label></td>
+                <td><input class="input-sm" type="text" name="o_num" id="o_num" value="<{$order.o_num}>" required/></td>
+                <td class="txt"><label for="o_tax">税率:</label></td>
                 <td>
-                    <select name="o_tax" id="o_tax">
+                    <select class="input-sm" name="o_tax" id="o_tax">
                         <{volist name="taxList" id="ll"}>
                         <option value="<{$key}>" <{if ($key == $order.o_tax) OR (empty($order.o_tax) AND $key==3)}>selected<{/if}>><{$ll}></option>
                         <{/volist}>
@@ -159,29 +155,29 @@
                 </td>
             </tr>
             <tr>
-                <td class="txt">成交机会:</td>
+                <td class="txt"><label for="o_deal">成交机会:</label></td>
                 <td>
-                    <select name="o_deal" id="o_deal">
+                    <select class="input-sm" name="o_deal" id="o_deal">
                         <{volist name="chancesList" id="cl"}>
                         <option value="<{$cl.cs_id}>" <{eq name="$cl.cs_id" value="$order.o_deal"}>selected<{/eq}>><{$cl.cs_name}></option>
                         <{/volist}>
                     </select>
                 </td>
-                <td class="txt">商机状态:</td>
+                <td class="txt"><label for="o_status">商机状态:</label></td>
                 <td>
-                    <select name="o_status" id="o_status">
+                    <select class="input-sm" name="o_status" id="o_status">
                         <{volist name="statusList" id="ll" key="k"}>
                         <option value="<{$k}>" <{eq name="$k" value="$order.o_status"}>selected<{/eq}>><{$ll}></option>
                         <{/volist}>
                     </select>
                 </td>
-                <td class="txt"><i class="asterisk">*</i>利润率:</td>
+                <td class="txt"><label for="o_profits"><i class="asterisk">*</i>利润率:</label></td>
                 <td>
-                    <input type="text" name="o_profits" id="o_profits" value="<{$order.o_profits}>"/>
+                    <input class="input-sm" type="text" name="o_profits" id="o_profits" value="<{$order.o_profits}>" required/>
                 </td>
             </tr>
             <tr>
-                <td class="txt">关键字/标签:</td>
+                <td class="txt"><label for="tagList">关键字/标签:</label></td>
                 <td colspan="3">
                     <select class="mstag" multiple id="tagList" name="tagList[]">
                         <{foreach name="tagList" item="tl" key="k"}>
@@ -193,7 +189,7 @@
                         <{/foreach}>
                     </select>
                 </td>
-                <td class="txt">传阅人:</td>
+                <td class="txt"><label for="cList">传阅人:</label></td>
                 <td colspan="3">
                     <select class="msmember" multiple id="cList" name="cList[]">
                         <{volist name="memberList" id="ml"}>
@@ -468,14 +464,25 @@
 <script>
     var baseMonth = '<{$baseMonth}>';
     var baseUrl = {
-        contract: "<{:url("/contract/searchContract")}>",
-        project: "<{:url("/project/searchProject")}>",
-        company: "<{:url("/company/searchCompany")}>",
-        department: "<{:url("/department/searchDepartment")}>",
-        invoice: "<{:url("/invoice/searchInvoice")}>",
-        acceptance: "<{:url("/acceptance/searchAcceptance")}>",
-        received:"<{:url("/received/searchReceived")}>",
-    }
+        contract: "<{:url('/contract/searchContract')}>",
+        project: "<{:url('/project/searchProject')}>",
+        company: "<{:url('/company/searchCompany')}>",
+        department: "<{:url('/department/searchDepartment')}>",
+        invoice: "<{:url('/invoice/searchInvoice')}>",
+        acceptance: "<{:url('/acceptance/searchAcceptance')}>",
+        received:"<{:url('/received/searchReceived')}>",
+    };
+
+    var zproject = {
+        show:function(){
+            $("#zc_name").attr("required","true");
+            $("#opform .zproject").show();
+        },
+        hide:function(){
+            $("#zc_name").removeAttr("required");
+            $("#opform .zproject").hide();
+        }
+    };
 
     $(document).ready(function () {
     <{if condition="!empty($op_id)"}>
@@ -496,9 +503,9 @@
             $(cla).remove();
             $(cla + "-back").remove();
             if($(this).val() == "1" && lie == "2"){
-                $(".zproject").show();
+                zproject.show();
             }else{
-                $(".zproject").hide();
+                zproject.hide();
             }
         });
         $("#o_type").change();
@@ -609,89 +616,39 @@
             $(this).removeClass("wrong");
             $(this).next(".wrongMsg").remove();
         });
-        $("#opform").submit(function(){
-            $(".content:eq(0) .wrongMsg").remove(),$(".content:eq(0) input").removeClass("wrong");
-            var o_pname = $("#o_pname"),o_subject = $("#o_subject"),
-                o_coname = $("#o_coname"),o_date = $("#o_date"),o_money = $("#o_money"),o_num = $("#o_num"),
-                o_profits = $("#o_profits"),url = $(this).attr("action"),par = $(this).serialize(),check=false;
-            if($(o_pname).val() == ""){
-                $(o_pname).attr("class", "wrong");
-                $(o_pname).after('<span class="wrongMsg" style="color: red;padding-right: 10px;">项目不能为空</span>');
-                check = true;
-            }
-            if($(o_subject).val() == ""){
-                $(o_subject).attr("class", "wrong");
-                $(o_subject).after('<span class="wrongMsg" style="color: red;padding-right: 10px;">订单标题不能为空</span>');
-                check = true;
-            }
-            if($(o_coname).val() == ""){
-                $(o_coname).attr("class", "wrong");
-                $(o_coname).after('<span class="wrongMsg" style="color: red;padding-right: 10px;">对方名称不能为空</span>');
-                check = true;
-            }
-            if($(o_date).val() == ""){
-                $(o_date).attr("class", "wrong");
-                $(o_date).after('<span class="wrongMsg" style="color: red;padding-right: 10px;">日期不能为空</span>');
-                check = true;
-            }
-            if($(o_money).val() == ""){
-                $(o_money).attr("class", "wrong");
-                $(o_money).after('<span class="wrongMsg" style="color: red;padding-right: 10px;">金额不能为空</span>');
-                check = true;
-            }
-            if(isNaN($(o_money).val())){
-                $(o_money).attr("class", "wrong");
-                $(o_money).after('<span class="wrongMsg" style="color: red;padding-right: 10px;">金额必须是数字</span>');
-                check = true;
-            }
-            if($(o_num).val() == ""){
-                $(o_num).attr("class", "wrong");
-                $(o_num).after('<span class="wrongMsg" style="color: red;padding-right: 10px;">数量不能为空</span>');
-                check = true;
-            }
-            if(isNaN($(o_num).val())){
-                $(o_num).attr("class", "wrong");
-                $(o_num).after('<span class="wrongMsg" style="color: red;padding-right: 10px;">数量必须是数字</span>');
-                check = true;
-            }
-            if($(o_profits).val() == ""){
-                $(o_profits).attr("class", "wrong");
-                $(o_profits).after('<span class="wrongMsg" style="color: red;padding-right: 10px;">利润率不能为空</span>');
-                check = true;
-            }
-            if(!$(".zproject").is(":hidden")){
-                if($("#zc_name").val() == ""){
-                    $("#zc_name").attr("class", "wrong");
-                    $("#zc_name").after('<span class="wrongMsg" style="color: red;padding-right: 10px;">支出项目不能为空</span>');
-                    check = true;
-                }
-            }
-            if(check){
-                return false;
-            }
-            $(this).prop("disabled", "true");
-            loading.show();
-            $.ajax({
-                url:url,
-                dataType: "json",
-                method: "post",
-                data:par,
-                success:function(data){
-                    loading.hide();
-                    $(this).prop("disabled", "false");
-                    custom.alert(data.message);
-                    if(data.status){
-                        window.setTimeout("location.reload()", 800);
-                    }
-                },
-                error:function () {
-                    loading.hide();
-                    $(this).prop("disabled", "false");
-                    custom.alert("提交出错，请联系管理员！");
+
+        $("#opform [type=submit]").click(function(){
+            var form = $("#opform");
+            form.validate({
+                'submitHandler':function(){
+                    var o_pname = $("#o_pname"),o_subject = $("#o_subject"),
+                        o_coname = $("#o_coname"),o_date = $("#o_date"),o_money = $("#o_money"),o_num = $("#o_num"),
+                        o_profits = $("#o_profits"),url = form.attr("action"),par = form.serialize(),check=false;
+                    form.prop("disabled", "true");
+                    loading.show();
+                    $.ajax({
+                        url:url,
+                        dataType: "json",
+                        method: "post",
+                        data:par,
+                        success:function(data){
+                            loading.hide();
+                            form.prop("disabled", "false");
+                            custom.alert(data.message);
+                            if(data.status){
+                                window.setTimeout("location.reload()", 800);
+                            }
+                        },
+                        error:function () {
+                            loading.hide();
+                            form.prop("disabled", "false");
+                            custom.alert("提交出错，请联系管理员！");
+                        }
+                    });
                 }
             });
-            return false;
         });
+
         $(".fa-search").click(function () {
             var type = $(this).attr("data");
             var thisEle = this;
@@ -813,6 +770,89 @@
                 }
             });
         });
+            $(".input-search").click(function () {
+                var type = $(this).attr("data");
+                var thisEle = this;
+                var inputs = $(this).parent().find("input");
+                var valss = $(inputs).val();
+                var otype = $("#o_type").val();
+                var olie = $("#o_lie").val();
+                var url = "";
+                if(type == "contract" || type == "company"){
+                    if(type == "company"){
+                        if(olie == "2" ){
+                            type = "department";
+                        }else{
+                            type = "company";
+                        }
+                    }
+                    url = baseUrl[type] + "?c_type="+otype+"&fi=1";
+                }else{
+                    url = baseUrl[type] + "?fi=1";
+                }
+                var cla = ".f-layer-" + type;
+                $.ajax({
+                    url: url,
+                    dataType: "json",
+                    method: "post",
+                    success: function (data) {
+                        $("#popDIV").html(data.content);
+                        $(cla + " .save").click(function () {
+                            if($(cla+" .selectRadio:checked").length == 0){
+                                custom.alert("请选择一个再保存！");
+                                return false;
+                            }
+                            if ($(inputs).length > 1) {
+                                $(inputs).eq(0).val($(cla+" .selectRadio:checked").attr("data"));
+                                $(inputs).eq(1).val($(cla+" .selectRadio:checked").val());
+                            } else {
+                                $(inputs).eq(0).val($(cla+" .selectRadio:checked").val());
+                            }
+                            $(cla).removeClass("show");
+                            $(cla + "-back").hide();
+                            $(thisEle).parent().find("input:eq(0)").unbind("focus");
+                            if(type == "contract" && $(inputs).length > 1){
+                                $("#o_status option").prop("selected", false);
+                                $("#o_status option").prop("disabled", true);
+                                $("#o_status option:last").prop("selected", true);
+                                $("#o_status option:last").prop("disabled", false);
+                                $("#o_status").prop("", true);
+                                var json = JSON.parse(decodeURIComponent($(cla + " .selectRadio:checked").attr("data-value")));
+                                if($("#o_money").val() == ""){
+                                    $("#o_money").val(json.c_noused);
+                                }else{
+                                    var nu = parseFloat(json.c_noused),mo = parseFloat($("#o_money").val());
+                                    if(nu < mo){
+                                        custom.alert("当前订单金额，超过合同的可用金额:"+nu.toFixed(2));
+                                        $("#o_money").val(nu.toFixed(2));
+                                    }
+                                }
+                                $("#o_money").attr("max",parseFloat(json.c_noused));
+                                if($("#o_pname").val() == ""){
+                                    $("#o_pname").val(json.c_pname);
+                                    $("#o_pid").val(json.c_pid);
+                                }
+                                if($("#o_coname").val() == ""){
+                                    $("#o_coname").val(json.c_coname);
+                                    $("#o_coid").val(json.c_coid);
+                                }
+                            }
+                            return false;
+                        });
+                        window.cla = cla;
+                        setTimeout('$(cla).addClass("show")',500);
+                        //$(cla).show();
+                        $(cla + "-back").show();
+                        $(cla + " .close").click(function () {
+                            //$(cla).hide();
+                            $(cla).removeClass("show");
+                            $(cla + "-back").hide();
+                            return false;
+                        });
+                    }
+                });
+            });
+
         $(".fa-minus-square").click(function(){
             var inputs = $(this).parent().next().find("input");
             var type = $(this).attr("data");
@@ -838,9 +878,9 @@
             }
             var o_type = $("#o_type").val();
             if($(this).val() == "2" && o_type == "1"){
-                $(".zproject").show();
+                zproject.show();
             }else{
-                $(".zproject").hide();
+                zproject.hide();
             }
             $("#o_coname").val("");
             $("#o_coid").val("");

@@ -62,12 +62,9 @@ input[type=text] {
     border-radius: 4px;
 }
 
-.detail input[type=text]:read-only{
-    /*background:yellow;*/
-}
-
 td {
     padding-right: 4px;
+    line-height:16px;
 }
 
 td.txt {
@@ -86,6 +83,11 @@ td.holder {
 
 .clearfix:after {
     clear: both;
+}
+
+table.list thead{
+    height:32px;
+    line-height:32px;
 }
 
 .header {
@@ -143,6 +145,10 @@ td.holder {
     color: #BFBFBF;
     vertical-align: top;
     margin-left: .4em;
+}
+
+#main-container{
+    margin-top:20px;
 }
 
 #main-container .fa-users {
@@ -320,6 +326,19 @@ th.icon {
 }
 .list th.date{
     width:7em;
+}
+.list th.datetime{
+    width:10em;
+}
+.list td{
+    padding:.5em 0;
+}
+.nowrap{
+    white-space: nowrap;
+    word-break: keep-all;
+}
+.nowrap a,.nowrap span{
+    padding-right:1em;
 }
 table .money{
     text-align:right;
@@ -605,6 +624,9 @@ table.list tr.hover{
 .bo-label label{
     margin:0;
     padding-right:.8em;
+    word-wrap: normal;
+    word-break: keep-all;
+    white-space:nowrap;
 }
 .detail tr{
     height:45px;
@@ -661,13 +683,15 @@ label.error{
 label.error:before{
     content: "\f0a6";
 }
+.detail td,
 #form-update td{
     position: relative;
 }
+.detail label.error,
 #form-update label.error{
     position: absolute;
     left:0;
-    top:24px;
+    top:38px;
     font-size: 10px;
     font: normal normal normal 10px/1 FontAwesome;
     z-index:9;
