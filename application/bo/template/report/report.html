@@ -64,29 +64,51 @@
             return false;
         });
         $(".cellTop").click(function () {
-            $(".selectCell:eq(0) select option:selected").each(function (index, element) {
-                var ele = $(element).clone(), prev = $(element).prev();
-                $(ele).insertBefore($(prev));
-                $(element).remove();
-            })
-            $(".selectCell:eq(1) select option:selected").each(function (index, element) {
-                var ele = $(element).clone(), prev = $(element).prev();
-                $(ele).insertBefore($(prev));
-                $(element).remove();
-            })
+            var f = false,t = false;
+            if($(".selectCell:eq(0) select option:selected:eq(0)").prev().length == 0){
+                f = true;
+            }
+            if($(".selectCell:eq(1) select option:selected:eq(0)").prev().length == 0){
+                t = true;
+            }
+            if(!f){
+                $(".selectCell:eq(0) select option:selected").each(function (index, element) {
+                    var ele = $(element).clone(), prev = $(element).prev();
+                    $(ele).insertBefore($(prev));
+                    $(element).remove();
+                })
+            }
+            if(!t) {
+                $(".selectCell:eq(1) select option:selected").each(function (index, element) {
+                    var ele = $(element).clone(), prev = $(element).prev();
+                    $(ele).insertBefore($(prev));
+                    $(element).remove();
+                });
+            }
             return false;
         });
         $(".cellDow").click(function () {
-            $(".selectCell:eq(0) select option:selected").each(function (index, element) {
-                var ele = $(element).clone(), next = $(element).next();
-                $(ele).insertAfter($(next));
-                $(element).remove();
-            })
-            $(".selectCell:eq(1) select option:selected").each(function (index, element) {
-                var ele = $(element).clone(), next = $(element).next();
-                $(ele).insertAfter($(next));
-                $(element).remove();
-            })
+            var f = false,t = false;
+            if($(".selectCell:eq(0) select option:selected:last").next().length == 0){
+                f = true;
+            }
+            if($(".selectCell:eq(1) select option:selected:last").next().length == 0){
+                t = true;
+            }
+            if(!f) {
+                $(".selectCell:eq(0) select option:selected").each(function (index, element) {
+                    var ele = $(element).clone(), next = $(element).next();
+                    $(ele).insertAfter($(next));
+                    $(element).remove();
+                })
+            }
+            if(!t) {
+                $(".selectCell:eq(1) select option:selected").each(function (index, element) {
+                    var ele = $(element).clone(), next = $(element).next();
+                    $(ele).insertAfter($(next));
+                    $(element).remove();
+                })
+            }
             return false;
         });
         $("#form-report").submit(function () {

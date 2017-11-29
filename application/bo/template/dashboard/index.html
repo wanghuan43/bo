@@ -214,6 +214,10 @@
         loading.show();
         if(ajaxData.success == undefined){
             ajaxData.success = function(data){
+                if(data.code == "0"){
+                    custom.alert(data.msg);
+                    window.setTimeout("location.href='/'", 800);
+                }
                 if(data.content != undefined){
                     $("#"+id).html(data.content);
                 }else{

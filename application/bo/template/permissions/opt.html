@@ -82,7 +82,17 @@
                         data.node.children[i].setSelected(selected);
                     }
                 }else if(data.node.parent != null){
-                    data.node.parent.setSelected(selected);
+                    var c = false;
+                    for(var i in data.node.parent.children){
+                        if(data.node.parent.children[i] == data.node){
+                            if(selected == true){
+                                c = selected;
+                            }
+                        }else if(data.node.parent.children[i].selected == true){
+                           c = true;
+                        }
+                    }
+                    data.node.parent.setSelected(c);
                 }
             },
         });

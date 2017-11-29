@@ -147,7 +147,7 @@ function spliTable() {
     }, 1);
 }
 
-function setTable(row, col, baseTable) {
+function setTable(row, col, baseTable, type) {
     var html = '<table id="settingTable" border="1">\n';
     html = setColName(col, html);
     if (baseTable.length > 0) {

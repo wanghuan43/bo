@@ -63,7 +63,7 @@
             var data = [], url = $(this).attr("action");
             $(permissionsTable).each(function(index, element){
                 var find = ".stcol[cid='" + element.c_id + "']";
-                var val = ($.trim($(find).attr("data")) == "" && $.trim($(find).attr("data")) == undefined) ? $.trim($(find).val()) : $.trim($(find).attr("data"));
+                var val = ($.trim($(find).attr("data")) == "" && $(find).attr("data") == undefined) ? $.trim($(find).val()) : $.trim($(find).attr("data"));
                 if (element.rw == 3) {
                     data.push({
                         c_id : element.c_id,
