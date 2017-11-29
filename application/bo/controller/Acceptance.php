@@ -3,6 +3,7 @@ namespace app\bo\controller;
 
 use app\bo\libs\BoController;
 use app\bo\libs\CustomUtils;
+use app\bo\model\Logs;
 use app\bo\model\OrderUsed;
 use think\Request;
 
@@ -46,8 +47,6 @@ class Acceptance extends BoController
         $data['a_subject'] = trim($post['subject']);
         $data['a_type'] = $post['type'];
         $data['a_money'] = trim($post['money']);
-        //$data['a_used'] = floatval(trim($post['used']));
-        //$data['a_noused'] = floatval(trim($post['noused']))?:$data['a_money'];
         $data['a_date'] = trim($post['date']);
         $data['a_coid'] = trim($post['coid']);
         $data['a_coname'] = trim($post['coname']);
@@ -65,42 +64,26 @@ class Acceptance extends BoController
                 $data['a_accdate'] = date('ym',$data['a_date']);
             }
 
+            $data['a_createtime'] = $data['a_updatetime'] = time();
+
             $data['a_money'] = $data['a_noused'] = floatval($data['a_money']);
 
             $file = $this->request->file('attachment');
 
-            $info =true;
+            $res = $this->uploadFile($file);
 
-            if(!empty($file)) {
-                $baseFolder = DS.'attachment'.DS.date('Y') ;
-
-                $folder = ROOT_PATH . DS . 'public' . $baseFolder;
-
-                if (!is_dir($folder)) {
-                    CustomUtils::mkdir_p($folder);
+            if($res['flag'] === 0){
+                $ret = $res;
+            }else{
+                if($res['flag'] === 1 ){
+                    $data['a_attachment'] = $res['name'];
                 }
-
-                if(!$file->checkImg()){
-                    $info = false;
-                }else {
-                    $info = $file->move($folder);
-                }
-            }
-
-            if($info) {
-                if( $info !== true ) {
-                    $data['a_attachment'] = $baseFolder . DS . $info->getSaveName();
-                }
-
                 if ($res = $this->model->insert($data)) {
                     $ret = ['flag' => 1, 'msg' => '添加成功'];
                 } else {
                     $ret = ['flag' => 0, 'msg' => '添加失败'];
                 }
-            }else{
-                $ret = ['flag'=>0,'msg'=>'附件上传失败'];
             }
-
         }else{
             $ret = ['flag'=>0,'msg'=>$validate->getError()];
         }
@@ -114,6 +97,7 @@ class Acceptance extends BoController
         $data = $this->model->getDataById($id);
         $modelOrderUsed = new OrderUsed();
         $orders = $modelOrderUsed->getOrderUsedByOtid($id,1);
+        $this->setUpdateParams($data['a_mid']);
         $this->assign('data',$data);
         $this->assign('orders',$orders);
         return $this->fetch();
@@ -123,34 +107,54 @@ class Acceptance extends BoController
     {
         $post = $this->request->post();
 
-        $id = $post['id'];
+        $arr = ['id','no','date','money','type','coname','coid','mname','mid','subject','content','used','noused'];
 
-        $data['a_no'] = $post['no'];
-        $data['a_date'] = strtotime(trim($post['date']));
-        $data['a_money'] = floatval(trim($post['money']));
-        $data['a_type'] = intval($post['type']);
-        $data['a_coname'] = trim($post['coname']);
-        $data['a_coid'] = intval($post['coid']);
-        $data['a_mname'] = trim($post['mname']);
-        $data['a_mid'] = intval($post['mid']);
-        //$data['a_used'] = floatval($post['used']);
-        //$data['a_noused'] = floatval($post['noused']);
-
-        if( empty($data['a_used']) && !!$post['oused'] ){
-            $used = 0;
-            foreach( $post['oused'] as $oused){
-                $used += floatval($oused);
-            }
-            $data['a_used'] = $used;
-            $data['a_noused'] = $data['a_money'] - $used;
+        foreach ($arr as $i){
+            $data['a_'.$i] = trim($post[$i]);
         }
 
-        $res = $this->model->save($data,['a_id'=>$id]);
+        if(floatval($data['a_money'])<floatval($post['used'])){
+            $ret =  ['flag'=>0,'msg'=>'总金额不能小于已对应订单金额'];
+        }else {
 
-        if($res){
-            $ret = ['flag'=>1,'msg'=>'更新成功'];
-        }else{
-            $ret = ['flag'=>0,'msg'=>'更新失败'];
+            $validate = \validate('Acceptance');
+
+            if ($validate->check($data)) {
+
+                $data['a_money'] = floatval($data['a_money']);
+                $data['a_used'] = floatval($data['a_used']);
+                $data['a_noused'] = $data['a_money'] - $data['a_used'];
+                $data['a_date'] = strtotime($data['a_date']);
+                $data['a_updatetime'] = time();
+
+                $file = $this->request->file('attachment');
+
+                $res = $this->uploadFile($file);
+
+                if($res['flag']===0){
+                    $ret = $res;
+                }else {
+
+                    if($res['flag'] === 1){
+                        $data['a_attachment'] = $res['name'];
+                    }
+                    $old = $this->model->getDataById($data['a_id']);
+                    if ($res = $this->model->save($data, $data['a_id'])) {
+                        $logModel = new Logs();
+                        $logModel->saveLogs($data,$old,$data['a_id'],'acceptance');
+                        $ret = ['flag' => 1, 'msg' => '更新成功'];
+                        if(isset($data['a_attachment'])){
+                            $ret['image'] = $data['a_attachment'];
+                        }
+                    } else {
+                        $ret = ['flag' => 0, 'msg' => '更新失败，请确认是否有做过修改'];
+                    }
+                }
+
+            } else {
+                $ret = ['flag'=>0,'msg'=>$validate->getError()];
+            }
+
         }
 
         return $ret;

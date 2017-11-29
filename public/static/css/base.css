@@ -62,6 +62,10 @@ input[type=text] {
     border-radius: 4px;
 }
 
+input[type=file] {
+    display: inline-block;
+}
+
 td {
     padding-right: 4px;
     line-height:16px;
@@ -73,6 +77,10 @@ td.txt {
 
 td.holder {
     min-width: 2em;
+}
+
+td.attachment {
+    padding:.5em 0;
 }
 
 .clearfix:before,
@@ -702,7 +710,7 @@ label.error:before{
         -moz-appearance: none;
         appearance: none;
         background: url("../images/firefox_select_icon.png") no-repeat calc(100% - 7px) 50%;
-        background-size: 5% auto;
+        background-size: 6px auto;
         border-radius:3px;
         padding:0;
         border:solid 1px #d9d9d9;

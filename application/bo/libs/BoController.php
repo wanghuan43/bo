@@ -465,4 +465,66 @@ class BoController extends Controller
 
     }
 
+    /**
+     * 设置当前用户更新权限参数
+     * @param $ownerId
+     */
+    protected function setUpdateParams($ownerId)
+    {
+        $isAdmin = $isOwner = false;
+        $readonly = true;
+
+        if($this->current->m_isAdmin == 1){
+            $isAdmin = true;
+        }
+
+        if($this->current->m_id == $ownerId){
+            $isOwner = true;
+        }
+
+        if($isAdmin || $isOwner){
+            $readonly = false;
+        }
+
+        $this->assign('isAdmin',$isAdmin);
+        $this->assign('isOwner',$isOwner);
+        $this->assign('readonly',$readonly);
+
+    }
+
+    protected function uploadFile($file,$type='image')
+    {
+        if(empty($file)){
+            $ret = ['flag'=>2, 'msg'=>'没有上传文件'];
+        }else{
+
+            $baseFolder = DS.'attachment'.DS.date('Y') ;
+
+            $folder = ROOT_PATH . DS . 'public' . $baseFolder;
+
+            if (!is_dir($folder)) {
+                CustomUtils::mkdir_p($folder);
+            }
+
+            $v = false;
+
+            if($type == 'image' && $file->checkImg()){
+                $v = true;
+            }
+
+            if($v){
+                $info = $file->move($folder);
+                if(empty($info)){
+                    $ret = ['flag'=>0,'msg'=>$file->getError()];
+                }else{
+                    $ret = ['flag'=>1,'msg'=>'文件上传成功','name'=>$baseFolder.DS.$info->getSaveName()];
+                }
+            }else{
+                $ret = ['flag' => 0, 'msg' => '上传文件格式不支持'];
+            }
+
+        }
+        return $ret;
+    }
+
 }

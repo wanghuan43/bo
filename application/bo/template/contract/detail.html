@@ -3,7 +3,7 @@
         <h2>合同管理.数据查看</h2>
         <div class="btn-pannel">
             <button type="button" href="#contract/all" class="btn red">取消</button>
-            <button type="submit" class="btn" disabled>保存</button>
+            <button type="submit" class="btn"<{if $readonly}> disabled<{/if}>>保存</button>
         </div>
     </div>
     <div class="main-pannel">
@@ -11,15 +11,18 @@
         <div class="content">
             <table class="detail">
                 <tr>
-                    <td><label for="ipt-no">合同号:</label></td>
-                    <td><input type="text" name="no" value="<{$data.c_no}>" class="input-sm" id="ipt-no" disabled/><input type="hidden" name="id" value="<{$data.c_id}>"/> </td>
-                    <td><label for="ipt-name">合同名称:</label></td>
-                    <td colspan="3">
-                        <input type="text" name="name" value="<{$data.c_name}>" class="input-sm" id="ipt-name" disabled/>
-                    </td>
-                    <td><label for="ipt-mname">责任人:</label></td>
+                    <td><label for="ipt-no"><i class="asterisk">*</i>合同号:</label></td>
                     <td>
-                        <input type="text" value="<{$data.c_mname}>" name="mname" class="input-sm no-border" id="ipt-mname" readonly/>
+                        <input type="text" name="no" value="<{$data.c_no}>" class="input-sm" required onkeyup="toUpperCase(this)" onblur="toUpperCase(this)" id="ipt-no"<{if $readonly}> disabled<{/if}>/>
+                        <input type="hidden" name="id" value="<{$data.c_id}>"/>
+                    </td>
+                    <td><label for="ipt-name"><i class="asterisk">*</i>合同名称:</label></td>
+                    <td colspan="3">
+                        <input type="text" name="name" value="<{$data.c_name}>" class="input-sm" required id="ipt-name"<{if $readonly}> disabled<{/if}>/>
+                    </td>
+                    <td><label <{if empty($isAdmin)}>for="ipt-mname"<{else}>for="ipt-member-name"<{/if}>>责任人:</label></td>
+                    <td>
+                        <input type="text" value="<{$data.c_mname}>" name="mname" class="input-sm<{if empty($isAdmin)}> no-border<{/if}>" <{if empty($isAdmin)}>id="ipt-mname"<{else}>id="ipt-member-name"<{/if}> readonly />
                         <input type="hidden" value="<{$data.c_mid}>" name="mid"/>
                     </td>
                 </tr>
@@ -27,31 +30,31 @@
 
                     <td><label for="sel-type">销售/采销:</label></td>
                     <td>
-                        <select name="type" class="input-sm" id="sel-type" disabled>
+                        <select name="type" class="input-sm" id="sel-type"<{if $readonly}> disabled<{/if}>>
                             <option value="1"<{if $data.c_type == 1}> selected<{/if}>>销售</option>
                             <option value="2"<{if $data.c_type == 2}> selected<{/if}>>采销</option>
                         </select>
                     </td>
-                    <td><label for="ipt-date">签约日期:</label></td>
+                    <td><label for="ipt-date"><i class="asterisk">*</i>签约日期:</label></td>
                     <td>
-                        <input type="text" value="<{$data.c_date|date='Y-m-d',###}>" class="input-sm" id="ipt-date" name="date" readonly disabled>
+                        <input type="text" value="<{$data.c_date|date='Y-m-d',###}>" class="input-sm" id="ipt-date" name="date" required readonly<{if $readonly}> disabled<{/if}>>
                     </td>
                     <td><label for="ipt-accdate">记账月:</label></td>
-                    <td><input type="text" name="accdate" value="<{if empty($data.c_accdate)}><{$data.c_date|date='md',###}><{else}><{$data.c_accdate}><{/if}>" class="input-sm" id="ipt-accdate" disabled></td>
-                    <td><label for="ipt-money">合同总金额:</label></td>
-                    <td><input type="text" value="<{$data.c_money}>" name="money" class="input-sm" id="ipt-money" disabled/></td>
+                    <td><input type="text" name="accdate" value="<{$data.c_accdate}>" class="input-sm" id="ipt-accdate"<{if $readonly}> disabled<{/if}>></td>
+                    <td><label for="ipt-money"><i class="asterisk">*</i>合同总金额:</label></td>
+                    <td><input type="text" value="<{$data.c_money}>" name="money" class="input-sm" required number="true" id="ipt-money"<{if $readonly}> disabled<{/if}>/></td>
                 </tr>
                 <tr>
-                    <td><label for="ipt-company-name">对方名称:</label></td>
+                    <td><label for="ipt-company-name"><i class="asterisk">*</i>对方名称:</label></td>
                     <td colspan="5">
-                        <input type="text" value="<{$data.c_coname}>" name="coname" id="ipt-company-name" class="input-sm" disabled/>
+                        <input type="text" value="<{$data.c_coname}>" name="coname" id="ipt-company-name" class="input-sm" required readonly<{if $readonly}> disabled<{/if}>/>
                         <input type="hidden" name="coid" value="<{$data.c_coid}>" id="ipt-company-id">
                     </td>
                 </tr>
                 <tr>
                     <td><label>合同摘要:</label></td>
                     <td colspan="5">
-                        <textarea class="form-control" disabled><{$data.c_bakup}></textarea>
+                        <textarea name="bakup" class="form-control"<{if $readonly}> disabled<{/if}>><{$data.c_bakup}></textarea>
                     </td>
                 </tr>
             </table>
