@@ -3,7 +3,7 @@
         <h2>科室管理.数据查看</h2>
         <div class="btn-pannel">
             <button type="button" href="#department/all" class="btn red">取消</button>
-            <button type="submit" class="btn">保存</button>
+            <button type="submit" class="btn"<{if !$isAdmin}> disabled<{/if}>>保存</button>
         </div>
     </div>
     <div class="main-pannel">
@@ -15,14 +15,14 @@
                 <tbody>
                 <tr>
                     <td class="bo-label"><label>公司:</label></td>
-                    <td><input type="text" name="cname" value="<{$data.d_cname}>"<{if !$isAdmin}> class="no-border" readonly<{/if}>/></td>
+                    <td><input class="input-sm" type="text" name="cname" value="<{$data.d_cname}>"<{if !$isAdmin}> readonly<{/if}>/></td>
                     <td class="bo-label"><label><i class="asterisk">*</i>科室:</label></td>
-                    <td><input type="text" name="name" value="<{$data.d_name}>" minlength="4" required<{if !$isAdmin}> class="no-border" readonly<{/if}>/><input type="hidden" name="id" value="<{$data.d_id}>"/></td>
+                    <td><input class="input-sm" type="text" name="name" value="<{$data.d_name}>" minlength="4" required<{if !$isAdmin}> readonly<{/if}>/><input type="hidden" name="id" value="<{$data.d_id}>"/></td>
                     <td class="bo-label"><label><i class="asterisk">*</i>成本中心编码:</label></td>
-                    <td><input type="text" name="code" value="<{$data.d_code}>" minlength="7" maxlength="7" digits="true" required<{if !$isAdmin}> class="no-border" readonly<{/if}>/></td>
+                    <td><input class="input-sm" type="text" name="code" value="<{$data.d_code}>" minlength="7" maxlength="7" digits="true" required<{if !$isAdmin}> readonly<{/if}>/></td>
                     <td class="bo-label"><label>领导/负责人:</label></td>
                     <td>
-                        <input type="text" name="mname" value="<{$data.m_name}>" <{if $isAdmin}>id="ipt-member-name"<{else}>class="no-border" readonly<{/if}>/>
+                        <input id="ipt-member-name" class="input-sm" type="text" name="mname" value="<{$data.m_name}>" <{if !$isAdmin}> readonly disabled<{/if}>/>
                         <input type="hidden" name="mcode" value="<{$data.m_code}>" />
                         <input type="hidden" name="o-mcode" value="<{$data.m_code}>"/>
                     </td>

@@ -2,40 +2,49 @@
     <div class="clearfix header">
         <h2>发票管理.数据查看</h2>
         <div class="btn-pannel">
-            <{/*button type="submit" class="btn">保存</button*/}>
             <button type="button" href="#invoice/all" class="btn red">取消</button>
+            <button type="submit" class="btn" disabled>保存</button>
         </div>
     </div>
     <div class="main-pannel">
         <h3>基本信息</h3>
         <div class="content">
-            <table>
+            <table class="detail">
                 <tr>
-                    <td width="64">发票号:</td>
-                    <td><input type="text" name="no" value="<{$data.i_no}>" class="no-border" readonly/><input type="hidden" name="id" value="<{$data.i_id}>"/> </td>
-                    <td style="padding-left:20px;width:84px;">开票日期:</td>
-                    <td><input type="text" value="<{$data.i_date|date='Y-m-d',###}>" class="no-border" readonly/></td>
-                    <td style="padding-left:20px;width:84px">记账月</td>
-                    <td><input type="text" value="<{$data.i_accdate}>" name="accdate" class="no-border" readonly/></td>
-                    <td style="padding-left:20px;width:84px">总金额:</td>
-                    <td><input type="text" value="<{$data.i_money}>" name="money" class="no-border" readonly/></td>
+                    <td><label for="ipt-no">发票号:</label></td>
+                    <td><input class="input-sm" id="ipt-no" type="text" name="no" value="<{$data.i_no}>" readonly disabled/><input type="hidden" name="id" value="<{$data.i_id}>"/> </td>
+                    <td><label for="ipt-subject">主题:</label></td>
+                    <td colspan="3"><input type="text" name="subject" id="ipt-subject" class="input-sm" value="<{$data.i_subject}>" readonly disabled/></td>
+                    <td><label for="ipt-mname">责任人:</label></td>
+                    <td>
+                        <input type="text" value="<{$data.i_mname}>" name="mname" class="input-sm no-border" id="ipt-mname" readonly/>
+                        <input type="hidden" value="<{$data.i_mid}>" name="mid"/>
+                    </td>
                 </tr>
                 <tr>
-                    <td>销售/采销:</td>
+                    <td><label for="sel-type">销售/采销:</label></td>
                     <td>
-                        <select name="type" disabled>
+                        <select name="type" disabled id="sel-type" class="input-sm">
                             <option value="1"<{if $data.i_type == 1}> selected<{/if}>>销售</option>
                             <option value="2"<{if $data.i_type == 2}> selected<{/if}>>采销</option>
                         </select>
                     </td>
-                    <td style="padding-left:20px;">对方名称:</td>
+                    <td><label for="ipt-date">开票日期:</label></td>
+                    <td><input id="ipt-date" name="date" type="text" value="<{$data.i_date|date='Y-m-d',###}>" class="input-sm" readonly disabled/></td>
+                    <td><label for="ipt-accdate">记账月:</label></td>
+                    <td><input id="ipt-accdate" type="text" value="<{$data.i_accdate}>" name="accdate" class="input-sm" readonly disabled/></td>
+                    <td><label for="ipt-money">总金额:</label></td>
+                    <td><input type="text" value="<{$data.i_money}>" name="money" id="ipt-money" class="input-sm" readonly disabled/></td>
+                </tr>
+                <tr>
+                    <td><label for="ipt-coname">对方名称:</label></td>
                     <td colspan="3">
-                        <input type="text" value="<{$data.i_coname}>" name="coname" class="no-border" readonly/>
+                        <input type="text" value="<{$data.i_coname}>" name="coname" id="ipt-coname" class="input-sm" readonly disabled/>
                         <input type="hidden" name="coid" value="<{$data.i_coid}>" id="ipt-company-id">
                     </td>
-                    <td style="padding-left:20px;width:84px;">税率</td>
+                    <td><label for="sel-tax">税率:</label></td>
                     <td>
-                        <select name="tax" disabled>
+                        <select name="tax" disabled id="sel-tax" class="input-sm">
                             <{foreach name=":getTaxList()" item="tax" key="k"}>
                             <option value="<{$k}>" <{if $data.i_tax==$k}>selected<{/if}>><{$tax}></option>
                             <{/foreach}>
@@ -43,20 +52,13 @@
                     </td>
                 </tr>
                 <tr>
-                    <td style="">责任人:</td>
-                    <td>
-                        <input type="text" value="<{$data.i_mname}>" name="mname" class="no-border" readonly/>
-                        <input type="hidden" value="<{$data.i_mid}>" name="mid"/>
-                    </td>
-                </tr>
-                <tr>
-                    <td>摘要:</td>
+                    <td><label for="txt-content">摘要:</label></td>
                     <td colspan="5">
-                        <textarea name="content" style="width:100%" readonly><{$data.i_content}></textarea>
+                        <textarea id="txt-content" name="content" class="form-control" disabled><{$data.i_content}></textarea>
                     </td>
                 </tr>
                 <tr>
-                    <td>附件:</td>
+                    <td><label>附件:</label></td>
                     <td>
                         <{if $data.i_attachment}>
                         <img src="<{$data.i_attachment}>" width="240" data-action="zoom"/>
@@ -69,7 +71,7 @@
     <div class="main-pannel">
         <h3>已对应订单情况</h3>
         <div class="content">
-            <table class="table2">
+            <table class="table2 table">
                 <tr>
                     <!--td style="width: 2em;"></td-->
                     <td>已对应订单金额:</td>
@@ -90,7 +92,7 @@
                 <{volist name="orders" id="order" empty="<tr><td colspan='8' style='text-align: center'>暂无数据</td></tr>"}>
                 <tr>
                     <!--td><i class="fa fa-minus-circle"></i><input type="hidden" name="oids[]" value="<{$order.o_id}>"</td-->
-                    <td><a href="/orders/operation?op=edit&op_id=<{$order.o_id}>"><{$order.o_no}></a></td>
+                    <td class="nowrap"><a href="/orders/operation?op=edit&op_id=<{$order.o_id}>"><{$order.o_no}></a></td>
                     <td><{$order.o_money}></td>
                     <td><{$order.ou_used}><input type="hidden" name="oused[]" value="<{$order.ou_used}>"</td>
                     <td><{$order.o_subject}></td>

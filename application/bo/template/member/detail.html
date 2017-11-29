@@ -12,26 +12,25 @@
             <table class="detail">
                 <tr>
                     <td class="bo-label"><label for="ipt-dm-name"><i class="asterisk">*</i>姓名:</label></td>
-                    <td><input type="text" name="name" id="ipt-dm-name" value="<{$data.m_name}>" required<{if !$isAdmin}> class="no-border" readonly<{/if}>/></td>
+                    <td><input class="input-sm" type="text" name="name" id="ipt-dm-name" value="<{$data.m_name}>" required<{if !$isAdmin}> readonly<{/if}>/></td>
                     <td class="bo-label"><label for="ipt-dm-email"><i class="asterisk">*</i>邮箱:</label></td>
-                    <td><input type="text" name="email" id="ipt-dm-email" value="<{$data.m_email}>" required email="true"<{if !$isAdmin}> class="no-border" readonly<{/if}>/><input type="hidden" name="id" value="<{$data.m_id}>"/></td>
+                    <td><input class="input-sm" type="text" name="email" id="ipt-dm-email" value="<{$data.m_email}>" required email="true"<{if !$isAdmin}> readonly<{/if}>/><input type="hidden" name="id" value="<{$data.m_id}>"/></td>
                     <{if $isSelf || $isAdmin}>
                     <td class="bo-label"><label for="ipt-dm-password">密码:<span style="color: red">(留空密码不变)</span></label></td>
-                    <td><input type="password" name="password" id="ipt-dm-password" value="" autocomplete="new-password" /></td>
+                    <td><input class="input-sm" type="password" name="password" id="ipt-dm-password" value="" autocomplete="new-password" /></td>
                     <{/if}>
                 </tr>
                 <tr>
                     <td class="bo-label"><label for="ipt-dm-code"><i class="asterisk">*</i>编码:</label></td>
-                    <td><input type="text" name="code" id="ipt-dm-code" value="<{$data.m_code}>" required<{if !$isAdmin}> class="no-border" readonly<{/if}>/></td>
+                    <td><input class="input-sm" type="text" name="code" id="ipt-dm-code" value="<{$data.m_code}>" required<{if !$isAdmin}> readonly<{/if}>/></td>
                     <td class="bo-label"><label for="ipt-dm-phone"><i class="asterisk">*</i>电话:</label></td>
-                    <td><input type="text" name="phone" id="ipt-dm-phone" value="<{$data.m_phone}>" required<{if !$isSelf && !$isAdmin}> class="no-border" readonly<{/if}>/></td>
+                    <td><input class="input-sm" type="text" name="phone" id="ipt-dm-phone" value="<{$data.m_phone}>" required<{if !$isSelf && !$isAdmin}> readonly<{/if}>/></td>
                     <td class="bo-label"><label for="inputDepartment"><i class="asterisk">*</i>科室:</label></td>
-                    <td><input type="text" readonly name="department" value="<{$data.m_department}>" required<{if !$isAdmin}>class="no-border"<{else}>id="inputDepartment"<{/if}>/> <input type="hidden" name="did" value="<{$data.m_did}>"/></td>
+                    <td><input class="input-sm" type="text" readonly name="department" id="inputDepartment" value="<{$data.m_department}>" required<{if !$isAdmin}> disabled<{/if}>/> <input type="hidden" name="did" value="<{$data.m_did}>"/></td>
                 </tr>
-
                 <tr>
                     <td class="bo-label"><label for="ipt-dm-office">部门:</label></td>
-                    <td><input type="text" name="office" id="ipt-dm-office" value="<{$data.m_office}>"<{if !$isAdmin}> class="no-border" readonly<{/if}>/></td>
+                    <td><input type="text" class="input-sm" name="office" id="ipt-dm-office" value="<{$data.m_office}>"<{if !$isAdmin}> readonly<{/if}>/></td>
                     <td class="bo-label"><label>管理员:</label></td>
                     <td>
                         <label><input type="radio" name="isAdmin" value="0"<{if $data.m_isAdmin==0}> checked<{/if}><{if $isAdmin !=1}> disabled<{/if}>/>&nbsp;否</label>
@@ -39,7 +38,6 @@
                         <label><input type="radio" name="isAdmin" value="1"<{if $data.m_isAdmin==1}> checked<{/if}><{if $isAdmin !=1}> disabled<{/if}>/>&nbsp;是</label>
                     </td>
                     <td colspan="2"></td>
-
                 </tr>
             </table>
         </div>

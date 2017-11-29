@@ -35,7 +35,8 @@
 <div class="main-pannel">
     <h3>已对应订单情况</h3>
     <div class="content">
-        <table class="table2">
+        <table class="table3 table">
+            <thead>
             <tr>
                 <!--th id="btn-add-order"><i class="fa fa-plus-circle"></i></th-->
                 <th>订单号</th>
@@ -45,6 +46,8 @@
                 <th>责任人</th>
                 <th>项目名称</th>
             </tr>
+            </thead>
+            <tbody>
             <{volist name="orders" id="order" empty="<tr><td colspan='7' style='text-align: center'>暂无数据</td></tr>"}>
             <tr>
                 <!--td><i class="fa fa-minus-circle"></i><input type="hidden" name="oids[]" value="<{$order.o_id}>"</td-->
@@ -56,6 +59,7 @@
                 <td><{$order.o_pname}></td>
             </tr>
             <{/volist}>
+            </tbody>
         </table>
     </div>
 <{load file="/static/js/update.js"}}>

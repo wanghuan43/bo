@@ -2,51 +2,54 @@
     <div class="clearfix header">
         <h2>验收单管理.数据查看</h2>
         <div class="btn-pannel">
-            <{/*button type="submit" class="btn">保存</button*/}>
             <button type="button" href="#contract/all" class="btn red">取消</button>
+            <button type="submit" class="btn" disabled>保存</button>
         </div>
     </div>
     <div class="main-pannel">
         <h3>基本信息</h3>
         <div class="content">
-            <table>
+            <table class="detail">
                 <tr>
-                    <td width="64">验收单号:</td>
-                    <td><input type="text" name="no" value="<{$data.a_no}>" class="no-border" readonly/><input type="hidden" name="id" value="<{$data.a_id}>"/> </td>
-                    <td style="padding-left:20px;width:84px;">验收日期:</td>
-                    <td><input type="text" value="<{$data.a_date|date='Y-m-d',###}>"  readonly class="no-border"/></td>
-                    <td style="padding-left:20px;width:84px;">记账月:</td>
-                    <td><input type="text" value="<{$data.a_accdate}>" readonly class="no-border"/></td>
-                    <td style="padding-left:20px;width:84px">总金额:</td>
-                    <td><input type="text" value="<{$data.a_money}>" name="money" class="no-border" readonly/></td>
-                </tr>
-                <tr>
-                    <td>销售/采销:</td>
+                    <td><label for="ipt-no">验收单号:</label></td>
+                    <td><input type="text" name="no" value="<{$data.a_no}>" class="input-sm" id="ipt-no" readonly disabled/><input type="hidden" name="id" value="<{$data.a_id}>"/> </td>
+                    <td><label for="ipt-subject">主题:</label></td>
+                    <td colspan="3"><input type="text" class="input-sm" id="ipt-subject" name="subject" value="<{$data.a_subject}>" readonly disabled></td>
+                    <td><label for="ipt-mname">责任人:</label></td>
                     <td>
-                        <select name="type" disabled>
-                            <option value="1"<{if $data.a_type == 1}> selected<{/if}>><{:getTypeList2(1)}></option>
-                            <option value="2"<{if $data.a_type == 2}> selected<{/if}>><{:getTypeList2(2)}></option>
-                        </select>
-                    </td>
-                    <td style="padding-left:20px;">对方名称:</td>
-                    <td colspan="3">
-                        <input type="text" value="<{$data.a_coname}>" name="coname" readonly class="no-border"/>
-                        <input type="hidden" name="coid" value="<{$data.a_coid}>" id="ipt-company-id">
-                    </td>
-                    <td style="padding-left:20px;">责任人:</td>
-                    <td>
-                        <input type="text" value="<{$data.a_mname}>" name="mname" class="no-border" readonly/>
+                        <{$data.a_mname}>
+                        <input type="hidden" name="mname" value="<{$data.a_mname}>"/>
                         <input type="hidden" value="<{$data.a_mid}>" name="mid"/>
                     </td>
                 </tr>
                 <tr>
-                    <td>主题:</td>
-                    <td><{$data.a_subject}></td>
-                    <td style="padding-left:20px;">摘要:</td>
-                    <td colspan="5"><textarea class="form-control" rows="3" name="content" id="txtContent"><{$data.a_content}></textarea></td>
+                    <td><label for="sel-type">销售/采销:</label></td>
+                    <td>
+                        <select name="type" id="sel-type" class="input-sm" disabled>
+                            <option value="1"<{if $data.a_type == 1}> selected<{/if}>><{:getTypeList2(1)}></option>
+                            <option value="2"<{if $data.a_type == 2}> selected<{/if}>><{:getTypeList2(2)}></option>
+                        </select>
+                    </td>
+                    <td><label for="ipt-date">验收日期:</label></td>
+                    <td><input type="text" value="<{$data.a_date|date='Y-m-d',###}>"  readonly class="input-sm" id="ipt-date" disabled/></td>
+                    <td><label for="ipt-accdate">记账月:</label></td>
+                    <td><input type="text" value="<{$data.a_accdate}>" readonly class="input-sm" id="ipt-accdate" disabled/></td>
+                    <td><label for="ipt-money">总金额:</label></td>
+                    <td><input type="text" value="<{$data.a_money}>" name="money" id="ipt-money" class="input-sm" readonly disabled/></td>
                 </tr>
                 <tr>
-                    <td>附件:</td>
+                    <td><label for="ipt-coname">对方名称:</label></td>
+                    <td colspan="5">
+                        <input type="text" value="<{$data.a_coname}>" name="coname" id="ipt-coname" readonly class="input-sm" disabled/>
+                        <input type="hidden" name="coid" value="<{$data.a_coid}>" id="ipt-company-id">
+                    </td>
+                </tr>
+                <tr>
+                    <td><label for="txtContent">摘要:</label></td>
+                    <td colspan="5"><textarea class="form-control" name="content" id="txtContent" disabled><{$data.a_content}></textarea></td>
+                </tr>
+                <tr>
+                    <td><label>附件:</label></td>
                     <td colspan="5">
                         <{if $data.a_attachment}>
                             <img src="<{$data.a_attachment}>" width="240" data-action="zoom"/>
@@ -59,7 +62,7 @@
     <div class="main-pannel">
         <h3>已对应订单情况</h3>
         <div class="content">
-            <table class="table2">
+            <table class="table2 table">
                 <tr>
                     <!--td style="width: 2em;"></td-->
                     <td>已对应订单金额:</td>

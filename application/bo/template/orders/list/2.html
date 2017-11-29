@@ -1,7 +1,7 @@
 <nav aria-label="Page navigation">
     <{$lists->render()}>
 </nav>
-<table class="list" cellspacing="0">
+<table class="list table" cellspacing="0">
     <thead>
     <tr>
         <{if condition="(isset($hideSelected)) AND ($hideSelected == false)"}>
@@ -10,9 +10,9 @@
         <th style="width:1em;"></th>
         <{/if}>
         <{if $type == 'contract'}>
-        <th>内/外</th>
+        <th style="width: 4em">内/外</th>
         <{else/}>
-        <th>状态</th>
+        <th style="width: 4em">状态</th>
         <{/if}>
         <th>
             <a href="<{$formUrl}>/sort/o_no/order/<{:getSortOrder($sort,'o_no')}>">
