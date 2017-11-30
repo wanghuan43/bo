@@ -17,7 +17,7 @@ class Invoice extends BoValidate
         'i_no' => 'require|alphaDash|unique:invoice',
         'i_subject' => 'require',
         'i_coname' => 'require',
-        'i_money' => 'require|money',
+        'i_money' => 'require|money|moneyValidity',
         'i_date' => 'require|date',
         'i_accdate' => 'accounting'
     ];
@@ -30,6 +30,7 @@ class Invoice extends BoValidate
         'i_coname' => '对方公司不能为空',
         'i_money.require' => '总金额不能为空',
         'i_money.money' => '总金额格式不正确',
+        'i_money.moneyValidity' => '总金额和已对应订单金额冲突',
         'i_date.require' => '开票日期不能为空',
         'i_date.date' => '开票日期格式不正确',
         'i_accdate' => '记账月格式不正确'
@@ -38,5 +39,21 @@ class Invoice extends BoValidate
     protected $scene = [
         'import' => ['i_no'=>'require','i_money','i_date']
     ];
+
+    protected function moneyValidity($value,$rule,$data)
+    {
+        if(isset($data['i_used'])) {
+            $value = floatval($value);
+            $used = floatval($data['i_used']);
+            if( $value >=0 ){
+                $ret = $value >= $used ? true : false;
+            }else{
+                $ret = $value <= $used ? true : false;
+            }
+        }else{
+            $ret =  true;
+        }
+        return $ret;
+    }
 
 }

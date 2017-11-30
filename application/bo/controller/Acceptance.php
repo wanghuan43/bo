@@ -1,4 +1,5 @@
 <?php
+
 namespace app\bo\controller;
 
 use app\bo\libs\BoController;
@@ -25,7 +26,7 @@ class Acceptance extends BoController
     {
         $acceptanceModel = new \app\bo\model\Acceptance();
         $this->assign("type", "acceptance");
-        $acceptanceModel->where("a.a_noused","<>","0");
+        $acceptanceModel->where("a.a_noused", "<>", "0");
         return $this->search($acceptanceModel, "common/popused");
     }
 
@@ -56,12 +57,12 @@ class Acceptance extends BoController
 
         $validate = validate('Acceptance');
 
-        if($validate->check($data)){
+        if ($validate->check($data)) {
 
             $data['a_date'] = strtotime($data['a_date']);
 
-            if(empty($data['a_accdate'])){
-                $data['a_accdate'] = date('ym',$data['a_date']);
+            if (empty($data['a_accdate'])) {
+                $data['a_accdate'] = date('ym', $data['a_date']);
             }
 
             $data['a_createtime'] = $data['a_updatetime'] = time();
@@ -72,10 +73,10 @@ class Acceptance extends BoController
 
             $res = $this->uploadFile($file);
 
-            if($res['flag'] === 0){
+            if ($res['flag'] === 0) {
                 $ret = $res;
-            }else{
-                if($res['flag'] === 1 ){
+            } else {
+                if ($res['flag'] === 1) {
                     $data['a_attachment'] = $res['name'];
                 }
                 if ($res = $this->model->insert($data)) {
@@ -84,8 +85,8 @@ class Acceptance extends BoController
                     $ret = ['flag' => 0, 'msg' => '添加失败'];
                 }
             }
-        }else{
-            $ret = ['flag'=>0,'msg'=>$validate->getError()];
+        } else {
+            $ret = ['flag' => 0, 'msg' => $validate->getError()];
         }
 
         return $ret;
@@ -96,10 +97,10 @@ class Acceptance extends BoController
     {
         $data = $this->model->getDataById($id);
         $modelOrderUsed = new OrderUsed();
-        $orders = $modelOrderUsed->getOrderUsedByOtid($id,1);
+        $orders = $modelOrderUsed->getOrderUsedByOtid($id, 1);
         $this->setUpdateParams($data['a_mid']);
-        $this->assign('data',$data);
-        $this->assign('orders',$orders);
+        $this->assign('data', $data);
+        $this->assign('orders', $orders);
         return $this->fetch();
     }
 
@@ -107,54 +108,49 @@ class Acceptance extends BoController
     {
         $post = $this->request->post();
 
-        $arr = ['id','no','date','money','type','coname','coid','mname','mid','subject','content','used','noused'];
+        $arr = ['id', 'no', 'date', 'money', 'type', 'coname', 'coid', 'mname', 'mid', 'subject', 'content', 'used', 'noused'];
 
-        foreach ($arr as $i){
-            $data['a_'.$i] = trim($post[$i]);
+        foreach ($arr as $i) {
+            $data['a_' . $i] = trim($post[$i]);
         }
 
-        if(floatval($data['a_money'])<floatval($post['used'])){
-            $ret =  ['flag'=>0,'msg'=>'总金额不能小于已对应订单金额'];
-        }else {
 
-            $validate = \validate('Acceptance');
+        $validate = \validate('Acceptance');
 
-            if ($validate->check($data)) {
+        if ($validate->check($data)) {
 
-                $data['a_money'] = floatval($data['a_money']);
-                $data['a_used'] = floatval($data['a_used']);
-                $data['a_noused'] = $data['a_money'] - $data['a_used'];
-                $data['a_date'] = strtotime($data['a_date']);
-                $data['a_updatetime'] = time();
+            $data['a_money'] = floatval($data['a_money']);
+            $data['a_used'] = floatval($data['a_used']);
+            $data['a_noused'] = $data['a_money'] - $data['a_used'];
+            $data['a_date'] = strtotime($data['a_date']);
+            $data['a_updatetime'] = time();
 
-                $file = $this->request->file('attachment');
+            $file = $this->request->file('attachment');
 
-                $res = $this->uploadFile($file);
+            $res = $this->uploadFile($file);
 
-                if($res['flag']===0){
-                    $ret = $res;
-                }else {
-
-                    if($res['flag'] === 1){
-                        $data['a_attachment'] = $res['name'];
-                    }
-                    $old = $this->model->getDataById($data['a_id']);
-                    if ($res = $this->model->save($data, $data['a_id'])) {
-                        $logModel = new Logs();
-                        $logModel->saveLogs($data,$old,$data['a_id'],'acceptance');
-                        $ret = ['flag' => 1, 'msg' => '更新成功'];
-                        if(isset($data['a_attachment'])){
-                            $ret['image'] = $data['a_attachment'];
-                        }
-                    } else {
-                        $ret = ['flag' => 0, 'msg' => '更新失败，请确认是否有做过修改'];
-                    }
-                }
-
+            if ($res['flag'] === 0) {
+                $ret = $res;
             } else {
-                $ret = ['flag'=>0,'msg'=>$validate->getError()];
+
+                if ($res['flag'] === 1) {
+                    $data['a_attachment'] = $res['name'];
+                }
+                $old = $this->model->getDataById($data['a_id']);
+                if ($res = $this->model->save($data, $data['a_id'])) {
+                    $logModel = new Logs();
+                    $logModel->saveLogs($data, $old, $data['a_id'], 'acceptance');
+                    $ret = ['flag' => 1, 'msg' => '更新成功'];
+                    if (isset($data['a_attachment'])) {
+                        $ret['image'] = $data['a_attachment'];
+                    }
+                } else {
+                    $ret = ['flag' => 0, 'msg' => '更新失败，请确认是否有做过修改'];
+                }
             }
 
+        } else {
+            $ret = ['flag' => 0, 'msg' => $validate->getError()];
         }
 
         return $ret;
