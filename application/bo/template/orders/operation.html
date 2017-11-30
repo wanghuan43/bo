@@ -106,17 +106,10 @@
                 <td class="txt">
                     <label for="zc_name"><i class="asterisk">*</i>支出项目:</label>
                 </td>
-                <td colspan="3">
+                <td colspan="5">
                     <input class="input-sm input-search" data="project" name="zc_name" id="zc_name" type="text" value="" readonly/>
                     <input type="hidden" name="zc_id" id="zc_id" value=""/>
-                </td>
-                <td class="txt">
-                    <label for="zc_did">支出部门:</label>
-                </td>
-                <td>
-                    <select class="input-sm pop" name="zc_did" id="zc_did" data="zc_did">
-
-                    </select>
+                    <input type="hidden" name="zc_did" id="zc_did" value=""/>
                     <input type="hidden" name="zc_dname" id="zc_dname" value=""/>
                 </td>
                 <td class="txt">
@@ -546,7 +539,7 @@
         }
         $(".content.table .slider").each(function(index, element){
             var val = $(element).parent().next().find("input").val() != "" ? parseFloat($(element).parent().next().find("input").val()) : 0;
-            sliderElement(element, val);
+            sliderElement(element, val, index);
         });
         $(".content.table select").each(function(index, element){
             var option = $(element).find("option:selected").val();
@@ -860,9 +853,9 @@
                 if(type == "contract" || type == "company"){
                     if(type == "company"){
                         if(olie == "2" ){
-                            type = "department";
-                        }else{
                             type = "company";
+                        }else{
+                            type = "department";
                         }
                     }
                     url = baseUrl[type] + "?c_type="+otype+"&fi=1";
@@ -886,6 +879,15 @@
                                 $(inputs).eq(1).val($(cla+" .selectRadio:checked").val());
                             } else {
                                 $(inputs).eq(0).val($(cla+" .selectRadio:checked").val());
+                            }
+                            if(type == "company" || type == "department"){
+                                if ($(inputs).length > 1) {
+                                    $("#zc_did").val($(cla + " .selectRadio:checked").attr("data"));
+                                    $("#zc_dname").val($(cla + " .selectRadio:checked").val());
+                                }else{
+                                    $("#zc_did").val("");
+                                    $("#zc_dname").val("");
+                                }
                             }
                             $(cla).removeClass("show");
                             $(cla + "-back").hide();
@@ -1045,7 +1047,7 @@
             $(".orderProject_value_" + index).each(function (index, ele) {
                 var sl = $(ele).parent().prev().find(".slider");
                 var val = parseFloat($(ele).val());
-                sliderElement(sl, val);
+                sliderElement(sl, val, index);
             });
         }
         $(".orderProject_value_" + index).unbind("change");
@@ -1091,13 +1093,6 @@
             var tmp = $(ele).val() == "" ? 0 : parseFloat($(ele).val());
             cal = cal + tmp;
         });
-        if($(percents).length == 1){
-            sliderElement($(percents).eq(0).prev(), total);
-        }else{
-            $(percents).each(function(i, ele){
-
-            });
-        }
         if (!isNaN(total) && total > 0) {
             if (cal > total) {
                 if (total % $(values).length != 0) {
@@ -1145,6 +1140,13 @@
             $(percents).each(function (i, ele) {
                 $(ele).val("0.00");
             })
+        }
+        if($(percents).length == 1){
+            sliderElement($(percents).eq(0).prev(), total);
+        }else{
+            $(percents).each(function(i, ele){
+                sliderElement($(ele).prev(), $(ele).parent().next().find("input").val());
+            });
         }
     }
     function getBaseTR(index) {
@@ -1196,21 +1198,25 @@
         if($(ele).slider('instance') != undefined){
             $(ele).slider('destroy');
         }
-        var max = parseFloat($("#o_money").val());
+        var max = $("#o_money").val() == "" ? 0 : $("#o_money").val(), max = parseFloat(max)
+            ,className = $(ele).parent().next().find("input").attr("class").split(" ")[0],tt = 0
+            ,cn = $(ele).parent().next().find("input");
         $( ele ).slider({
-            range: "max",
             min: 0,
             max: max,
             value: val,
             create: function (event,ui) {
-                var values = $(ele).next().val() == "" ? 0 : parseFloat($(ele).next().val());
-                values = val > 0 ? val : values;
-                if(values > 0){
-                    $(ele).find("span").text(Math.round(100 - (max - values) / max * 100)+"%");
-                }else{
-                    $(ele).find("span").text("0%");
+                p = 0;
+                if(max > 0){
+                    p = Math.round(100 - (max - val) / max * 100);
                 }
-
+                console.log(val);
+                $(ele).find("span").css("left", p+"%");
+                $(ele).find("span").text(p+"%");
+            },
+            slide: function (event, ui){
+                var value = ui.value, p = Math.round(100 - (max - value) / max * 100)+"%";
+                $(ui.handle).text(p);
             },
             stop: function( event, ui ) {
                 var total = 0;
@@ -1233,7 +1239,7 @@
                 if(parseInt(p.replace(/\%/, "")) <= 0){
                     p = "0%";
                 }
-                $(ui.handle).prev().css("width", 100-parseInt(p.replace(/\%/, ""))+"%");
+                $(ui.handle).prev().css("width", (100-parseInt(p.replace(/\%/, "")))+"%");
                 $(ui.handle).css("left", p);
                 $(ui.handle).text(p);
             }
