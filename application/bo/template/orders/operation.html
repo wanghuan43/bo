@@ -2,7 +2,7 @@
 <form action="/orders/doOperation?op=<{$op}>&op_id=<{$op_id}>" method="post" id="opform"
       xmlns="http://www.w3.org/1999/html">
 <div class="clearfix header">
-    <h2>订单信息管理（商机阶段）</h2>
+    <h2>订单（<{if $order.o_status==6}>签约<{else}>预计<{/if}>）</h2>
     <div class="btn-pannel">
         <{if condition="$isAdmin"}>
         <button type="button" href="#historyBack" class="btn red">取消</button>
