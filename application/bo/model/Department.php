@@ -14,16 +14,14 @@ class Department extends BoModel
             "name" => "科室名称",
             "type" => "text",
             "operators" => array(
-                "like" => "包含",
-                "=" => "等于",
+                "like" => "包含"
             ),
         ),
         "d_code" => array(
             "name" => "科室编码",
             "type" => "text",
             "operators" => array(
-                "like" => "包含",
-                "=" => "等于",
+                "like" => "包含"
             ),
         )
     ];

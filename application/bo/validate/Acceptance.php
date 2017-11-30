@@ -16,7 +16,7 @@ class Acceptance extends BoValidate
         'a_no' => 'require|alphaDash|unique:acceptance',
         'a_subject' => 'require',
         'a_coname' => 'require',
-        'a_money' => 'require|money',
+        'a_money' => 'require|money|moneyValidity',
         'a_date' => 'require|date',
         'a_accdate' => 'accounting'
     ];
@@ -29,6 +29,7 @@ class Acceptance extends BoValidate
         'a_coname' => '对方公司不能为空',
         'a_money.require' => '总金额不能为空',
         'a_money.money' => '总金额格式不正确',
+        'a_money.moneyValidity' => '总金额和已对应订单金额冲突',
         'a_date.require' => '验收时间不能为空',
         'a_date.date' => '验收日期格式不正确',
         'a_accdate' => '记账月格式不正确'
@@ -37,5 +38,21 @@ class Acceptance extends BoValidate
     protected $scene = [
         'import' => ['a_no'=>'require','a_money','a_date']
     ];
+
+    protected function moneyValidity($value,$rule,$data)
+    {
+        if(isset($data['a_used'])) {
+            $value = floatval($value);
+            $used = floatval($data['a_used']);
+            if( $value >=0 ){
+                $ret = $value >= $used ? true : false;
+            }else{
+                $ret = $value <= $used ? true : false;
+            }
+        }else{
+            $ret =  true;
+        }
+        return $ret;
+    }
 
 }

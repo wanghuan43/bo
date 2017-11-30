@@ -46,8 +46,6 @@ class Contract extends BoController
         $data['c_bakup'] = trim($post['bakup']);
         $data['c_type'] = $post['type'];
         $data['c_money'] = trim($post['money']);
-        //$data['c_used'] = floatval(trim($post['used']));
-        //$data['c_noused'] = $data['c_money'];
         $data['c_date'] = $post['date'];
         $data['c_coid'] = trim($post['coid']);
         $data['c_coname'] = trim($post['coname']);
@@ -72,11 +70,29 @@ class Contract extends BoController
             if(empty($data['c_accdate'])){
                 $data['c_accdate'] = date('ym',$data['c_date']);
             }
-            if( $res = $this->model->save($data) ){
-                $ret = ['flag'=>1,'msg'=>'添加成功'];
-            }else{
-                $ret = ['flag'=>0,'msg'=>'添加失败'];
+
+            $file = $this->request->file('attachment');
+
+            $res = $this->uploadFile($file);
+
+            if($res['flag']===0){
+                $ret = $res;
+            }else {
+
+                if($res['flag'] === 1){
+                    $data['c_attachment'] = $res['name'];
+                }
+
+                if ($res = $this->model->save($data)) {
+
+                    $ret = ['flag' => 1, 'msg' => '添加成功'];
+
+                } else {
+                    $ret = ['flag' => 0, 'msg' => '添加失败'];
+                }
+
             }
+
         }else{
             $ret = ['flag'=>0,'msg'=>$validate->getError()];
         }
@@ -91,6 +107,11 @@ class Contract extends BoController
         $modelOrders = new \app\bo\model\Orders();
         $orders = $modelOrders->getOrdersByContractId($id);
         $this->setUpdateParams($data['c_mid']);
+        $mimeType = false;
+        if($data['c_attachment']){
+            $mimeType = $this->getAttachmentMimeType($data['c_attachment']);
+        }
+        $this->assign('aMimeType',$mimeType);
         $this->assign('data',$data);
         $this->assign('orders',$orders);
         return $this->fetch();
@@ -114,14 +135,32 @@ class Contract extends BoController
             $data['c_date'] = strtotime($data['c_date']);
             $data['c_money'] = floatval($data['c_money']);
 
-            $old = $this->model->getDataById($data['c_id']);
+            $file = $this->request->file('attachment');
 
-            if($this->model->save($data,$data['c_id'])){
-                $logModel = new Logs();
-                $logModel->saveLogs($data,$old,$data['c_id'],'contract');
-                $ret = ['flag' => 1, 'msg' => '更新成功'];
-            }else{
-                $ret = ['flag' => 0, 'msg' => '更新失败'];
+            $res = $this->uploadFile($file);
+
+            if($res['flag']===0){
+                $ret = $res;
+            }else {
+
+                if($res['flag'] === 1){
+                    $data['c_attachment'] = $res['name'];
+                }
+                $old = $this->model->getDataById($data['c_id']);
+                if ($res = $this->model->save($data,$data['c_id'])) {
+                    $logModel = new Logs();
+                    $logModel->saveLogs($data,$old,$data['c_id'],'contract');
+                    $ret = ['flag' => 1, 'msg' => '更新成功'];
+                    if(isset($data['c_attachment']) && $data['c_attachment']){
+                        if($this->getAttachmentMimeType($data['c_attachment']) == 'image'){
+                            $ret['image'] = $data['c_attachment'];
+                        }else{
+                            $ret['file'] = $data['c_attachment'];
+                        }
+                    }
+                } else {
+                    $ret = ['flag' => 0, 'msg' => '更新失败'];
+                }
             }
 
         }else{

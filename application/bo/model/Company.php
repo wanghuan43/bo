@@ -14,16 +14,14 @@ class Company extends BoModel
             "name" => "公司名称",
             "type" => "text",
             "operators" => array(
-                "like" => "包含",
-                "=" => "等于",
+                "like" => "包含"
             ),
         ),
         "co_code" => array(
             "name" => "公司代码",
             "type" => "text",
             "operators" => array(
-                "like" => "包含",
-                "=" => "等于",
+                "like" => "包含"
             ),
         )
     );

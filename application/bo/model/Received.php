@@ -14,16 +14,14 @@ class Received extends BoModel
             'name' => '付/回款单号',
             'type' => 'text',
             'operators' => array(
-                'like' => '包含',
-                '=' => '等于'
+                'like' => '包含'
             )
         ),
         'r_coname' => array(
             'name' => '对方名称',
             'type' => 'text',
             'operators' => array(
-                'like' => '包含',
-                '=' => '等于'
+                'like' => '包含'
             )
         ),
         "r_date" => array(

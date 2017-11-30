@@ -56,7 +56,7 @@
     </tr>
     </thead>
     <tbody>
-    <{volist name="lists" id="val" empty="$empty"}>
+    <{volist name="lists" id="val" empty="<tr><td colspan='11'>暂无数据</td></tr>"}>
     <tr>
         <td><input type="checkbox" value="<{$val.i_id}>" class="lists-id" data-name="<{$val.i_no}>"></td>
         <td><a href="/invoice/detail?id=<{$val.i_id}>"><{$val.i_no}></a></td>

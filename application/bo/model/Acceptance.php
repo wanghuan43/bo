@@ -14,16 +14,14 @@ class Acceptance extends BoModel
             'name' => '验收单号',
             'type' => 'text',
             'operators' => [
-                'like' => '包含',
-                '=' => '等于'
+                'like' => '包含'
             ]
         ),
         'a_coname' => array(
             'name' => '对方公司',
             'type' => 'text',
             'operators' => [
-                'like' => '包含',
-                '=' => '等于'
+                'like' => '包含'
             ]
         ),
         "a_date" => array(

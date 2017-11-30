@@ -3,6 +3,7 @@ namespace app\bo\controller;
 
 use app\bo\libs\BoController;
 use app\bo\model\Invoice as ModelInvoice;
+use app\bo\model\Logs;
 use app\bo\model\OrderUsed;
 use think\Request;
 
@@ -54,48 +55,42 @@ class Invoice extends BoController
         $data['i_accdate'] = trim($post['accdate']);
         $data['i_mid'] = $this->current->m_id;
         $data['i_mname'] = $this->current->m_name;
+        $data['i_createtime'] = $data['i_updatetime'] = time();
 
         $validate = validate('Invoice');
 
         if($validate->check($data)){
 
             $data['i_date'] = strtotime($data['i_date']);
+
             if(empty($data['i_accdate'])){
                 $data['i_accdate'] = date('ym',$data['i_date']);
             }
+
             $data['i_money'] = $data['i_noused'] = floatval($data['i_money']);
 
             $file = $this->request->file('attachment');
-            $info =true;
 
-            if(!empty($file)) {
-                $baseFolder = DS.'attachment'.DS.date('Y') ;
+            $res = $this->uploadFile($file);
 
-                $folder = ROOT_PATH . DS . 'public' . $baseFolder;
+            if($res['flag']===0){
+                $ret = $res;
+            }else {
 
-                if (!is_dir($folder)) {
-                    CustomUtils::mkdir_p($folder);
+                if($res['flag'] === 1){
+                    $data['i_attachment'] = $res['name'];
                 }
 
-                if(!$file->checkImg()){
-                    $info = false;
-                }else {
-                    $info = $file->move($folder);
-                }
-            }
-
-            if($info) {
-                if ($info !== true) {
-                    $data['i_attachment'] = $baseFolder . DS . $info->getSaveName();
-                }
                 if ($res = $this->model->save($data)) {
+
                     $ret = ['flag' => 1, 'msg' => '添加成功'];
+
                 } else {
-                    $ret = ['flag' => 0, 'msg' => '发生错误'];
+                    $ret = ['flag' => 0, 'msg' => '添加失败'];
                 }
-            }else{
-                $ret = ['flag'=>0,'msg'=>'附件上传失败'];
+
             }
+
         }else{
             $ret = ['flag'=>0,'msg'=>$validate->getError()];
         }
@@ -108,6 +103,12 @@ class Invoice extends BoController
         $data = $this->model->getDataById($id);
         $modelOrderUsed = new OrderUsed();
         $orders = $modelOrderUsed->getOrderUsedByOtid($id,1);
+        $this->setUpdateParams($data['i_mid']);
+        $mimeType = false;
+        if($data['i_attachment']){
+            $mimeType = $this->getAttachmentMimeType($data['i_attachment']);
+        }
+        $this->assign('aMimeType',$mimeType);
         $this->assign('data',$data);
         $this->assign('orders',$orders);
         return $this->fetch();
@@ -117,34 +118,51 @@ class Invoice extends BoController
     {
         $post = $this->request->post();
 
-        $id = $post['id'];
+        $arr = ['id','no','subject','date','tax','accdate','money','type','coname','coid','mid','mname','used','noused'];
 
-        $data['i_no'] = $post['no'];
-        $data['i_date'] = strtotime(trim($post['date']));
-        $data['i_money'] = floatval(trim($post['money']));
-        $data['i_type'] = intval($post['type']);
-        $data['i_coname'] = trim($post['coname']);
-        $data['i_coid'] = intval($post['coid']);
-        $data['i_mname'] = trim($post['mname']);
-        $data['i_mid'] = intval($post['mid']);
-        $data['i_used'] = floatval($post['used']);
-        $data['i_noused'] = floatval($post['noused']);
-
-        if( empty($data['i_used']) && !!$post['oused'] ){
-            $used = 0;
-            foreach( $post['oused'] as $oused){
-                $used += floatval($oused);
-            }
-            $data['i_used'] = $used;
-            $data['i_noused'] = $data['i_money'] - $used;
+        foreach($arr as $i){
+            $data['i_'.$i] = trim($post[$i]);
         }
 
-        $res = $this->model->save($data,['i_id'=>$id]);
+        $data['i_updatetime'] = time();
 
-        if($res){
-            $ret = ['flag'=>1,'msg'=>'更新成功'];
+        $validate = \validate('Invoice');
+
+        if($validate->check($data)){
+
+            if(!empty($data['i_date'])){
+                $data['i_date'] = strtotime($data['i_date']);
+            }
+
+            $file = $this->request->file('attachment');
+
+            $res = $this->uploadFile($file);
+
+            if($res['flag']===0){
+                $ret = $res;
+            }else {
+
+                if($res['flag'] === 1){
+                    $data['i_attachment'] = $res['name'];
+                }
+                $old = $this->model->getDataById($data['i_id']);
+                if ($res = $this->model->save($data,$data['i_id'])) {
+                    $logModel = new Logs();
+                    $logModel->saveLogs($data,$old,$data['i_id'],'invoice');
+                    $ret = ['flag' => 1, 'msg' => '更新成功'];
+                    if(isset($data['i_attachment']) && $data['i_attachment']){
+                        if($this->getAttachmentMimeType($data['i_attachment']) == 'image'){
+                            $ret['image'] = $data['i_attachment'];
+                        }else{
+                            $ret['file'] = $data['i_attachment'];
+                        }
+                    }
+                } else {
+                    $ret = ['flag' => 0, 'msg' => '更新失败'];
+                }
+            }
         }else{
-            $ret = ['flag'=>0,'msg'=>'更新失败'];
+            $ret = ['flag'=>0,'msg'=>$validate->getError()];
         }
 
         return $ret;

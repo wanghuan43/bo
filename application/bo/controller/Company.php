@@ -68,7 +68,6 @@ class Company extends BoController
     public function all()
     {
         $type = $this->request->param('type');
-        $this->model->where('co_type','=',$type);
         $titleName = $type == '2'?'客户':'供应商';
         $this->assign('titleName',$titleName);
         $this->assign('type',$type);

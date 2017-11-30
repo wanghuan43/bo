@@ -15,24 +15,21 @@ class   Orders extends BoModel
             'name' => '项目名称',
             'type' => 'text',
             'operators' => [
-                'like' => '包含',
-                '=' => '等于'
+                'like' => '包含'
             ]
         ],
         'o_no' => [
             'name' => '订单号',
             'type' => 'text',
             'operators' => [
-                'like' => '包含',
-                '=' => '等于'
+                'like' => '包含'
             ]
         ],
         'o_mname' => [
             'name' => '责任人',
             'type' => 'text',
             'operators' => [
-                'like' => '包含',
-                '=' => '等于'
+                'like' => '包含'
             ]
         ],
         'o_type' => [
@@ -51,8 +48,7 @@ class   Orders extends BoModel
             'name' => '合同编号',
             'type' => 'text',
             'operators' => [
-                "like" => "包含",
-                "=" => "等于",
+                "like" => "包含"
             ]
         ],
         'o_money' => [
@@ -79,8 +75,7 @@ class   Orders extends BoModel
             'name' => '公司名称',
             'type' => 'text',
             'operators' => [
-                "like" => "包含",
-                "=" => "等于",
+                "like" => "包含"
             ]
         ],
     ];

@@ -581,6 +581,10 @@ table th i{
 #checked-result select{
     width:600px;
 }
+.highlight,.highlight *{
+    font-size:14px;
+    font-weight:bolder;
+}
 .table3 tbody tr:nth-child(2n+1),
 .table2 tr:nth-child(2n){
     background: #f2f2f2;
@@ -714,5 +718,9 @@ label.error:before{
         border-radius:3px;
         padding:0;
         border:solid 1px #d9d9d9;
+    }
+    select.input-sm:disabled{
+        background:#EEEEEE url("../images/firefox_select_icon.png") no-repeat calc(100% - 7px) 50%;
+        background-size:6px auto ;
     }
 }

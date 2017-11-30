@@ -8,6 +8,11 @@ abstract class BoModel extends Model
 {
     protected $searchable;
 
+    protected $uploadFileValidateRule = [
+        'size' => '2048000',
+        'ext' => 'jpg,gif,jpeg,png,zip,rar,pdf,ppt,pptx,csv,xls,xlsx,doc,docx'
+    ];
+
     public function getCurrent()
     {
         return getLoginMember();
@@ -19,6 +24,11 @@ abstract class BoModel extends Model
     public function getSearchable()
     {
         return $this->searchable;
+    }
+
+    public function getUploadFileValidateRule()
+    {
+        return $this->uploadFileValidateRule;
     }
 
     public function getSearchableByKey($key)

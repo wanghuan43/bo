@@ -3,7 +3,7 @@
         <h2>付款单管理.数据查看</h2>
         <div class="btn-pannel">
             <button type="button" href="#received/all" class="btn red">取消</button>
-            <button type="submit" class="btn" disabled>保存</button>
+            <button type="submit" class="btn"<{if $readonly}> disabled<{/if}>>保存</button>
         </div>
     </div>
     <div class="main-pannel">
@@ -11,51 +11,56 @@
         <div class="content">
             <table class="detail">
                 <tr>
-                    <td><label for="ipt-no">付款单号:</label></td>
-                    <td><input type="text" name="no" value="<{$data.r_no}>" id="ipt-no" class="input-sm" readonly disabled/><input type="hidden" name="id" value="<{$data.r_id}>"/> </td>
-                    <td><label for="ipt-subject">主题:</label></td>
+                    <td><label for="ipt-no"><i class="asterisk">*</i>付款单号:</label></td>
+                    <td><input type="text" name="no" value="<{$data.r_no}>" id="ipt-no" class="input-sm" required<{if $readonly}> disabled<{/if}>/><input type="hidden" name="id" value="<{$data.r_id}>"/> </td>
+                    <td><label for="ipt-subject"><i class="asterisk">*</i>主题:</label></td>
                     <td colspan="3">
-                        <input type="text" name="subject" value="<{$data.r_subject}>" class="input-sm" id="ipt-subject" readonly disabled/>
+                        <input type="text" name="subject" value="<{$data.r_subject}>" class="input-sm" id="ipt-subject" required <{if $readonly}>disabled<{/if}>/>
                     </td>
-                    <td><label for="ipt-mname">责任人:</label></td>
+                    <td><label for="<{if empty($isAdmin)}>ipt-mname<{else}>ipt-member-name<{/if}>">责任人:</label></td>
                     <td>
-                        <input type="text" value="<{$data.r_mname}>" name="mname" class="input-sm no-border" id="ipt-mname" readonly/>
+                        <input type="text" value="<{$data.r_mname}>" name="mname" class="input-sm<{if empty($isAdmin)}> no-border<{/if}>" id="<{if empty($isAdmin)}>ipt-mname<{else}>ipt-member-name<{/if}>" readonly/>
                         <input type="hidden" value="<{$data.r_mid}>" name="mid"/>
                     </td>
                 </tr>
                 <tr>
                     <td><label for="sel-type">类型:</label></td>
                     <td>
-                        <select name="type" disabled id="sel-type" class="input-sm">
+                        <select name="type" id="sel-type" class="input-sm"<{if $readonly}>disabled<{/if}>>
                             <option value="1"<{if $data.r_type == 1}> selected<{/if}>>销售</option>
                             <option value="2"<{if $data.r_type == 2}> selected<{/if}>>采销</option>
                         </select>
                     </td>
-                    <td><label for="ipt-date">验收日期:</label></td>
-                    <td><input name="date" id="ipt-date" type="text" value="<{$data.r_date|date='Y-m-d',###}>" readonly class="input-sm" disabled/></td>
+                    <td><label for="ipt-date"><i class="asterisk">*</i>发生日期:</label></td>
+                    <td><input name="date" id="ipt-date" type="text" value="<{$data.r_date|date='Y-m-d',###}>" required readonly class="input-sm"<{if $readonly}> disabled<{/if}>/></td>
                     <td><label for="ipt-accdate">记账月:</label></td>
-                    <td><input type="text" value="<{$data.r_accdate}>" readonly class="input-sm" id="ipt-accdate" disabled></td>
-                    <td><label for="ipt-money">总金额:</label></td>
-                    <td><input id="ipt-money" type="text" value="<{$data.r_money}>" name="money" class="input-sm" readonly disabled/></td>
+                    <td><input type="text" value="<{$data.r_accdate}>" class="input-sm" name="accdate" number="true" id="ipt-accdate"<{if $readonly}> disabled<{/if}>></td>
+                    <td><label for="ipt-money"><i class="asterisk">*</i>总金额:</label></td>
+                    <td><input id="ipt-money" type="text" value="<{$data.r_money}>" name="money" class="input-sm" required number="true" <{if $readonly}>disabled<{/if}>/></td>
                 </tr>
                 <tr>
-                    <td><label for="ipt-coname">对方名称:</label></td>
+                    <td><label for="ipt-company-name"><i class="asterisk">*</i>对方公司:</label></td>
                     <td colspan="5">
-                        <input type="text" value="<{$data.r_coname}>" name="coname" id="ipt-coname" class="input-sm" readonly disabled/>
+                        <input type="text" value="<{$data.r_coname}>" name="coname" id="ipt-company-name" class="input-sm" required readonly <{if $readonly}>disabled<{/if}>/>
                         <input type="hidden" name="coid" value="<{$data.r_coid}>" id="ipt-company-id">
                     </td>
                 </tr>
                 <tr>
                     <td><label>摘要:</label></td>
                     <td colspan="5">
-                        <textarea name="content" class="form-control" disabled><{$data.r_content}></textarea>
+                        <textarea name="content" class="form-control" <{if $readonly}>disabled<{/if}>><{$data.r_content}></textarea>
                     </td>
                 </tr>
                 <tr>
-                    <td><label>附件:</label></td>
-                    <td>
-                        <{if $data.r_attachment}>
+                    <td><label for="ipt-attachment">附件:</label></td>
+                    <td colspan="5" class="<{if $aMimeType == 'image'}>attachment<{/if}>">
+                        <{if $aMimeType == 'image'}>
                         <img src="<{$data.r_attachment}>" width="240" data-action="zoom"/>
+                        <{elseif $aMimeType}>
+                        <a href="<{$data.r_attachment}>" target="_blank"><i class="fa fa-paperclip"></i> 附件</a>
+                        <{/if}>
+                        <{if empty($readonly)}>
+                        <input type="file" name="attachment" id="ipt-attachment"/>
                         <{/if}>
                     </td>
                 </tr>
@@ -66,7 +71,7 @@
         <h3>已对应订单情况</h3>
         <div class="content">
             <table class="table2 table">
-                <tr>
+                <tr class="highlight">
                     <!--td style="width: 2em;"></td-->
                     <td>已对应订单金额:</td>
                     <td><input type="text" name="used" value="<{$data.r_used}>" class="no-border" readonly/></td>
