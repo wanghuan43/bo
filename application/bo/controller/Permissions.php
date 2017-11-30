@@ -9,21 +9,19 @@ use think\Request;
 
 class Permissions extends BoController
 {
+
+    /**
+     * Menu constructor.
+     */
+    public function __construct(Request $request)
+    {
+        parent::__construct($request);
+    }
     public function index()
     {
-        $memberModel = new Member();
-        $filters = Request::instance()->session('filtersPermissions', array());
-        $params = Request::instance()->param();
-        unset($params['page']);
-        $params = array_merge($filters, $params);
-        foreach ($params as $key => $value) {
-            $memberModel->where($key, $value);
-        }
-        session("filtersPermissions", $params);
-        $lists = $memberModel->paginate($this->limit);
-        $this->assign("memberList", $lists);
-        $this->assign("empty", '<tr><td colspan="4">无用户权限数据.</td></tr>');
-        $this->assign("stype", "member");
+        $menuModel = new Menu();
+        $menuList = $menuModel->getList();
+        $this->assign("menuList", json_encode(array_values($menuList)));
         return $this->fetch("permissions/index");
     }
 
@@ -46,24 +44,20 @@ class Permissions extends BoController
     public function save()
     {
         $post = Request::instance()->post();
-        $post['ids'] = $post['ids'] == "del" ? array() : (is_array($post['ids']) ? $post['ids'] : array($post['ids']));
-        if (!empty($post['isAdmin'])) {
-            $post['ids'] = array();
+        $tmp = [];
+        $permissions = new \app\bo\model\Permissions();
+        foreach($post['menuids'] as $val){
+            $tmp[] = ["menu_id"=>$val,"member_id"=>"","opt"=>"2"];
         }
-        Member::update(["m_isAdmin" => $post['isAdmin']], ["m_id" => $post['mid']]);
-        $data = array();
-        foreach ($post['ids'] as $val) {
-            $data[] = [
-                "menu_id" => $val,
-                "member_id" => $post['mid'],
-                "opt" => 1,
-            ];
+        $permissions->where("member_id", "in", $post['mids'])->delete();
+        $all = [];
+        foreach($post['mids'] as $val){
+            foreach($tmp as $k=>$v){
+                $v["member_id"] = $val;
+                $all[] = $v;
+            }
         }
-        $ps = new \app\bo\model\Permissions();
-        \app\bo\model\Permissions::destroy(["member_id" => $post['mid']]);
-        if(count($data) > 0){
-            $ps->saveAll($data);
-        }
+        $permissions->saveAll($all);
         return ["status" => true, "message" => "保存成功"];
     }
 }

@@ -75,7 +75,7 @@ class Member extends BoModel
         if ($member) {
             $pwd = encryptPassword($data['password']);
             if ($member->m_password == $pwd) {
-                if (empty($member->m_isAdmin)) {
+                if ($member->m_isAdmin == "2") {
                     $member->menu = $permissionsModel->getList($member->m_id);
                 } else {
                     $menus = $menuModel->getList();

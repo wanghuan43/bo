@@ -11,7 +11,7 @@ class Chances extends BoModel
     public function getChanges($id = "")
     {
         $current = $this->getCurrent();
-        if(!$current->m_isAdmin){
+        if($current->m_isAdmin == "2"){
             $this->where("cs_mid", "=", $current->m_id);
         }
         if ($id != "") {

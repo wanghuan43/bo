@@ -30,7 +30,7 @@ class Company extends BoModel
     {
         $member = $this->getCurrent();
         $this->alias('co');
-        if (!$member->m_isAdmin) {
+        if ($member->m_isAdmin == "2") {
             $this->join('__CIRCULATION__ c', "co.co_id = c.ci_otid AND c.ci_type = 'company'");
             $this->where("c.ci_mid", "=", $member->m_id);
         }

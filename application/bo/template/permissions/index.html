@@ -1,51 +1,163 @@
-<div class="clearfix header">
-    <h2>权限管理</h2>
-    <div class="link-pannel">
-        <ul>
-            <li>
-                <a href="<{:url("/member/searchMemberNoList")}>?permissions=1" target="_blank" id="searchList" stype="<{$stype}>"><i class="fa fa-filter"></i>筛选</a>
-            </li>
-        </ul>
+<{load href="/static/js/jquery-ui.custom.js,/static/fancytree/jquery.fancytree.min.js,/static/fancytree/jquery.fancytree-all.min.js,/static/fancytree/skin-win8/ui.fancytree.min.css"}>
+<{load href="/static/js/menu.js,/static/js/plugin/select/select.min.js,/static/css/select.min.css,/static/css/jquery-ui.min.css"}>
+<div class="page-header">
+    <h2>批量权限设置</h2>
+</div>
+<div class="form-group" style="margin-bottom: 10px;overflow: hidden;">
+    <div class="col-sm-10">
+        <button class="btn btn-default" id="btn-add">设置权限</button>
+        <!--<button onclick="historyBack();" class="btn btn-default">返回</button>-->
     </div>
 </div>
-<div class="main-pannel" id="main-pannel">
-    <nav aria-label="Page navigation">
-        <{$memberList->render()}>
-    </nav>
-    <table class="list" cellspacing="0">
-        <thead>
-        <tr>
-            <th></th>
-            <th>姓名</th>
-            <th>编码</th>
-            <th>Email</th>
-            <th>电话</th>
-            <th>部门</th>
-            <th>科室</th>
-            <th>部门领导</th>
-            <th>管理员</th>
-            <th style="width:8em;"></th>
-        </tr>
-        </thead>
-        <tbody>
-        <{volist name="memberList" id="vo" empty="$empty"}>
-        <tr>
-            <td></td>
-            <td><a href="/member/detail?id=<{$vo.m_id}>"><{$vo.m_name}></a></td>
-            <td><{$vo.m_code}></td>
-            <td><{$vo.m_email}></td>
-            <td><{$vo.m_phone}></td>
-            <td><{$vo.m_department}></td>
-            <td><{$vo.m_office}></td>
-            <td><{if $vo.m_is_lead == 1}><span style="color: green;">是</span><{else}><span style="color:red">否</span><{/if}></td>
-            <td><{if $vo.m_isAdmin == 1}><span style="color: green;">是</span><{else}><span style="color:red">否</span><{/if}></td>
-            <td><a href="<{:url("/permissions/setPermissions/mid/".$vo['m_id'])}>" style="color: blue;">设置权限</a></td>
-        </tr>
-        <{/volist}>
-        </tbody>
-    </table>
-    <nav aria-label="Page navigation">
-        <{$memberList->render()}>
-    </nav>
-</div>
-<{load href="/static/js/plugin/select/select.min.js,/static/js/lists.js,/static/css/select.min.css"}>
+<table id="tree" style="margin: 0 10px;">
+    <colgroup>
+        <col width="100px">
+    </colgroup>
+    <thead class="alignCenter">
+    <tr>
+        <th><span style="display: inline-block;float: left;padding-left: 20px;"><input type="checkbox" id="checkAll"></span>菜单</th>
+    </tr>
+    </thead>
+    <tbody>
+    <!-- Define a row template for all invariant markup: -->
+    <tr>
+        <td></td>
+    </tr>
+    </tbody>
+</table>
+<script type="text/javascript">
+
+    var SOURCE =<{$menuList}>,tree="";
+
+    $(function () {
+        tree = $("#tree").fancytree({
+            checkbox: true,
+            titlesTabbable: true,     // Add all node titles to TAB chain
+            quicksearch: true,        // Jump to nodes when pressing first character
+            source: SOURCE,
+            //source: { url: "ajax-tree-products.json"},
+
+            extensions: ["edit", "dnd", "table", "gridnav"],
+
+            dnd: {
+                preventVoidMoves: true,
+                preventRecursiveMoves: true,
+                autoExpandMS: 400,
+                dragStart: function (node, data) {
+                    return true;
+                },
+                dragEnter: function (node, data) {
+                    // return ["before", "after"];
+                    return true;
+                },
+                dragDrop: function (node, data) {
+                    data.otherNode.moveTo(node, data.hitMode);
+                }
+            },
+            table: {
+                indentation: 20,
+                //nodeColumnIdx: 2,
+                //checkboxColumnIdx: 0
+            },
+            gridnav: {
+                autofocusInput: false,
+                handleCursorKeys: true
+            },
+            click: function (event, data) {
+                if(data.targetType != "checkbox"){
+                    return;
+                }
+                var selected = data.node.selected == undefined ? true : (data.node.selected == false ? true : false);
+                if(data.node.children != null){
+                    for (var i in data.node.children) {
+                        data.node.children[i].setSelected(selected);
+                    }
+                }else if(data.node.parent != null){
+                    var c = false;
+                    for(var i in data.node.parent.children){
+                        if(data.node.parent.children[i] == data.node){
+                            if(selected == true){
+                                c = selected;
+                            }
+                        }else if(data.node.parent.children[i].selected == true){
+                            c = true;
+                        }
+                    }
+                    data.node.parent.setSelected(c);
+                }
+            },
+        });
+        tree = $("#tree").fancytree("getTree");
+        $("#checkAll").click(function(){
+            var c = $(this).prop("checked");
+            for(var i in tree.rootNode.children){
+                tree.rootNode.children[i].setSelected(c);
+                if(tree.rootNode.children[i].children != null){
+                    for(var j in tree.rootNode.children[i].children){
+                        tree.rootNode.children[i].children[j].setSelected(c);
+                    }
+                }
+            }
+        });
+        $("#btn-add").click(function(){
+            var nodes = tree.getSelectedNodes(),menuids = [];
+            if(nodes.length == 0){
+                custom.alert("请至少选择一个菜单项");
+                return false;
+            }
+            for(var i in nodes){
+                menuids.push(nodes[i].data.id);
+            }
+            var cla = ".f-layer-member";
+            loading.show();
+            $.ajax({
+                url:"/member/searchMember?pop=true&permissions=true",
+                dataType: "json",
+                method: "post",
+                success:function(data){
+                    $("#popDIV").html(data.content);
+                    loading.hide();
+                    $("#sel-ids").select2();
+                    $("#checked-result").show();
+                    $(cla).addClass("show");
+                    $(cla + "-back").show();
+                    $(cla + " .close").click(function () {
+                        $(cla).removeClass("show");
+                        $(cla + "-back").hide();
+                        return false;
+                    });
+                    $(cla + " .save").click(function () {
+                        if($(cla+" table input:checked").length == 0){
+                            custom.alert("请至少选择一个再保存！");
+                            return false;
+                        }
+                        var mids = [];
+                        $("#sel-ids option:selected").each(function(i,ele){
+                            mids.push($(ele).val());
+                        });
+                        var data = {
+                            menuids : menuids,
+                            mids: mids,
+                        }
+                        $.ajax({
+                            url: "/permissions/save?pop=true",
+                            dataType: "json",
+                            method: "post",
+                            data:data,
+                            success: function (data) {
+                                custom.alert("保存成功");
+                                $(cla).removeClass("show");
+                                $(cla + "-back").hide();
+                            }
+                        });
+                        return false;
+                    });
+                },
+                error:function () {
+                    loading.hide();
+                    custom.alert("页面加载出错，请联系管理员！");
+                }
+            });
+        });
+    });
+</script>

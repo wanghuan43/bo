@@ -84,7 +84,7 @@ class   Orders extends BoModel
     {
         $member = $this->getCurrent();
         $this->alias('o');
-        if (!$member->m_isAdmin) {
+        if ($member->m_isAdmin == "2") {
             $this->join('__CIRCULATION__ c1', "o.o_id = c1.ci_otid AND c1.ci_type = 'orders'", "left");
             $this->where("c1.ci_mid", "=", $member->m_id);
         }

@@ -3,6 +3,7 @@
         <{$lists->render()}>
     </nav>
     <{assign name="type" value="$Request.get.type" /}>
+    <{assign name="permissions" value="$Request.get.permissions" /}>
     <div class="main-pannel">
         <table class="list" cellspacing="0">
             <thead>
@@ -55,13 +56,24 @@
 </div>
 <script>
     (function($){
-
+        var permissions = "<{$permissions}>";
+        if(permissions == "true"){
+            $("#popDIV tr").find("td:eq(8)").each(function(ii, ee){
+                if($(ee).html().replace(/<[^>]+>/g, "") == "是"){
+                    $(ee).parent("tr").find("td:eq(0)").find("input").prop("disabled","true");
+                }
+            })
+        }
         $("#list-all-member").click(function(){
             $this = $(this);
             $(".member-ids").prop("checked",$this.prop("checked")).change();
         });
         $("input.member-ids[type='checkbox']").change(function(){
             var $this = $(this);
+            if($this.prop("disabled")){
+                $this.prop("checked", false);
+                return false;
+            }
             var option = $("#sel-ids").find("option[value='"+$this.val()+"']");
             var html = "<option value='"+$this.val()+"' selected>"+$this.parent().parent().find("td:nth-child(2)").html()+"</option>";
             if( $this.prop("checked") ){

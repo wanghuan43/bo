@@ -64,7 +64,7 @@ class Orders extends BoController
         $order = $this->ordersModel->get($op_id);
         $isAdmin = true;
         if (!empty($op_id) AND $op == "edit") {
-            $isAdmin = $this->current->m_isAdmin ? true : ($this->current->m_id == $order->o_mid ? true : false);
+            $isAdmin = $this->current->m_isAdmin == "1" ? true : ($this->current->m_id == $order->o_mid ? true : false);
             $tmp = $tagLinkModel->getList($op_id, "orders");
             foreach ($tmp as $key => $value) {
                 $tagIDList[$value->tl_id] = $value->tl_name;
@@ -178,7 +178,7 @@ class Orders extends BoController
     public function delete($opID)
     {
         $order = $this->ordersModel->find($opID);
-        if ($order->o_mid != $this->current->m_id AND empty($this->current->m_isAdmin)) {
+        if ($order->o_mid != $this->current->m_id AND $this->current->m_isAdmin == "2") {
             $ret = ["status" => "false", "message" => "只有订单责任人和管理员可以删除订单"];
         } else {
             $oum = new OrderUsed();
@@ -208,7 +208,7 @@ class Orders extends BoController
         $chancesModle = new Chances();
         $log = Logs::get($opId)->toArray();
         $depart = $this->ordersModel->getOrderDeparent($log['l_otid']);
-        if ($depart->m_code == $this->current->m_code OR $this->current->m_isAdmin) {
+        if ($depart->m_code == $this->current->m_code OR $this->current->m_isAdmin == "1") {
             $this->assign("admin", true);
         } else {
             $this->assign("admin", false);
@@ -313,7 +313,7 @@ class Orders extends BoController
             case "contract":
                 $this->title = "订单（签约）";
                 $this->ordersModel->where("o.o_status", "=", "6");
-                if (!$this->current->m_isAdmin) {
+                if ($this->current->m_isAdmin == "2") {
                     $this->ordersModel->where("o.o_mid", "=", $this->current->m_id);
                 }
                 break;
@@ -336,7 +336,7 @@ class Orders extends BoController
                 $this->ordersModel->join("__LOGS__ l", "l.l_otid = o.o_id", "LEFT");
                 $this->ordersModel->join("__MEMBER__ m", "o.o_mid = m.m_id", "LEFT");
                 $this->ordersModel->join("__DEPARTMENT__ d", "m.m_did = d.d_id", "LEFT");
-                if (!$this->current->m_isAdmin) {
+                if ($this->current->m_isAdmin == "2") {
                     $this->ordersModel->where("d.m_code", "=", $this->current->m_code);
                 }
                 $this->ordersModel->where("l.l_panding", "=", "0");
@@ -344,7 +344,7 @@ class Orders extends BoController
             default:
                 $this->title = "订单（预计）";
                 $this->ordersModel->where("o.o_status", "<>", "6");
-                if (!$this->current->m_isAdmin) {
+                if ($this->current->m_isAdmin == "2") {
                     $this->ordersModel->where("o.o_mid", "=", $this->current->m_id);
                 }
                 break;

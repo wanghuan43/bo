@@ -108,7 +108,7 @@ return [
             'E' => ['title'=>'公司','key'=>'m_cname'],
             'F' => ['title'=>'部门','key'=>'m_office'],
             'G' => ['title'=>'科室','key'=>'m_department'],
-            'H' => ['title'=>'管理员','key'=>'m_isAdmin','type'=>['0'=>'否','1'=>'是']]
+            'H' => ['title'=>'管理员','key'=>'m_isAdmin','type'=>['2'=>'否','1'=>'是']]
         ],
         'company-1' => [ //供应商
             'A' => ['title'=>'编码','key'=>'co_code'],

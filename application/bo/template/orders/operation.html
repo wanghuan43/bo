@@ -65,7 +65,7 @@
                 </td>
             </tr>
             <tr>
-                <td class="txt"><label for="o_subject"><i class="asterisk">*</i>订单主题:</label></td>
+                <td class="txt"><label for="o_subject"><i class="asterisk">*</i>订单摘要:</label></td>
                 <td colspan="5"><input class="input-sm" type="text" name="o_subject" id="o_subject" value="<{$order.o_subject}>" required/></td>
                 <td class="txt"><label for="o_type">收入/支出:</label></td>
                 <td>
@@ -113,7 +113,7 @@
                     <input type="hidden" name="zc_dname" id="zc_dname" value=""/>
                 </td>
                 <td class="txt">
-                    <label for="zc_mid">支出负责人:</label>
+                    <label for="zc_mid">支出责任人:</label>
                 </td>
                 <td>
                     <select class="input-sm pop" name="zc_mid" id="zc_mid" data="zc_mid">
@@ -183,7 +183,7 @@
     </div>
 </div>
 <div class="main-pannel" <{if condition="$order['o_status'] != '6'"}>style="display:none;"<{/if}>>
-    <h3>已完成情况</h3>
+    <h3>实际发生情况</h3>
     <div class="content table clearfix">
         <div class="col33">
             <table class="invoice_1" data="1">

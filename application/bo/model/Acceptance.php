@@ -50,7 +50,7 @@ class Acceptance extends BoModel
     {
         $member = $this->getCurrent();
         $this->alias('a');
-        if (!$member->m_isAdmin) {
+        if ($member->m_isAdmin == "2") {
             $this->join('__CIRCULATION__ c', "a.a_id = c.ci_otid AND c.ci_type = 'acceptance'", "left");
             $this->where("c.ci_mid", "=", $member->m_id)->whereOr("a.a_mid", "=", $member->m_id);
         }
