@@ -12,9 +12,11 @@
     <div class="link-pannel">
         <ul>
             <{if condition="$op != 'add'"}>
+            <{if condition="$isAdmin"}>
             <li>
                 <a href="<{:url("/orders/myLogList/opId/".$op_id)}>"><i class="fa fa-calendar-check-o"></i>日志</a>
             </li>
+            <{/if}>
             <li>
                 <a href="<{:url("/postil/index/opID/".$op_id)}>"><i class="fa fa-pencil"></i>批注</a>
             </li>
@@ -92,16 +94,10 @@
                 </td>
                 <td class="txt"><label for="o_did">部门:</label></td>
                 <td>
-                    <select class="input-sm" name="o_did" id="o_did">
-                        <{volist name="dList" id="dl"}>
-                        <option value="<{$dl.d_id}>"
-                        <{if condition="empty($op_id)"}>
-                        <{eq name="$md" value="$dl.d_id"}>selected<{/eq}>
-                        <{else}>
-                        <{eq name="$dl.d_id" value="$order.o_did"}>selected<{/eq}>
+                    <select class="input-sm pop" name="o_did" id="o_did" data="o_did">
+                        <{if condition="!empty($op_id)"}>
+                        <option selected value="<{$order.o_did}>"><{$order.o_dname}></option>
                         <{/if}>
-                        ><{$dl.d_name}></option>
-                        <{/volist}>
                     </select>
                     <input type="hidden" name="o_dname" id="o_dname" value="<{$order.o_dname}>"/>
                 </td>
@@ -118,10 +114,8 @@
                     <label for="zc_did">支出部门:</label>
                 </td>
                 <td>
-                    <select class="input-sm" name="zc_did" id="zc_did">
-                        <{volist name="dList" id="dl"}>
-                        <option value="<{$dl.d_id}>" <{eq name="$dl.d_id" value="$order.o_did"}>selected<{/eq}>><{$dl.d_name}></option>
-                        <{/volist}>
+                    <select class="input-sm pop" name="zc_did" id="zc_did" data="zc_did">
+
                     </select>
                     <input type="hidden" name="zc_dname" id="zc_dname" value=""/>
                 </td>
@@ -129,10 +123,8 @@
                     <label for="zc_mid">支出负责人:</label>
                 </td>
                 <td>
-                    <select class="input-sm" name="zc_mid" id="zc_mid">
-                        <{volist name="memberList" id="dl"}>
-                        <option value="<{$dl.m_id}>" <{eq name="$dl.m_id" value="$order.o_mid"}>selected<{/eq}>><{$dl.m_name}></option>
-                        <{/volist}>
+                    <select class="input-sm pop" name="zc_mid" id="zc_mid" data="zc_mid">
+
                     </select>
                     <input type="hidden" name="zc_mname" id="zc_mname" value=""/>
                 </td>
@@ -179,22 +171,18 @@
             <tr>
                 <td class="txt"><label for="tagList">关键字/标签:</label></td>
                 <td colspan="3">
-                    <select class="mstag" multiple id="tagList" name="tagList[]">
-                        <{foreach name="tagList" item="tl" key="k"}>
-                        <optgroup label="<{$k}>">
-                            <{foreach name="$tl" item="l"}>
-                        <option value="<{$l.tl_id}>" <{if condition="array_key_exists($l.tl_id, $tagIDList)"}>selected<{/if}>><{$k}>:<{$l.tl_name}></option>
-                            <{/foreach}>
-                        </optgroup>
+                    <select class="mstag pop" multiple id="tagList" name="tagList[]" data="tagList">
+                        <{foreach $tagIDList as $key=>$value}>
+                        <option value="<{$key}>" selected><{$value}></option>
                         <{/foreach}>
                     </select>
                 </td>
                 <td class="txt"><label for="cList">传阅人:</label></td>
                 <td colspan="3">
-                    <select class="msmember" multiple id="cList" name="cList[]">
-                        <{volist name="memberList" id="ml"}>
-                        <option value="<{$ml.m_id}>" <{if condition="array_key_exists($ml.m_id, $cIDList)"}>selected<{/if}>><{$ml.m_department}>-<{$ml.m_name}></option>
-                        <{/volist}>
+                    <select class="msmember pop" multiple id="cList" name="cList[]" data="cList">
+                        <{foreach $cIDList as $key=>$value}>
+                        <option value="<{$key}>" selected><{$value}></option>
+                        <{/foreach}>
                     </select>
                 </td>
             </tr>
@@ -485,18 +473,18 @@
     };
 
     $(document).ready(function () {
-    <{if condition="!empty($op_id)"}>
-        $("#o_deal option").each(function(index, element){
-            if(parseInt($(element).val()) < parseInt("<{$order.o_deal}>")){
-                $(element).prop("disabled", true);
-            }
-        });
-        $("#o_status option").each(function(index, element){
-            if(parseInt($(element).val()) < parseInt("<{$order.o_status}>")){
-                $(element).prop("disabled", true);
-            }
-        });
-    <{/if}>
+//    <{if condition="!empty($op_id)"}>
+//        $("#o_deal option").each(function(index, element){
+//            if(parseInt($(element).val()) < parseInt("<{$order.o_deal}>")){
+//                $(element).prop("disabled", true);
+//            }
+//        });
+//        $("#o_status option").each(function(index, element){
+//            if(parseInt($(element).val()) < parseInt("<{$order.o_status}>")){
+//                $(element).prop("disabled", true);
+//            }
+//        });
+//    <{/if}>
         bindRemove();
         $("#o_type").change(function(){
             var cla = ".f-layer-company",lie = $("#o_lie").val();
@@ -581,8 +569,99 @@
             $("#o_dname").val($("#o_did option:selected").html());
         });
         $("#o_did").change();
-        $(".mstag").select2();
-        $(".msmember").select2();
+        $("select").select2();
+        $("select").on("select2:open", function(e){
+            var current = $(e.currentTarget),mul=current.prop("multiple"),type=current.attr("data"),url="",cla="",
+                hidden="",selectC="";
+            switch (type){
+                case "o_did":
+                    url = "/department/searchDepartment?mul="+mul+"&pop=true";
+                    cla = ".f-layer-department";
+                    hidden = "o_dname";
+                    break;
+                case "zc_did":
+                    url = "/department/searchDepartment?mul="+mul+"&pop=true";
+                    cla = ".f-layer-department";
+                    hidden = "zc_dname";
+                    break;
+                case "zc_mid":
+                    url = "/member/searchMember?type=" + mul + "&pop=true";
+                    cla = ".f-layer-member";
+                    hidden = "zc_mname";
+                    break;
+                case "cList":
+                    url = "/member/searchMember?pop=true";
+                    cla = ".f-layer-member";
+                    selectC = "cList";
+                    break;
+                case "tagList":
+                    url = "/taglib/searchTaglib?mul="+mul+"&pop=true";
+                    cla = ".f-layer-taglib";
+                    selectC = "tagList";
+                    break;
+                default:
+                    url = false;
+                    break;
+            }
+            if(url == false){
+                return false;
+            }
+            $.ajax({
+                url:url,
+                dataType: "json",
+                method: "post",
+                success:function(data){
+                    $("#popDIV").html(data.content);
+                    if(mul == true) {
+                        $("#sel-ids").select2();
+                        $("#checked-result").show();
+                    }
+                    $(cla).addClass("show");
+                    $(cla + "-back").show();
+                    $(cla + " .close").click(function () {
+                        $(cla).removeClass("show");
+                        $(cla + "-back").hide();
+                        return false;
+                    });
+                    $(cla + " .save").click(function () {
+                        if($(cla+" table input:checked").length == 0){
+                            custom.alert("请至少选择一个再保存！");
+                            return false;
+                        }
+                        if(mul){
+                            var options = "",old = $("#"+selectC+" option:selected");
+                            $("#sel-ids option:selected").each(function(i,ele){
+                                var rr = true;
+                                old.each(function(ii,ee){
+                                    if($(ee).val() == $(ele).val()){
+                                        rr = false;
+                                    }
+                                });
+                                if(rr) {
+                                    options += '<option value="' + $(ele).val() + '" selected>' + $(ele).html().replace(/<[^>]+>/g, "") + '</option>';
+                                }
+                            });
+                            $(current).append(options);
+                        }else{
+                            var options = "";
+                            $(cla+" table input:checked").each(function(i,ele){
+                                options += '<option value="'+$(ele).val()+'" selected>'+$(ele).parent().next().html().replace(/<[^>]+>/g,"")+'</option>';
+                                $("#"+hidden).val($(ele).parent().next().html().replace(/<[^>]+>/g,""));
+                            });
+                            $(current).html(options);
+                        }
+                        $(cla).removeClass("show");
+                        $(cla + "-back").hide();
+                        return false;
+                    });
+                },
+                error:function () {
+                    loading.hide();
+                    custom.alert("页面加载出错，请联系管理员！");
+                }
+            });
+            return false;
+        });
         initUsed();
         $("#o_money").change(function () {
             var val = $(this).val().replace(",","");
@@ -616,7 +695,6 @@
             $(this).removeClass("wrong");
             $(this).next(".wrongMsg").remove();
         });
-
         $("#opform [type=submit]").click(function(){
             var form = $("#opform");
             form.validate({
@@ -650,16 +728,15 @@
         });
 
         $(".fa-search").click(function () {
-            var type = $(this).attr("data");
-            var thisEle = this;
-            var inputs = $(this).parent().next().find("input");
-            var valss = $(inputs).val();
-            var otype = $("#o_type").val();
-            var olie = $("#o_lie").val();
-            var url = "";
+            var type = $(this).attr("data"),thisEle = this,inputs = $(this).parent().next().find("input"),
+                valss = $(inputs).val(),otype = $("#o_type").val(),olie = $("#o_lie").val(),url = ""
+                per = $(this).parents("tr").find("td:last").html();
             if(valss != "" && valss != undefined){
                 $(this).hide();
                 $(this).next().show();
+                return false;
+            }
+            if(per == "100.00%"){
                 return false;
             }
             if(type == "contract" || type == "company"){

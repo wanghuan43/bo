@@ -71,7 +71,7 @@
         <td></td>
         <{/if}>
         <{if $type == 'contract'}>
-        <td><{if $vo.o_lie == 1}>内部<{else/}>外部<{/if}></td>
+        <td><{if $vo.o_lie == 2}>内部<{else/}>外部<{/if}></td>
         <{else/}>
         <td><?php echo getStatusList($vo['o_status']);?></td>
         <{/if}>
