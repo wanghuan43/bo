@@ -715,4 +715,8 @@ label.error:before{
         padding:0;
         border:solid 1px #d9d9d9;
     }
+    select.input-sm:disabled{
+        background:#EEEEEE url("../images/firefox_select_icon.png") no-repeat calc(100% - 7px) 50%;
+        background-size:6px auto ;
+    }
 }
