@@ -490,7 +490,7 @@
             var cla = ".f-layer-company",lie = $("#o_lie").val();
             $(cla).remove();
             $(cla + "-back").remove();
-            if($(this).val() == "1" && lie == "2"){
+            if($(this).val() == "2" && lie == "1"){
                 zproject.show();
             }else{
                 zproject.hide();
@@ -947,14 +947,14 @@
             }
         });
         $("#o_lie").change(function(){
-            if($(this).val() == 2){
-                $("#o_type option:eq(0)").prop("selected", true);
-                $("#o_type option:eq(1)").prop("disabled", true);
+            if($(this).val() == 1){
+                $("#o_type option:eq(1)").prop("selected", true);
+                $("#o_type option:eq(0)").prop("disabled", true);
             }else{
-                $("#o_type option:eq(1)").prop("disabled", false);
+                $("#o_type option:eq(0)").prop("disabled", false);
             }
             var o_type = $("#o_type").val();
-            if($(this).val() == "2" && o_type == "1"){
+            if($(this).val() == "1" && o_type == "2"){
                 zproject.show();
             }else{
                 zproject.hide();
