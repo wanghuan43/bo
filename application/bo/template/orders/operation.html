@@ -70,8 +70,8 @@
                 <td class="txt"><label for="o_type">收入/支出:</label></td>
                 <td>
                     <select class="input-sm" name="o_type" id="o_type" <{if condition="!empty($order.o_type)"}>disabled<{/if}>>
-                        <{foreach name="typeList" id="tl" key="k"}>
-                        <option value="<{$k}>" <{eq name="$k" value="$order.o_type"}>selected<{/eq}>><{$tl}></option>
+                        <{foreach name="typeList" id="tl"}>
+                        <option value="<{$key}>" <{eq name="$key" value="$order.o_type"}>selected<{/eq}>><{$tl}></option>
                         <{/foreach}>
                     </select>
                 </td>
@@ -87,8 +87,8 @@
                 <td class="txt"><label for="o_lie">外部/内部:</label></td>
                 <td>
                     <select class="input-sm" name="o_lie" id="o_lie" <{if condition="!empty($order.o_lie)"}>disabled<{/if}>>
-                        <{volist name="lieList" id="ll" key="k"}>
-                        <option value="<{$k}>" <{eq name="$k" value="$order.o_lie"}>selected<{/eq}>><{$ll}></option>
+                        <{volist name="lieList" id="ll"}>
+                        <option value="<{$key}>" <{eq name="$key" value="$order.o_lie"}>selected<{/eq}>><{$ll}></option>
                         <{/volist}>
                     </select>
                 </td>
@@ -158,8 +158,8 @@
                 <td class="txt"><label for="o_status">商机状态:</label></td>
                 <td>
                     <select class="input-sm" name="o_status" id="o_status">
-                        <{volist name="statusList" id="ll" key="k"}>
-                        <option value="<{$k}>" <{eq name="$k" value="$order.o_status"}>selected<{/eq}>><{$ll}></option>
+                        <{volist name="statusList" id="ll"}>
+                        <option value="<{$key}>" <{eq name="$key" value="$order.o_status"}>selected<{/eq}>><{$ll}></option>
                         <{/volist}>
                     </select>
                 </td>
