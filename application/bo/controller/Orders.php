@@ -67,14 +67,16 @@ class Orders extends BoController
             $isAdmin = $this->current->m_isAdmin ? true : ($this->current->m_id == $order->o_mid ? true : false);
             $tmp = $tagLinkModel->getList($op_id, "orders");
             foreach ($tmp as $key => $value) {
-                $tagIDList[$value->tl_id] = $value->tl_id;
+                $tagIDList[$value->tl_id] = $value->tl_name;
             }
             $tmp = $cModel->getList($op_id, "orders");
             foreach ($tmp as $key => $value) {
-                $cIDList[$value->m_id] = $value->m_id;
+                $cIDList[$value->m_id] = $value->m_name;
             }
-            if(!$isAdmin AND !isset($cIDList[$this->current->m_did])){
-                $this->error("你没有权限查看此订单", "/");
+            if (!$isAdmin) {
+                if (!isset($cIDList[$this->current->m_id])) {
+                    $this->error("你没有权限查看此订单", "/");
+                }
             }
         }
         $tmp = $tagListModel->all(function ($query) {
@@ -94,7 +96,7 @@ class Orders extends BoController
         $this->assign('cIDList', $cIDList);
         $this->assign('baseMonth', json_encode($baseMonth));
         $this->assign('dList', $dModel->all());
-        $this->assign('chancesList', $chancesModel->where("cs_isShow", "=","1")->select());
+        $this->assign('chancesList', $chancesModel->where("cs_isShow", "=", "1")->select());
         $this->assign('memberList', $memberModel->all());
         $this->assign('tagList', $tagList);
         $this->assign('opject', $opm->getOrderProject($op_id));
@@ -361,7 +363,7 @@ class Orders extends BoController
 
             $type = $this->request->param('type') ?: 'orders';
             $post = $this->request->post();
-            $search = $this->getSearch(false,$post, 'orders');
+            $search = $this->getSearch(false, $post, 'orders');
 
             $ids = [];
             if (isset($post['ids'])) {
@@ -399,7 +401,7 @@ class Orders extends BoController
                     $arr1['o_date'] = date('Y/m/d', $arr1['o_date']);
                 }
                 $types = getTypeList();
-                $arr1['o_type'] = isset($types[$arr1['o_type']])?$types[$arr1['o_type']]:'';
+                $arr1['o_type'] = isset($types[$arr1['o_type']]) ? $types[$arr1['o_type']] : '';
 
                 foreach ($val as $k => $i) {
                     if ($type == 'orders') {
@@ -446,7 +448,7 @@ class Orders extends BoController
                     } else {
                         $arr1['o_lie'] = $i['o_lie'] = '';
                     }
-                    $i['o_type'] = isset($types[$i['o_type']])?$types[$i['o_type']]:'';
+                    $i['o_type'] = isset($types[$i['o_type']]) ? $types[$i['o_type']] : '';
                     $i['o_date'] = date('Y/m/d', $i['o_date']);
 
                     $i['c_no'] = '';

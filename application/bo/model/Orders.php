@@ -90,8 +90,8 @@ class   Orders extends BoModel
         $member = $this->getCurrent();
         $this->alias('o');
         if (!$member->m_isAdmin) {
-            $this->join('__CIRCULATION__ c', "o.o_id = c.ci_otid AND c.ci_type = 'orders'");
-            $this->where("c.ci_mid", "=", $member->m_id);
+            $this->join('__CIRCULATION__ c1', "o.o_id = c1.ci_otid AND c1.ci_type = 'orders'", "left");
+            $this->where("c1.ci_mid", "=", $member->m_id);
         }
         $this->field("o.*");
         foreach ($search as $key => $value) {

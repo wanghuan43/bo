@@ -60,6 +60,7 @@
     var search = eval('(<{$searchable|json_encode=###}>)');
     $(".f-layer-" + mName + " .search-condition").initSearchable(search, mName);
     $(document).ready(function(){
+        var className = getClassByType(mName);
         $("#<{$type}>Form").submit(function() {
             var formData = $(this).serialize();
             var url = $(this).attr("action");
@@ -70,44 +71,7 @@
                 data: formData,
                 success:function(data){
                     $("#<{$type}>List").html(data.content);
-                    $("#<{$type}>List input").click(function(){
-                        var cla = ".f-layer-<{$type}>";
-                        if($(this).attr('c') == "true"){
-                            $(this).prop("checked", false);
-                            $(this).attr("c", "false");
-                            $(cla).find(".on_class").html("");
-                            $(cla).find(".cp_class").html("");
-                            $(cla).find(".money_class").html("");
-                            $(cla).find(".m_class").val("0");
-                            $(cla).find(".m_class").attr("max", "0");
-                            $(cla).find(".no_class").html("");
-                        }else{
-                            $(this).prop("checked", true);
-                            $(this).attr("c", "true");
-                            var jdata = JSON.parse(decodeURIComponent($(this).attr("json")));
-                            var money = parseFloat($("#o_money").val());
-                            jdata.noused = parseFloat(jdata.noused);
-                            if(money > jdata.noused){
-                                money = jdata.noused;
-                            }else if(money < jdata.noused){
-                                money = money;
-                                $(".mony-<{$type}>").each(function(index, element){
-                                    money -= parseFloat($(element).html());
-                                });
-                            }
-                            if(money <= 0){
-                                custom.alert("金额不能小于等于0");
-                                return false;
-                            }
-                            money = money.toFixed(2);
-                            $(cla).find(".on_class").html(jdata.id);
-                            $(cla).find(".cp_class").html(jdata.coname);
-                            $(cla).find(".money_class").html(jdata.money);
-                            $(cla).find(".m_class").val(money);
-                            $(cla).find(".m_class").attr("max", jdata.noused);
-                            $(cla).find(".no_class").html(jdata.noused);
-                        }
-                    });
+                    clickBind(className);
                     $("#<{$type}>List a").click(function(){
                         var href = $(this).attr("href");
                         if(href != "" && href != "#"){
@@ -116,7 +80,11 @@
                                 url: href,
                                 method: "post",
                                 data:formData,
-                                dataType:"json"
+                                dataType:"json",
+                                success:function(data){
+                                    $("#<{$type}>List").html(data.content);
+                                    clickBind(className);
+                                }
                             }
                             contentAjax("<{$type}>List", tts, 'jump');
                         }
@@ -129,5 +97,66 @@
         });
         $("#<{$type}>Form").submit();
     });
+    function getClassByType(type){
+        var r = "";
+        switch(type){
+            case "invoice":
+                r = "invoice_1";
+                break;
+            case "acceptance":
+                r = "acceptance_2";
+                break;
+            case "received":
+                r = "received_3";
+                break;
+        }
+        return r;
+    }
 
+    function clickBind(className){
+        $("#<{$type}>List input").unbind("click");
+        $("#<{$type}>List input").click(function(){
+            var cla = ".f-layer-<{$type}>";
+            if($(this).attr('c') == "true"){
+                $(this).prop("checked", false);
+                $(this).attr("c", "false");
+                $(cla).find(".on_class").html("");
+                $(cla).find(".cp_class").html("");
+                $(cla).find(".money_class").html("");
+                $(cla).find(".m_class").val("0");
+                $(cla).find(".m_class").attr("max", "0");
+                $(cla).find(".no_class").html("");
+            }else{
+                $(this).prop("checked", true);
+                $(this).attr("c", "true");
+                var jdata = JSON.parse(decodeURIComponent($(this).attr("json"))),
+                    money = parseFloat($("#o_money").val()),
+                    used = parseFloat($("."+className).find("tr:eq(0)").find("td:eq(2)").html()),
+                    total = money - used;
+                jdata.noused = parseFloat(jdata.noused);
+                if(money > jdata.noused){
+                    money = jdata.noused;
+                }else if(money < jdata.noused){
+                    money = money;
+                    $(".mony-<{$type}>").each(function(index, element){
+                        money -= parseFloat($(element).html());
+                    });
+                }
+                if(money <= 0){
+                    custom.alert("金额不能小于等于0");
+                    return false;
+                }
+                if(money >= total){
+                    money = total;
+                }
+                money = money.toFixed(2);
+                $(cla).find(".on_class").html(jdata.id);
+                $(cla).find(".cp_class").html(jdata.coname);
+                $(cla).find(".money_class").html(jdata.money);
+                $(cla).find(".m_class").val(money);
+                $(cla).find(".m_class").attr("max", money);
+                $(cla).find(".no_class").html(jdata.noused);
+            }
+        });
+    }
 </script>
