@@ -14,24 +14,21 @@ class Invoice extends BoModel
             'name' => '发票号',
             'type' => 'text',
             'operators' => array(
-                'like' => '包含',
-                '=' => '等于'
+                'like' => '包含'
             )
         ),
         'i_coname' => array(
             'name' => '对方名称',
             'type' => 'text',
             'operators' => array(
-                'like' => '包含',
-                '=' => '等于'
+                'like' => '包含'
             )
         ),
         'i_content' => array(
             'name' => '开票摘要',
             'type' => 'text',
             'operators' => array(
-                'like' => '包含',
-                '=' => '等于'
+                'like' => '包含'
             )
         ),
         "i_date" => array(

@@ -14,16 +14,14 @@ class Project extends BoModel
             "name" => "项目编号",
             "type" => "text",
             "operators" => array(
-                "like" => "包含",
-                "=" => "等于",
+                "like" => "包含"
             ),
         ),
         "p_name" => array(
             "name" => "项目名称",
             "type" => "text",
             "operators" => array(
-                "like" => "包含",
-                "=" => "等于",
+                "like" => "包含"
             ),
         ),
     );

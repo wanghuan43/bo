@@ -13,48 +13,42 @@ class Member extends BoModel
             "name" => "用户编号",
             "type" => "text",
             "operators" => array(
-                "like" => "包含",
-                "=" => "等于",
+                "like" => "包含"
             ),
         ),
         "m_name" => array(
             "name" => "用户名",
             "type" => "text",
             "operators" => array(
-                "like" => "包含",
-                "=" => "等于",
+                "like" => "包含"
             ),
         ),
         "m_email" => array(
             "name" => "用户邮箱",
             "type" => "text",
             "operators" => array(
-                "like" => "包含",
-                "=" => "等于",
+                "like" => "包含"
             ),
         ),
         "m_office" => array(
             "name" => "用户部门",
             "type" => "text",
             "operators" => array(
-                "like" => "包含",
-                "=" => "等于",
+                "like" => "包含"
             ),
         ),
         'm_phone' => array(
             'name' => '电话',
             'type' => 'text',
             'operators' => array(
-                'like' => '包含',
-                '=' => '等于'
+                'like' => '包含'
             )
         ),
         'm_department' => array(
             'name' => '科室',
             'type' => 'text',
             'operators' => array(
-                'like' => '包含',
-                '=' => '等于'
+                'like' => '包含'
             )
         ),
         'm_isAdmin' => array(
@@ -64,6 +58,7 @@ class Member extends BoModel
                 '=' => '等于',
             ),
             'options' => array(
+                '0' => '-请选择-',
                 '2' => '否',
                 '1' => '是'
             )
