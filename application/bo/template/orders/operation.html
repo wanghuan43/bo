@@ -569,8 +569,8 @@
             $("#o_dname").val($("#o_did option:selected").html());
         });
         $("#o_did").change();
-        $("select").select2();
-        $("select").on("select2:open", function(e){
+        $(".pop").select2();
+        $(".pop").on("select2:open", function(e){
             var current = $(e.currentTarget),mul=current.prop("multiple"),type=current.attr("data"),url="",cla="",
                 hidden="",selectC="";
             switch (type){
@@ -606,12 +606,14 @@
             if(url == false){
                 return false;
             }
+            loading.show();
             $.ajax({
                 url:url,
                 dataType: "json",
                 method: "post",
                 success:function(data){
                     $("#popDIV").html(data.content);
+                    loading.hide();
                     if(mul == true) {
                         $("#sel-ids").select2();
                         $("#checked-result").show();
@@ -1210,19 +1212,17 @@
                 }
 
             },
-            slide: function( event, ui ) {
+            stop: function( event, ui ) {
                 var total = 0;
-                var returns = true;
                 $(ele).parents("table").find(".slider").each(function(index, element){
                     if(!$(element).is($(ele))){
-                        total += parseFloat($(element).slider("value"));
+                        total += parseFloat($(element).parent().next().find("input").val());
                     }
                 });
                 total = max - total;
                 var value = parseFloat(ui.value);
                 if(value > total){
                     value = total;
-                    returns = false;
                 }
                 $(ele).parent().next().find("input").val( value.toFixed(2) );
                 if(max > 0){
@@ -1230,8 +1230,12 @@
                 }else{
                     var p = "0%";
                 }
+                if(parseInt(p.replace(/\%/, "")) <= 0){
+                    p = "0%";
+                }
+                $(ui.handle).prev().css("width", 100-parseInt(p.replace(/\%/, ""))+"%");
+                $(ui.handle).css("left", p);
                 $(ui.handle).text(p);
-                return returns;
             }
         });
         $(ele).parent().next().find("input").val( $( ele ).slider( "value" ).toFixed(2) );
