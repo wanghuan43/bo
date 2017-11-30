@@ -30,7 +30,12 @@
                             $(el).val("");
                             if ( res.image !== undefined) {
                                 $(el).parent().addClass("attachment").find("img").remove();
+                                $(el).parent().find("a").remove();
                                 $(el).parent().prepend('<img src="' + res.image + '"  width="240" data-action="zoom"/>');
+                            }else if (res.file !== undefined){
+                                $(el).parent().find("img").remove();
+                                $(el).parent().find("a").remove();
+                                $(el).parent().prepend('<a href="' + res.file + '" target="_blank"><i class="fa fa-paperclip"></i> 附件</a>');
                             }
                         }
                     }

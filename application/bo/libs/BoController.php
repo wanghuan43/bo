@@ -4,6 +4,7 @@ namespace app\bo\libs;
 
 use think\Config;
 use think\Controller;
+use think\File;
 use think\Request;
 use think\Url;
 
@@ -129,7 +130,7 @@ class BoController extends Controller
         }
         $listFile = $mName . '/list/' . $listType;
 
-        $search = $this->getSearch(false,$post, $type);
+        $search = $this->getSearch(false, $post, $type);
 
         if (isset($post['fields']) || isset($get['page'])) {
             $file = $listFile;
@@ -160,9 +161,9 @@ class BoController extends Controller
 
     }
 
-    protected function getSearch( $model=false, $post = false, $mName = false)
+    protected function getSearch($model = false, $post = false, $mName = false)
     {
-        if(empty($model)){
+        if (empty($model)) {
             $model = $this->model;
         }
         if (empty($post)) {
@@ -392,7 +393,7 @@ class BoController extends Controller
             if (isset($post['ids'])) {
                 $res = $this->model->where($this->model->getPk(), 'IN', $post['ids'])->select();
             } else {
-                $search = $this->getSearch(false,$post, $type);
+                $search = $this->getSearch(false, $post, $type);
                 $res = $this->model->getList($search, false);
             }
 
@@ -474,31 +475,33 @@ class BoController extends Controller
         $isAdmin = $isOwner = false;
         $readonly = true;
 
-        if($this->current->m_isAdmin == 1){
+        if ($this->current->m_isAdmin == 1) {
             $isAdmin = true;
         }
 
-        if($this->current->m_id == $ownerId){
+        if ($this->current->m_id == $ownerId) {
             $isOwner = true;
         }
 
-        if($isAdmin || $isOwner){
+        if ($isAdmin || $isOwner) {
             $readonly = false;
         }
 
-        $this->assign('isAdmin',$isAdmin);
-        $this->assign('isOwner',$isOwner);
-        $this->assign('readonly',$readonly);
+        $this->assign('isAdmin', $isAdmin);
+        $this->assign('isOwner', $isOwner);
+        $this->assign('readonly', $readonly);
 
     }
 
-    protected function uploadFile($file,$type='image')
+    protected function uploadFile($file, $type = 'image')
     {
-        if(empty($file)){
-            $ret = ['flag'=>2, 'msg'=>'没有上传文件'];
-        }else{
+        if (empty($file)) {
+            $ret = ['flag' => 2, 'msg' => '没有上传文件'];
+        } else {
 
-            $baseFolder = DS.'attachment'.DS.date('Y') ;
+            $str = md5('XinZhiYun' . date('Ym'));
+
+            $baseFolder = DS . 'files' . DS . substr($str, 8, 2) . DS . substr($str, 26, 2);
 
             $folder = ROOT_PATH . DS . 'public' . $baseFolder;
 
@@ -506,25 +509,25 @@ class BoController extends Controller
                 CustomUtils::mkdir_p($folder);
             }
 
-            $v = false;
+            $rule = $this->model->getUploadFileValidateRule();
 
-            if($type == 'image' && $file->checkImg()){
-                $v = true;
-            }
+            $info = $file->validate($rule)->move($folder);
 
-            if($v){
-                $info = $file->move($folder);
-                if(empty($info)){
-                    $ret = ['flag'=>0,'msg'=>$file->getError()];
-                }else{
-                    $ret = ['flag'=>1,'msg'=>'文件上传成功','name'=>$baseFolder.DS.$info->getSaveName()];
-                }
-            }else{
-                $ret = ['flag' => 0, 'msg' => '上传文件格式不支持'];
+            if (empty($info)) {
+                $ret = ['flag' => 0, 'msg' => $file->getError()];
+            } else {
+                $ret = ['flag' => 1, 'msg' => '文件上传成功', 'name' => $baseFolder . DS . $info->getSaveName()];
             }
 
         }
         return $ret;
+    }
+
+    protected function getAttachmentMimeType($file)
+    {
+        $file = ROOT_PATH . DS . 'public' . $file;
+        $file = new File($file);
+        return explode('/',$file->getMime())[0];
     }
 
 }

@@ -2,8 +2,10 @@
 namespace app\bo\controller;
 
 use app\bo\libs\BoController;
+use app\bo\model\Logs;
 use app\bo\model\Orders;
 use app\bo\model\Project as ModelProject;
+use think\File;
 use think\Request;
 
 
@@ -59,6 +61,7 @@ class Project extends BoController
             'p_pay' => trim($post['pay']),
             'p_mname'=>$this->current->m_name,
             'p_mid'=>$this->current->m_id,
+            'p_content' => trim($post['content']),
             'p_createtime'=>time(),
             'p_updatetime'=>time()
         ];
@@ -69,10 +72,25 @@ class Project extends BoController
                 $data['p_date'] = strtotime($data['p_date']);
             }
 
-            if($this->model->save($data)){
-                $ret = ['flag'=>1,'msg'=>'添加成功'];
-            }else{
-                $ret = ['flag'=>0,'msg'=>'添加失败'];
+            $file = $this->request->file('attachment');
+
+            $res = $this->uploadFile($file);
+
+            if($res['flag']===0){
+                $ret = $res;
+            }else {
+
+                if($res['flag'] === 1){
+                    $data['p_attachment'] = $res['name'];
+                }
+
+                if ($res = $this->model->save($data)) {
+
+                    $ret = ['flag' => 1, 'msg' => '添加成功'];
+
+                } else {
+                    $ret = ['flag' => 0, 'msg' => '添加失败'];
+                }
             }
 
         }else{
@@ -88,11 +106,12 @@ class Project extends BoController
         $data = $this->model->getDataById($id);
         $mOrders = new Orders();
         $orders = $mOrders->where('o_pid','=',$id)->select();
-        $readonly = true;
-        if($this->current->m_isAdmin == 1 || $this->current->m_id == $data['p_mid'] ){
-            $readonly = false;
+        $this->setUpdateParams($data['p_mid']);
+        $mimeType = false;
+        if($data['p_attachment']){
+            $mimeType = $this->getAttachmentMimeType($data['p_attachment']);
         }
-        $this->assign('readonly',$readonly);
+        $this->assign('aMimeType',$mimeType);
         $this->assign('orders',$orders);
         $this->assign('data',$data);
         return $this->fetch();
@@ -109,12 +128,15 @@ class Project extends BoController
             'p_id' => $id,
             'p_no' => strtoupper(trim($post['no'])),
             'p_name' => trim($post['name']),
+            'p_mname' => trim($post['mname']),
+            'p_mid' => $post['mid'],
             'p_did' => $post['did'],
             'p_dname' => $post['dname'],
             'p_income' => trim($post['income']),
             'p_pay' => trim($post['pay']),
             'p_updatetime' => time(),
-            'p_date' => trim($post['date'])
+            'p_date' => trim($post['date']),
+            'p_content' => trim($post['content'])
         ];
 
         $validate = validate('Project');
@@ -123,11 +145,33 @@ class Project extends BoController
             if(!empty($data['p_date'])){
                 $data['p_date'] = strtotime($data['p_date']);
             }
-            $res = $this->model->save($data,['p_id'=>$id]);
-            if ($res) {
-                $ret = ['flag' => 1, 'msg' => '更新成功'];
-            } else {
-                $ret = ['flag' => 0, 'msg' => '更新失败'];
+
+            $file = $this->request->file('attachment');
+
+            $res = $this->uploadFile($file);
+
+            if($res['flag']===0){
+                $ret = $res;
+            }else {
+
+                if($res['flag'] === 1){
+                    $data['p_attachment'] = $res['name'];
+                }
+                $old = $this->model->getDataById($data['p_id']);
+                if ($res = $this->model->save($data,$data['p_id'])) {
+                    $logModel = new Logs();
+                    $logModel->saveLogs($data,$old,$data['p_id'],'project');
+                    $ret = ['flag' => 1, 'msg' => '更新成功'];
+                    if(isset($data['p_attachment']) && $data['p_attachment']){
+                        if($this->getAttachmentMimeType($data['p_attachment']) == 'image'){
+                            $ret['image'] = $data['p_attachment'];
+                        }else{
+                            $ret['file'] = $data['p_attachment'];
+                        }
+                    }
+                } else {
+                    $ret = ['flag' => 0, 'msg' => '更新失败'];
+                }
             }
         }else{
             $ret = ['flag'=>0,'msg'=>$validate->getError()];

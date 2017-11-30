@@ -34,7 +34,7 @@ class Project extends BoModel
         $this->alias('p');
         if (!$member->m_isAdmin) {
             $this->join('__CIRCULATION__ c', "p.p_id = c.ci_otid AND c.ci_type = 'project'");
-            $this->where("c.ci_mid", "=", $member->m_id);
+            $this->where("c.ci_mid", "=", $member->m_id)->whereOr('p.p_mid','=',$member->m_id);
         }
         $this->field("p.*");
         foreach ($search as $key => $value) {

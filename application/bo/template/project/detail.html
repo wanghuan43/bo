@@ -12,21 +12,43 @@
             <table class="detail">
                 <tr>
                     <td><label for="ipt-no"><i class="asterisk">*</i>项目编号:</label></td>
-                    <td><input id="ipt-no" class="<{if $readonly}>no-border<{else}>input-sm<{/if}>" type="text" name="no" value="<{$data.p_no}>"<{if $readonly}> readonly<{/if}> required onkeyup="toUpperCase(this)" onBlur="toUpperCase(this)" rangelength="[8,32]"/><input type="hidden" name="id" value="<{$data.p_id}>"/> </td>
+                    <td><input id="ipt-no" class="input-sm" type="text" name="no" value="<{$data.p_no}>"<{if $readonly}> disabled<{/if}> required onkeyup="toUpperCase(this)" onBlur="toUpperCase(this)" rangelength="[8,32]"/><input type="hidden" name="id" value="<{$data.p_id}>"/> </td>
                     <td><label for="ipt-name"><i class="asterisk">*</i>项目名称:</label></td>
-                    <td><input id="ipt-name" class="<{if $readonly}>no-border<{else}>input-sm<{/if}>" type="text" name="name" value="<{$data.p_name}>"<{if $readonly==true}> readonly<{/if}> required minlength="4"/></td>
+                    <td><input id="ipt-name" class="input-sm" type="text" name="name" value="<{$data.p_name}>"<{if $readonly}> disabled<{/if}> required minlength="4"/></td>
                     <td><label><i class="asterisk">*</i>立项部门:</label></td>
-                    <td><input type="text" class="<{if $readonly}>no-border<{else}>input-sm<{/if}>" name="dname" id="inputDepartment" value="<{$data.p_dname}>" readonly<{if $readonly==true}> disabled<{/if}> required/><input type="hidden" name="did" value="<{$data.p_did}>"></td>
-                    <td><label>责任人:</label></td>
-                    <td><input type="text"  name="mname" value="<{$data.p_mname}>" readonly class="no-border"></td>
+                    <td><input type="text" class="input-sm" name="dname" id="inputDepartment" value="<{$data.p_dname}>" readonly<{if $readonly}> disabled<{/if}> required/><input type="hidden" name="did" value="<{$data.p_did}>"></td>
+                    <td><label for="<{if $isAdmin}>ipt-member-name<{else}>ipt-mname<{/if}>">责任人:</label></td>
+                    <td>
+                        <input type="text"  name="mname" value="<{$data.p_mname}>" readonly class="<{if empty($isAdmin)}>no-border<{else}>input-sm<{/if}>" id="<{if $isAdmin}>ipt-member-name<{else}>ipt-mname<{/if}>">
+                        <input type="hidden" name="mid" value="<{$data.p_mid}>"/>
+                    </td>
                 </tr>
                 <tr>
                     <td><label>立项日期:</label></td>
-                    <td><input type="text" class="<{if $readonly}>no-border<{else}>input-sm<{/if}>" name="date" value="<{$data.p_date|date='Y-m-d',###}>" readonly<{if $readonly==true}> disabled<{/if}>></td>
-                    <td><label>总收入:</label></td>
-                    <td><input type="text" class="<{if $readonly}>no-border<{else}>input-sm<{/if}>" name="income" value="<{$data.p_income}>"<{if $readonly}> readonly<{/if}>/></td>
-                    <td><label>总支出:</label></td>
-                    <td><input type="text" class="<{if $readonly}>no-border<{else}>input-sm<{/if}>" name="pay" value="<{$data.p_pay}>"<{if $readonly}> readonly<{/if}>></td>
+                    <td><input type="text" class="input-sm" name="date" value="<{$data.p_date|date='Y-m-d',###}>" readonly<{if $readonly}> disabled<{/if}>></td>
+                    <td><label>预计总收入:</label></td>
+                    <td><input type="text" class="input-sm" name="income" value="<{$data.p_income}>"<{if $readonly}> disabled<{/if}>/></td>
+                    <td><label>预计总支出:</label></td>
+                    <td><input type="text" class="input-sm" name="pay" value="<{$data.p_pay}>"<{if $readonly}> disabled<{/if}>></td>
+                </tr>
+                <tr>
+                    <td><label>说明:</label></td>
+                    <td colspan="5">
+                        <textarea class="form-control" name="content"<{if $readonly}> disabled<{/if}>><{$data.p_content}></textarea>
+                    </td>
+                </tr>
+                <tr>
+                    <td><label for="ipt-attachment">附件:</label></td>
+                    <td colspan="5" class="<{if $aMimeType == 'image'}>attachment<{/if}>">
+                        <{if $aMimeType == 'image'}>
+                            <img src="<{$data.p_attachment}>" width="240" data-action="zoom"/>
+                        <{elseif $aMimeType}>
+                            <a href="<{$data.p_attachment}>" target="_blank"><i class="fa fa-paperclip"></i> 附件</a>
+                        <{/if}>
+                        <{if empty($readonly)}>
+                        <input type="file" name="attachment" id="ipt-attachment"/>
+                        <{/if}>
+                    </td>
                 </tr>
             </table>
         </div>
