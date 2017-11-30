@@ -64,7 +64,7 @@ class Member extends BoModel
                 '=' => '等于',
             ),
             'options' => array(
-                '0' => '否',
+                '2' => '否',
                 '1' => '是'
             )
         )
