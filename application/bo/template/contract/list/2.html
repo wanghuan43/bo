@@ -2,7 +2,7 @@
     <{$lists->render()}>
 </nav>
 <div class="search-result">
-    <table cellspacing="0" class="list">
+    <table cellspacing="0" class="list table">
         <thead>
         <tr>
             <th style="min-width: 50px;text-align:center;padding-right:4px;">
@@ -18,7 +18,7 @@
                     合同名称<i class="<{:getSortClass($sort,'c_name')}>"></i>
                 </a>
             </th>
-            <th width="400">
+            <th width="200">
                 <a href="/contract/all/sort/c_coname/order/<{:getSortOrder($sort,'c_coname')}>">
                     对方名称<i class="<{:getSortClass($sort,'c_coname')}>"></i>
                 </a>
@@ -48,11 +48,11 @@
                     未对应订单金额<i class="<{:getSortClass($sort,'c_noused')}>"></i>
                 </a>
             </th>
-            <th style="width:8em;"></th>
+            <th></th>
         </tr>
         </thead>
         <tbody>
-        <{volist name="lists" id="val" empty="$empty"}>
+        <{volist name="lists" id="val" empty="<tr><td colspan='10'>暂无数据</td></tr>"}>
         <tr>
             <td><input type="checkbox" value="<{$val.c_id}>" class="lists-id" data-name="<{$val.c_no}>"></td>
             <td><a href="/contract/detail?id=<{$val.c_id}>"><{$val.c_no}></a></td>

@@ -1,7 +1,7 @@
 <nav aria-label="Page navigation">
     <{$lists->render()}>
 </nav>
-<table cellspacing="0" class="list">
+<table cellspacing="0" class="list table">
     <thead>
     <tr>
         <th style="width: 50px;text-align:center;padding-right:4px;">
@@ -17,7 +17,7 @@
                 开票摘要<i class="<{:getSortClass($sort,'i_content')}>"></i>
             </a>
         </th>
-        <th>
+        <th width="200">
             <a href="/invoice/all/sort/i_coname/order/<{:getSortOrder($sort,'i_coname')}>">
                 对方名称<i class="<{:getSortClass($sort,'i_coname')}>"></i>
             </a>

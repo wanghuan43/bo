@@ -44,8 +44,8 @@
                     return html;
                 }
                 if (operator == 'between') {
-                    return '<input type="text" name="values[' + modelName + '][' + i + '][]" class="values input-sm" style="width:100px"/>'
-                        + '<input type="text" name="values[' + modelName + '][' + i + '][]" class="values input-sm" style="width: 100px"/>';
+                    return '<input type="text" name="values[' + modelName + '][' + i + '][]" class="values input-sm" style="width:99px"/>'
+                        + '<input type="text" name="values[' + modelName + '][' + i + '][]" class="values input-sm" style="width: 99px;margin-left:2px"/>';
                 } else {
                     return '<input type="text" name="values[' + modelName + '][' + i + '][]" class="values input-sm"/>';
                 }

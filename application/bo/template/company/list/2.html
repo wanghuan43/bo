@@ -1,7 +1,7 @@
 <nav aria-label="Page navigation">
     <{$lists->render()}>
 </nav>
-<table class="list" cellspacing="0">
+<table class="list table " cellspacing="0">
     <thead>
     <tr>
         <th style="min-width: 50px;text-align:center;padding-right:4px;"><input type="checkbox" class="checkAll" value="all"/></th>
@@ -10,7 +10,7 @@
                 编码<i class="<{:getSortClass($sort,'co_code')}>"></i>
             </a>
         </th>
-        <th width="300">
+        <th width="200">
             <a href="/company/all/type/<{$type}>/sort/co_name/order/<{:getSortOrder($sort,'co_name')}>">
                 名称<i class="<{:getSortClass($sort,'co_name')}>"></i>
             </a>

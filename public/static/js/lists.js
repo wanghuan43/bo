@@ -173,11 +173,11 @@
         };
     });
 
-    $("table.list tr").hover(function(){
+    /*$("table.list tr").hover(function(){
         $(this).addClass("hover");
     },function(){
         $(this).removeClass("hover");
-    });
+    });*/
     $("#searchList").click(function(){
         loading.show();
         var stype = $(this).attr("stype");

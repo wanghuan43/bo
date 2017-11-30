@@ -8,15 +8,31 @@
 
     $("#form-update [type='submit']").click(function () {
         var form = $("#form-update");
+        var data = new FormData(form[0]);
         form.validate({
             'submitHandler': function () {
+                var form = $("#form-update");
+                var data = new FormData(form[0]);
                 $.ajax({
                     url: form.attr("action"),
                     method: form.attr("method"),
-                    data: form.serialize(),
+                    data: data,
+                    contentType: false,
+                    processData: false,
                     dataType: "json",
                     success: function (res) {
                         custom.alert(res.msg);
+                        if(res.flag == 1) {
+                            var el;
+                            if ($("#ipt-attachment").length > 0) {
+                                el = "#ipt-attachment";
+                            }
+                            $(el).val("");
+                            if ( res.image !== undefined) {
+                                $(el).parent().addClass("attachment").find("img").remove();
+                                $(el).parent().prepend('<img src="' + res.image + '"  width="240" data-action="zoom"/>');
+                            }
+                        }
                     }
                 });
             }
@@ -26,9 +42,9 @@
     $(".form-add [type='submit']").click(function () {
 
         var form = $(".form-add:first");
-
         form.validate({
             'submitHandler': function () {
+                var form = $(".form-add:first");
                 var data = new FormData(form[0]);
                 $.ajax({
                     url: form.attr("action"),
@@ -189,6 +205,7 @@
                         if (radio.length > 0) {
                             $("input[name='mname']").val(radio.parent().parent().find("td:eq(1)").html());
                             $("input[name='mcode']").val(radio.parent().parent().find("td:eq(2)").html());
+                            $("input[name='mid']").val(radio.val());
                             custom.hideFilter(".f-layer-member-1");
                         } else {
                             custom.alert("请至少选择一项");

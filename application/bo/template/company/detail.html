@@ -9,49 +9,53 @@
     <div class="main-pannel">
         <h3>基本信息</h3>
         <div class="content">
-            <table>
+            <table class="detail">
                 <tr>
-                    <td>类型:</td>
+                    <td><label>类型:</label></td>
                     <td>
                         <label><input type="radio" name="type" value="1"<{if $data.co_type==1}> checked<{/if}>>&nbsp;&nbsp;供应商</label>
-                        &nbsp;&nbsp;&nbsp;&nbsp;
                         <label><input type="radio" name="type" value="2"<{if $data.co_type==2}> checked<{/if}>>&nbsp;&nbsp;客户</label>
                     </td>
                     <td colspan="3">
-                        <label style="margin-right:1em;">内部供应商/客户:</label>
+                        <label>内部供应商/客户:</label>
+                    </td>
+                    <td>
                         <label><input type="radio" name="internal_flag" value="1"<{if $data.co_internal_flag==1}> checked<{/if}>>&nbsp;&nbsp;是</label>
-                        &nbsp;&nbsp;&nbsp;&nbsp;
-                        <label><input type="radio" name="internal_flag" value="2"<{if $data.co_internal_flag==0}> checked<{/if}>>&nbsp;&nbsp;否</label>
+                        <label><input type="radio" name="internal_flag" value="2"<{if $data.co_internal_flag!=1}> checked<{/if}>>&nbsp;&nbsp;否</label>
                     </td>
                 </tr>
                 <tr>
-                    <td><i class="asterisk">*</i>编号:</td>
-                    <td><input type="text" name="code" value="<{$data.co_code}>" required minlength="4" onblur="toUpperCase(this)" onkeyup="toUpperCase(this)"/><input type="hidden" name="id" value="<{$data.co_id}>"/> </td>
-                    <td style="width:84px;"><i class="asterisk">*</i>名称:</td>
-                    <td><input type="text" name="name" value="<{$data.co_name}>" required minlength="4"/></td>
-                    <td>简称:</td>
-                    <td><input type="text" name="remark" value="<{$data.co_remark}>"/></td>
-                    <td style="width:84px">助记码:</td>
-                    <td><input type="text" value="<{$data.co_mnemonic_code}>" name="mnemonic_code"/></td>
+                    <td><label for="ipt-code"><i class="asterisk">*</i>编号:</label></td>
+                    <td><input class="input-sm" type="text" name="code" id="ipt-code" value="<{$data.co_code}>" required minlength="4" onblur="toUpperCase(this)" onkeyup="toUpperCase(this)"/><input type="hidden" name="id" value="<{$data.co_id}>"/> </td>
+                    <td><label for="ipt-name"><i class="asterisk">*</i>名称:</label></td>
+                    <td><input class="input-sm" id="ipt-name" type="text" name="name" value="<{$data.co_name}>" required minlength="4"/></td>
+                    <td><label for="ipt-remark">简称:</label></td>
+                    <td><input id="ipt-remark" class="input-sm" type="text" name="remark" value="<{$data.co_remark}>"/></td>
+                    <td><label for="ipt-mnemonic_code">助记码:</label></td>
+                    <td><input class="input-sm" id="ipt-mnemonic_code" type="text" value="<{$data.co_mnemonic_code}>" name="mnemonic_code"/></td>
                 </tr>
                 <tr>
-                    <td>行业:</td>
-                    <td><input type="text" name="industry" value="<{$data.co_industry}>"></td>
-                    <td>地址:</td>
-                    <td colspan="5"><input type="text" name="address" value="<{$data.co_address}>"/></td>
+                    <td><label for="ipt-industry">行业:</label></td>
+                    <td><input id="ipt-industry" class="input-sm" type="text" name="industry" value="<{$data.co_industry}>"></td>
+                    <td><label for="ipt-address">地址:</label></td>
+                    <td colspan="5"><input id="ipt-address" class="input-sm" type="text" name="address" value="<{$data.co_address}>"/></td>
                 </tr>
                 <tr>
-                    <td>税务登记号:</td>
-                    <td><input type="text" name="tax_id" value="<{$data.co_tax_id}>"/> </td>
-                    <td>工商注册号:</td>
-                    <td><input type="text" name="reg_id" value="<{$data.co_reg_id}>"/></td>
-                    <td>法人代表:</td>
-                    <td><input type="text" name="lr" value="<{$data.co_lr}>"/></td>
-                    <td>集团内名称:</td>
-                    <td><input type="text" name="internal_name" value="<{$data.co_internal_name}>"/> </td>
+                    <td><label for="ipt-tax_id">税务登记号:</label></td>
+                    <td><input id="ipt-tax_id" class="input-sm" type="text" name="tax_id" value="<{$data.co_tax_id}>"/> </td>
+                    <td><label for="ipt-reg_id">工商注册号:</label></td>
+                    <td><input id="ipt-reg_id" class="input-sm" type="text" name="reg_id" value="<{$data.co_reg_id}>"/></td>
+                    <td><label for="ipt-lr">法人代表:</label></td>
+                    <td><input id="ipt-lr" class="input-sm" type="text" name="lr" value="<{$data.co_lr}>"/></td>
+                    <td><label for="ipt-internal_name">集团内名称:</label></td>
+                    <td><input id="ipt-internal_name" class="input-sm" type="text" name="internal_name" value="<{$data.co_internal_name}>"/> </td>
                 </tr>
                 <tr>
-                    <td>状态:</td>
+                    <td><label for="ipt-create_org">创建组织:</label></td>
+                    <td colspan="3"><input id="ipt-create_org" class="input-sm" type="text" name="create_org" value="<{$data.co_create_org}>"></td>
+                </tr>
+                <tr>
+                    <td><label>状态:</label></td>
                     <td>
                         <label class="radio-inline">
                             <input type="radio" name="status" value="1"<{if $data.co_status==1}> checked<{/if}>> 核准
@@ -60,7 +64,7 @@
                             <input type="radio" name="status" value="0"<{if $data.co_status!=1}> checked<{/if}>> 禁用
                         </label>
                     </td>
-                    <td>委外商:</td>
+                    <td><label>委外商:</label></td>
                     <td>
                         <label class="radio-inline">
                             <input type="radio" name="flag" value="0"<{if $data.co_flag != 1}> checked<{/if}>> 否
@@ -69,10 +73,6 @@
                             <input type="radio" name="flag" value="1"<{if $data.co_flag==1}> checked<{/if}>> 是
                         </label>
                     </td>
-                </tr>
-                <tr>
-                    <td>创建组织:</td>
-                    <td colspan="3"><input type="text" name="create_org" value="<{$data.co_create_org}>"></td>
                 </tr>
             </table>
         </div>
