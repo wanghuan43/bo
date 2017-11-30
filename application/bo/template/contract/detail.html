@@ -57,6 +57,19 @@
                         <textarea name="bakup" class="form-control"<{if $readonly}> disabled<{/if}>><{$data.c_bakup}></textarea>
                     </td>
                 </tr>
+                <tr>
+                    <td><label for="ipt-attachment">附件:</label></td>
+                    <td colspan="5" class="<{if $aMimeType == 'image'}>attachment<{/if}>">
+                        <{if $aMimeType == 'image'}>
+                        <img src="<{$data.c_attachment}>" width="240" data-action="zoom"/>
+                        <{elseif $aMimeType}>
+                        <a href="<{$data.c_attachment}>" target="_blank"><i class="fa fa-paperclip"></i> 附件</a>
+                        <{/if}>
+                        <{if empty($readonly)}>
+                        <input type="file" name="attachment" id="ipt-attachment"/>
+                        <{/if}>
+                    </td>
+                </tr>
             </table>
         </div>
     </div>

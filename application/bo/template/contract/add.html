@@ -19,21 +19,21 @@
     </div>
 
     <div class="form-group">
-        <label class="col-sm-2 control-label" for="ipt-company-name"><i class="asterisk">*</i>对方公司</label>
-        <div class="col-sm-10">
-            <input type="text" class="form-control input-sm" name="coname" id="ipt-company-name" readonly required/>
-            <input type="hidden" name="coid" />
-        </div>
-    </div>
-
-    <div class="form-group">
         <label class="col-sm-2 control-label">类型</label>
         <div class="col-sm-10">
             <select class="form-control input-sm" name="type">
                 <{foreach name=":getTypeList()" item="type" key="k"}>
-                    <option value="<{$k}>"><{$type}></option>
+                <option value="<{$k}>"><{$type}></option>
                 <{/foreach}>
             </select>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-sm-2 control-label" for="ipt-company-name"><i class="asterisk">*</i>对方公司</label>
+        <div class="col-sm-10">
+            <input type="text" class="form-control input-sm" name="coname" id="ipt-company-name" readonly required/>
+            <input type="hidden" name="coid" />
         </div>
     </div>
 
@@ -55,6 +55,14 @@
         <label class="col-sm-2 control-label">记账月</label>
         <div class="col-sm-10">
             <input type="text" class="form-control input-sm" name="accdate" number="true" placeholder="格式:1711"/>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-sm-2 control-label">附件</label>
+        <div class="col-sm-10">
+            <input type="file" name="attachment"/>
+            <p class="help-block">请上传相关附件</p>
         </div>
     </div>
 
