@@ -581,6 +581,10 @@ table th i{
 #checked-result select{
     width:600px;
 }
+.highlight,.highlight *{
+    font-size:14px;
+    font-weight:bolder;
+}
 .table3 tbody tr:nth-child(2n+1),
 .table2 tr:nth-child(2n){
     background: #f2f2f2;
