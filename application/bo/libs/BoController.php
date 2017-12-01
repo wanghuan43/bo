@@ -308,6 +308,7 @@ class BoController extends Controller
         if (empty($this->model)) {
             $ret = ['flag' => 0, 'msg' => '发生错误'];
         } else {
+
             $ids = $this->request->post('ids/a');
 
             if (is_array($ids) && count($ids) > 0) {

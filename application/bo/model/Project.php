@@ -87,6 +87,8 @@ class Project extends BoModel
             $data['p_date'] = strtotime($data['p_date']);
             $data['p_createtime'] = $data['p_updatetime'] = time();
 
+            $dataset[$key] = $data;
+
         }
         return $this->insertDuplicate($dataset);
 
