@@ -585,7 +585,7 @@ table th i{
     font-size:14px;
     font-weight:bolder;
 }
-.table3 tbody tr:nth-child(2n+1),
+.table3 tbody tr:nth-child(2n),
 .table2 tr:nth-child(2n){
     background: #f2f2f2;
 }
@@ -595,6 +595,7 @@ table th i{
 .table3>tbody>tr>td{
     border:none;
 }
+.table3 thead tr:nth-child(1),
 .table2 tr:nth-child(2){
     background:#e0e0e0;
 }

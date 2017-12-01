@@ -119,11 +119,10 @@ class Acceptance extends BoController
 
         if ($validate->check($data)) {
 
-            $data['a_money'] = floatval($data['a_money']);
-            $data['a_used'] = floatval($data['a_used']);
-            $data['a_noused'] = $data['a_money'] - $data['a_used'];
             $data['a_date'] = strtotime($data['a_date']);
             $data['a_updatetime'] = time();
+
+            $data['a_noused'] = floatval($data['a_money']) - floatval($data['a_used']);
 
             $file = $this->request->file('attachment');
 

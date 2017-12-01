@@ -123,9 +123,12 @@ class Received extends BoController
         $validate = \validate('Received');
 
         if($validate->check($data)){
+
             if(!empty($data['r_date'])){
                 $data['r_date'] = strtotime($data['r_date']);
             }
+
+            $data['r_noused'] = floatval($data['r_money']) - floatval($data['r_used']);
 
             $file = $this->request->file('attachment');
 

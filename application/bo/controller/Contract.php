@@ -121,7 +121,7 @@ class Contract extends BoController
     {
         $post = $this->request->post();
 
-        $arr = ['id','no','date','accdate','money','name','type','coname','coid','mname','mid','bakup'];
+        $arr = ['id','no','date','accdate','money','used','noused','name','type','coname','coid','mname','mid','bakup'];
 
         foreach( $arr as $i ){
             $data['c_'.$i] = trim($post[$i]);
@@ -133,7 +133,8 @@ class Contract extends BoController
         if($validate->check($data)){
 
             $data['c_date'] = strtotime($data['c_date']);
-            $data['c_money'] = floatval($data['c_money']);
+
+            $data['c_noused'] = floatval($data['c_money']) - floatval($data['c_used']);
 
             $file = $this->request->file('attachment');
 

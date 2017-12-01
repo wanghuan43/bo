@@ -13,7 +13,7 @@
                 <tr>
                     <td><label for="ipt-no"><i class="asterisk">*</i>发票号:</label></td>
                     <td><input class="input-sm" id="ipt-no" type="text" name="no" value="<{$data.i_no}>" required<{if $readonly}> disabled<{/if}>/><input type="hidden" name="id" value="<{$data.i_id}>"/> </td>
-                    <td><label for="ipt-subject"><i class="asterisk">*</i>主题:</label></td>
+                    <td><label for="ipt-subject"><i class="asterisk">*</i>摘要:</label></td>
                     <td colspan="3"><input type="text" name="subject" id="ipt-subject" class="input-sm" value="<{$data.i_subject}>" required<{if $readonly}> disabled<{/if}>/></td>
                     <td><label for="<{if $isAdmin}>ipt-member-name<{else}>ipt-mname<{/if}>">责任人:</label></td>
                     <td>
@@ -52,7 +52,7 @@
                     </td>
                 </tr>
                 <tr>
-                    <td><label for="txt-content">摘要:</label></td>
+                    <td><label for="txt-content">说明:</label></td>
                     <td colspan="5">
                         <textarea id="txt-content" name="content" class="form-control"<{if $readonly}> disabled<{/if}>><{$data.i_content}></textarea>
                     </td>
@@ -80,7 +80,7 @@
                 <tr class="highlight">
                     <!--td style="width: 2em;"></td-->
                     <td>已对应订单金额:</td>
-                    <td><input type="text" name="used" value="<{$data.i_used}>" class="no-border" readonly/></td>
+                    <td><input type="text" name="used" value="<{$data.i_used}>" class="<{if empty($isAdmin)}>no-border<{else}>input-sm<{/if}>" <{if empty($isAdmin)}>readonly<{/if}>/></td>
                     <td>未对应订单金额</td>
                     <td><input type="text" name="noused" value="<{$data.i_noused}>" class="no-border" readonly/></td>
                 </tr>
