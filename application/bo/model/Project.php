@@ -63,7 +63,7 @@ class Project extends BoModel
                 unset($dataset[$key]);
                 continue;
             } else {
-                unset($dataset[$key]['p_type']);
+                unset($data['p_type']);
             }
             $mModel = new Member();
             $dModel =new Department();
@@ -90,6 +90,7 @@ class Project extends BoModel
             $dataset[$key] = $data;
 
         }
+
         return $this->insertDuplicate($dataset);
 
     }
