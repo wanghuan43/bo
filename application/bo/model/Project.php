@@ -67,7 +67,7 @@ class Project extends BoModel
             }
             $mModel = new Member();
             $dModel =new Department();
-            $m = $mModel->getMemberByName($data['p_manme']);
+            $m = $mModel->getMemberByName($data['p_mname']);
 
             if(!empty($m))
                 $data['p_mid'] = $m->m_id;
