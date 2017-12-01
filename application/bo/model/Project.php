@@ -65,6 +65,7 @@ class Project extends BoModel
             } else {
                 unset($data['p_type']);
             }
+
             $mModel = new Member();
             $dModel =new Department();
             $m = $mModel->getMemberByName($data['p_mname']);
@@ -75,7 +76,7 @@ class Project extends BoModel
                 $data['p_mid'] = 0;
 
             $did = $dModel->getDepartmentIdByName($data['p_dname']);
-            if(empty($d)){
+            if(empty($did)){
                 $data['p_did'] = 0;
             }else{
                 $data['p_did'] = $did;
@@ -84,7 +85,6 @@ class Project extends BoModel
             $data['p_income'] = floatval($data['p_income']);
             $data['p_pay'] = floatval($data['p_pay']);
 
-            $data['p_date'] = strtotime($data['p_date']);
             $data['p_createtime'] = $data['p_updatetime'] = time();
 
             $dataset[$key] = $data;

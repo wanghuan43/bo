@@ -32,6 +32,7 @@ return [
                 'p_date' => 'G'
             ],
             'dateFields' => ['p_date'],
+            'moneyFields' => ['p_income','p_pay'],
             'defaultFields' => ['p_type'=>'项目编号']
         ],
         'member' => [
