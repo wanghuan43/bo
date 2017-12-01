@@ -14,7 +14,7 @@ use app\bo\libs\BoValidate;
 class Invoice extends BoValidate
 {
     protected $rule = [
-        'i_no' => 'require|alphaDash|unique:invoice',
+        'i_no' => 'require|alphaDash|unique:invoice,i_no^i_date',
         'i_subject' => 'require',
         'i_coname' => 'require',
         'i_money' => 'require|money|moneyValidity',
@@ -25,7 +25,7 @@ class Invoice extends BoValidate
     protected $message = [
         'i_no.require' => '发票号不能为空',
         'i_no.alphaDash' => '发票号格式不正确',
-        'i_no.unique' => '发票号已存在',
+        'i_no.unique' => '当日此发票号已存在',
         'i_subject' => '主题不能为空',
         'i_coname' => '对方公司不能为空',
         'i_money.require' => '总金额不能为空',
@@ -54,6 +54,12 @@ class Invoice extends BoValidate
             $ret =  true;
         }
         return $ret;
+    }
+
+    protected function unique($value,$rule,$data,$field)
+    {
+        $data['i_date'] = strtotime($data['i_date']);
+        return parent::unique($value,$rule,$data,$field);
     }
 
 }
