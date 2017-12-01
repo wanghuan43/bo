@@ -23,10 +23,16 @@ return [
             'file' => 'uploads/xlsx/主数据.xlsx',
             'index' => 2,
             'fields' => [
-                'p_no' => 'B',
-                'p_name' => 'C',
-                'p_type' => 'D'
-            ]
+                'p_no' => 'A',
+                'p_name' => 'B',
+                'p_mname' => 'C',
+                'p_dname' => 'D',
+                'p_income' => 'E',
+                'p_pay' => 'F',
+                'p_date' => 'G'
+            ],
+            'dateFields' => ['p_date'],
+            'defaultFields' => ['p_type'=>'项目编号']
         ],
         'member' => [
             'file' => 'uploads/xlsx/人事员工.xlsx',
