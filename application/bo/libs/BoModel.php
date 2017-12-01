@@ -175,7 +175,7 @@ abstract class BoModel extends Model
             }
 
             if (!empty($values)) {
-                $sql = $sqlPrev . $values . $sqlSuffix;var_dump($sql);//die;
+                $sql = $sqlPrev . $values . $sqlSuffix;//var_dump($sql);//die;
                 CustomUtils::writeImportLog('SQL - '.$sql,strtolower($this->name));
                 $res[] = $db->query($sql);
             }
