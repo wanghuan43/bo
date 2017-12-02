@@ -197,13 +197,13 @@ class   Orders extends BoModel
 
     public function import($dataset)
     {
-        $mChances = new Chances();
-        $mMember = new Member();
-        $mProject = new Project();
-        $mCompany = new Company();
-        $mDepartment = new Department();
-        $mContract = new Contract();
         foreach ($dataset as $key => $data) {
+            $mChances = new Chances();
+            $mMember = new Member();
+            $mProject = new Project();
+            $mCompany = new Company();
+            $mDepartment = new Department();
+            $mContract = new Contract();
             if (isset($data['flag']) && $data['flag'] != 1) {
                 unset($dataset[$key]);
                 continue;
