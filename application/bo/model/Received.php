@@ -95,17 +95,29 @@ class Received extends BoModel
 
     public function doImport($dataset=false)
     {
+        $mMember = new Member();
+        $mCompany = new Company();
         foreach ($dataset as $key=>$data){
+
             if(isset($data['r_mname']) && isset($data['d_name'])){
-                $model = new Member();
-                $member = $model->getMemberByName($data['r_mname'],$data['d_name']);
+                $member = $mMember->getMemberByName($data['r_mname'],$data['d_name']);
                 if($member) $data['r_mid'] = $member->m_id;
                 unset($data['d_name']);
             }elseif (isset($data['r_mname'])){
-                $model = new Member();
-                $member = $model->getMemberByName($data['r_mname']);
+                $member = $mMember->getMemberByName($data['r_mname']);
                 if($member) $data['r_mid'] = $member->m_id;
             }
+
+            if(isset($data['r_coname']) && $data['r_coname']){
+                $type = $data['r_type'] == 2 ? 1 : 2;
+                $c = $mCompany->getCompany(false,$data['r_coname'],$type);
+                if($c){
+                    $data['r_coid'] = $c->co_id;
+                }else{
+                    $data['r_coid'] = 0;
+                }
+            }
+
             $data['r_noused'] = $data['r_money'];
             $dataset[$key] = $data;
         }

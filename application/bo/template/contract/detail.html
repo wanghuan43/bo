@@ -52,7 +52,7 @@
                     </td>
                 </tr>
                 <tr>
-                    <td><label>合同摘要:</label></td>
+                    <td><label>说明:</label></td>
                     <td colspan="5">
                         <textarea name="bakup" class="form-control"<{if $readonly}> disabled<{/if}>><{$data.c_bakup}></textarea>
                     </td>
@@ -80,7 +80,7 @@
                 <tr class="highlight">
                     <!--td style="width: 2em;"></td-->
                     <td>已对应订单金额:</td>
-                    <td><input type="text" name="used" value="<{$data.c_used}>" class="no-border" readonly/></td>
+                    <td><input type="text" name="used" value="<{$data.c_used}>" class="<{if empty($isAdmin)}>no-border<{else}>input-sm<{/if}>" number="true" <{if empty($isAdmin)}>readonly<{/if}>/></td>
                     <td>未对应订单金额</td>
                     <td><input type="text" name="noused" value="<{$data.c_noused}>" class="no-border" readonly/></td>
                 </tr>

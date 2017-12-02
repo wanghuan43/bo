@@ -83,31 +83,8 @@ abstract class BoModel extends Model
 
         $ret['validate'] = $res;
 
-        //$ret['res'] = $this->saveAll($dataset);
+        $ret['res'] = $this->doImport($dataset);
 
-        if( method_exists($this,'doImport')){
-
-            $ret['res'] = $this->doImport($dataset);
-
-            //foreach($ret['res'] as $item){
-            $log = 'SUCCESS - '.serialize($ret['res']);
-            CustomUtils::writeImportLog($log,strtolower($this->name));
-            //}
-
-        }else{
-            try{
-                $ret['res'] = $this->saveAll($dataset);
-                foreach($ret['res'] as $item){
-                    $log = 'SUCCESS - '.serialize($item->getData());
-                    CustomUtils::writeImportLog($log,strtolower($this->name));
-                }
-            }catch (\Exception $e){
-                $log = 'ERROR - '.$e->getMessage();
-                CustomUtils::writeImportLog($log,strtolower($this->name));
-            }
-        }
-
-        return $ret;
     }
 
     public function insertDuplicate($dataset=false)
@@ -166,6 +143,7 @@ abstract class BoModel extends Model
                 $i++;
                 if ($i%1000 == 0) { //1000条数据操作一次
                     $sql = $sqlPrev . $values . $sqlSuffix;
+                    var_dump($sql);
                     CustomUtils::writeImportLog('SQL - '.$sql,strtolower($this->name));
                     $res[] = $db->query($sql);
                     $i = 0;
@@ -175,7 +153,8 @@ abstract class BoModel extends Model
             }
 
             if (!empty($values)) {
-                $sql = $sqlPrev . $values . $sqlSuffix;var_dump($sql);//die;
+                $sql = $sqlPrev . $values . $sqlSuffix;//var_dump($sql);//die;
+                var_dump($sql);
                 CustomUtils::writeImportLog('SQL - '.$sql,strtolower($this->name));
                 $res[] = $db->query($sql);
             }
@@ -185,7 +164,7 @@ abstract class BoModel extends Model
         }catch (\Exception $e){
             $db->rollback();
             $log = 'Exception - '. $e->getMessage();
-            CustomUtils::writeImportLog($log,'project');
+            CustomUtils::writeImportLog($log,strtotime($this->name));
             return false;
         }
 

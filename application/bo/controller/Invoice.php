@@ -134,6 +134,8 @@ class Invoice extends BoController
                 $data['i_date'] = strtotime($data['i_date']);
             }
 
+            $data['i_noused'] = floatval($data['i_money']) - floatval($data['i_used']);
+
             $file = $this->request->file('attachment');
 
             $res = $this->uploadFile($file);
@@ -141,7 +143,6 @@ class Invoice extends BoController
             if($res['flag']===0){
                 $ret = $res;
             }else {
-
                 if($res['flag'] === 1){
                     $data['i_attachment'] = $res['name'];
                 }

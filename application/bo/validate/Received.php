@@ -38,7 +38,7 @@ class Received extends BoValidate
     ];
 
     protected $scene = [
-        'import' => ['r_no'=>'require|alphaDash','r_money','r_date']
+        'import' => ['r_no'=>'require']
     ];
 
     protected function moneyValidity($value,$rule,$data)
