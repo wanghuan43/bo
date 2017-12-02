@@ -12,43 +12,63 @@
             <table class="detail">
                 <tr>
                     <td><label for="ipt-no"><i class="asterisk">*</i>发票号:</label></td>
-                    <td><input class="input-sm" id="ipt-no" type="text" name="no" value="<{$data.i_no}>" required<{if $readonly}> disabled<{/if}>/><input type="hidden" name="id" value="<{$data.i_id}>"/> </td>
-                    <td><label for="ipt-subject"><i class="asterisk">*</i>摘要:</label></td>
-                    <td colspan="3"><input type="text" name="subject" id="ipt-subject" class="input-sm" value="<{$data.i_subject}>" required<{if $readonly}> disabled<{/if}>/></td>
-                    <td><label for="<{if $isAdmin}>ipt-member-name<{else}>ipt-mname<{/if}>">责任人:</label></td>
                     <td>
-                        <input type="text" value="<{$data.i_mname}>" name="mname" class="input-sm<{if empty($isAdmin)}> no-border<{/if}>" id="<{if $isAdmin}>ipt-member-name<{else}>ipt-mname<{/if}>" readonly/>
+                        <input class="input-sm" id="ipt-no" type="text" name="no" value="<{$data.i_no}>" required disabled/>
+                        <input type="hidden" name="no" value="<{$data.i_no}>">
+                        <input type="hidden" name="id" value="<{$data.i_id}>"/>
+                    </td>
+                    <td><label for="ipt-subject"><i class="asterisk">*</i>摘要:</label></td>
+                    <td colspan="3">
+                        <input type="text" name="subject" id="ipt-subject" class="input-sm" value="<{$data.i_subject}>" required disabled/>
+                        <input type="hidden" name="subject" value="<{$data.i_subject}>">
+                    </td>
+                    <td><label for="ipt-member-name">责任人:</label></td>
+                    <td>
+                        <input type="text" value="<{$data.i_mname}>" name="mname" class="input-sm" id="ipt-member-name" readonly disabled/>
+                        <input type="hidden" value="<{$data.i_mname}>" name="mname">
                         <input type="hidden" value="<{$data.i_mid}>" name="mid"/>
                     </td>
                 </tr>
                 <tr>
-                    <td><label for="sel-type">销售/采销:</label></td>
+                    <td><label for="sel-type">类型:</label></td>
                     <td>
-                        <select name="type" id="sel-type" class="input-sm"<{if $readonly}> disabled<{/if}>>
-                            <option value="1"<{if $data.i_type == 1}> selected<{/if}>>销售</option>
-                            <option value="2"<{if $data.i_type == 2}> selected<{/if}>>采销</option>
+                        <select name="type" id="sel-type" class="input-sm" disabled>
+                            <option value="1"<{if $data.i_type == 1}> selected<{/if}>><{:getTypeList2(1)}></option>
+                            <option value="2"<{if $data.i_type == 2}> selected<{/if}>><{:getTypeList2(2)}></option>
                         </select>
+                        <input type="hidden" value="<{$data.i_type}>" name="type">
                     </td>
                     <td><label for="ipt-date"><i class="asterisk">*</i>开票日期:</label></td>
-                    <td><input id="ipt-date" name="date" type="text" value="<{$data.i_date|date='Y-m-d',###}>" class="input-sm" required readonly<{if $readonly}> disabled<{/if}>/></td>
+                    <td>
+                        <input id="ipt-date" name="date" type="text" value="<{$data.i_date|date='Y-m-d',###}>" class="input-sm" required readonly disabled/>
+                        <input type="hidden" name="date" value="<{$data.i_date|date='Y-m-d',###}>">
+                    </td>
                     <td><label for="ipt-accdate">记账月:</label></td>
-                    <td><input id="ipt-accdate" type="text" value="<{$data.i_accdate}>" name="accdate" class="input-sm" number="true" readonly<{if $readonly}> disabled<{/if}>/></td>
+                    <td>
+                        <input id="ipt-accdate" type="text" value="<{$data.i_accdate}>" name="accdate" class="input-sm" number="true" readonly disabled/>
+                        <input type="hidden" name="accdate" value="<{$data.i_accdate}>">
+                    </td>
                     <td><label for="ipt-money"><i class="asterisk">*</i>总金额:</label></td>
-                    <td><input type="text" value="<{$data.i_money}>" name="money" id="ipt-money" class="input-sm" required number="true" <{if $readonly}> disabled<{/if}>/></td>
+                    <td>
+                        <input type="text" value="<{$data.i_money}>" name="money" id="ipt-money" class="input-sm" required number="true" disabled/>
+                        <input type="hidden" name="money" value="<{$data.i_money}>">
+                    </td>
                 </tr>
                 <tr>
                     <td><label for="ipt-compnay-name"><i class="asterisk">*</i>对方公司:</label></td>
                     <td colspan="3">
-                        <input type="text" value="<{$data.i_coname}>" name="coname" id="ipt-compnay-name" class="input-sm" readonly required <{if $readonly}>disabled<{/if}>/>
+                        <input type="text" value="<{$data.i_coname}>" name="coname" id="ipt-compnay-name" class="input-sm" readonly required disabled/>
+                        <input type="hidden" name="coname" value="<{$data.i_coname}>">
                         <input type="hidden" name="coid" value="<{$data.i_coid}>" id="ipt-company-id">
                     </td>
                     <td><label for="sel-tax">税率:</label></td>
                     <td>
-                        <select name="tax" id="sel-tax" class="input-sm"<{if $readonly}> disabled<{/if}>>
+                        <select name="tax" id="sel-tax" class="input-sm" disabled>
                             <{foreach name=":getTaxList()" item="tax" key="k"}>
                             <option value="<{$k}>" <{if $data.i_tax==$k}>selected<{/if}>><{$tax}></option>
                             <{/foreach}>
                         </select>
+                        <input type="hidden" name="tax" value="<{$data.i_tax}>">
                     </td>
                 </tr>
                 <tr>

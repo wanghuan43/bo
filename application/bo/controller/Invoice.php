@@ -118,7 +118,7 @@ class Invoice extends BoController
     {
         $post = $this->request->post();
 
-        $arr = ['id','no','subject','date','tax','accdate','money','type','coname','coid','mid','mname','used','noused'];
+        $arr = ['id','no','subject','content','date','tax','accdate','money','type','coname','coid','mid','mname','used','noused'];
 
         foreach($arr as $i){
             $data['i_'.$i] = trim($post[$i]);

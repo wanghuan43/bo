@@ -13,36 +13,52 @@
                 <tr>
                     <td><label for="ipt-no"><i class="asterisk">*</i>验收单号:</label></td>
                     <td>
-                        <input type="text" name="no" value="<{$data.a_no}>" class="input-sm" required onblur="toUpperCase(this)" onkeyup="toUpperCase(this)" id="ipt-no"<{if $readonly}>disabled<{/if}>/>
+                        <input type="text" name="no" value="<{$data.a_no}>" class="input-sm" required onblur="toUpperCase(this)" onkeyup="toUpperCase(this)" id="ipt-no" disabled/>
+                        <input type="hidden" name="no" value="<{$data.a_no}>">
                         <input type="hidden" name="id" value="<{$data.a_id}>"/>
                     </td>
                     <td><label for="ipt-subject"><i class="asterisk">*</i>摘要:</label></td>
-                    <td colspan="3"><input type="text" class="input-sm" id="ipt-subject" name="subject" value="<{$data.a_subject}>" required<{if $readonly}> disabled<{/if}>></td>
-                    <td><label <{if empty($isAdmin)}>for="ipt-mname"<{else}>for="ipt-member-name"<{/if}>>责任人:</label></td>
+                    <td colspan="3">
+                        <input type="text" class="input-sm" id="ipt-subject" name="subject" value="<{$data.a_subject}>" required disabled>
+                        <input type="hidden" name="subject" value="<{$data.a_subject}>">
+                    </td>
+                    <td><label for="ipt-member-name">责任人:</label></td>
                     <td>
-                        <input type="text" name="mname" value="<{$data.a_mname}>" readonly class="input-sm<{if empty($isAdmin)}> no-border<{/if}>" id="<{if empty($isAdmin)}>ipt-mname<{else}>ipt-member-name<{/if}>"/>
+                        <input type="text" name="mname" value="<{$data.a_mname}>" readonly class="input-sm" id="ipt-member-name" disabled/>
+                        <input type="hidden" name="mname" value="<{$data.a_mname}>">
                         <input type="hidden" value="<{$data.a_mid}>" name="mid"/>
                     </td>
                 </tr>
                 <tr>
                     <td><label for="sel-type">销售/采销:</label></td>
                     <td>
-                        <select name="type" id="sel-type" class="input-sm"<{if $readonly}> disabled<{/if}>>
+                        <select name="type" id="sel-type" class="input-sm" disabled>
                             <option value="1"<{if $data.a_type == 1}> selected<{/if}>><{:getTypeList2(1)}></option>
                             <option value="2"<{if $data.a_type == 2}> selected<{/if}>><{:getTypeList2(2)}></option>
                         </select>
+                        <input type="hidden" name="type" value="<{$data.a_type}>"/>
                     </td>
                     <td><label for="ipt-date"><i class="asterisk">*</i>验收日期:</label></td>
-                    <td><input type="text" value="<{$data.a_date|date='Y-m-d',###}>" name="date" readonly required class="input-sm" id="ipt-date"<{if $readonly}> disabled<{/if}>/></td>
+                    <td>
+                        <input type="text" value="<{$data.a_date|date='Y-m-d',###}>" name="date" readonly required class="input-sm" id="ipt-date" disabled/>
+                        <input type="hidden" name="date" value="<{$data.a_date|date='Y-m-d',###}>">
+                    </td>
                     <td><label for="ipt-accdate">记账月:</label></td>
-                    <td><input type="text" value="<{$data.a_accdate}>" placeholder="格式:1708" class="input-sm" id="ipt-accdate"<{if $readonly}> disabled<{/if}>></td>
+                    <td>
+                        <input type="text" value="<{$data.a_accdate}>" name="accdate" placeholder="格式:1708" class="input-sm" id="ipt-accdate" disabled>
+                        <input type="hidden" name="accdate" value="<{$data.a_accdate}>">
+                    </td>
                     <td><label for="ipt-money"><i class="asterisk">*</i>总金额:</label></td>
-                    <td><input type="text" value="<{$data.a_money}>" name="money" id="ipt-money" required number="true" class="input-sm"<{if $readonly}> disabled<{/if}>/></td>
+                    <td>
+                        <input type="text" value="<{$data.a_money}>" name="money" id="ipt-money" required number="true" class="input-sm" disabled/>
+                        <input type="hidden" name="money" value="<{$data.a_money}>">
+                    </td>
                 </tr>
                 <tr>
                     <td><label for="ipt-company-name"><i class="asterisk">*</i>对方名称:</label></td>
                     <td colspan="5">
-                        <input type="text" value="<{$data.a_coname}>" name="coname" id="ipt-company-name" readonly required class="input-sm"<{if $readonly}> disabled<{/if}>/>
+                        <input type="text" value="<{$data.a_coname}>" name="coname" id="ipt-company-name" readonly required class="input-sm" disabled/>
+                        <input type="hidden" name="coname" value="<{$data.a_coname}>">
                         <input type="hidden" name="coid" value="<{$data.a_coid}>" id="ipt-company-id">
                     </td>
                 </tr>

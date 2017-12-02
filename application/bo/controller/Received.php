@@ -112,7 +112,7 @@ class Received extends BoController
     {
         $post = $this->request->post();
 
-        $arr = ['id','no','subject','date','accdate','money','type','coname','coid','mid','mname','used','noused'];
+        $arr = ['id','no','subject','content','date','accdate','money','type','coname','coid','mid','mname','used','noused'];
 
         foreach($arr as $i){
             $data['r_'.$i] = trim($post[$i]);
