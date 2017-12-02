@@ -88,7 +88,7 @@ class Contract extends BoModel
         $this->alias('ct');
         if ($member->m_isAdmin == "2") {
             $this->join('__CIRCULATION__ c', "ct.c_id = c.ci_otid AND c.ci_type = 'contract'")
-                ->where("c.ci_mid", "=", $member->m_id)->whereOr("ct.c_mid", "=", $member->m_id);
+                ->where("c.ci_mid|ct.c_mid", "=", $member->m_id);
         }
         $this->field("ct.*,p.p_no,cp.co_type");
         $this->join('__PROJECT__ p', "ct.c_pid = p.p_id",'left');
