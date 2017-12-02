@@ -44,6 +44,42 @@ class Acceptance extends BoModel
                 "<" => "小于",
             ),
         ),
+        'a_subject' => array(
+            'name' => '摘要',
+            'type' => 'text',
+            'operators' => array(
+                'like' => '包含'
+            )
+        ),
+        'a_noused' => array(
+            'name' => '未对应订单金额',
+            'type' => 'price',
+            'operators' => array(
+                'between' => '介于',
+                '=' => '等于',
+                '>' => '大于',
+                '<' => '小于'
+            )
+        ),
+        'a_type' => array(
+            'name' => '类型',
+            'type' => 'select',
+            'operators' => array(
+                '=' => '等于'
+            ),
+            'options' => array(
+                '0' => '-请选择-',
+                '1' => '销售',
+                '2' => '采购'
+            )
+        ),
+        'a_accdate' => array(
+            'name' => '记账月',
+            'type' => 'text',
+            'operators' => array(
+                'like' => '包含'
+            )
+        )
     );
 
     public function getList($search, $limit)
