@@ -275,12 +275,24 @@ class Orders extends BoController
         $log = Logs::get($post['id']);
         $new = unserialize($log['l_new']);
         $old = unserialize($log['l_old']);
+        unset($new['zc_name']);
+        unset($new['zc_id']);
+        unset($new['zc_dname']);
+        unset($new['zc_did']);
+        unset($new['zc_mid']);
+        unset($new['zc_mname']);
+        unset($old['zc_name']);
+        unset($old['zc_id']);
+        unset($old['zc_dname']);
+        unset($old['zc_did']);
+        unset($old['zc_mid']);
+        unset($old['zc_mname']);
         $oum = new OrderUsed();
         if ($post['val'] == "1") {
             $log->l_panding = 2;
             $new['o_id'] = $log->l_otid;
             $oum->resetOrderUsed($log->l_otid);
-            if ($new['o_cid'] != $old['o_cid']) {
+            if ($new['o_cid'] != $old['o_cid'] AND !empty($old['o_cid'])) {
                 $con = \app\bo\model\Contract::get($old['o_cid']);
                 $con->c_noused += $old['o_money'];
                 $con->c_used -= $old['o_money'];
