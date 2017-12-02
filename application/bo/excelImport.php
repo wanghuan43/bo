@@ -238,8 +238,8 @@ return [
             ]
         ],
 
-        'order171202' =>[
-            'file' => 'uploads/xlsx/orders.xlsx',
+        'orders171202' =>[
+            'file' => 'uploads/default/orders.xlsx',
             'model' => 'orders',
             'index' => 0,
             'fields' => [
