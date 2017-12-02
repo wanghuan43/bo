@@ -143,7 +143,8 @@ class Member extends BoModel
     }
 
     public function getMemberByName($name,$department=false){
-        $res = $this->where('m_name','=',$name)->select();
+        $model = new self();
+        $res = $model->where('m_name','=',$name)->select();
         $ret = false;
         if(count($res) == 1){
             $ret = $res[0];

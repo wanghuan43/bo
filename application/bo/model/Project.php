@@ -152,13 +152,13 @@ class Project extends BoModel
 
     public function getProject($no, $name = false)
     {
-
+        $model = new self();
         if (empty($no)) {
             $project = false;
         } else {
-            $project = $this->where('p_no', '=', $no)->find();
+            $project = $model->where('p_no', '=', $no)->find();
             if (empty($project)) {
-                $pid = $this->insertGetId(['p_no' => $no, 'p_name' => $name]);
+                $pid = $model->insertGetId(['p_no' => $no, 'p_name' => $name]);
                 $project = new static(['p_id' => $pid, 'p_no' => $no, 'p_name' => $name]);
             }
         }
