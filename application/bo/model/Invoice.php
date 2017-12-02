@@ -24,8 +24,8 @@ class Invoice extends BoModel
                 'like' => '包含'
             )
         ),
-        'i_content' => array(
-            'name' => '开票摘要',
+        'i_subject' => array(
+            'name' => '摘要',
             'type' => 'text',
             'operators' => array(
                 'like' => '包含'

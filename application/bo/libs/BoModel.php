@@ -143,7 +143,7 @@ abstract class BoModel extends Model
                 $i++;
                 if ($i%1000 == 0) { //1000条数据操作一次
                     $sql = $sqlPrev . $values . $sqlSuffix;
-                    var_dump($sql);
+                    //var_dump($sql);
                     CustomUtils::writeImportLog('SQL - '.$sql,strtolower($this->name));
                     $res[] = $db->query($sql);
                     $i = 0;
@@ -154,7 +154,7 @@ abstract class BoModel extends Model
 
             if (!empty($values)) {
                 $sql = $sqlPrev . $values . $sqlSuffix;//var_dump($sql);//die;
-                var_dump($sql);
+                //var_dump($sql);
                 CustomUtils::writeImportLog('SQL - '.$sql,strtolower($this->name));
                 $res[] = $db->query($sql);
             }
