@@ -150,7 +150,7 @@ class   Orders extends BoModel
         unset($data['cList']);
         unset($data['project']);
         unset($data['used']);
-        if (!empty($data['o_cid'])) {
+        if (!empty($data['o_cid']) AND !empty($id)) {
             $con = new Contract();
             $c = $con->where("c_id", "=", $data['o_cid'])->find();
             $c->c_used = $c->c_used + $data['o_money'];
