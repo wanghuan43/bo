@@ -86,9 +86,6 @@ class DataImport
                 }
                 if(isset($config['moneyFields']) && in_array($key,$config['moneyFields'])){
                     $data[$key] = floatval(str_replace(',', '', $data[$key]));
-                    if($data[$key]<0){
-                        $data[$key] = 0 - $data[$key];
-                    }
                 }
                 if(isset($config['enumFields'][$key])){
                     $enum = $config['enumFields'][$key];

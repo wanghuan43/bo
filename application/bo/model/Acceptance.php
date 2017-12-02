@@ -95,6 +95,7 @@ class Acceptance extends BoModel
 
     public function doImport($dataset=false)
     {
+        $mCompany = new Company();
         foreach ($dataset as $key=>$data){
             if(isset($data['a_mname']) && isset($data['d_name'])){
                 $model = new Member();
@@ -106,6 +107,17 @@ class Acceptance extends BoModel
                 $member = $model->getMemberByName($data['a_mname']);
                 if($member) $data['a_mid'] = $member->m_id;
             }
+
+            if(isset($data['a_coname']) && $data['a_coname']){
+                $type = $data['a_type'] == 2 ? 1 : 2;
+                $c = $mCompany->getCompany(false,$data['a_coname'],$type);
+                if($c){
+                    $data['a_coid'] = $c->co_id;
+                }else{
+                    $data['a_coid'] = 0;
+                }
+            }
+
             $data['a_noused'] = $data['a_money'];
             $dataset[$key] = $data;
         }

@@ -37,7 +37,7 @@ class Invoice extends BoValidate
     ];
 
     protected $scene = [
-        'import' => ['i_no'=>'require','i_money','i_date']
+        'import' => ['i_no'=>'require']
     ];
 
     protected function moneyValidity($value,$rule,$data)

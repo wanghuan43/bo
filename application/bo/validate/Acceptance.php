@@ -36,7 +36,7 @@ class Acceptance extends BoValidate
     ];
 
     protected $scene = [
-        'import' => ['a_no'=>'require','a_money','a_date']
+        'import' => ['a_no'=>'require']
     ];
 
     protected function moneyValidity($value,$rule,$data)

@@ -123,86 +123,151 @@ return [
                 'co_type' => 2
             ]
         ],
-        'purchase-contract' => [ //采销、采购合同
-            'file' => 'uploads/xlsx/采购跟踪表1031最终.xls',
+        'contract171202' => [ //主数据 - 销售合同
+            'file' => 'uploads/default/contract1202.xlsx',
             'model' => 'contract',
-            'index' => 2,
+            'index' => 0,
             'fields' => [
-                //'c_pname' => '',
-                'c_money' => 'M',
-                'c_coname' => 'E',
-                'co_code' => 'X',
-                'c_mname' => 'B',
-                //'d_name' => 'A',
-                'c_date' => 'N',
-                'c_no' => 'U',
-                'c_name' => 'V',
-                'c_type' => 'L',
-                'd_name' => 'A',
-                'p_no' => 'C',
-                'status' => 'P',
+                //'c_pname' => 'E',
+                'c_money' => 'H',
+                'c_coname' => 'F',
+                'c_mname' => 'C',
+                'c_date' => 'G',
+                'c_no' => 'A',
+                'c_name' => 'D',
+                'c_type' => 'E',
+                'c_accdate' => 'I',
+                //'c_bakup' => 'L',
+                'd_name' => 'B',
+                //'p_no' => 'D'
             ],
             'dateFields' => ['c_date'],
+            //'defaultFields' => ['c_type' => 1],
             'moneyFields' => ['c_money'],
             'enumFields' => [
                 'c_type' => [
-                    '采购合同' => 2,
-                    '销售合同' => 1,
-                    '销'      => 1,
-                    '购'      => 2,
-                    'default' => 0
+                    '收入' => 1,
+                    '支出' => 2
                 ]
             ]
         ],
-        'sales-contract' => [ //主数据 - 销售合同
-            'file' => 'uploads/xlsx/主数据.xlsx',
-            'model' => 'contract',
-            'index' => 5,
+        'received171202' => [
+            'file' => 'uploads/xlsx/received.xlsx',
+            'model' => 'received',
+            'index' => 0,
             'fields' => [
-                'c_pname' => 'E',
-                'c_money' => 'F',
-                'c_coname' => 'H',
-                'c_mname' => 'B',
-                'c_date' => 'M',
-                'c_no' => 'O',
-                'c_name' => 'P',
-                'c_bakup' => 'L',
-                'd_name' => 'C',
-                'p_no' => 'D'
+                'r_no' => 'A',
+                'r_mname' => 'C',
+                'r_coname' => 'F',
+                'r_type' => 'E',
+                'r_money' => 'H',
+                'r_date' => 'G',
+                'r_subject' => 'D',
+                'r_content' => 'K',
+                'd_name' => 'B',
+                'r_accdate' => 'J'
             ],
-            'dateFields' => ['c_date'],
-            'defaultFields' => ['c_type' => 1],
-            'moneyFields' => ['c_money']
+            'dateFields' => ['r_date'],
+            'moneyFields' => ['r_money'],
+            'enumFields' => [
+                'r_type' => [
+                    '收入' => 1,
+                    '支出' => 2
+                ]
+            ]
         ],
-        'order-chance' =>[ //主数据商机表
-            'file' => 'uploads/xlsx/采购跟踪表1031最终.xls',
-            'model' => 'orders',
-            'index' => 2,
+
+        'acceptance171202' => [
+            'file' => 'uploads/xlsx/acceptance.xlsx',
+            'model' => 'acceptance',
+            'index' => 0,
             'fields' => [
-                'o_no' => 'X',
-                'o_mname' => 'B',
-                'm_department' => 'A',
-                'p_no' => 'C',
-                'o_pname' => 'D',
-                'o_type' => 'L',
-                'o_lie' => 'X',
-                'o_coname' => 'E',
-                'o_dname' => 'A',
-                'o_date' => 'N',
-                'o_money' => 'M',
-                'o_cno'  => 'U',
-                //'o_deal' => 'I',
-                'o_status' => 'P'
+                'a_no' => 'A',
+                'a_mname' => 'C',
+                'a_subject' => 'D',
+                //'a_content' => 'K',
+                'a_coname' => 'F',
+                'a_money' => 'H',
+                'a_date' => 'G',
+                'd_name' => 'B',
+                'a_type' => 'E'
+            ],
+            'dateFields' => ['a_date'],
+            'moneyFields' => ['a_money'],
+            'enumFields' => [
+                'a_type' => [
+                    '收入' => 1,
+                    '支出' => 2
+                ]
+            ]
+        ],
+        'invoice171202' => [
+            'file' => 'uploads/xlsx/invoice.xlsx',
+            'model' => 'invoice',
+            'index' => 0,
+            'fields' => [
+                'i_no' => 'A',
+                'i_subject' => 'D',
+                'i_coname' => 'F',
+                'i_money' => 'H',
+                'i_date' => 'G',
+                'i_mname' => 'C',
+                'i_type' => 'E',
+                'i_tax' => 'I',
+                'i_accdate' => 'J',
+                'd_name' => 'B'
+            ],
+            'dateFields' => ['i_date'],
+            //'defaultFields' => ['co_code'=>''],
+            'moneyFields' => ['i_money'],
+            'enumFields' => [
+                'i_type' => [
+                    '收入' => 1,
+                    '支出' => 2
+                ],
+                'i_tax' => [
+                    '3%' => 1,
+                    '5%' => 2,
+                    '6%' => 3,
+                    '11%' => 4,
+                    '13' => 5,
+                    '17%' => 6,
+                    'default' => 7
+                ]
+            ]
+        ],
+
+        'order171202' =>[
+            'file' => 'uploads/xlsx/orders.xlsx',
+            'model' => 'orders',
+            'index' => 0,
+            'fields' => [
+                'o_no' => 'A',
+                'o_mname' => 'C',
+                'm_department' => 'B',
+                'p_no' => 'O',
+                'o_subject' => 'D',
+                'o_type' => 'E',
+                'o_lie' => 'G',
+                'o_coname' => 'F',
+                'o_dname' => 'B',
+                'o_date' => 'H',
+                'o_money' => 'I',
+                'o_num' => 'J',
+                'o_deal' => 'L',
+                'o_status' => 'M',
+                'o_tax' => 'K'
             ],
             'dateFields' => ['o_date'],
             'moneyFields' => ['o_money'],
+            'defaultFields' => ['o_pname' => ''],
             'enumFields' => [
                 'o_type' => [
-                    '销' => 1,
+                    '收入' => 1,
                     'default' => 2
                 ],
                 'o_lie' => [
-                    '1' => 1,
+                    '内部' => 1,
                     'default' => 2
                 ],
                 'o_status' => [
@@ -212,147 +277,21 @@ return [
                     '3发标' => 4,
                     '4定标' => 5,
                     '5合同' => 6,
-                    'C合同' => 6,
+                    '6合同' => 6,
                     'default' => 1,
                 ],
-                'flag' => [
-                    'C合同' => 1,
-                    'default' => 0
+                'o_tax' => [
+                    '3%' => 1,
+                    '5%' => 2,
+                    '6%' => 3,
+                    '11%' => 4,
+                    '13' => 5,
+                    '17%' => 6,
+                    'default' => 7
                 ]
-            ],
-            'validate' => [
-                'o_status' => 6
             ]
         ],
-        'order-purchase-chance' => [ //采购商机表
-            'extends' => 'order-purchase',
-            'index' => 1,
-            'fields' => [
-                'unextends' => ['o_cno']
-            ]
-        ],
-        'order-sales-chance' => [ //销售商机表
-            'extends' => 'order-purchase-chance',
-            'index' => 2
-        ],
-        'order-purchase' => [ //采购合同跟踪表
-            'file' => 'uploads/xlsx/商务合同跟踪表及商机表.xls',
-            'extends' => 'order-chance',
-            'index' => 0,
-            'fields' => [
-                'o_mname' => 'B',
-                'm_department' => 'A',
-                'p_no' => 'C',
-                'o_pname' => 'D',
-                'o_type' => 'L',
-                'o_lie' => 'G',
-                'o_coname' => 'E',
-                'o_dname' => 'A',
-                'o_date' => 'N',
-                'o_money' => 'M',
-                'o_deal' => 'H',
-                'o_status' => 'I',
-                'flag' => 'P',
-                'o_cno' => 'V',
-                'unextends' => ['o_no']
-            ],
-        ],
-        'order-sales' => [ //销售合同跟踪表
-            'extends' => 'order-purchase',
-            'index' => 3,
-            'fields' => [
-                'o_cno' => 'U'
-            ]
-        ],
-        'purchase-invoice' => [ //主数据-财务部开票数据
-            'file' => 'uploads/xlsx/最终版-主数据.xlsx',
-            'model' => 'invoice',
-            'index' => 1,
-            'fields' => [
-                'i_no' => 'X',
-                'i_mname' => 'T',
-                'i_content' => 'J',
-                'i_coname' => 'D',
-                'co_code' => 'C',
-                'i_money' => 'F',
-                'i_date' => 'Y',
-                'p_no' => 'A',
-                'c_no' => 'AB',
-                'c_name' => 'AC'
-            ],
-            'dateFields' => ['i_date'],
-            'defaultFields' => ['i_type'=>1,'o_csid'=>6,'o_csname'=>'C合同'],
-            'moneyFields' => ['i_money']
-        ],
-        'invoice1107' => [ //11月3号导入发票
-            'file' => 'uploads/xlsx/采购跟踪表1031最终.xls',
-            'model' => 'invoice',
-            'index' => 1,
-            'fields' => [
-                'i_no' => 'Y',
-                'i_mname' => 'B',
-                'i_content' => 'K',
-                'i_coname' => 'D',
-                //'co_code' => 'C',
-                'i_money' => 'M',
-                'i_date' => 'N',
-                //'d_no' => 'A',
-                'p_no' => 'C',
-                'flag1' => 'P',
-                'flag2' => 'Q'
-            ],
-            'dateFields' => ['i_date'],
-            'defaultFields' => ['i_type'=>2,'i_tax'=>1,'co_code'=>''],
-            'moneyFields' => ['i_money'],
-            'validate' => [
-                'flag1' => 'I开票',
-                'flag2' => '1'
-            ]
-        ],
-        'acceptance1107' => [ //11月3号导入发票
-            'file' => 'uploads/xlsx/采购跟踪表1031最终.xls',
-            'model' => 'acceptance',
-            'index' => 1,
-            'fields' => [
-                'a_no' => 'Y',
-                'a_mname' => 'B',
-                'a_content' => 'K',
-                'a_coname' => 'D',
-                'a_money' => 'M',
-                'a_date' => 'N',
-                'd_name' => 'A',
-                'flag1' => 'P',
-                'flag2' => 'Q'
-            ],
-            'dateFields' => ['a_date'],
-            'defaultFields' => ['a_type'=>2],
-            'moneyFields' => ['a_money'],
-            'validate' => [
-                'flag1' => 'D交付',
-                'flag2' => '1'
-            ]
-        ],
-        'received' => [ //11月7号导入付款单
-            'file' => 'uploads/xlsx/采购跟踪表1031最终.xls',
-            'model' => 'received',
-            'index' => 2,
-            'fields' => [
-                'r_no' => 'Y',
-                'r_mname' => 'B',
-                'r_coname' => 'E',
-                'r_money' => 'M',
-                'r_date' => 'N',
-                'd_name' => 'A',
-                'flag1' => 'P',
-                'flag2' => 'Q'
-            ],
-            'dateFields' => ['r_date'],
-            'defaultFields' => ['r_type'=>2],
-            'moneyFields' => ['r_money'],
-            'validate' => [
-                'flag1' => 'P付款',
-                'flag2' => '1'
-            ]
-        ],
+
     ],
+
 ];
