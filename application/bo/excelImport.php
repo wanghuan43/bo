@@ -178,7 +178,7 @@ return [
         ],
 
         'acceptance171202' => [
-            'file' => 'uploads/xlsx/acceptance.xlsx',
+            'file' => 'uploads/default/acceptance.xlsx',
             'model' => 'acceptance',
             'index' => 0,
             'fields' => [
@@ -190,7 +190,8 @@ return [
                 'a_money' => 'H',
                 'a_date' => 'G',
                 'd_name' => 'B',
-                'a_type' => 'E'
+                'a_type' => 'E',
+                'a_accdate' => 'J'
             ],
             'dateFields' => ['a_date'],
             'moneyFields' => ['a_money'],
