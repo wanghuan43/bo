@@ -62,6 +62,23 @@ class Contract extends BoModel
                 "1" => "收入",
                 "2" => "支出"
             )
+        ),
+        'c_accdate' => array(
+            'name' => '记账月',
+            'type' => 'text',
+            'operators' => array(
+                'like' => '包含'
+            )
+        ),
+        'c_noused' => array(
+            'name' => '未对应订单金额',
+            'type' => 'price',
+            'operators' => array(
+                'between' => '介于',
+                '=' => '等于',
+                '>' => '大于',
+                '<' => '小于'
+            )
         )
     );
 

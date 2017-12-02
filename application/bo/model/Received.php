@@ -25,7 +25,7 @@ class Received extends BoModel
             )
         ),
         "r_date" => array(
-            "name" => "付款日期",
+            "name" => "付/回款日期",
             "type" => "date",
             "operators" => array(
                 "between" => "介于",
@@ -35,7 +35,7 @@ class Received extends BoModel
             ),
         ),
         "r_money" => array(
-            "name" => "金额",
+            "name" => "付/回款金额",
             "type" => "price",
             "operators" => array(
                 "between" => "介于",
@@ -44,6 +44,35 @@ class Received extends BoModel
                 "<" => "小于",
             ),
         ),
+        'r_type' => array(
+            'name' => '类型',
+            'type' => 'select',
+            'operators' => array(
+                '=' => '等于'
+            ),
+            'options' => array(
+                '0' => '-请选择-',
+                '1' => '收入',
+                '2' => '支出'
+            )
+        ),
+        'r_accdate' => array(
+            'name' => '记账月',
+            'type' => 'text',
+            'operators' => array(
+                'like' => '包含'
+            )
+        ),
+        'r_noused' => array(
+            'name' => '未对应订单金额',
+            'type' => 'price',
+            'operators' => array(
+                'between' => '介于',
+                '=' => '等于',
+                '>' => '大于',
+                '<' => '小于'
+            )
+        )
     );
 
     public function getList($search = array(), $limit = 20)
