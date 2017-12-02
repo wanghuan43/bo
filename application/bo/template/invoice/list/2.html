@@ -13,8 +13,8 @@
             </a>
         </th>
         <th>
-            <a href="/invoice/all/sort/i_content/order/<{:getSortOrder($sort,'i_content')}>">
-                开票摘要<i class="<{:getSortClass($sort,'i_content')}>"></i>
+            <a href="/invoice/all/sort/i_subject/order/<{:getSortOrder($sort,'i_content')}>">
+                摘要<i class="<{:getSortClass($sort,'i_subject')}>"></i>
             </a>
         </th>
         <th width="200">
@@ -60,7 +60,7 @@
     <tr>
         <td><input type="checkbox" value="<{$val.i_id}>" class="lists-id" data-name="<{$val.i_no}>"></td>
         <td><a href="/invoice/detail?id=<{$val.i_id}>"><{$val.i_no}></a></td>
-        <td><{$val.i_content}></td>
+        <td><{$val.i_subject}></td>
         <td><{$val.i_coname}></td>
         <td><?php echo getTaxList($val['i_tax']); ?></td>
         <td><{:getTypeList2($val.i_type)}></td>
