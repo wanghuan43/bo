@@ -145,7 +145,6 @@ class   Orders extends BoModel
         $clm = new Circulation();
         $opm = new OrderProject();
         $oum = new OrderUsed();
-        $con = new Contract();
         $tagList = !empty($data['tagList']) ? $data['tagList'] : array();
         $cList = !empty($data['cList']) ? $data['cList'] : array();
         $pj = !empty($data['project']) ? $data['project'] : array();
@@ -155,7 +154,8 @@ class   Orders extends BoModel
         unset($data['cList']);
         unset($data['project']);
         unset($data['used']);
-        if (!empty($data['o_cid']) and empty($id)) {
+        if (!empty($data['o_cid'])) {
+            $con = new Contract();
             $c = $con->where("c_id", "=", $data['o_cid'])->find();
             $c->c_used = $c->c_used + $data['o_money'];
             $c->c_noused = $c->c_money - $c->c_used;
