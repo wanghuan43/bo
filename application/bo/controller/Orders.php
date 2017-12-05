@@ -293,7 +293,7 @@ class Orders extends BoController
                 }
             }
             if($old['o_pid'] != $new['o_pid']){
-                $new['o_no'] = $this->ordersModel->getOrderNO($new['o_pid'], $new['o_type']);
+                $new['o_no'] = $this->ordersModel->getOrderNO($new['o_pid'], $old['o_type']);
             }
             $this->ordersModel->save($new);
             $message = "审核通过";
