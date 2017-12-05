@@ -78,4 +78,9 @@ class Company extends BoModel
 
     }
 
+    protected function doImport($dataset)
+    {
+        return $this->insertDuplicate($dataset);
+    }
+
 }
