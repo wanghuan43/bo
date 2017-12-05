@@ -25,6 +25,46 @@ class Project extends BoModel
                 "like" => "包含"
             ),
         ),
+        'p_mname' => [
+            'name' => '责任人',
+            'type' => 'text',
+            'operators' => ['like'=>'包含']
+        ],
+        'p_dname' => [
+            'name' => '立项部门',
+            'type' => 'text',
+            'operators' => ['like'=>'包含']
+        ],
+        'p_income' => [
+            'name' => '预计总收入',
+            'type' => 'price',
+            'operators' => [
+                'between' => '介于',
+                '=' => '等于',
+                '>' => '大于',
+                '<' => '小于'
+            ]
+        ],
+        'p_pay' => [
+            'name' => '预计总支出',
+            'type' => 'price',
+            'operators' => [
+                'between' => '介于',
+                '=' => '等于',
+                '>' => '大于',
+                '<' => '小于'
+            ]
+        ],
+        'p_date' => [
+            'name' => '立项日期',
+            'type' => 'date',
+            'operators' => [
+                'between' => '介于',
+                '=' => '等于',
+                '>' => '大于',
+                '<' => '小于'
+            ]
+        ]
     );
 
     public function getList($search = array(), $limit = 20)
