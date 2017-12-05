@@ -330,7 +330,7 @@ th.icon {
     max-width:25%;
 }
 .list th:last-child{
-    width:120px;
+    width:80px;
 }
 .list th.date{
     width:7em;

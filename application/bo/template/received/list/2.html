@@ -15,6 +15,11 @@
                 </a>
             </th>
             <th>
+                <a href="/received/all/sort/r_subject/order/<{:getSortOrder($sort,'r_subject')}>">
+                    摘要<i class="<{:getSortClass($sort,'r_subject')}>"></i>
+                </a>
+            </th>
+            <th>
                 <a href="/received/all/sort/r_coname/order/<{:getSortOrder($sort,'r_coname')}>">
                     对方名称<i class="<{:getSortClass($sort,'r_coname')}>"></i>
                 </a>
@@ -48,17 +53,18 @@
         </tr>
         </thead>
         <tbody>
-        <{volist name="lists" id="val" empty="<tr><td colspan='9'>暂无数据</td></tr>"}>
+        <{volist name="lists" id="val" empty="<tr><td colspan='10'>暂无数据</td></tr>"}>
         <tr>
             <td><input type="checkbox" value="<{$val.r_id}>" class="lists-id" data-name="<{$val.r_no}>"></td>
             <td><a href="/received/detail?id=<{$val.r_id}>"><{$val.r_no}></a></td>
+            <td><{$val.r_subject}></td>
             <td><{$val.r_coname}></td>
             <td><?php echo getTypeList($val['r_type']); ?></td>
             <td><?php echo date("Y-m-d", $val['r_date']); ?></td>
             <td><{$val.r_accdate}></td>
             <td class="money"><{$val.r_money|number_format=2}></td>
             <td class="money"><{$val.r_noused|number_format=2}></td>
-            <td><a href="/circulation/list/type/received/id/<{$val.r_id}>">传阅列表</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a href="/received/detail?id=<{$val.r_id}>">查看</a</td>
+            <td><a href="/circulation/list/type/received/id/<{$val.r_id}>">传阅列表</a></td>
         </tr>
         <{/volist}>
         </tbody>

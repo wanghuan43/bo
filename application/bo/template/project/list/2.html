@@ -15,7 +15,19 @@
                 <a href="/project/all/sort/p_name/order/<{:getSortOrder($sort,'p_name')}>">项目名称<i class="<{:getSortClass($sort,'p_name')}>"></i></a>
             </th>
             <th>
-                <a href="/project/all/sort/p_mname/order/<{:getSortOrder($sort,'p_mname')}>">创建人<i class="<{:getSortClass($sort,'p_mname')}>"></i></a>
+                <a href="/project/all/sort/p_mname/order/<{:getSortOrder($sort,'p_mname')}>">责任人<i class="<{:getSortClass($sort,'p_mname')}>"></i></a>
+            </th>
+            <th>
+                <a href="/project/all/sort/p_dname/order/<{:getSortOrder($sort,'p_dname')}>">立项部门<i class="<{:getSortClass($sort,'p_dname')}>"></i></a>
+            </th>
+            <th class="money">
+                <a href="/project/all/sort/p_income/order/<{:getSortOrder($sort,'p_income')}>">预计总收入<i class="<{:getSortClass($sort,'p_income')}>"></i></a>
+            </th>
+            <th class="money">
+                <a href="/project/all/sort/p_pay/order/<{:getSortOrder($sort,'p_pay')}>">预计总支出<i class="<{:getSortClass($sort,'p_pay')}>"></i></a>
+            </th>
+            <th class="date">
+                <a href="/project/all/sort/p_date/order/<{:getSortOrder($sort,'p_date')}>">立项日期<i class="<{:getSortClass($sort,'p_date')}>"></i></a>
             </th>
             <th>
                 <a href="/project/all/sort/p_createtime/order/<{:getSortOrder($sort,'p_createtime')}>">创建时间<i class="<{:getSortClass($sort,'p_createtime')}>"></i></a>
@@ -24,7 +36,7 @@
         </tr>
         </thead>
         <tbody>
-        <{volist name="lists" id="val" empty="<td colspan='6'>暂无数据</td>"}>
+        <{volist name="lists" id="val" empty="<td colspan='10'>暂无数据</td>"}>
         <tr>
             <td>
                 <input type="checkbox" value="<{$val.p_id}>" class="lists-id" data-name="<{$val.p_no}>">
@@ -34,8 +46,12 @@
             </td>
             <td><{$val.p_name}></td>
             <td><{$val.p_mname}></td>
+            <td><{$val.p_dname}></td>
+            <td class="money"><{$val.p_income|number_format=2}></td>
+            <td class="money"><{$val.p_pay|number_format=2}></td>
+            <td><{$val.p_date|date='Y-m-d',###}></td>
             <td><{$val.p_createtime|date='Y-m-d H:i:s',###}></td>
-            <td><a href="/circulation/list/type/project/id/<{$val.p_id}>">传阅列表</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a href="/project/detail?id=<{$val.p_id}>">查看</a></td>
+            <td><a href="/circulation/list/type/project/id/<{$val.p_id}>">传阅列表</a></td>
         </tr>
         <{/volist}>
         </tbody>
