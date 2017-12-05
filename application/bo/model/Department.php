@@ -57,4 +57,9 @@ class Department extends BoModel
         return $ret;
     }
 
+    protected function doImport($dataset)
+    {
+        return $this->insertDuplicate($dataset);
+    }
+
 }
