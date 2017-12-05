@@ -45,11 +45,10 @@
                 管理员<i class="<{:getSortClass($sort,'m_isAdmin')}>"></i>
             </a>
         </th>
-        <th style="width:8em;"></th>
     </tr>
     </thead>
     <tbody>
-    <{volist name="lists" id="vo" empty="<tr><td colspan='11'>暂无数据</td></tr>"}>
+    <{volist name="lists" id="vo" empty="<tr><td colspan='9'>暂无数据</td></tr>"}>
     <tr>
         <td><input type="checkbox" value="<{$vo.m_id}>" class="lists-id" data-name="<{$vo.m_name}>"></td>
         <td><a href="/member/detail?id=<{$vo.m_id}>"><{$vo.m_name}></a></td>
@@ -60,7 +59,6 @@
         <td><{$vo.m_department}></td>
         <td><{if $vo.m_is_lead == 1}><span style="color: green;">是</span><{else}><span style="color:red">否</span><{/if}></td>
         <td><{if $vo.m_isAdmin == 1}><span style="color: green;">是</span><{else}><span style="color:red">否</span><{/if}></td>
-        <td><a href="/member/detail?id=<{$vo.m_id}>">查看</a></td>
     </tr>
     <{/volist}>
     </tbody>
