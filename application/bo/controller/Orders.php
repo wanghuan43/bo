@@ -104,9 +104,7 @@ class Orders extends BoController
         $this->assign('op', $op);
         $this->assign('op_id', $op_id);
         $this->assign("isAdmin", $isAdmin);
-        $this->assign("md", $this->current->m_did);
-        $this->assign("mdn", $this->current->m_department);
-        $this->assign("mn", $this->current->m_name);
+        $this->assign("current", $this->current);
         $this->assign("isFavorite", $fmodel->where("f_oid", "=", $op_id)->where("f_mid", "=", $this->current->m_id)->count());
         return $this->fetch("operation");
     }
@@ -150,7 +148,7 @@ class Orders extends BoController
             unset($post['zc_mid']);
             unset($post['zc_mname']);
             $result = $this->ordersModel->save($post, $where);
-            if ($result AND $post['o_lie'] == '2') {
+            if ($result AND $post['o_lie'] == '1') {
                 $nO = new \app\bo\model\Orders();
                 if ($post['o_type'] == "1") {
                     $post['o_pid'] = $zc['zc_id'];

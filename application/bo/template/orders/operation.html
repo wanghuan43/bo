@@ -59,9 +59,15 @@
                 </td>
                 <td class="txt"><label for="o_mname">订单责任人:</label></td>
                 <td>
-                    <{if condition="empty($order.o_mname)"}><{$mn}><{else}><{$order.o_mname}><{/if}>
+                    <{if condition="empty($order.o_mname)"}>
+                    <{$current.m_name}>
+                    <input class="input-sm" type="hidden" name="o_mname" id="o_mname" value="<{$current.m_name}>"/>
+                    <input type="hidden" name="o_mid" id="o_mid" value="<{$current.m_id}>"/>
+                    <{else}>
+                    <{$order.o_mname}>
                     <input class="input-sm" type="hidden" name="o_mname" id="o_mname" value="<{$order.o_mname}>"/>
                     <input type="hidden" name="o_mid" id="o_mid" value="<{$order.o_mid}>"/>
+                    <{/if}>
                 </td>
             </tr>
             <tr>
@@ -98,7 +104,7 @@
                         <{if condition="!empty($op_id)"}>
                         <option selected value="<{$order.o_did}>"><{$order.o_dname}></option>
                         <{else}>
-                        <option selected value="<{$md}>"><{$mdn}></option>
+                        <option selected value="<{$current.m_did}>"><{$current.m_department}></option>
                         <{/if}>
                     </select>
                     <input type="hidden" name="o_dname" id="o_dname" value="<{$order.o_dname}>"/>
@@ -711,7 +717,7 @@
                             form.prop("disabled", "false");
                             custom.alert(data.message);
                             if(data.status){
-                                window.setTimeout("location.reload()", 800);
+//                                window.setTimeout("location.reload()", 800);
                             }
                         },
                         error:function () {
@@ -884,8 +890,8 @@
                             }
                             if(type == "company" || type == "department"){
                                 if ($(inputs).length > 1) {
-                                    $("#zc_did").val($(cla + " .selectRadio:checked").attr("data"));
-                                    $("#zc_dname").val($(cla + " .selectRadio:checked").val());
+                                    $("#zc_did").val($(cla + " .selectRadio:checked").val());
+                                    $("#zc_dname").val($(cla + " .selectRadio:checked").attr("data"));
                                 }else{
                                     $("#zc_did").val("");
                                     $("#zc_dname").val("");
@@ -954,13 +960,13 @@
         });
         $("#o_lie").change(function(){
             if($(this).val() == 1){
-                $("#o_type option:eq(1)").prop("selected", true);
-                $("#o_type option:eq(0)").prop("disabled", true);
+                $("#o_type option:eq(0)").prop("selected", true);
+                $("#o_type option:eq(1)").prop("disabled", true);
             }else{
-                $("#o_type option:eq(0)").prop("disabled", false);
+                $("#o_type option:eq(1)").prop("disabled", false);
             }
             var o_type = $("#o_type").val();
-            if($(this).val() == "1" && o_type == "2"){
+            if($(this).val() == "1" && o_type == "1"){
                 zproject.show();
             }else{
                 zproject.hide();
