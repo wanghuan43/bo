@@ -97,6 +97,8 @@
                     <select class="input-sm pop" name="o_did" id="o_did" data="o_did">
                         <{if condition="!empty($op_id)"}>
                         <option selected value="<{$order.o_did}>"><{$order.o_dname}></option>
+                        <{else}>
+                        <option selected value="<{$md}>"><{$mdn}></option>
                         <{/if}>
                     </select>
                     <input type="hidden" name="o_dname" id="o_dname" value="<{$order.o_dname}>"/>

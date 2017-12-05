@@ -105,6 +105,7 @@ class Orders extends BoController
         $this->assign('op_id', $op_id);
         $this->assign("isAdmin", $isAdmin);
         $this->assign("md", $this->current->m_did);
+        $this->assign("mdn", $this->current->m_department);
         $this->assign("mn", $this->current->m_name);
         $this->assign("isFavorite", $fmodel->where("f_oid", "=", $op_id)->where("f_mid", "=", $this->current->m_id)->count());
         return $this->fetch("operation");
@@ -117,8 +118,6 @@ class Orders extends BoController
         $post['o_date'] = strtotime($post['o_date']);
         $where = [];
         $message = "保存成功";
-        $post['o_mid'] = $this->current->m_id;
-        $post['o_mname'] = $this->current->m_name;
         if ($op == "edit") {
             $search = [
                 "l_otid" => $op_id,
@@ -292,6 +291,9 @@ class Orders extends BoController
                     $con->c_used -= $old['o_money'];
                     $con->save();
                 }
+            }
+            if($old['o_pid'] != $new['o_pid']){
+                $new['o_no'] = $this->ordersModel->getOrderNO($new['o_pid'], $new['o_type']);
             }
             $this->ordersModel->save($new);
             $message = "审核通过";
