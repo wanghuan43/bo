@@ -48,8 +48,7 @@ class Department extends BoModel
 
     public function getDepartmentIdByName($dName)
     {
-        $model = new self();
-        $res = $model->where('d_name','=',$dName)->find();
+        $res = $this->where('d_name','=',$dName)->find();
         if($res) {
             $ret = $res->d_id;
         }else{

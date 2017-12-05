@@ -55,24 +55,23 @@ class Company extends BoModel
      */
     public function getCompany($code=false,$name=false,$type=false){
 
-        $model = new self();
 
         if(!$code && !$name){
             $res = false;
         }else {
-            $model = $model->where('co_status', '=', 1);
+            $this->where('co_status', '=', 1);
 
             if ($code) {
-                $model = $model->where('co_code', '=', $code);
+                $this->where('co_code', '=', $code);
             } elseif ($name) {
-                $model = $model->where('co_name', '=', $name);
+                $this->where('co_name', '=', $name);
             }
 
             if ($type) {
-                $model = $model->where('co_type', '=', $type);
+                $this->where('co_type', '=', $type);
             }
 
-            $res = $model->find();
+            $res = $this->find();
         }
 
         return $res;

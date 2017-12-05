@@ -105,7 +105,10 @@ abstract class BoModel extends Model
                 }
             }
         }
-        $cols = array_keys($dataset[0]);
+
+        $keys = array_keys($dataset);
+        $cols = array_keys($dataset[$keys[0]]);
+
         $sqlPrev = "INSERT INTO `".$this->getTable()."` (".implode(',',$cols).") VALUES ";
 
         foreach($cols as $key => $col){

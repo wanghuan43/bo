@@ -3,6 +3,7 @@
 namespace app\bo\model;
 
 use app\bo\libs\BoModel;
+use app\bo\libs\CustomUtils;
 use think\Exception;
 
 class Project extends BoModel
@@ -56,8 +57,15 @@ class Project extends BoModel
         return ['code' => $data['p_no'], 'name' => $data['p_name']];
     }
 
-    public function import($dataset)
+    /**
+     * @param $dataset
+     * @return array|bool
+     */
+    protected function doImport($dataset)
     {
+        $mModel = new Member();
+        $dModel =new Department();
+
         foreach ($dataset as $key => $data) {
             if ($data['p_type'] != '项目编号') {
                 unset($dataset[$key]);
@@ -66,18 +74,21 @@ class Project extends BoModel
                 unset($data['p_type']);
             }
 
-            $mModel = new Member();
-            $dModel =new Department();
-            $m = $mModel->getMemberByName($data['p_mname']);
+            $m = $mModel->getMemberByName($data['p_mname'],$data['p_dname']);
 
             if(!empty($m))
                 $data['p_mid'] = $m->m_id;
-            else
-                $data['p_mid'] = 0;
+            else{
+                CustomUtils::writeImportLog('Member ID is null - '.serialize($data),strtolower($this->name));
+                unset($dataset[$key]);
+                continue;
+            }
 
             $did = $dModel->getDepartmentIdByName($data['p_dname']);
             if(empty($did)){
-                $data['p_did'] = 0;
+                CustomUtils::writeImportLog('Department ID is null - '.serialize($data),strtolower($this->name));
+                unset($dataset[$key]);
+                continue;
             }else{
                 $data['p_did'] = $did;
             }
@@ -92,61 +103,6 @@ class Project extends BoModel
         }
 
         return $this->insertDuplicate($dataset);
-
-    }
-
-    /**
-     * @param $dataset
-     * @param bool $forceUpdate
-     * @return int|void
-     */
-    protected function doImport($dataset, $forceUpdate = true)
-    {
-
-        if (empty($dataset)) return;
-
-        if ($forceUpdate) {
-            $sqlPrev = "INSERT INTO `kj_project` (`p_no`,`p_name`,`p_mid`,`p_mname`,`p_did`,`p_dname`,`p_income`,`p_pay`,`p_date`,`p_createtime`,`p_updatetime`) VALUES ";
-            $sqlSuffix = " ON DUPLICATE KEY UPDATE `p_name`=VALUES(`p_name`,`p_mid`,`p_mname`,`p_did`,`p_dname`,`p_income`,`p_pay`,`p_date`,`p_createtime`,`p_updatetime`)";
-        } else {
-            $sqlPrev = "INSERT IGNORE INTO `kj_project` (`p_no`,`p_name`) VALUES ";
-            $sqlSuffix = "";
-        }
-
-        $i = 0;
-        $values = '';
-
-        $db = $this->getQuery();
-        $db->startTrans();
-        try {
-            foreach ($dataset as $data) {
-
-                if (!empty($values))
-                    $values .= ",";
-
-                $values .= "('" . $data['p_no'] . "','" . $data['p_name'] . "',".$data['p_mid'].",'".$data['p_mname']."',".")";
-                $i++;
-                if ($i%1000 == 0) { //1000条数据操作一次
-                    $sql = $sqlPrev . $values . $sqlSuffix;
-                    $res[] = $db->query($sql);
-                    $i = 0;
-                    $values = '';
-                }
-
-            }
-
-            if (!empty($values)) {
-                $sql = $sqlPrev . $values . $sqlSuffix; //var_dump($sql);die;
-                $res[] = $db->query($sql);
-            }
-            $db->commit();
-            return $res;
-
-        }catch (\Exception $e){
-            $db->rollback();
-            $log = 'Exception - '. $e->getMessage();
-            CustomUtils::writeImportLog($log,'project');
-        }
 
     }
 

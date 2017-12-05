@@ -139,52 +139,58 @@ class Invoice extends BoModel
         return ['code'=>$data['i_no'],'name'=>'发票'.$data['i_no']];
     }
 
-    public function import($dataset)
+    /**
+     * @param $dataset
+     * @return array|bool
+     */
+    protected function doImport($dataset)
     {
 
         $mCompany = new Company();
         $mMember = new Member();
+        $mDepartment = new Department();
 
-        $arr = [];
+        foreach ($dataset as $key=>$data){
 
-        foreach ($dataset as $data){
-            if(empty($data['i_no'])){
+            $did = $mDepartment->getDepartmentIdByName($data['i_dname']);
+            if(empty($did)){
+                CustomUtils::writeImportLog('Department ID is null - '.serialize($data),strtolower($this->name));
+                unset($dataset[$key]);
                 continue;
+            }else{
+                $data['i_did'] = $did;
             }
 
             $type = $data['i_type'] == 1 ? 2 : 1;
 
-            $company = $mCompany->where('co_name','=',$data['i_coname'])->where('co_type','=',$type)
-                                ->where('co_status','=',1)->find();
+            $company = $mCompany->getCompany(false,$data['i_coname'],$type);
 
             if($company){
-                $data['i_coname'] = $company->co_name;
                 $data['i_coid'] = $company->co_id;
             }else{
-                $data['i_coid'] = 0;
+                CustomUtils::writeImportLog('Company ID is null - '.serialize($data),strtolower($this->name));
+                unset($dataset[$key]);
+                continue;
             }
 
-            $member = $mMember->where('m_name','=',$data['i_mname'])->find();
+            $member = $mMember->getMemberByName($data['i_mname'],$data['i_dname']);
 
             if($member){
                 $data['i_mid'] = $member->m_id;
+            }else{
+                CustomUtils::writeImportLog('Member ID is null - '.serialize($data),strtolower($this->name));
+                unset($dataset[$key]);
+                continue;
             }
-
-            if(isset($data['d_name']))
-                unset($data['d_name']);
 
             $data['i_noused'] = $data['i_money'];
             $data['i_createtime'] = $data['i_updatetime'] = time();
 
-            $arr[] = $data;
+            $dataset[$key] = $data;
 
         }
 
-        if(empty($arr)){
-            return ;
-        }else{
-            return $this->insertDuplicate($arr);
-        }
+        return $this->insertDuplicate($dataset);
 
     }
 

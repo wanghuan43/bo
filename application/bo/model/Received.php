@@ -3,6 +3,7 @@
 namespace app\bo\model;
 
 use app\bo\libs\BoModel;
+use app\bo\libs\CustomUtils;
 
 class Received extends BoModel
 {
@@ -87,9 +88,9 @@ class Received extends BoModel
         foreach ($search as $key => $value) {
             $this->where("r." . $value['field'], $value['opt'], $value['val']);
         }
-        if($limit===false){
+        if ($limit === false) {
             $list = $this->select();
-        }else {
+        } else {
             $list = $this->paginate($limit);
         }
         return $list;
@@ -98,9 +99,9 @@ class Received extends BoModel
     public function checkUsed($id, $money, $op = '-')
     {
         $tmp = $this->find($id);
-        if(!$tmp){
+        if (!$tmp) {
             return true;
-        }else{
+        } else {
             $tmp = $tmp->toArray();
         }
         $return = true;
@@ -119,35 +120,48 @@ class Received extends BoModel
     public function getCodeAndNameById($id)
     {
         $data = $this->getDataById($id);
-        return ['code'=>$data['r_no'],'name'=>'付款单'.$data['r_no']];
+        return ['code' => $data['r_no'], 'name' => '付款单' . $data['r_no']];
     }
 
-    public function doImport($dataset=false)
+    public function doImport($dataset = false)
     {
         $mMember = new Member();
         $mCompany = new Company();
-        foreach ($dataset as $key=>$data){
+        $mDepartment = new Department();
 
-            if(isset($data['r_mname']) && isset($data['d_name'])){
-                $member = $mMember->getMemberByName($data['r_mname'],$data['d_name']);
-                if($member) $data['r_mid'] = $member->m_id;
-                unset($data['d_name']);
-            }elseif (isset($data['r_mname'])){
-                $member = $mMember->getMemberByName($data['r_mname']);
-                if($member) $data['r_mid'] = $member->m_id;
+        foreach ($dataset as $key => $data) {
+
+            $did = $mDepartment->getDepartmentIdByName($data['r_dname']);
+            if(empty($did)){
+                CustomUtils::writeImportLog('Department ID is null - '.serialize($data),strtolower($this->name));
+                unset($dataset[$key]);
+                continue;
+            }else{
+                $data['r_did'] = $did;
             }
 
-            if(isset($data['r_coname']) && $data['r_coname']){
-                $type = $data['r_type'] == 2 ? 1 : 2;
-                $c = $mCompany->getCompany(false,$data['r_coname'],$type);
-                if($c){
-                    $data['r_coid'] = $c->co_id;
-                }else{
-                    $data['r_coid'] = 0;
-                }
+            $member = $mMember->getMemberByName($data['r_mname'], $data['r_dname']);
+
+            if (empty($member)) {
+                CustomUtils::writeImportLog('Member ID is null - ' . serialize($data), strtolower($this->name));
+                unset($dataset[$key]);
+                continue;
+            } else {
+                $data['r_mid'] = $member->m_id;
+            }
+
+            $type = $data['r_type'] == 2 ? 1 : 2;
+            $c = $mCompany->getCompany(false, $data['r_coname'], $type);
+            if ($c) {
+                $data['r_coid'] = $c->co_id;
+            } else {
+                CustomUtils::writeImportLog('Company ID is null - '.serialize($data),strtolower($this->name));
+                unset($dataset[$key]);
+                continue;
             }
 
             $data['r_noused'] = $data['r_money'];
+            $data['r_createtime'] = $data['r_updatetime'] = time();
             $dataset[$key] = $data;
         }
         return $this->insertDuplicate($dataset);

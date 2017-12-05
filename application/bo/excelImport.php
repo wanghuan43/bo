@@ -123,12 +123,11 @@ return [
                 'co_type' => 2
             ]
         ],
-        'contract171202' => [ //主数据 - 销售合同
+        'contract' => [ //主数据 - 销售合同
             'file' => 'uploads/default/contract1202.xlsx',
             'model' => 'contract',
             'index' => 0,
             'fields' => [
-                //'c_pname' => 'E',
                 'c_money' => 'H',
                 'c_coname' => 'F',
                 'c_mname' => 'C',
@@ -137,12 +136,9 @@ return [
                 'c_name' => 'D',
                 'c_type' => 'E',
                 'c_accdate' => 'I',
-                //'c_bakup' => 'L',
-                'd_name' => 'B',
-                //'p_no' => 'D'
+                'c_dname' => 'B'
             ],
             'dateFields' => ['c_date'],
-            //'defaultFields' => ['c_type' => 1],
             'moneyFields' => ['c_money'],
             'enumFields' => [
                 'c_type' => [
@@ -164,7 +160,7 @@ return [
                 'r_date' => 'G',
                 'r_subject' => 'D',
                 'r_content' => 'K',
-                'd_name' => 'B',
+                'r_dname' => 'B',
                 'r_accdate' => 'J'
             ],
             'dateFields' => ['r_date'],
@@ -189,7 +185,7 @@ return [
                 'a_coname' => 'F',
                 'a_money' => 'H',
                 'a_date' => 'G',
-                'd_name' => 'B',
+                'a_dname' => 'B',
                 'a_type' => 'E',
                 'a_accdate' => 'J'
             ],
@@ -216,7 +212,7 @@ return [
                 'i_type' => 'E',
                 'i_tax' => 'I',
                 'i_accdate' => 'J',
-                'd_name' => 'B'
+                'i_dname' => 'B'
             ],
             'dateFields' => ['i_date'],
             //'defaultFields' => ['co_code'=>''],
@@ -245,7 +241,6 @@ return [
             'fields' => [
                 'o_no' => 'A',
                 'o_mname' => 'C',
-                'm_department' => 'B',
                 'p_no' => 'O',
                 'o_subject' => 'D',
                 'o_type' => 'E',
