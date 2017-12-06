@@ -57,8 +57,10 @@
 <!-- 弹窗 END -->
 <script>
     var mName = "<{$type}>";
+    var coName = "<{$Request.get.coName}>";
     var search = eval('(<{$searchable|json_encode=###}>)');
     $(".f-layer-" + mName + " .search-condition").initSearchable(search, mName);
+    $(".f-layer-" + mName + " .search-condition .search-block:eq(1)").find("input").val(coName);
     $(document).ready(function(){
         var className = getClassByType(mName);
         $("#<{$type}>Form").submit(function() {

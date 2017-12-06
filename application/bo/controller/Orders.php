@@ -15,12 +15,14 @@ use app\bo\libs\BoController;
 use PHPExcel_IOFactory;
 use think\Config;
 use think\Request;
+use think\Response;
 use think\Session;
 
 class Orders extends BoController
 {
     private $ordersModel;
     protected $title;
+    protected $unuseF = ["zc_name", "zc_id", "zc_dname", "zc_did", "zc_mid", "zc_mname","zc_coname","zc_coid"];
 
     function __construct(Request $request)
     {
@@ -117,19 +119,22 @@ class Orders extends BoController
         $where = [];
         $message = "保存成功";
         if ($op == "edit") {
-            $search = [
-                "l_otid" => $op_id,
-                "l_mid" => $this->current->m_id,
-                "l_model" => "orders",
-                "l_panding" => "0",
-            ];
-            $check = Logs::get($search);
-            if ($check) {
-                return array("status" => 0, "message" => "已有还未审核的修改,请等待上一次提交的审核.");
-            }
+//            $search = [
+//                "l_otid" => $op_id,
+//                "l_mid" => $this->current->m_id,
+//                "l_model" => "orders",
+//                "l_panding" => "0",
+//            ];
+//            $check = Logs::get($search);
+//            if ($check) {
+//                return array("status" => 0, "message" => "已有还未审核的修改,请等待上一次提交的审核.");
+//            }
             $old = $this->ordersModel->getOrderById($op_id);
             $logModel->saveLogs($post, $old, $op_id, "orders", "edit");
-            return array("status" => 1, "message" => "以保存此次提交,请等待审核");
+            $_POST['id'] = $logModel->l_id;
+            $_POST['val'] = 1;
+            $this->savePanding();
+            return array("status" => 1, "message" => "保存成功!");
         } else {
             $post['o_no'] = $this->ordersModel->getOrderNO($post['o_pid'], $post['o_type']);
             $post['o_createtime'] = $post['o_updatetime'] = time();
@@ -138,15 +143,14 @@ class Orders extends BoController
                 "zc_id" => $post['zc_id'],
                 "zc_dname" => $post['zc_dname'],
                 "zc_did" => $post['zc_did'],
-                "zc_mid" => $post['zc_mid'],
+                "zc_mid" => empty($post['zc_mid']) ? "" : $post['zc_mid'],
                 "zc_mname" => $post['zc_mname'],
+                "zc_coname" => empty($post['zc_coname']) ? "" : $post['zc_coname'],
+                "zc_coid" => $post['zc_coid'],
             ];
-            unset($post['zc_name']);
-            unset($post['zc_id']);
-            unset($post['zc_dname']);
-            unset($post['zc_did']);
-            unset($post['zc_mid']);
-            unset($post['zc_mname']);
+            foreach($this->unuseF as $v){
+                unset($post[$v]);
+            }
             $result = $this->ordersModel->save($post, $where);
             if ($result AND $post['o_lie'] == '1') {
                 $nO = new \app\bo\model\Orders();
@@ -157,6 +161,8 @@ class Orders extends BoController
                     $post['o_dname'] = $zc['zc_dname'];
                     $post['o_mid'] = $zc['zc_mid'];
                     $post['o_mname'] = $zc['zc_mname'];
+                    $post['o_coid'] = $zc['zc_coid'];
+                    $post['o_coname'] = $zc['zc_coname'];
                     $post['o_foreign'] = $this->ordersModel->o_id;
                 }
                 $post['o_type'] = $post['o_type'] == '1' ? '2' : '1';
@@ -269,16 +275,17 @@ class Orders extends BoController
     public function savePanding()
     {
         $post = Request::instance()->post();
-        $log = Logs::get($post['id']);
+        $id = empty($post['id']) ? $_POST['id'] : $post['id'];
+        $vp = empty($post['val']) ? $_POST['val'] : $post['val'];
+        $log = Logs::get($id);
         $new = unserialize($log['l_new']);
         $old = unserialize($log['l_old']);
-        $unuseF = ["zc_name", "zc_id", "zc_dname", "zc_did", "zc_mid", "zc_mname"];
-        foreach($unuseF as $val){
+        foreach($this->unuseF as $val){
             unset($new[$val]);
             unset($old[$val]);
         }
         $oum = new OrderUsed();
-        if ($post['val'] == "1") {
+        if ($vp == "1") {
             $log->l_panding = 2;
             $new['o_id'] = $log->l_otid;
             $oum->resetOrderUsed($log->l_otid);
