@@ -105,7 +105,11 @@ class   Orders extends BoModel
         if ($otype == '1') {
             $str = "X";
         }
-        $c = $this->where("o_pid", "=", $p_id)->where("o_type", "=", $otype)->count();
+        $tmp = $this->field("o_no")->where("o_pid", "=", $p_id)->where("o_type", "=", $otype)->order("o_createtime", "desc")->find();
+        $c = 0;
+        if ($tmp) {
+            $c = intval(str_replace(['C', 'X'], "", explode("-", $tmp->o_no)[1]));
+        }
         return $project->p_no . "-" . $str . str_pad(($c + 1), 4, "0", STR_PAD_LEFT);
     }
 
@@ -249,11 +253,11 @@ class   Orders extends BoModel
             }
 
             $co_type = $data['o_type'] == 1 ? 2 : 1;
-            $company = $mCompany->getCompany(false,$data['o_coname'],$co_type);
+            $company = $mCompany->getCompany(false, $data['o_coname'], $co_type);
             if ($company) {
                 $data['o_coid'] = $company->co_id;
-            }else{
-                CustomUtils::writeImportLog('Company ID is null - '.serialize($data),strtolower($this->name));
+            } else {
+                CustomUtils::writeImportLog('Company ID is null - ' . serialize($data), strtolower($this->name));
                 unset($dataset[$key]);
                 continue;
             }
