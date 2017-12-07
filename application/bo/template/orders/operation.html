@@ -73,18 +73,27 @@
             <tr>
                 <td class="txt"><label for="o_subject"><i class="asterisk">*</i>订单摘要:</label></td>
                 <td colspan="5"><input class="input-sm" type="text" name="o_subject" id="o_subject" value="<{$order.o_subject}>" required/></td>
-                <td class="txt"><label for="o_type">收入/支出:</label></td>
+                <td class="txt"><label for="o_did">部门:</label></td>
                 <td>
-                    <select class="input-sm" name="o_type" id="o_type" <{if condition="!empty($order.o_type)"}>disabled<{/if}>>
-                        <{foreach name="typeList" id="tl"}>
-                        <option value="<{$key}>" <{eq name="$key" value="$order.o_type"}>selected<{/eq}>><{$tl}></option>
-                        <{/foreach}>
+                    <select class="input-sm pop" name="o_did" id="o_did" data="o_did">
+                        <{if condition="!empty($op_id)"}>
+                        <option selected value="<{$order.o_did}>"><{$order.o_dname}></option>
+                        <{else}>
+                        <option selected value="<{$current.m_did}>"><{$current.m_department}></option>
+                        <{/if}>
                     </select>
+                    <input type="hidden" name="o_dname" id="o_dname" value="<{$order.o_dname}>"/>
                 </td>
             </tr>
             <tr>
                 <td class="txt">
-                    <label for="o_coname"><i class="asterisk">*</i>对方名称:</label>
+                    <label for="o_coname">
+                        <{if condition="!empty($order.o_lie)"}>
+                        <i class="asterisk">*</i><{if condition="$order.o_lie == '1'"}>对方部门:<{else}>对方名称:<{/if}>
+                        <{else}>
+                        <i class="asterisk">*</i>对方名称:
+                        <{/if}>
+                    </label>
                 </td>
                 <td colspan="3">
                     <input class="input-sm input-search" data="company" name="o_coname" id="o_coname" type="text" value="<{$order.o_coname}>" readonly required/>
@@ -98,16 +107,13 @@
                         <{/volist}>
                     </select>
                 </td>
-                <td class="txt"><label for="o_did">部门:</label></td>
+                <td class="txt"><label for="o_type">收入/支出:</label></td>
                 <td>
-                    <select class="input-sm pop" name="o_did" id="o_did" data="o_did">
-                        <{if condition="!empty($op_id)"}>
-                        <option selected value="<{$order.o_did}>"><{$order.o_dname}></option>
-                        <{else}>
-                        <option selected value="<{$current.m_did}>"><{$current.m_department}></option>
-                        <{/if}>
+                    <select class="input-sm" name="o_type" id="o_type" <{if condition="!empty($order.o_type)"}>disabled<{/if}>>
+                    <{foreach name="typeList" id="tl"}>
+                    <option value="<{$key}>" <{eq name="$key" value="$order.o_type"}>selected<{/eq}>><{$tl}></option>
+                    <{/foreach}>
                     </select>
-                    <input type="hidden" name="o_dname" id="o_dname" value="<{$order.o_dname}>"/>
                 </td>
             </tr>
             <tr class="zproject" style="display: none">
@@ -119,6 +125,8 @@
                     <input type="hidden" name="zc_id" id="zc_id" value=""/>
                     <input type="hidden" name="zc_did" id="zc_did" value=""/>
                     <input type="hidden" name="zc_dname" id="zc_dname" value=""/>
+                    <input type="hidden" name="zc_coname" id="zc_coname" value=""/>
+                    <input type="hidden" name="zc_coid" id="zc_coid" value=""/>
                 </td>
                 <td class="txt">
                     <label for="zc_mid">支出责任人:</label>
@@ -474,18 +482,18 @@
     };
 
     $(document).ready(function () {
-//    <{if condition="!empty($op_id)"}>
-//        $("#o_deal option").each(function(index, element){
-//            if(parseInt($(element).val()) < parseInt("<{$order.o_deal}>")){
-//                $(element).prop("disabled", true);
-//            }
-//        });
-//        $("#o_status option").each(function(index, element){
-//            if(parseInt($(element).val()) < parseInt("<{$order.o_status}>")){
-//                $(element).prop("disabled", true);
-//            }
-//        });
-//    <{/if}>
+    <{if condition="!empty($op_id)"}>
+        $("#o_deal option").each(function(index, element){
+            if(parseInt($(element).val()) < parseInt("<{$order.o_deal}>")){
+                $(element).prop("disabled", true);
+            }
+        });
+        $("#o_status option").each(function(index, element){
+            if(parseInt($(element).val()) < parseInt("<{$order.o_status}>")){
+                $(element).prop("disabled", true);
+            }
+        });
+    <{/if}>
         bindRemove();
         $("#o_type").change(function(){
             var cla = ".f-layer-company",lie = $("#o_lie").val();
@@ -568,6 +576,8 @@
         });
         $("#o_did").change(function(){
             $("#o_dname").val($("#o_did option:selected").html());
+            $("#zc_coname").val($("#o_did option:selected").html());
+            $("#zc_coid").val($("#o_did option:selected").val());
         });
         $("#o_did").change();
         $(".pop").select2();
@@ -698,6 +708,10 @@
             $(this).removeClass("wrong");
             $(this).next(".wrongMsg").remove();
         });
+        $("#o_coname").change(function(){
+            $("#zc_did").val($("#o_coid").val());
+            $("#zc_dname").val($(this).val());
+        });
         $("#opform [type=submit]").click(function(){
             var form = $("#opform");
             form.validate({
@@ -753,6 +767,17 @@
                 url = baseUrl[type] + "?c_type="+otype+"&fi=1";
             }else{
                 url = baseUrl[type] + "?fi=1";
+            }
+            switch(type){
+                case "invoice":
+                    url += "&coName="+encodeURIComponent($("#o_coname").val());
+                    break;
+                case "acceptance":
+                    url += "&coName="+encodeURIComponent($("#o_coname").val());
+                    break;
+                case "received":
+                    url += "&coName="+encodeURIComponent($("#o_coname").val());
+                    break;
             }
             var cla = ".f-layer-" + type;
             $.ajax({
@@ -962,8 +987,10 @@
             if($(this).val() == 1){
                 $("#o_type option:eq(0)").prop("selected", true);
                 $("#o_type option:eq(1)").prop("disabled", true);
+                $("#o_coname").parent().prev().find("label").html('<i class="asterisk">*</i>对方部门:');
             }else{
                 $("#o_type option:eq(1)").prop("disabled", false);
+                $("#o_coname").parent().prev().find("label").html('<i class="asterisk">*</i>对方名称:');
             }
             var o_type = $("#o_type").val();
             if($(this).val() == "1" && o_type == "1"){
