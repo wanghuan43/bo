@@ -107,6 +107,9 @@ class Project extends BoController
         $mOrders = new Orders();
         $orders = $mOrders->where('o_pid','=',$id)->select();
         $this->setUpdateParams($data['p_mid']);
+        if(!empty($orders)){
+            $this->assign('readonly','true');
+        }
         $mimeType = false;
         if($data['p_attachment']){
             $mimeType = $this->getAttachmentMimeType($data['p_attachment']);
