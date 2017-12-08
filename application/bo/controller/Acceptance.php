@@ -99,6 +99,9 @@ class Acceptance extends BoController
         $modelOrderUsed = new OrderUsed();
         $orders = $modelOrderUsed->getOrderUsedByOtid($id, 1);
         $this->setUpdateParams($data['a_mid']);
+        if(!empty($orders)){
+            $this->assign('readonly',true);
+        }
         $this->assign('data', $data);
         $this->assign('orders', $orders);
         return $this->fetch();

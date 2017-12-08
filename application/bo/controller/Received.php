@@ -98,6 +98,9 @@ class Received extends BoController
         $modelOrderUsed = new OrderUsed();
         $orders = $modelOrderUsed->getOrderUsedByOtid($id,1);
         $this->setUpdateParams($data['r_mid']);
+        if(!empty($orders)){
+            $this->assign('readonly',true);
+        }
         $mimeType = false;
         if($data['r_attachment']){
             $mimeType = $this->getAttachmentMimeType($data['r_attachment']);

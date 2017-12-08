@@ -104,6 +104,9 @@ class Invoice extends BoController
         $modelOrderUsed = new OrderUsed();
         $orders = $modelOrderUsed->getOrderUsedByOtid($id,1);
         $this->setUpdateParams($data['i_mid']);
+        if(!empty($orders)){
+            $this->assign('readonly',true);
+        }
         $mimeType = false;
         if($data['i_attachment']){
             $mimeType = $this->getAttachmentMimeType($data['i_attachment']);

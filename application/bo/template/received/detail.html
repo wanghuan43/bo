@@ -13,52 +13,44 @@
                 <tr>
                     <td><label for="ipt-no"><i class="asterisk">*</i>付款单号:</label></td>
                     <td>
-                        <input type="text" name="no" value="<{$data.r_no}>" id="ipt-no" class="input-sm" required disabled/>
-                        <input type="hidden" name="no" value="<{$data.r_no}>">
+                        <input type="text" name="no" value="<{$data.r_no}>" id="ipt-no" class="input-sm" required <{if $readonly}>disabled<{/if}>/>
                         <input type="hidden" name="id" value="<{$data.r_id}>"/>
                     </td>
                     <td><label for="ipt-subject"><i class="asterisk">*</i>摘要:</label></td>
                     <td colspan="3">
-                        <input type="text" name="subject" value="<{$data.r_subject}>" class="input-sm" id="ipt-subject" required disabled/>
-                        <input type="hidden" name="subject" value="<{$data.r_subject}>">
+                        <input type="text" name="subject" value="<{$data.r_subject}>" class="input-sm" id="ipt-subject" required <{if $readonly}>disabled<{/if}>/>
                     </td>
                     <td><label for="ipt-member-name">责任人:</label></td>
                     <td>
-                        <input type="text" value="<{$data.r_mname}>" name="mname" class="input-sm" id="ipt-member-name" readonly disabled/>
-                        <input type="hidden" name="mname" value="<{$data.r_mname}>">
+                        <input type="text" value="<{$data.r_mname}>" name="mname" class="input-sm" id="ipt-member-name" readonly <{if $readonly}>disabled<{/if}>/>
                         <input type="hidden" value="<{$data.r_mid}>" name="mid"/>
                     </td>
                 </tr>
                 <tr>
                     <td><label for="sel-type">类型:</label></td>
                     <td>
-                        <select name="type" id="sel-type" class="input-sm" disabled>
+                        <select name="type" id="sel-type" class="input-sm" <{if $readonly}>disabled<{/if}>>
                             <option value="1"<{if $data.r_type == 1}> selected<{/if}>><{:getTypeList(1)}></option>
                             <option value="2"<{if $data.r_type == 2}> selected<{/if}>><{:getTypeList(2)}></option>
                         </select>
-                        <input type="hidden" name="type" value="<{$data.r_type}>">
                     </td>
                     <td><label for="ipt-date"><i class="asterisk">*</i>发生日期:</label></td>
                     <td>
-                        <input name="date" id="ipt-date" type="text" value="<{$data.r_date|date='Y-m-d',###}>" required readonly class="input-sm" disabled/>
-                        <input type="hidden" name="date" value="<{$data.r_date|date='Y-m-d',###}>">
+                        <input name="date" id="ipt-date" type="text" value="<{$data.r_date|date='Y-m-d',###}>" required readonly class="input-sm" <{if $readonly}>disabled<{/if}>/>
                     </td>
                     <td><label for="ipt-accdate">记账月:</label></td>
                     <td>
-                        <input type="text" value="<{$data.r_accdate}>" class="input-sm" name="accdate" number="true" id="ipt-accdate" disabled>
-                        <input type="hidden" name="accdate" value="<{$data.r_accdate}>">
+                        <input type="text" value="<{$data.r_accdate}>" class="input-sm" name="accdate" number="true" id="ipt-accdate" <{if $readonly}>disabled<{/if}>>
                     </td>
                     <td><label for="ipt-money"><i class="asterisk">*</i>总金额:</label></td>
                     <td>
-                        <input id="ipt-money" type="text" value="<{$data.r_money}>" name="money" class="input-sm" required number="true" disabled/>
-                        <input type="hidden" name="money" value="<{$data.r_money}>">
+                        <input id="ipt-money" type="text" value="<{$data.r_money}>" name="money" class="input-sm" required number="true" <{if $readonly}>disabled<{/if}>/>
                     </td>
                 </tr>
                 <tr>
                     <td><label for="ipt-company-name"><i class="asterisk">*</i>对方公司:</label></td>
                     <td colspan="5">
-                        <input type="text" value="<{$data.r_coname}>" name="coname" id="ipt-company-name" class="input-sm" required readonly disabled/>
-                        <input type="hidden" name="coname" value="<{$data.r_coname}>">
+                        <input type="text" value="<{$data.r_coname}>" name="coname" id="ipt-company-name" class="input-sm" required readonly <{if $readonly}>disabled<{/if}>/>
                         <input type="hidden" name="coid" value="<{$data.r_coid}>" id="ipt-company-id">
                     </td>
                 </tr>
@@ -89,11 +81,18 @@
         <div class="content">
             <table class="table2 table">
                 <tr class="highlight">
-                    <!--td style="width: 2em;"></td-->
-                    <td>已对应订单金额:</td>
-                    <td><input type="text" name="used" value="<{$data.r_used}>" class="<{if empty($isAdmin)}>no-border<{else}>input-sm<{/if}>" <{if empty($isAdmin)}>readonly<{/if}>/></td>
-                    <td>未对应订单金额</td>
-                    <td><input type="text" name="noused" value="<{$data.r_noused}>" class="no-border" readonly/></td>
+                    <td>
+                        <label>已对应订单金额:</label>
+                        <input type="text" name="used_view" value="<{$data.r_used|number_format=2}>" class="no-border" readonly />
+                        <input type="hidden" name="used" value="<{$data.r_used}>">
+                    </td>
+                </tr>
+                <tr class="highlight">
+                    <td>
+                        <label>未对应订单金额:</label>
+                        <input type="text" name="noused_view" value="<{$data.r_noused|number_format=2}>" class="no-border" readonly/>
+                        <input type="hidden" name="noused" value="<{$data.r_noused}>">
+                    </td>
                 </tr>
                 <tr>
                     <!--th id="btn-add-order"><i class="fa fa-plus-circle"></i></th-->
