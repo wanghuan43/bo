@@ -586,8 +586,11 @@ table th i{
     font-weight:bolder;
 }
 .table3 tbody tr:nth-child(2n),
-.table2 tr:nth-child(2n){
+.table2 tr:nth-child(2n+1){
     background: #f2f2f2;
+}
+.table2 tr:nth-child(1){
+    background:#fff;
 }
 .table>thead>tr>th,
 .table>tbody>tr>td,
@@ -596,11 +599,16 @@ table th i{
     border:none;
 }
 .table3 thead tr:nth-child(1),
-.table2 tr:nth-child(2){
+.table2 tr:nth-child(3){
     background:#e0e0e0;
 }
 .form-control[readonly]{
     background:#fff;
+}
+.table2 input[type=text]{
+    display: inline-block;
+    width:auto;
+    margin-left:.8em;
 }
 textarea:disabled,
 select:disabled,

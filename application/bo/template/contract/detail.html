@@ -20,10 +20,9 @@
                     <td colspan="3">
                         <input type="text" name="name" value="<{$data.c_name}>" class="input-sm" required id="ipt-name" <{if $readonly}>disabled<{/if}>/>
                     </td>
-                    <td><label for="ipt-mname">责任人:</label></td>
+                    <td><label for="ipt-member-name">责任人:</label></td>
                     <td>
-                        <input type="text" value="<{$data.c_mname}>" name="mname" class="input-sm" id="ipt-mname" readonly disabled />
-                        <input type="hidden" value="<{$data.c_mname}>" name="mname" />
+                        <input type="text" value="<{$data.c_mname}>" name="mname" class="input-sm" id="ipt-member-name" readonly <{if $readonly}>disabled<{/if}> />
                         <input type="hidden" value="<{$data.c_mid}>" name="mid"/>
                     </td>
                 </tr>
@@ -31,33 +30,28 @@
 
                     <td><label for="sel-type">合同类型:</label></td>
                     <td>
-                        <select name="type" class="input-sm" id="sel-type" disabled>
+                        <select name="type" class="input-sm" id="sel-type" <{if $readonly}>disabled<{/if}>>
                             <option value="1"<{if $data.c_type == 1}> selected<{/if}>><{:getTypeList(1)}></option>
                             <option value="2"<{if $data.c_type == 2}> selected<{/if}>><{:getTypeList(2)}></option>
                         </select>
-                        <input type="hidden" name="type" value="<{$data.c_type}>"/>
                     </td>
                     <td><label for="ipt-date"><i class="asterisk">*</i>签约日期:</label></td>
                     <td>
-                        <input type="text" value="<{$data.c_date|date='Y-m-d',###}>" class="input-sm" id="ipt-date" name="date" required readonly disabled />
-                        <input type="hidden" name="date" value="<{$data.c_date|date='Y-m-d',###}>">
+                        <input type="text" value="<{$data.c_date|date='Y-m-d',###}>" class="input-sm" id="ipt-date" name="date" required readonly <{if $readonly}>disabled<{/if}> />
                     </td>
                     <td><label for="ipt-accdate">记账月:</label></td>
                     <td>
-                        <input type="text" name="accdate" value="<{$data.c_accdate}>" class="input-sm" id="ipt-accdate" disabled>
-                        <input type="hidden" name="accdate" value="<{$data.c_accdate}>">
+                        <input type="text" name="accdate" value="<{$data.c_accdate}>" class="input-sm" id="ipt-accdate" <{if $readonly}>disabled<{/if}>>
                     </td>
                     <td><label for="ipt-money"><i class="asterisk">*</i>合同总金额:</label></td>
                     <td>
-                        <input type="text" value="<{$data.c_money}>" name="money" class="input-sm" required number="true" id="ipt-money" disabled/>
-                        <input type="hidden" name="money" value="<{$data.c_money}>">
+                        <input type="text" value="<{$data.c_money}>" name="money" class="input-sm" required number="true" id="ipt-money" <{if $readonly}>disabled<{/if}>/>
                     </td>
                 </tr>
                 <tr>
                     <td><label for="ipt-company-name"><i class="asterisk">*</i>对方名称:</label></td>
                     <td colspan="5">
-                        <input type="text" value="<{$data.c_coname}>" name="coname" id="ipt-company-name" class="input-sm" required readonly disabled/>
-                        <input type="hidden" name="coname" value="<{$data.c_coname}>">
+                        <input type="text" value="<{$data.c_coname}>" name="coname" id="ipt-company-name" class="input-sm" required readonly <{if $readonly}>disabled<{/if}>/>
                         <input type="hidden" name="coid" value="<{$data.c_coid}>" id="ipt-company-id">
                     </td>
                 </tr>
@@ -88,11 +82,18 @@
         <div class="content">
             <table class="table2 table">
                 <tr class="highlight">
-                    <!--td style="width: 2em;"></td-->
-                    <td>已对应订单金额:</td>
-                    <td><input type="text" name="used" value="<{$data.c_used}>" class="<{if empty($isAdmin)}>no-border<{else}>input-sm<{/if}>" number="true" <{if empty($isAdmin)}>readonly<{/if}>/></td>
-                    <td>未对应订单金额</td>
-                    <td><input type="text" name="noused" value="<{$data.c_noused}>" class="no-border" readonly/></td>
+                    <td colspan="4">
+                        <label>已对应订单金额:</label>
+                        <input type="text" name="used_view" value="<{$data.c_used|number_format=2}>" class="no-border" number="true" readonly/>
+                        <input type="hidden" name="used" value="<{$data.c_used}>"/>
+                    </td>
+                </tr>
+                <tr class="highlight">
+                    <td colspan="4">
+                        <label>未对应订单金额:</label>
+                        <input type="text" name="noused_view" value="<{$data.c_noused|number_format=2}>" class="no-border" readonly/>
+                        <input type="hidden" name="noused" value="<{$data.c_noused}>">
+                    </td>
                 </tr>
                 <tr>
                     <!--th id="btn-add-order"><i class="fa fa-plus-circle"></i></th-->
