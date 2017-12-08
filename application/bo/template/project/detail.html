@@ -25,17 +25,16 @@
                         <input type="text" class="input-sm" name="dname" id="inputDepartment" value="<{$data.p_dname}>" readonly <{if $readonly}>disabled<{/if}> required/>
                         <input type="hidden" name="did" value="<{$data.p_did}>"/>
                     </td>
-                    <td><label for="ipt-mname">责任人:</label></td>
+                    <td><label for="ipt-member-name">责任人:</label></td>
                     <td>
-                        <input type="text"  name="mname" value="<{$data.p_mname}>" class="input-sm <{$data.p_mname}>" disabled id="ipt-mname" />
-                        <input type="hidden" name="mname" value="<{$data.p_mname}>"/>
+                        <input type="text"  name="mname" value="<{$data.p_mname}>" class="input-sm <{$data.p_mname}>" id="ipt-member-name" readonly <{if $readonly}>disabled<{/if}>/>
                         <input type="hidden" name="mid" value="<{$data.p_mid}>"/>
                     </td>
                 </tr>
                 <tr>
                     <td><label>立项日期:</label></td>
                     <td>
-                        <input type="text" class="input-sm" name="date" value="<{$data.p_date|date='Y-m-d',###}>"  <{if $readonly}>disabled<{/if}> />
+                        <input type="text" class="input-sm" name="date" value="<{$data.p_date|date='Y-m-d',###}>" readonly <{if $readonly}>disabled<{/if}> />
                     </td>
                     <td><label>预计总收入:</label></td>
                     <td>
