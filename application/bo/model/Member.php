@@ -124,6 +124,7 @@ class Member extends BoModel
             }
 
             $dataset[$key]['m_password'] = encryptPassword($data['m_password']);
+            $dataset[$key]['m_email'] = strtoupper($data['m_email']);
 
             if(array_key_exists($data['m_code'],$arr)){
                 $dataset[$key]['m_is_lead'] = 1;

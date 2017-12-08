@@ -13,14 +13,12 @@
                 <tr>
                     <td><label for="ipt-no"><i class="asterisk">*</i>合同号:</label></td>
                     <td>
-                        <input type="text" name="no" value="<{$data.c_no}>" class="input-sm" required onkeyup="toUpperCase(this)" onblur="toUpperCase(this)" id="ipt-no" disabled/>
-                        <input type="hidden" name="no" value="<{$data.c_no}>" />
+                        <input type="text" name="no" value="<{$data.c_no}>" class="input-sm" required onkeyup="toUpperCase(this)" onblur="toUpperCase(this)" id="ipt-no" <{if $readonly}>disabled<{/if}>/>
                         <input type="hidden" name="id" value="<{$data.c_id}>"/>
                     </td>
                     <td><label for="ipt-name"><i class="asterisk">*</i>合同名称:</label></td>
                     <td colspan="3">
-                        <input type="text" name="name" value="<{$data.c_name}>" class="input-sm" required id="ipt-name" disabled/>
-                        <input type="hidden" name="name" value="<{$data.c_name}>"/>
+                        <input type="text" name="name" value="<{$data.c_name}>" class="input-sm" required id="ipt-name" <{if $readonly}>disabled<{/if}>/>
                     </td>
                     <td><label for="ipt-mname">责任人:</label></td>
                     <td>

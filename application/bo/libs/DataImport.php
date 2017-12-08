@@ -75,7 +75,7 @@ class DataImport
             }
 
             foreach ($config['fields'] as $key=>$val){
-                $data[$key] = trim($row[$cols[$val]]);
+                $data[$key] = addslashes(trim($row[$cols[$val]]));
                 if(isset($config['dateFields']) && in_array($key,$config['dateFields'])){
                     if($data[$key]) {
                         $data[$key] = strtotime($data[$key]);

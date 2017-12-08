@@ -32,4 +32,23 @@ class Taglib extends BoModel
         $list = $this->paginate($limit);
         return $list;
     }
+
+    public function getTagByName($tagName)
+    {
+        $res = $this->where('tl_name','=',$tagName)->find();
+        if(empty($res)){
+            $data = ['tl_name'=>$tagName,'tl_times'=>0];
+            $data['tl_id'] = $this->insertGetId($data);
+        }else{
+            $data = $res->getData();
+        }
+        return $data;
+    }
+
+    public function getTagIdByName($tagName)
+    {
+        $data = $this->getTagByName($tagName);
+        return $data['tl_id'];
+    }
+
 }

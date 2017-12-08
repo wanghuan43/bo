@@ -107,6 +107,9 @@ class Contract extends BoController
         $modelOrders = new \app\bo\model\Orders();
         $orders = $modelOrders->getOrdersByContractId($id);
         $this->setUpdateParams($data['c_mid']);
+        if(!empty($orders)){
+            $this->assign('readonly',true);
+        }
         $mimeType = false;
         if($data['c_attachment']){
             $mimeType = $this->getAttachmentMimeType($data['c_attachment']);

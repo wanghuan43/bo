@@ -32,20 +32,27 @@ return [
                 'p_date' => 'G'
             ],
             'dateFields' => ['p_date'],
-            'moneyFields' => ['p_income','p_pay'],
-            'defaultFields' => ['p_type'=>'项目编号']
+            'moneyFields' => ['p_income', 'p_pay'],
+            'defaultFields' => ['p_type' => '项目编号']
         ],
         'member' => [
             'file' => 'uploads/xlsx/人事员工.xlsx',
             'index' => 6,
             'fields' => [
-                'm_code' => 'B',
-                'm_department' => 'H',
-                'm_office' => 'G',
-                'm_name' => 'C',
+                'm_code' => 'A',
+                'm_name' => 'B',
+                'm_email' => 'C',
                 'm_phone' => 'D',
-                'm_email' => 'E',
-                'm_cname' => 'F'
+                'm_cname' => 'E',
+                'm_department' => 'G',
+                'm_office' => 'F',
+                'm_isAdmin' => 'H'
+            ],
+            'enumFields' => [
+                'm_isAdmin' => [
+                    '是' => '1',
+                    'default' => '2'
+                ]
             ]
         ],
         'supplier' => [
@@ -55,19 +62,26 @@ return [
             'fields' => [
                 'co_code' => 'A',
                 'co_name' => 'B',
-                'co_remark' => 'C',
-                'co_mnemonic_code' => 'D',
-                'co_industry' => 'E',
-                'co_address' => 'F',
-                'co_internal_flag' => 'G',
-                'co_tax_id' => 'H',
-                'co_reg_id' => 'I',
-                'co_lr' => 'J',
-                'co_status' => 'K',
-                'co_internal_name' => 'L',
-                'co_create_time' => 'M',
-                'co_flag' => 'N',
-                'co_create_org' => 'O'
+                'co_remark' => 'L',
+                //'co_mnemonic_code' => 'C', //助记码
+                //'co_industry' => 'D', //行业
+                'co_address' => 'D',
+                'co_phone' => 'E',
+                //'co_internal_flag' => 'G', //内部
+                'co_tax_id' => 'C', //税务登记号
+                //'co_reg_id' => 'I', //工商注册号
+                //'co_lr' => 'J', //法人代表
+                //'co_status' => 'K', //状态 0 => 禁用，1=>核准
+                //'co_internal_name' => 'L', //集团内公司名称
+                //'co_create_time' => 'M',
+                //'co_flag' => 'N', //委外商 0=>否,1=>是
+                //'co_create_org' => 'O' //创建管理单元/创建组织
+                'co_bank' => 'F',
+                'co_bank_card' => 'G',
+                'co_invoice_type' => 'H',
+                'co_invoice_address' => 'I',
+                'co_invoice_recipient' => 'J',//发票接收人
+                'co_invoice_phone' => 'K' //发票接收人电话
             ],
             'dateFields' => ['co_create_time'],
             'enumFields' => [
@@ -95,18 +109,26 @@ return [
             'fields' => [
                 'co_code' => 'A',
                 'co_name' => 'B',
-                'co_remark' => 'C',
-                'co_mnemonic_code' => 'D',
-                'co_industry' => 'E',
-                'co_address' => 'F',
-                'co_internal_flag' => 'G',
-                'co_internal_name' => 'H',
-                'co_tax_id' => 'I',
-                'co_reg_id' => 'J',
-                'co_lr' => 'K',
-                'co_status' => 'L',
-                'co_create_org' => 'M',
-                'co_create_time' => 'N'
+                'co_remark' => 'L',
+                //'co_mnemonic_code' => 'C', //助记码
+                //'co_industry' => 'D', //行业
+                'co_address' => 'D',
+                'co_phone' => 'E',
+                //'co_internal_flag' => 'G', //内部
+                'co_tax_id' => 'C', //税务登记号
+                //'co_reg_id' => 'I', //工商注册号
+                //'co_lr' => 'J', //法人代表
+                //'co_status' => 'K', //状态 0 => 禁用，1=>核准
+                //'co_internal_name' => 'L', //集团内公司名称
+                //'co_create_time' => 'M',
+                //'co_flag' => 'N', //委外商 0=>否,1=>是
+                //'co_create_org' => 'O' //创建管理单元/创建组织
+                'co_bank' => 'F',
+                'co_bank_card' => 'G',
+                'co_invoice_type' => 'H',
+                'co_invoice_address' => 'I',
+                'co_invoice_recipient' => 'J',//发票接收人
+                'co_invoice_phone' => 'K' //发票接收人电话
             ],
             'dateFields' => ['co_create_time'],
             'enumFields' => [
@@ -148,7 +170,7 @@ return [
             ]
         ],
         'received171202' => [
-            'file' => 'uploads/xlsx/received.xlsx',
+            'file' => 'uploads/xlsx/received20171208.xlsx',
             'model' => 'received',
             'index' => 0,
             'fields' => [
@@ -159,7 +181,7 @@ return [
                 'r_money' => 'H',
                 'r_date' => 'G',
                 'r_subject' => 'D',
-                'r_content' => 'K',
+                //'r_content' => 'K',
                 'r_dname' => 'B',
                 'r_accdate' => 'J'
             ],
@@ -173,8 +195,8 @@ return [
             ]
         ],
 
-        'acceptance171202' => [
-            'file' => 'uploads/default/acceptance.xlsx',
+        'acceptance20171208' => [
+            'file' => 'uploads/xlsx/acceptance20171208.xlsx',
             'model' => 'acceptance',
             'index' => 0,
             'fields' => [
@@ -198,8 +220,8 @@ return [
                 ]
             ]
         ],
-        'invoice171202' => [
-            'file' => 'uploads/xlsx/invoice.xlsx',
+        'invoice20171208' => [
+            'file' => 'uploads/xlsx/invoice20171208.xlsx',
             'model' => 'invoice',
             'index' => 0,
             'fields' => [
@@ -234,8 +256,8 @@ return [
             ]
         ],
 
-        'orders171202' =>[
-            'file' => 'uploads/default/orders.xlsx',
+        'orders20171208' => [
+            'file' => 'uploads/xlsx/orders20171208.xlsx',
             'model' => 'orders',
             'index' => 0,
             'fields' => [
@@ -286,6 +308,19 @@ return [
                 ]
             ]
         ],
+
+        'orderstags' => [
+            'file' => 'uploads/xlsx/orders20171208.xlsx',
+            'model' => 'taglink',
+            'index' => 0,
+            'fields' => [
+                'o_no' => 'A',
+                'tags' => 'N',
+            ],
+            'defaultFields' => [
+                'model' => 'orders'
+            ]
+        ]
 
     ],
 
