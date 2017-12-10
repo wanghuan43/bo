@@ -285,25 +285,45 @@ class   Orders extends BoModel
         return $this->insertDuplicate($dataset);
     }
 
-    public function reportList($cols, &$obj, $type = "", $begin = "2", $id = "")
+    public function reportList($cols, &$obj, $type = "", $begin = "2", $id = "", $search = "")
     {
         $this->getOu();
         $count = $begin;
         $in = false;
+        $where = [];
         switch ($type) {
             case "project":
-                $this->where("o_pid", "=", $id);
+                $where[] = ["field" => "o_pid", "opt" => "=", "val" => $id];
                 break;
             case "contract":
-                $this->where("o_cid", "=", $id);
+                $where[] = ["field" => "o_cid", "opt" => "=", "val" => $id];
                 break;
             case "invoice":
             case "received":
             case "acceptance":
-                $this->where("o_id", "=", $id);
+                $where[] = ["field" => "o_id", "opt" => "=", "val" => $id];
                 break;
         }
-        $list = $this->select();
+        if (is_array($search)) {
+            foreach ($search['fields'] as $key => $value) {
+                $val = count($search['values'][$key]) > 1 ? $search['values'][$key] : trim($search['values'][$key][0]);
+                $opt = trim($search['operators'][$key]);
+                $val = is_array($val) ? ((empty($val['0']) AND empty($val['1'])) ? "" : $val) : $val;
+                if (!empty($val)) {
+                    if ($opt == "between") {
+                        $val = is_array($val) ? $val : explode(" ~ ", $val);
+                    } elseif ($opt == "like") {
+                        $val = "%$val%";
+                    }
+                    $where[] = array(
+                        "field" => $value,
+                        "opt" => $opt,
+                        "val" => $val
+                    );
+                }
+            }
+        }
+        $list = $this->where($where)->select();
         foreach ($list as $key => $value) {
             $in = true;
             $count = $cell = intval($begin) + intval($key);

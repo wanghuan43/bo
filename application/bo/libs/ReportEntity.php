@@ -33,7 +33,7 @@ class ReportEntity extends BoModel
     /**
      * @param $type
      */
-    public function doReport($type, $sendCells)
+    public function doReport($type, $sendCells, $search=array())
     {
         set_time_limit(0);
         ini_set('memory_limit', '1024M');
@@ -61,12 +61,30 @@ class ReportEntity extends BoModel
         $omodel = new Orders();
         switch ($type) {
             case "orders":
-                $model->reportList($tmp[$type], $activeSheet, $type, 2, "");
+                $model->reportList($tmp[$type], $activeSheet, $type, 2, "", $search);
                 break;
             default:
                 $mname = "app\\bo\\model\\" . ucfirst($type);
                 $mtmp = new $mname();
-                $lists = $mtmp->select();
+                $where = [];
+                foreach ($search['fields'] as $key => $value) {
+                    $val = count($search['values'][$key]) > 1 ? $search['values'][$key] : trim($search['values'][$key][0]);
+                    $opt = trim($search['operators'][$key]);
+                    $val = is_array($val) ? ((empty($val['0']) AND empty($val['1'])) ? "" : $val) : $val;
+                    if (!empty($val)) {
+                        if ($opt == "between") {
+                            $val = is_array($val) ? $val : explode(" ~ ", $val);
+                        } elseif ($opt == "like") {
+                            $val = "%$val%";
+                        }
+                        $where[] = array(
+                            "field" => $value,
+                            "opt" => $opt,
+                            "val" => $val
+                        );
+                    }
+                }
+                $lists = $mtmp->where($where)->select();
                 $begin = 1;
                 $id = "";
                 $tmps = $model->field("SUM(o_money) as om,o_pid,o_type")->group("o_pid,o_type")->select();

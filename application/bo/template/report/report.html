@@ -3,15 +3,22 @@
     <h2><{$title}></h2>
 </div>
 <form class="form-horizontal form-default form-add" id="form-report" action="/report/doReport/type/<{$type}>"
-      method="post" target="_blank">
-    <div class="form-group">
-        <div class="col-sm-offset-2 col-sm-10">
-            <button class="btn btn-default" id="btn-report">导出</button>
+      method="post" target="_blank" style="max-width: 100%">
+    <div class="search-panel">
+        <div class="f-layer f-layer-<{$type}>" style="display: block;">
+            <div class="clearfix header">
+                <h2>搜索条件:</h2>
+                <div class="btn-pannel">
+                    <button class="btn search" id="btn-report" type="submit">导出</button>
+                </div>
+            </div>
+            <div class="search-condition clearfix">
+            </div>
         </div>
     </div>
     <div class="cell">
         <div class="selectCell">
-            <select multiple>
+            <select multiple class="fieldsSelect">
                 <{foreach name="cols" key="k" item="val"}>
                 <option value="<?php echo urlencode(json_encode([$k=>$val])); ?>"><{$k}></option>
                 <{/foreach}>
@@ -26,7 +33,7 @@
             <button class="cellDow">下移</button>
         </div>
         <div class="selectCell">
-            <select multiple>
+            <select multiple class="fieldsSelect">
 
             </select>
         </div>
@@ -35,6 +42,9 @@
 </form>
 <script>
     $(document).ready(function () {
+        var mName = "<{$type}>";
+        var search = eval('(<{$search|json_encode=###}>)');
+        $(".f-layer-" + mName + " .search-condition").initSearchable(search, mName);
         $(".allLeft").click(function () {
             $(".selectCell:eq(1) select option").each(function (index, element) {
                 $(".selectCell:eq(0) select").append($(element));
