@@ -69,18 +69,19 @@ class ReportEntity extends BoModel
                 $lists = $mtmp->select();
                 $begin = 1;
                 $id = "";
-                $tmps = $model->field("SUM(o_money) as om,o_pid,o_type")->where("o_cid", "<>", "0")
-                    ->group("o_pid,o_type")->select();
+                $tmps = $model->field("SUM(o_money) as om,o_pid,o_type")->group("o_pid,o_type")->select();
                 $clist = [];
                 foreach ($tmps as $val) {
                     $clist[$val['o_pid']][$val["o_type"]] = $val['om'];
                 }
-                $tmps = $model->field("o_money,o_tax,o_pid")->where("o_cid", "=", "0")->select();
+                $tmps = $model->field("o_money,o_tax,o_pid,o_type")->select();
                 $cclist = [];
                 foreach ($tmps as $val) {
-                    if (isset($cclist[$val['o_pid']])) {
-                        $tax = intval(getTaxList($val['o_tax'])) / 100;
-                        $cclist[$val['o_pid']] += $val['o_money'] - $val['o_money'] * $tax;
+                    $tax = intval(getTaxList($val['o_tax'])) / 100;
+                    if (isset($cclist[$val['o_pid']][$val['o_type']])) {
+                        $cclist[$val['o_pid']][$val['o_type']] += $val['o_money'] - $val['o_money'] * $tax;
+                    }else{
+                        $cclist[$val['o_pid']][$val['o_type']] = $val['o_money'] - $val['o_money'] * $tax;
                     }
                 }
                 foreach ($lists as $key => $value) {
@@ -160,7 +161,9 @@ class ReportEntity extends BoModel
                                     break;
                                 case "p_total":
                                     if (isset($cclist[$value['p_id']])) {
-                                        $v = $cclist[$value['p_id']];
+                                        $intmp = isset($cclist[$value['p_id']][1]) ? $cclist[$value['p_id']][1] : 0;
+                                        $outmp = isset($cclist[$value['p_id']][2]) ? $cclist[$value['p_id']][2] : 0;
+                                        $v = $intmp - $outmp;
                                     }
                                     break;
                             }
