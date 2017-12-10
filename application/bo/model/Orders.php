@@ -293,15 +293,15 @@ class   Orders extends BoModel
         $where = [];
         switch ($type) {
             case "project":
-                $where[] = ["field" => "o_pid", "opt" => "=", "val" => $id];
+                $this->where("o_pid", "=", $id);
                 break;
             case "contract":
-                $where[] = ["field" => "o_cid", "opt" => "=", "val" => $id];
+                $this->where("o_cid", "=", $id);
                 break;
             case "invoice":
             case "received":
             case "acceptance":
-                $where[] = ["field" => "o_id", "opt" => "=", "val" => $id];
+                $this->where("o_id", "=", $id);
                 break;
         }
         if (is_array($search)) {
