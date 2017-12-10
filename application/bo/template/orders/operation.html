@@ -39,8 +39,7 @@
                 <td colspan="3"><{$order.o_no}></td>
                 <td class="txt">
                     <label for="o_cno">
-                    <{/*i class="fa fa-search" data="contract"></i>
-                    <i class="fa fa-minus-square" style="color: red;display: none;" data="contract"></i*/}>
+                    <i class="fa fa-minus-square" style="color: red;<{if condition="empty($order.o_cno)"}>display:none;<{/if}>" data="contract"></i>
                     对应合同号:</label></td>
                 <td>
                     <input class="input-sm input-search" data="contract" type="text" name="o_cno" id="o_cno" value="<{$order.o_cno}>" readonly/>
@@ -202,43 +201,6 @@
     <h3>实际发生情况</h3>
     <div class="content table clearfix">
         <div class="col33">
-            <table class="invoice_1" data="1">
-                <thead>
-                <tr>
-                    <td><i class="fa fa-search" data="invoice"></i></td>
-                    <td>&#931;已开票</td>
-                    <td>0.00</td>
-                    <td>0%</td>
-                </tr>
-                <tr class="thead">
-                    <td></td>
-                    <td>开票日期</td>
-                    <td>金额</td>
-                    <td>凭证</td>
-                </tr>
-                </thead>
-                <tbody>
-                <{if condition="count($oused[1]) >= 1"}>
-                <{volist name="oused[1]" id="value" key="k"}>
-                <tr>
-                    <td>
-                        <i class="fa fa-minus-circle" data="<{$value['ou_id']}>"></i>
-                    </td>
-                    <td><?php echo date("Y-m-d", $value['ou_date']); ?></td>
-                    <td class="mony-invoice"><{$value['ou_used']}></td>
-                    <td>
-                        <a href="/#invoice/detail?id=<{$value['ou_otid']}>" target="_blank" style="color: blue;"><{$value['ou_otid']}></a>
-                        <input type="hidden" name="used[1][date][]" value="<?php echo date("Y-m-d", $value['ou_date']); ?>">
-                        <input type="hidden" name="used[1][value][]" value="<{$value['ou_used']}>">
-                        <input type="hidden" name="used[1][ot_id][]" value="<{$value['ou_oid']}>">
-                    </td>
-                </tr>
-                <{/volist}>
-                <{/if}>
-                </tbody>
-            </table>
-        </div>
-        <div class="col33">
             <table class="acceptance_2" data="2">
                 <thead>
                 <tr>
@@ -265,9 +227,46 @@
                     <td class="mony-acceptance"><{$value['ou_used']}></td>
                     <td>
                         <a href="/#acceptance/detail?id=<{$value['ou_otid']}>" target="_blank" style="color: blue;"><{$value['ou_otid']}></a>
-                        <input type="hidden" name="used[2][date][]" value="<?php echo date("Y-m-d", $value['ou_date']); ?>">
                         <input type="hidden" name="used[2][value][]" value="<{$value['ou_used']}>">
+                        <input type="hidden" name="used[2][date][]" value="<?php echo date("Y-m-d", $value['ou_date']); ?>">
                         <input type="hidden" name="used[2][ot_id][]" value="<{$value['ou_oid']}>">
+                    </td>
+                </tr>
+                <{/volist}>
+                <{/if}>
+                </tbody>
+            </table>
+        </div>
+        <div class="col33">
+            <table class="invoice_1" data="1">
+                <thead>
+                <tr>
+                    <td><i class="fa fa-search" data="invoice"></i></td>
+                    <td>&#931;已开票</td>
+                    <td>0.00</td>
+                    <td>0%</td>
+                </tr>
+                <tr class="thead">
+                    <td></td>
+                    <td>开票日期</td>
+                    <td>金额</td>
+                    <td>凭证</td>
+                </tr>
+                </thead>
+                <tbody>
+                <{if condition="count($oused[1]) >= 1"}>
+                <{volist name="oused[1]" id="value" key="k"}>
+                <tr>
+                    <td>
+                        <i class="fa fa-minus-circle" data="<{$value['ou_id']}>"></i>
+                    </td>
+                    <td><?php echo date("Y-m-d", $value['ou_date']); ?></td>
+                    <td class="mony-invoice"><{$value['ou_used']}></td>
+                    <td>
+                        <a href="/#invoice/detail?id=<{$value['ou_otid']}>" target="_blank" style="color: blue;"><{$value['ou_otid']}></a>
+                        <input type="hidden" name="used[1][value][]" value="<{$value['ou_used']}>">
+                        <input type="hidden" name="used[1][date][]" value="<?php echo date("Y-m-d", $value['ou_date']); ?>">
+                        <input type="hidden" name="used[1][ot_id][]" value="<{$value['ou_oid']}>">
                     </td>
                 </tr>
                 <{/volist}>
@@ -302,8 +301,8 @@
                     <td class="mony-received"><{$value['ou_used']}></td>
                     <td>
                         <a href="/#received/detail?id=<{$value['ou_otid']}>" target="_blank" style="color: blue;"><{$value['ou_otid']}></a>
-                        <input type="hidden" name="used[3][date][]" value="<?php echo date("Y-m-d", $value['ou_date']); ?>">
                         <input type="hidden" name="used[3][value][]" value="<{$value['ou_used']}>">
+                        <input type="hidden" name="used[3][date][]" value="<?php echo date("Y-m-d", $value['ou_date']); ?>">
                         <input type="hidden" name="used[3][ot_id][]" value="<{$value['ou_oid']}>">
                     </td>
                 </tr>
@@ -317,51 +316,6 @@
 <div class="main-pannel">
     <h3>预计执行计划</h3>
     <div class="content table clearfix">
-        <div class="col33">
-            <table data="1" style="border-collapse: separate;border-spacing: 0px 10px;">
-                <thead>
-                <tr>
-                    <th class="icon"><i class="fa fa-plus"></i></th>
-                    <th style="width: 64px;">开票月</th>
-                    <th>比例</th>
-                    <th style="width: 94px;">金额</th>
-                </tr>
-                </thead>
-                <tbody>
-                <{if condition="count($opject[1]) >= 1"}>
-                <{volist name="opject[1]" id="value" key="k"}>
-                <tr>
-                    <td class="icon"><i class="fa fa-remove"></i></td>
-                    <td>
-                        <select class="orderProject_month_1" name="project[1][month][]">
-                            <option value="<{$value.op_month}>" selected><{$value.op_month}></option>
-                        </select>
-                    </td>
-                    <td>
-                        <div class="slider" style="margin: 0 20px;"></div>
-                        <input class="orderProject_percent_1 sliderPercent" name="project[1][percent][]" type="text" style="display: none;" value="<{$value.op_used}>">
-                    </td>
-                    <td><input type="text" class="orderProject_value_1 sliderValue" name="project[1][value][]" style="margin-left: 10px;" value="<{$value.op_used}>"/></td>
-                </tr>
-                <{/volist}>
-                <{else /}>
-                <tr>
-                    <td class="icon"></td>
-                    <td>
-                        <select class="orderProject_month_1" name="project[1][month][]">
-                        </select>
-                    </td>
-                    <td>
-                        <div class="slider" style="margin: 0 20px;">
-                        </div>
-                        <input class="orderProject_percent_1 sliderPercent" name="project[1][percent][]" style="display: none;" type="text" value="0">
-                    </td>
-                    <td><input type="text" class="orderProject_value_1 sliderValue" style="margin-left: 10px;" name="project[1][value][]" value="0"/></td>
-                </tr>
-                <{/if}>
-                </tbody>
-            </table>
-        </div>
         <div class="col33">
             <table data="2" style="border-collapse: separate;border-spacing: 0px 10px;">
                 <thead>
@@ -385,7 +339,7 @@
                     <td>
                         <div class="slider" style="margin: 0 20px;">
                         </div>
-                        <input class="orderProject_percent_2 sliderPercent" name="project[2][percent][]" style="display: none;" type="text" value="<{$value.op_used}>">
+                        <input class="orderProject_percent_2 sliderPercent" name="project[2][percent][]" style="display: none;" type="text" value="<{$value.op_percent}>">
                     </td>
                     <td><input type="text" class="orderProject_value_2 sliderValue" name="project[2][value][]" style="margin-left: 10px;" value="<{$value.op_used}>"/></td>
                 </tr>
@@ -403,6 +357,51 @@
                         <input class="orderProject_percent_2 sliderPercent" name="project[2][percent][]" style="display: none;" type="text" value="0">
                     </td>
                     <td><input class="orderProject_value_2 sliderValue" name="project[2][value][]" style="margin-left: 10px;" type="text" value="0"/></td>
+                </tr>
+                <{/if}>
+                </tbody>
+            </table>
+        </div>
+        <div class="col33">
+            <table data="1" style="border-collapse: separate;border-spacing: 0px 10px;">
+                <thead>
+                <tr>
+                    <th class="icon"><i class="fa fa-plus"></i></th>
+                    <th style="width: 64px;">开票月</th>
+                    <th>比例</th>
+                    <th style="width: 94px;">金额</th>
+                </tr>
+                </thead>
+                <tbody>
+                <{if condition="count($opject[1]) >= 1"}>
+                <{volist name="opject[1]" id="value" key="k"}>
+                <tr>
+                    <td class="icon"><i class="fa fa-remove"></i></td>
+                    <td>
+                        <select class="orderProject_month_1" name="project[1][month][]">
+                            <option value="<{$value.op_month}>" selected><{$value.op_month}></option>
+                        </select>
+                    </td>
+                    <td>
+                        <div class="slider" style="margin: 0 20px;"></div>
+                        <input class="orderProject_percent_1 sliderPercent" name="project[1][percent][]" type="text" style="display: none;" value="<{$value.op_percent}>">
+                    </td>
+                    <td><input type="text" class="orderProject_value_1 sliderValue" name="project[1][value][]" style="margin-left: 10px;" value="<{$value.op_used}>"/></td>
+                </tr>
+                <{/volist}>
+                <{else /}>
+                <tr>
+                    <td class="icon"></td>
+                    <td>
+                        <select class="orderProject_month_1" name="project[1][month][]">
+                        </select>
+                    </td>
+                    <td>
+                        <div class="slider" style="margin: 0 20px;">
+                        </div>
+                        <input class="orderProject_percent_1 sliderPercent" name="project[1][percent][]" style="display: none;" type="text" value="0">
+                    </td>
+                    <td><input type="text" class="orderProject_value_1 sliderValue" style="margin-left: 10px;" name="project[1][value][]" value="0"/></td>
                 </tr>
                 <{/if}>
                 </tbody>
@@ -431,7 +430,7 @@
                     <td>
                         <div class="slider" style="margin: 0 20px;">
                         </div>
-                        <input class="orderProject_percent_3 sliderPercent"  name="project[3][percent][]" style="display: none;" value="<{$value.op_used}>">
+                        <input class="orderProject_percent_3 sliderPercent"  name="project[3][percent][]" style="display: none;" value="<{$value.op_percent}>">
                     </td>
                     <td><input type="text" class="orderProject_value_3 sliderValue" name="project[3][value][]" style="margin-left: 10px;" value="<{$value.op_used}>"/></td>
                 </tr>
@@ -459,7 +458,7 @@
 </form>
 <{load href="/static/js/plugin/select/select.min.js,/static/js/jquery-ui.custom.js"/}>
 <script>
-    var baseMonth = '<{$baseMonth}>';
+    var baseMonth = '<{$baseMonth}>',opCheck='<{$op_id}>';
     var baseUrl = {
         contract: "<{:url('/contract/searchContract')}>",
         project: "<{:url('/project/searchProject')}>",
@@ -482,18 +481,23 @@
     };
 
     $(document).ready(function () {
-    <{if condition="!empty($op_id)"}>
-        $("#o_deal option").each(function(index, element){
-            if(parseInt($(element).val()) < parseInt("<{$order.o_deal}>")){
-                $(element).prop("disabled", true);
+        if (opCheck != '0'){
+            $("#o_deal option").each(function(index, element){
+                if(parseInt($(element).val()) < parseInt("<{$order.o_deal}>")){
+                    $(element).prop("disabled", true);
+                }
+            });
+            $("#o_status option").each(function(index, element){
+                if(parseInt($(element).val()) < parseInt("<{$order.o_status}>")){
+                    $(element).prop("disabled", true);
+                }
+            });
+            if($("#o_cno").val() == ""){
+                $("#o_status option:last").prop("disabled", true);
             }
-        });
-        $("#o_status option").each(function(index, element){
-            if(parseInt($(element).val()) < parseInt("<{$order.o_status}>")){
-                $(element).prop("disabled", true);
-            }
-        });
-    <{/if}>
+        }else{
+            $("#o_status option:last").prop("disabled", true);
+        }
         bindRemove();
         $("#o_type").change(function(){
             var cla = ".f-layer-company",lie = $("#o_lie").val();
@@ -555,7 +559,7 @@
         }
         $(".content.table .slider").each(function(index, element){
             var val = $(element).parent().next().find("input").val() != "" ? parseFloat($(element).parent().next().find("input").val()) : 0;
-            sliderElement(element, val, index);
+            sliderElement(element, val);
         });
         $(".content.table select").each(function(index, element){
             var option = $(element).find("option:selected").val();
@@ -926,6 +930,7 @@
                             $(cla + "-back").hide();
                             $(thisEle).parent().find("input:eq(0)").unbind("focus");
                             if(type == "contract" && $(inputs).length > 1){
+                                $("#o_cno").parent().prev().find("i").show();
                                 $("#o_status option").prop("selected", false);
                                 $("#o_status option").prop("disabled", true);
                                 $("#o_status option:last").prop("selected", true);
@@ -978,8 +983,8 @@
             $(this).hide();
             $(inputs).val("");
             if(type == "contract"){
+                $(this).parents("td").next().find("input").val("");
                 $("#o_status option").prop("disabled", false);
-                $("#o_status option").prop("selected", false);
                 $("#o_status option:first").prop("selected", true);
             }
         });
@@ -1008,9 +1013,6 @@
                 $(element).parent().prev().find("i:eq(1)").click();
             }
         });
-//        $("#o_cno,#o_pname,#o_coname").click(function(){
-//            $(this).parent().prev().find("i:eq(0)").click();
-//        });
     });
     function baseUTR(element,data,type){
         var i = 1;
@@ -1048,6 +1050,7 @@
         $(cla).find("tr:first").find("td:eq(2)").html(parseFloat(plus).toFixed(2));
         $(cla).find("tr:first").find("td:eq(3)").html(persent.toFixed(2)+"%");
         bindRemove();
+        usedChangeProject(type,plus);
     }
     function bindRemove(){
         $(".fa-minus-circle").unbind("click");
@@ -1056,6 +1059,8 @@
             var now = parseFloat($(tr).find("input:eq(0)").val());
             var subTotal = parseFloat($(this).parents("table").find("tr:eq(0)").find("td:eq(2)").html());
             var total = parseFloat($("#o_money").val());
+            var data = $(this).parents("table").find("tr:eq(0)").find("i").attr("data"),
+            sendTotal = $(this).parents("table").find("tr:eq(0)").find("td:eq(2)").html();
             subTotal = subTotal-now;
             if(subTotal <= 0){
                 $(this).parents("table").find("tr:eq(0)").find("td:eq(2)").html("0.00");
@@ -1066,25 +1071,40 @@
                 $(this).parents("table").find("tr:eq(0)").find("td:eq(3)").html(Math.round(tmp)+"%");
             }
             $(tr).remove();
+            usedChangeProject(data, sendTotal, now);
         });
     }
-    function bindClick(element) {
+    function bindClick(element, inputValue) {
         var index = $(element).attr('data');
-        var baseTR = getBaseTR($(element).attr('data'));
+        var baseTR = getBaseTR($(element).attr('data'), inputValue);
+        var max = parseFloat($("#o_money").val()),cla="";
+        if(opCheck != "0"){
+            switch (index){
+                case "1":
+                    cla=".invoice_1";
+                    break;
+                case "2":
+                    cla=".acceptance_2";
+                    break;
+                case "3":
+                    cla=".received_3";
+                    break;
+            }
+            max -= parseFloat($(cla).find("tr:eq(0)").find("td:eq(2)").html());
+        }
         $(element).append(baseTR);
         if($(".orderProject_percent_"+index).length == 1){
             $(".fa-remove").eq(0).remove();
-        }else{
-            var tmp = 0;
-            $(".orderProject_value_" + index).each(function (index, ele) {
-                tmp += parseFloat($(ele).val());
-            });
-            $(".orderProject_value_" + index).each(function (index, ele) {
-                var sl = $(ele).parent().prev().find(".slider");
-                var val = parseFloat($(ele).val());
-                sliderElement(sl, val, index);
-            });
         }
+        var tmp = 0;
+        $(".orderProject_value_" + index).each(function (index, ele) {
+            tmp += parseFloat($(ele).val());
+        });
+        $(".orderProject_value_" + index).each(function (index, ele) {
+            var sl = $(ele).parent().prev().find(".slider");
+            var val = parseFloat($(ele).val());
+            sliderElement(sl, val, max);
+        });
         $(".orderProject_value_" + index).unbind("change");
         $(".orderProject_value_" + index).change(function(){
             valueChange(this);
@@ -1093,22 +1113,6 @@
         $(".fa-remove").click(function () {
             $(this).parents("tr").remove();
         });
-    }
-    function formatValue(value, ele) {
-        value = parseFloat(value);
-        if (value == 5) {
-            $(ele).parent().next().find("input").val("0");
-            $(ele).val("0");
-            return "0%";
-        }
-        if (value == "" || value <= 0) {
-            $(ele).parent().next().find("input").val("0");
-            return "0%";
-        }
-        var total = parseFloat($("#o_money").val());
-        var persent = Math.round(100 - (total - value) / total * 100) + "%";
-        $(ele).parent().next().find("input").val(value.toFixed(2));
-        return persent;
     }
     function calculateAll() {
         $(".fa-plus").each(function (i, e) {
@@ -1184,10 +1188,10 @@
             });
         }
     }
-    function getBaseTR(index) {
+    function getBaseTR(index, inputValue) {
         var baseTr = '<tr><td class="icon"><i class="fa fa-remove"></i></td><td><select class="orderProject_month_' + index + '" name="project[' + index + '][month][]">';
         var bm = JSON.parse(baseMonth);
-        var len = bm.length;
+        var len = bm.length,tdValue = inputValue == undefined ? 0 : inputValue.toFixed(2);
         for (var i = 0; i < len; i++) {
             baseTr += '<option value="+' + bm[i] + '">+ ' + bm[i] + '</option>';
         }
@@ -1195,7 +1199,12 @@
         for (var i = (len - 1); i >= 0; i--) {
             baseTr += '<option value="-' + bm[i] + '">- ' + bm[i] + '</option>';
         }
-        baseTr += '</select></td><td><div class="slider" style="margin: 0 20px;"></div><input type="text" class="orderProject_percent_' + index + ' sliderPercent" style="display: none;" name="project[' + index + '][percent][]" value="0"/></td><td><input class="orderProject_value_' + index + ' sliderValue" name="project[' + index + '][value][]" style="margin-left: 10px;" type="text" value="0"/></td></tr>';
+        baseTr += '</select></td><td><div class="slider" style="margin: 0 20px;"></div>' +
+            '<input type="text" class="orderProject_percent_' + index + ' sliderPercent" style="display: none;" ' +
+            'name="project[' + index + '][percent][]" value="0"/></td>' +
+            '<td><input class="orderProject_value_' + index + ' sliderValue" ' +
+            'name="project[' + index + '][value][]" style="margin-left: 10px;" ' +
+            'type="text" value="'+tdValue+'"/></td></tr>';
         return baseTr;
     }
     function valueChange(em){
@@ -1229,12 +1238,13 @@
         }
         sliderElement(persent, val);
     }
-    function sliderElement(ele, val){
+    function sliderElement(ele, val, sendMax){
         if($(ele).slider('instance') != undefined){
             $(ele).slider('destroy');
         }
-        var max = $("#o_money").val() == "" ? 0 : $("#o_money").val(), max = parseFloat(max)
-            ,className = $(ele).parent().next().find("input").attr("class").split(" ")[0],tt = 0
+        var max = $("#o_money").val() == "" ? 0 : $("#o_money").val(), max = parseFloat(max),
+            max = sendMax == undefined ? max : sendMax,
+            className = $(ele).parent().next().find("input").attr("class").split(" ")[0],tt = 0
             ,cn = $(ele).parent().next().find("input");
         $( ele ).slider({
             min: 0,
@@ -1245,9 +1255,9 @@
                 if(max > 0){
                     p = Math.round(100 - (max - val) / max * 100);
                 }
-                console.log(val);
                 $(ele).find("span").css("left", p+"%");
                 $(ele).find("span").text(p+"%");
+                $(ele).next().val(p);
             },
             slide: function (event, ui){
                 var value = ui.value, p = Math.round(100 - (max - value) / max * 100)+"%";
@@ -1267,16 +1277,17 @@
                 }
                 $(ele).parent().next().find("input").val( value.toFixed(2) );
                 if(max > 0){
-                    var p = Math.round(100 - (max - value) / max * 100)+"%";
+                    var p = Math.round(100 - (max - value) / max * 100);
                 }else{
-                    var p = "0%";
+                    var p = "0";
                 }
-                if(parseInt(p.replace(/\%/, "")) <= 0){
-                    p = "0%";
+                if(parseInt(p) <= 0){
+                    p = "0";
                 }
-                $(ui.handle).prev().css("width", (100-parseInt(p.replace(/\%/, "")))+"%");
-                $(ui.handle).css("left", p);
-                $(ui.handle).text(p);
+                $(ui.handle).prev().css("width", (100-parseInt(p))+"%");
+                $(ui.handle).css("left", p+"%");
+                $(ui.handle).text(p+"%");
+                $(ui.handle).parent().next().val(p);
             }
         });
         $(ele).parent().next().find("input").val( $( ele ).slider( "value" ).toFixed(2) );
@@ -1296,5 +1307,56 @@
             $(cla).find("tr:first").find("td:eq(3)").html(persent.toFixed(2)+"%");
         }
 
+    }
+    function usedChangeProject(type,used,sendValue){
+        var cla="",total=parseFloat($("#o_money").val()),used=parseFloat(used),left=total-used
+            ,projectMoney=0,data=1,op=sendValue==undefined?0:sendValue;
+        switch (type) {
+            case "invoice":
+                cla = ".orderProject_value_1.sliderValue";
+                data = 1;
+                break;
+            case "acceptance":
+                cla = ".orderProject_value_2.sliderValue";
+                data = 2;
+                break;
+            case "received":
+                cla = ".orderProject_value_3.sliderValue";
+                data = 3;
+                break;
+        }
+        if(op != 0){
+            bindClick($("table[data='"+data+"']:eq(1)"), op);
+            $(cla).each(function(index, element){
+                if(parseFloat($(element).val()) <= 0){
+                    $(element).parents("tr").remove();
+                }
+            });
+            $(cla).eq(0).parents("tr").find("td:eq(0)").find("i").remove();
+        }else {
+            if (left <= 0) {
+                $(cla).each(function (index, element) {
+                    $(element).parents("tr").remove();
+                });
+                $("table[data='" + data + "']:eq(1) .fa-plus").hide();
+            } else {
+                var c = false;
+                $(cla).each(function (index, element) {
+                    if (!c) {
+                        projectMoney = projectMoney + parseFloat($(element).val());
+                        if (projectMoney <= used) {
+                            $(element).parents("tr").remove();
+                        } else {
+                            $(element).val(projectMoney - used);
+                            c = true;
+                        }
+                    }
+                });
+                $(cla).each(function (index, element) {
+                    sliderElement($(element).parent("td").prev().find(".slider"), $(element).val(), left);
+                });
+                $("table[data='" + data + "']:eq(1) .fa-plus").show();
+            }
+        }
     }
 </script>

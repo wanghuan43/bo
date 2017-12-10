@@ -58,17 +58,6 @@ return [
     "baseKey" => md5("xzy"),
     "permissionsMenu" => array(
         array(
-            "name" => "权限",
-            "flag" => "fa-cogs",
-            "url" => "",
-            "children" => array(
-                array(
-                    "name" => "设置权限",
-                    "url" => "permissions/index",
-                ),
-            ),
-        ),
-        array(
             "name" => "菜单管理",
             "flag" => "fa-list",
             "url" => "",
@@ -80,6 +69,10 @@ return [
                 array(
                     "name" => "添加菜单",
                     "url" => "menu/add",
+                ),
+                array(
+                    "name" => "设置权限",
+                    "url" => "permissions/index",
                 ),
             ),
         ),

@@ -30,13 +30,28 @@ class Taglib extends BoController
     }
 
     public function opt(){
-        $id = Request::instance()->get("id");
+        $id = Request::instance()->get("id", 0);
         $tl = $this->model->find($id);
         $this->assign("tl", $tl);
         return $this->fetch();
     }
 
     public function doOpt(){
-        $id = Request::instance()->post("id");
+        $id = Request::instance()->post("tl_id");
+        $name = Request::instance()->post("tl_name");
+        $data = ["tl_name"=>$name];
+        $tm = new \app\bo\model\Taglib();
+        $where = [];
+        if(!empty($id)){
+            $where = ["tl_id"=>$id];
+            $tm->where("tl_id", "<>", $id)->where("tl_name", $name);
+        }else{
+            $tm->where("tl_name", $name);
+        }
+        if($tm->find()){
+            return ["status"=>0, "msg"=>"标签名称重复"];
+        }
+        $this->model->save($data, $where);
+        return ["status"=>1, "msg"=>"标签保存成功"];
     }
 }
