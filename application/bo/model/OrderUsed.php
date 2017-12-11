@@ -48,6 +48,9 @@ class OrderUsed extends BoModel
     {
         $this->where("ou_oid", "=", $id)->delete();
         $array = array();
+        if(!is_array($data)){
+            return false;
+        }
         foreach ($data as $key => $value) {
             $table = $this->ka[$key];
             $i = new $table();

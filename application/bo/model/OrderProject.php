@@ -32,6 +32,9 @@ class OrderProject extends BoModel
     {
         $this->where("op_oid", "=", $op_id)->delete();
         $array = array();
+        if(!is_array($list)){
+            return false;
+        }
         foreach ($list as $key => $value) {
             foreach ($value['month'] as $k => $val) {
                 $tmp['op_oid'] = $op_id;
