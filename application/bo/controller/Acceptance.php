@@ -143,8 +143,12 @@ class Acceptance extends BoController
                     $logModel = new Logs();
                     $logModel->saveLogs($data, $old, $data['a_id'], 'acceptance');
                     $ret = ['flag' => 1, 'msg' => '更新成功'];
-                    if (isset($data['a_attachment'])) {
-                        $ret['image'] = $data['a_attachment'];
+                    if(isset($data['i_attachment']) && $data['i_attachment']){
+                        if($this->getAttachmentMimeType($data['i_attachment']) == 'image'){
+                            $ret['image'] = $data['i_attachment'];
+                        }else{
+                            $ret['file'] = $data['i_attachment'];
+                        }
                     }
                 } else {
                     $ret = ['flag' => 0, 'msg' => '更新失败，请确认是否有做过修改'];
