@@ -79,9 +79,7 @@
 
     var doCirculation = function ( e ) {
         var url = e.data.url, ids = new Array(), mids = new Array();
-        $(".lists-id:checked").each(function () {
-            ids.push($(this).val());
-        });
+        ids = $("#main-container .selected-ids select").val();
         mids = $("#sel-ids").val();
         if (mids.length > 0) {
             loading.show();
