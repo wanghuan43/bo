@@ -81,8 +81,8 @@ final class MyTag extends BaseTag implements StaticMethod
      *                                    it is highly recommended to pass it. If you omit it then it is assumed that
      *                                    the DocBlock is in the global namespace and has no `use` statements.
      *
-     * @see Tag for the interface declaration of the `create` method.
-     * @see Tag::create() for more information on this method's workings.
+     * @see Taglib for the interface declaration of the `create` method.
+     * @see Taglib::create() for more information on this method's workings.
      *
      * @return MyTag
      */

@@ -20,7 +20,7 @@ use phpDocumentor\Reflection\FqsenResolver;
 use Webmozart\Assert\Assert;
 
 /**
- * Reflection class for a @covers tag in a Docblock.
+ * Reflection class for a @covers Taglib in a Docblock.
  */
 final class Covers extends BaseTag implements Factory\StaticMethod
 {

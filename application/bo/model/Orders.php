@@ -149,7 +149,7 @@ class   Orders extends BoModel
         $tagList = !empty($data['tagList']) ? $data['tagList'] : array();
         $cList = !empty($data['cList']) ? $data['cList'] : array();
         $pj = !empty($data['project']) ? $data['project'] : array();
-        $used = !empty($data['used']) AND !empty($data['o_cid']) ? $data['used'] : array();
+        $used = (!empty($data['used']) AND !empty($data['o_cid'])) ? $data['used'] : array();
         $id = !empty($data['o_id']) ? $data['o_id'] : "";
         unset($data['tagList']);
         unset($data['cList']);
