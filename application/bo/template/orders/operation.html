@@ -58,14 +58,17 @@
                 </td>
                 <td class="txt"><label for="o_mname">订单责任人:</label></td>
                 <td>
+                    <select class="input-sm pop" name="o_mid" id="o_mid" data="o_mid">
+                        <{if condition="empty($order.o_mname)"}>
+                        <option selected value="<{$current.m_id}>"><{$current.m_name}></option>
+                        <{else}>
+                        <option selected value="<{$order.o_mid}>"><{$order.o_mname}></option>
+                        <{/if}>
+                    </select>
                     <{if condition="empty($order.o_mname)"}>
-                    <{$current.m_name}>
                     <input class="input-sm" type="hidden" name="o_mname" id="o_mname" value="<{$current.m_name}>"/>
-                    <input type="hidden" name="o_mid" id="o_mid" value="<{$current.m_id}>"/>
                     <{else}>
-                    <{$order.o_mname}>
                     <input class="input-sm" type="hidden" name="o_mname" id="o_mname" value="<{$order.o_mname}>"/>
-                    <input type="hidden" name="o_mid" id="o_mid" value="<{$order.o_mid}>"/>
                     <{/if}>
                 </td>
             </tr>
@@ -458,7 +461,7 @@
 </form>
 <{load href="/static/js/plugin/select/select.min.js,/static/js/jquery-ui.custom.js"/}>
 <script>
-    var baseMonth = '<{$baseMonth}>',opCheck='<{$op_id}>';
+    var baseMonth = '<{$baseMonth}>',opCheck='<{$op_id}>',cmid = '<{$current.m_id}>',omid = '<{$order.o_mid}>';
     var baseUrl = {
         contract: "<{:url('/contract/searchContract')}>",
         project: "<{:url('/project/searchProject')}>",
@@ -599,6 +602,11 @@
                     cla = ".f-layer-department";
                     hidden = "zc_dname";
                     break;
+                case "o_mid":
+                    url = "/member/searchMember?type=" + mul + "&pop=true";
+                    cla = ".f-layer-member";
+                    hidden = "o_mname";
+                    break;
                 case "zc_mid":
                     url = "/member/searchMember?type=" + mul + "&pop=true";
                     cla = ".f-layer-member";
@@ -660,12 +668,29 @@
                             });
                             $(current).append(options);
                         }else{
+                            if(type == "o_mid"){
+                                var optionList = $("#cList option:selected"),optionCheck = false,nmid = (omid == "" ? cmid : omid);
+                                $(optionList).each(function(index, element){
+                                    if($(element).val() == omid){
+                                        optionCheck = true;
+                                    }
+                                });
+                                if(!optionCheck && $(cla+" table input:checked").val() != nmid){
+                                    var ohtml = '<option selected value="'+omid+'">'+$("#o_mid option:selected").html()+'</option>';
+                                    $("#cList").append(ohtml);
+                                }
+                            }
                             var options = "";
                             $(cla+" table input:checked").each(function(i,ele){
                                 options += '<option value="'+$(ele).val()+'" selected>'+$(ele).parent().next().html().replace(/<[^>]+>/g,"")+'</option>';
                                 $("#"+hidden).val($(ele).parent().next().html().replace(/<[^>]+>/g,""));
                             });
                             $(current).html(options);
+                            $(optionList).each(function(index, element){
+                                if($(element).val() == $("#o_mid").val()){
+                                    $(element).remove();
+                                }
+                            });
                         }
                         $(cla).removeClass("show");
                         $(cla + "-back").hide();
@@ -723,6 +748,7 @@
                     var o_pname = $("#o_pname"),o_subject = $("#o_subject"),
                         o_coname = $("#o_coname"),o_date = $("#o_date"),o_money = $("#o_money"),o_num = $("#o_num"),
                         o_profits = $("#o_profits"),url = form.attr("action"),par = form.serialize(),check=false;
+                    console.log(par);
                     form.prop("disabled", "true");
                     loading.show();
                     $.ajax({
