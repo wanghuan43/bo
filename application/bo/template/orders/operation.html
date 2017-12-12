@@ -921,6 +921,9 @@
                         }
                     }
                     url = baseUrl[type] + "?c_type="+otype+"&fi=1";
+                    if(type == "contract"){
+                        url += "&c_coname="+encodeURIComponent($("#o_coname").val());
+                    }
                 }else{
                     url = baseUrl[type] + "?fi=1";
                 }
@@ -931,6 +934,9 @@
                     method: "post",
                     success: function (data) {
                         $("#popDIV").html(data.content);
+                        if(type == "contract"){
+                            $(cla + ".search-block:eq(2) input").val($(""));
+                        }
                         $(cla + " .save").click(function () {
                             if($(cla+" .selectRadio:checked").length == 0){
                                 custom.alert("请选择一个再保存！");

@@ -25,6 +25,13 @@ class Contract extends BoModel
                 "like" => "包含"
             ),
         ),
+        "c_coname" => array(
+            "name" => "对方名称",
+            "type" => "text",
+            "operators" => array(
+                "like" => "包含"
+            ),
+        ),
         "c_money" => array(
             "name" => "合同金额",
             "type" => "price",
@@ -43,13 +50,6 @@ class Contract extends BoModel
                 "=" => "等于",
                 ">" => "大于",
                 "<" => "小于",
-            ),
-        ),
-        "c_coname" => array(
-            "name" => "对方名称",
-            "type" => "text",
-            "operators" => array(
-                "like" => "包含"
             ),
         ),
         "c_type" => array(
