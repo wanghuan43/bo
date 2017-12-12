@@ -1,0 +1,42 @@
+<form action="/member/update" method="post" onsubmit="return false" id="member-update">
+    <div class="clearfix header">
+        <div class="btn-pannel">
+            <button type="button" href="#historyBack" class="btn red close">取消</button>
+            <button type="submit" class="btn">保存</button>
+        </div>
+    </div>
+    <div class="main-pannel">
+        <h3>基本信息</h3>
+        <div class="content">
+            <table class="detail">
+                <tr>
+                    <td class="bo-label"><label for="ipt-dm-name"><i class="asterisk">*</i>姓名:</label></td>
+                    <td><input class="input-sm" type="text" name="name" id="ipt-dm-name" value="<{$data.m_name}>" required/></td>
+                    <td class="bo-label"><label for="ipt-dm-email"><i class="asterisk">*</i>邮箱:</label></td>
+                    <td><input class="input-sm" type="text" name="email" id="ipt-dm-email" value="<{$data.m_email}>" required email="true"/><input type="hidden" name="id" value="<{$data.m_id}>"/></td>
+                    <{if $isSelf || $isAdmin}>
+                    <td class="bo-label"><label for="ipt-dm-password">密码:<span style="color: red">(留空密码不变)</span></label></td>
+                    <td><input class="input-sm" type="password" name="password" id="ipt-dm-password" value="" autocomplete="new-password" /></td>
+                    <{/if}>
+                </tr>
+                <tr>
+                    <td class="bo-label"><label for="ipt-dm-code"><i class="asterisk">*</i>编码:</label></td>
+                    <td><input class="input-sm" type="text" name="code" id="ipt-dm-code" value="<{$data.m_code}>" required/></td>
+                    <td class="bo-label"><label for="ipt-dm-phone"><i class="asterisk">*</i>电话:</label></td>
+                    <td><input class="input-sm" type="text" name="phone" id="ipt-dm-phone" value="<{$data.m_phone}>" required/></td>
+                    <td class="bo-label"><label for="inputDepartment"><i class="asterisk">*</i>部门:</label></td>
+                    <td><input class="input-sm" type="text" readonly name="department" id="inputDepartment" value="<{$data.m_department}>"/> <input type="hidden" name="did" value="<{$data.m_did}>"/></td>
+                </tr>
+                <tr>
+                    <td class="bo-label"><label for="ipt-dm-office">组织:</label></td>
+                    <td><input type="text" class="input-sm" name="office" id="ipt-dm-office" value="<{$data.m_office}>"/></td>
+                    <td class="bo-label"></td>
+                    <td>
+                        <input type="hidden" name="isAdmin" value="<{$data.m_isAdmin}>">
+                    </td>
+                    <td colspan="2"></td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</form>

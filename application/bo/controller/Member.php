@@ -71,6 +71,7 @@ class Member extends BoController
 
     public function detail($id)
     {
+        $pop = Request::instance()->get("pop");
         $data = $this->model->getDataById($id);
 
         $readonly = $isSelf = $isAdmin = false;
@@ -88,7 +89,11 @@ class Member extends BoController
         $this->assign('isAdmin',$isAdmin);
         $this->assign('readonly',$readonly);
         $this->assign('data', $data);
-        return $this->fetch();
+        $files = "";
+        if(!empty($pop)){
+            $files = "member/pop";
+        }
+        return $this->fetch($files);
     }
 
     public function update()
@@ -113,8 +118,9 @@ class Member extends BoController
             } else {
                 $member['m_password'] = encryptPassword($member['m_password']);
             }
-
-            if ($this->model->save($member, ['m_id' => $post['id']])) {
+            $this->model->save($member, ['m_id' => $post['id']]);
+            $error = $this->model->getError();
+            if (empty($error)) {
                 $ret = ['flag' => 1, 'msg' => '更新成功'];
             } else {
                 $ret = ['flag' => 0, 'msg' => '更新失败'];

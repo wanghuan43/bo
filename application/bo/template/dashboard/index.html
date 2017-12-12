@@ -17,7 +17,7 @@
     <h1 style="padding: 5px;display: inline-block;font-size:24px;line-height:39px;"><i class="fa fa-bars"></i>新智超脑</h1>
     <div style="float: right;">
         <p style="margin: 13px 0;">
-            <span style="font-size: 16px;margin-right: 20px;"><i class="fa fa-user-circle"></i><{$member.m_name}></span>
+            <span style="font-size: 16px;margin-right: 20px;cursor: pointer;" id="popinfo"><i class="fa fa-user-circle"></i><{$member.m_name}></span>
             <a href="<{:url("/dashboard/logout")}>" style="color: blue;" id="link-site-exit"><i class="fa fa-sign-out"></i>退出</a>
         </p>
     </div>
@@ -108,6 +108,71 @@
                 $("#main-container").css("margin-left","230px");
                 $("body").css("background","url(/static/images/body-bg.png) repeat-y");
             }
+        });
+
+        $("#popinfo").click(function(){
+            var mid = "<{$member.m_id}>",pop='<div class="f-layer-member-back" ' +
+                'style="display:none;background-color: black;opacity: 0.5;width: 100%;height: 100%;position: fixed;top: 0;z-index:999"></div>' +
+                '<div class="f-layer f-layer-member" style="display: block;">';
+            loading.show()
+            $.ajax({
+                url: "/member/detail?pop=1&id="+mid,
+                dataType: "json",
+                method: "get",
+                success: function (data) {
+                    pop += data+'</div>';
+                    $("#popDIV").html(pop);
+                    setTimeout('$(".f-layer-member").addClass("show")',500);
+                    //$(cla).show();
+                    $(".f-layer-member-back").show();
+                    $(".f-layer-member .close").click(function () {
+                        //$(cla).hide();
+                        $(".f-layer-member").removeClass("show");
+                        $(".f-layer-member-back").hide();
+                        return false;
+                    });
+                    $("#member-update [type='submit']").click(function () {
+                        loading.show();
+                        var form = $("#member-update");
+                        var data = new FormData(form[0]);
+                        form.validate({
+                            'submitHandler': function () {
+                                var form = $("#member-update");
+                                var data = new FormData(form[0]);
+                                $.ajax({
+                                    url: form.attr("action"),
+                                    method: form.attr("method"),
+                                    data: data,
+                                    contentType: false,
+                                    processData: false,
+                                    dataType: "json",
+                                    success: function (res) {
+                                        loading.hide();
+                                        custom.alert(res.msg);
+                                        if(res.flag == 1) {
+                                            var el;
+                                            if ($("#ipt-attachment").length > 0) {
+                                                el = "#ipt-attachment";
+                                            }
+                                            $(el).val("");
+                                            if ( res.image !== undefined) {
+                                                $(el).parent().addClass("attachment").find("img").remove();
+                                                $(el).parent().find("a").remove();
+                                                $(el).parent().prepend('<img src="' + res.image + '"  width="240" data-action="zoom"/>');
+                                            }else if (res.file !== undefined){
+                                                $(el).parent().find("img").remove();
+                                                $(el).parent().find("a").remove();
+                                                $(el).parent().prepend('<a href="' + res.file + '" target="_blank"><i class="fa fa-paperclip"></i> 附件</a>');
+                                            }
+                                        }
+                                    }
+                                });
+                            }
+                        });
+                    })
+                    loading.hide();
+                }
+            });
         });
 
         detectBack.initialize();
