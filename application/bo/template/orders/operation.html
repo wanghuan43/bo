@@ -560,9 +560,12 @@
             $("#o_status option").prop("disabled", true);
             $("#o_status option:last").prop("disabled", false);
         }
+        initUsed();
         $(".content.table .slider").each(function(index, element){
             var val = $(element).parent().next().find("input").val() != "" ? parseFloat($(element).parent().next().find("input").val()) : 0;
-            sliderElement(element, val);
+            var d=$(element).parents("table").attr("data"),sendMax = parseFloat($("table[data='"+d+"']:eq(0) tr:first").find("td:eq(2)").html());
+            sendMax = parseFloat($("#o_money").val())-sendMax;
+            sliderElement(element, val,sendMax);
         });
         $(".content.table select").each(function(index, element){
             var option = $(element).find("option:selected").val();
@@ -704,7 +707,6 @@
             });
             return false;
         });
-        initUsed();
         $("#o_money").change(function () {
             var val = $(this).val().replace(",","");
             if(isNaN(val) === true){
