@@ -22,7 +22,7 @@ class Taglib extends BoModel
         $member = $this->getCurrent();
         $this->alias('t');
         if ($member->m_isAdmin == "2") {
-            $this->join('__CIRCULATION__ c', "t.tl_id = c.ci_otid AND c.ci_type = 'taglib'");
+            $this->join('__CIRCULATION__ c', "t.tl_id = c.ci_otid AND c.ci_type = 'taglib'", "left");
             $this->where("c.ci_mid", "=", $member->m_id);
         }
         $this->field("t.*");

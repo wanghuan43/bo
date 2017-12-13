@@ -11,7 +11,7 @@ class Taglink extends BoModel
         $db = $this->db();
         $list = $db->table('__TAGLIB__')
             ->alias('tl')
-            ->join('__TAGLINK__ tk', 'tl.tl_id = tk.tl_id')
+            ->join('__TAGLINK__ tk', 'tl.tl_id = tk.tl_id', "left")
             ->where('tk.ot_id', $ot_id)
             ->where('tk.model', $model)
             ->select();
