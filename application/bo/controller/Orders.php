@@ -339,9 +339,9 @@ class Orders extends BoController
                 break;
             case "circulate":
                 $this->title = "我的传阅";
-                $this->ordersModel->join("__CIRCULATION__ c", "o.o_id = c.ci_otid AND c.ci_type = 'orders'", "LEFT");
+                $this->ordersModel->join("__CIRCULATION__ c", "o.o_id = c.ci_otid", "LEFT");
 //                if(!$this->current->m_isAdmin){
-                $this->ordersModel->where("c.ci_mid", "=", $this->current->m_id);
+                $this->ordersModel->where("c.ci_mid", "=", $this->current->m_id)->where('c.ci_type', "=", "orders");
 //                }
                 break;
             case "panding":
