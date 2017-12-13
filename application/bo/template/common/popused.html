@@ -144,8 +144,8 @@
                         money -= parseFloat($(element).html());
                     });
                 }
-                if(money <= 0){
-                    custom.alert("金额不能小于等于0");
+                if(money == 0){
+                    custom.alert("金额不能等于0");
                     return false;
                 }
                 if(money >= total){
