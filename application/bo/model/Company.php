@@ -29,19 +29,28 @@ class Company extends BoModel
     public function getList($search, $limit)
     {
         $member = $this->getCurrent();
-        $this->alias('co');
         if ($member->m_isAdmin == "2") {
-            $this->join('__CIRCULATION__ c', "co.co_id = c.ci_otid AND c.ci_type = 'company'", "left");
-            $this->where("c.ci_mid", "=", $member->m_id);
-        }
-        $this->field("co.*");
-        foreach ($search as $key => $value) {
-            $this->where("co." . $value['field'], $value['opt'], $value['val']);
-        }
-        if( $limit===false ){
-            $list = $this->select();
-        }else {
-            $list = $this->paginate($limit, false, array("query" => ["c_type" => Request::instance()->get("c_type")]));
+            $c = new Circulation();
+            $c->alias("c")->field('co.*')->join("__COMPANY__ co", "c.ci_otid = co.co_id", "LEFT")
+                ->where("c.ci_type", "=", "company")->where("c.ci_mid|co.co_mid", "=", $member->m_id);
+            foreach ($search as $key => $value) {
+                $c->where("co." . $value['field'], $value['opt'], $value['val']);
+            }
+            if ($limit === false) {
+                $list = $c->select();
+            } else {
+                $list = $c->paginate($limit);
+            }
+        }else{
+            $this->alias('co')->field("co.*");
+            foreach ($search as $key => $value) {
+                $this->where("co." . $value['field'], $value['opt'], $value['val']);
+            }
+            if( $limit===false ){
+                $list = $this->select();
+            }else {
+                $list = $this->paginate($limit, false, array("query" => ["c_type" => Request::instance()->get("c_type")]));
+            }
         }
         return $list;
     }

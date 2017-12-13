@@ -72,17 +72,27 @@ class Project extends BoModel
         $member = $this->getCurrent();
         $this->alias('p');
         if ($member->m_isAdmin == "2") {
-            $this->join('__CIRCULATION__ c', "p.p_id = c.ci_otid AND c.ci_type = 'project' AND c.ci_mid=".$member->m_id, "left");
-            $this->where("p.p_mid", "=", $member->m_id);
-        }
-        $this->field("p.*");
-        foreach ($search as $key => $value) {
-            $this->where('p.' . $value['field'], $value['opt'], $value['val']);
-        }
-        if ($limit==false) {
-            $list = $this->select();
-        } else {
-            $list = $this->paginate($limit);
+            $c = new Circulation();
+            $c->alias("c")->field('p.*')->join("__PROJECT__ p", "c.ci_otid = p.p_id", "LEFT")
+                ->where("c.ci_type", "=", "project")->where("c.ci_mid|p.p_mid", "=", $member->m_id);
+            foreach ($search as $key => $value) {
+                $c->where("p." . $value['field'], $value['opt'], $value['val']);
+            }
+            if ($limit === false) {
+                $list = $c->select();
+            } else {
+                $list = $c->paginate($limit);
+            }
+        }else{
+            $this->alias('p')->field("p.*");
+            foreach ($search as $key => $value) {
+                $this->where('p.' . $value['field'], $value['opt'], $value['val']);
+            }
+            if ($limit==false) {
+                $list = $this->select();
+            } else {
+                $list = $this->paginate($limit);
+            }
         }
         return $list;
     }

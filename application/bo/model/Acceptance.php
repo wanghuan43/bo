@@ -86,19 +86,28 @@ class Acceptance extends BoModel
     public function getList($search, $limit)
     {
         $member = $this->getCurrent();
-        $this->alias('a');
         if ($member->m_isAdmin == "2") {
-            $this->join('__CIRCULATION__ c', "a.a_id = c.ci_otid AND c.ci_type = 'acceptance' and c.ci_mid = ".$member->m_id, "left");
-            $this->where("a.a_mid", "=", $member->m_id);
-        }
-        $this->field("a.*");
-        foreach ($search as $key => $value) {
-            $this->where('a.' . $value['field'], $value['opt'], $value['val']);
-        }
-        if ($limit === false) {
-            $list = $this->select();
-        } else {
-            $list = $this->paginate($limit);
+            $c = new Circulation();
+            $c->alias("c")->field('a.*')->join("__ACCEPTANCE__ a", "c.ci_otid = a.a_id", "LEFT")
+                ->where("c.ci_type", "=", "acceptance")->where("c.ci_mid|a.a_mid", "=", $member->m_id);
+            foreach ($search as $key => $value) {
+                $c->where("a." . $value['field'], $value['opt'], $value['val']);
+            }
+            if ($limit === false) {
+                $list = $c->select();
+            } else {
+                $list = $c->paginate($limit);
+            }
+        }else{
+            $this->alias("a")->field("a.*");
+            foreach ($search as $key => $value) {
+                $this->where('a.' . $value['field'], $value['opt'], $value['val']);
+            }
+            if ($limit === false) {
+                $list = $this->select();
+            } else {
+                $list = $this->paginate($limit);
+            }
         }
         return $list;
     }

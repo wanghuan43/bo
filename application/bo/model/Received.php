@@ -79,19 +79,28 @@ class Received extends BoModel
     public function getList($search = array(), $limit = 20)
     {
         $member = $this->getCurrent();
-        $this->alias('r');
         if ($member->m_isAdmin == "2") {
-            $this->join('__CIRCULATION__ c', "r.r_id = c.ci_otid AND c.ci_type = 'received' AND c.ci_mid=".$member->m_id, "left");
-            $this->where("r.r_mid", "=", $member->m_id);
-        }
-        $this->field("r.*");
-        foreach ($search as $key => $value) {
-            $this->where("r." . $value['field'], $value['opt'], $value['val']);
-        }
-        if ($limit === false) {
-            $list = $this->select();
-        } else {
-            $list = $this->paginate($limit);
+            $c = new Circulation();
+            $c->alias("c")->field('r.*')->join("__RECEIVED__ r", "c.ci_otid = r.r_id", "LEFT")
+                ->where("c.ci_type", "=", "received")->where("c.ci_mid|r.r_mid", "=", $member->m_id);
+            foreach ($search as $key => $value) {
+                $c->where("r." . $value['field'], $value['opt'], $value['val']);
+            }
+            if ($limit === false) {
+                $list = $c->select();
+            } else {
+                $list = $c->paginate($limit);
+            }
+        }else{
+            $this->alias('r')->field("r.*");
+            foreach ($search as $key => $value) {
+                $this->where("r." . $value['field'], $value['opt'], $value['val']);
+            }
+            if ($limit === false) {
+                $list = $this->select();
+            } else {
+                $list = $this->paginate($limit);
+            }
         }
         return $list;
     }
