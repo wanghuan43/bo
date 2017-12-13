@@ -2,7 +2,7 @@
     <{$lists->render()}>
 </nav>
 <div class="auto-scroll">
-<table class="list table " cellspacing="0">
+<table class="list table scroll" cellspacing="0">
     <thead>
     <tr>
         <th style="min-width: 50px;text-align:center;padding-right:4px;"><input type="checkbox" class="checkAll" value="all"/></th>
@@ -22,6 +22,12 @@
         <th width="200">地址</th>
         <th>税务登记号</th>
         <th>工商注册号</th>
+        <th>开户行</th>
+        <th>开户行账号</th>
+        <th>发票类型</th>
+        <th>发票邮寄地址</th>
+        <th>发票接收人</th>
+        <th>发票接收人电话</th>
         <th>法人代表</th>
         <th>集团内公司名称</th>
         <th class="date">创建时间</th>
@@ -43,6 +49,12 @@
         <td><{$vo.co_address}></td>
         <td><{$vo.co_tax_id}></td>
         <td><{$vo.co_reg_id}></td>
+        <td><{$vo.co_bank}></td>
+        <td><{$vo.co_bank_card}></td>
+        <td><{$vo.co_invoice_type}></td>
+        <td><{$vo.co_invoice_address}></td>
+        <td><{$vo.co_invoice_recipient}></td>
+        <td><{$vo.co_invoice_phone}></td>
         <td><{$vo.co_lr}></td>
         <td><{$vo.co_internal_name}></td>
         <td><{$vo.co_create_time|date='Y-m-d',###}></td>

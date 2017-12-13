@@ -718,6 +718,13 @@ label.error:before{
     display: none;
 }
 
+.auto-scroll{
+    overflow-x:scroll;
+}
+.auto-scroll .scroll{
+    width:2200px;
+}
+
 @-moz-document url-prefix() {
     select.input-sm {
         -moz-appearance: none;
