@@ -1068,7 +1068,7 @@
         var total = parseFloat($("#o_money").val());
         var val = $(element).find(".m_class").val();
         var html = '<tr><td><i class="fa fa-minus-circle" data="'+data.id+'"></i></td>' +
-                '<td><?php echo date("Y-m-d"); ?></td>' +
+                '<td>'+data.date+'</td>' +
                 '<td class="mony-'+type+'">'+parseFloat(val).toFixed(2)+'</td>' +
                 '<td><a href="'+url+'" target="_blank" style="color: blue;">'+data.id+'</a>' +
                 '<input type="hidden" name="used['+i+'][value][]" value="'+val+'">' +
