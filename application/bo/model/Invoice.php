@@ -95,28 +95,19 @@ class Invoice extends BoModel
     public function getList($search, $limit)
     {
         $member = $this->getCurrent();
+        $this->alias('i');
         if ($member->m_isAdmin == "2") {
-            $c = new Circulation();
-            $c->alias("c")->field('i.*')->join("__INVOICE__ i", "c.ci_otid = i.i_id", "LEFT")
-                ->where("c.ci_type", "=", "invoice")->where("c.ci_mid|i.i_mid", "=", $member->m_id);
-            foreach ($search as $key => $value) {
-                $c->where("i." . $value['field'], $value['opt'], $value['val']);
-            }
-            if ($limit === false) {
-                $list = $c->select();
-            } else {
-                $list = $c->paginate($limit);
-            }
-        } else {
-            $this->alias("i")->field("i.*");
-            foreach ($search as $key => $value) {
-                $this->where("i." . $value['field'], $value['opt'], $value['val']);
-            }
-            if ($limit === false) {
-                $list = $this->select();
-            } else {
-                $list = $this->paginate($limit);
-            }
+            $this->join('__CIRCULATION__ c', "i.i_id = c.ci_otid AND c.ci_type = 'invoice'", "left");
+            $this->where("c.ci_mid|i.i_mid", "=", $member->m_id)->group('i.i_id');
+        }
+        $this->field("i.*");
+        foreach ($search as $key => $value) {
+            $this->where("i." . $value['field'], $value['opt'], $value['val']);
+        }
+        if( $limit===false ){
+            $list = $this->select();
+        }else {
+            $list = $this->paginate($limit);
         }
         return $list;
     }
@@ -124,28 +115,27 @@ class Invoice extends BoModel
     public function checkUsed($id, $money, $op = "-")
     {
         $tmp = $this->find($id);
-        if (!$tmp) {
+        if(!$tmp){
             return true;
-        } else {
+        }else{
             $tmp = $tmp->toArray();
         }
         $return = true;
         if ($op == "-") {
-            if ($tmp['i_noused'] - $money < 0) {
-                $return = false;
-            } else {
-                $this->save(['i_noused' => ($tmp['i_noused'] - $money), 'i_used' => ($tmp['i_used'] + $money)], ["i_id" => $id]);
-            }
-        } else {
-            $this->save(['i_noused' => ($tmp['i_noused'] + $money), 'i_used' => ($tmp['i_used'] - $money)], ["i_id" => $id]);
+            $noused = ($tmp['i_noused'] - $money);
+            $used = ($tmp['i_used'] + $money);
+        }else{
+            $noused = ($tmp['i_noused'] + $money);
+            $used = ($tmp['i_used'] - $money);
         }
+        $this->update(['i_noused' => $noused, 'i_used' => $used], ["i_id" => $id]);
         return $return;
     }
 
     public function getCodeAndNameById($id)
     {
         $data = $this->getDataById($id);
-        return ['code' => $data['i_no'], 'name' => '发票' . $data['i_no']];
+        return ['code'=>$data['i_no'],'name'=>'发票'.$data['i_no']];
     }
 
     /**
@@ -159,35 +149,35 @@ class Invoice extends BoModel
         $mMember = new Member();
         $mDepartment = new Department();
 
-        foreach ($dataset as $key => $data) {
+        foreach ($dataset as $key=>$data){
 
             $did = $mDepartment->getDepartmentIdByName($data['i_dname']);
-            if (empty($did)) {
-                CustomUtils::writeImportLog('Department ID is null - ' . serialize($data), strtolower($this->name));
+            if(empty($did)){
+                CustomUtils::writeImportLog('Department ID is null - '.serialize($data),strtolower($this->name));
                 unset($dataset[$key]);
                 continue;
-            } else {
+            }else{
                 $data['i_did'] = $did;
             }
 
             $type = $data['i_type'] == 1 ? 2 : 1;
 
-            $company = $mCompany->getCompany(false, $data['i_coname'], $type);
+            $company = $mCompany->getCompany(false,$data['i_coname'],$type);
 
-            if ($company) {
+            if($company){
                 $data['i_coid'] = $company->co_id;
-            } else {
-                CustomUtils::writeImportLog('Company ID is null - ' . serialize($data), strtolower($this->name));
+            }else{
+                CustomUtils::writeImportLog('Company ID is null - '.serialize($data),strtolower($this->name));
                 unset($dataset[$key]);
                 continue;
             }
 
-            $member = $mMember->getMemberByName($data['i_mname'], $data['i_dname']);
+            $member = $mMember->getMemberByName($data['i_mname'],$data['i_dname']);
 
-            if ($member) {
+            if($member){
                 $data['i_mid'] = $member->m_id;
-            } else {
-                CustomUtils::writeImportLog('Member ID is null - ' . serialize($data), strtolower($this->name));
+            }else{
+                CustomUtils::writeImportLog('Member ID is null - '.serialize($data),strtolower($this->name));
                 unset($dataset[$key]);
                 continue;
             }

@@ -86,35 +86,23 @@ class Contract extends BoModel
     public function getList($search, $limit)
     {
         $member = $this->getCurrent();
+        $this->alias('ct');
         if ($member->m_isAdmin == "2") {
-            $this->join('__CIRCULATION__ c', "ct.c_id = c.ci_otid AND c.ci_type = 'contract' AND c.ci_mid = ".$member->m_id, "left")
-                ->where("ct.c_mid", "=", $member->m_id);
-            $c = new Circulation();
-            $c->alias("c")->field("ct.*,p.p_no,cp.co_type")->join("__CONTRACT__ ct", "c.ci_otid = ct.c_id", "LEFT")
-                ->join('__PROJECT__ p', "ct.c_pid = p.p_id", 'left')
-                ->join('__COMPANY__ cp', "ct.c_coid = cp.co_id", 'left')
-                ->where("c.ci_type", "=", "contract")->where("c.ci_mid|ct.c_mid", "=", $member->m_id);
-            foreach ($search as $key => $value) {
-                $c->where("ct." . $value['field'], $value['opt'], $value['val']);
-            }
-            if ($limit === false) {
-                $list = $c->select();
-            } else {
-                $list = $c->paginate($limit);
-            }
-        }else{
-            $this->alias('ct')->field("ct.*,p.p_no,cp.co_type");
-            $this->join('__PROJECT__ p', "ct.c_pid = p.p_id", 'left');
-            $this->join('__COMPANY__ cp', "ct.c_coid = cp.co_id", 'left');
-            foreach ($search as $key => $value) {
-                $this->where("ct." . $value['field'], $value['opt'], $value['val']);
-            }
-            if ($limit == false) {
-                $list = $this->select();
-            } else {
-                $list = $this->paginate($limit, false, array("query" => ["c_type" => Request::instance()->get("c_type")]));
-            }
+            $this->join('__CIRCULATION__ c', "ct.c_id = c.ci_otid AND c.ci_type = 'contract'", 'left')
+                ->where("c.ci_mid|ct.c_mid", "=", $member->m_id)->group('ct.c_id');
         }
+        $this->field("ct.*,p.p_no,cp.co_type");
+        $this->join('__PROJECT__ p', "ct.c_pid = p.p_id", 'left');
+        $this->join('__COMPANY__ cp', "ct.c_coid = cp.co_id", 'left');
+        foreach ($search as $key => $value) {
+            $this->where("ct." . $value['field'], $value['opt'], $value['val']);
+        }
+        if ($limit == false) {
+            $list = $this->select();
+        } else {
+            $list = $this->paginate($limit, false, array("query" => ["c_type" => Request::instance()->get("c_type")]));
+        }
+
         return $list;
     }
 

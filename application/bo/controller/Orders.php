@@ -288,7 +288,6 @@ class Orders extends BoController
         if ($vp == "1") {
             $log->l_panding = 2;
             $new['o_id'] = $log->l_otid;
-            $oum->resetOrderUsed($log->l_otid);
             if(!empty($old['o_cid'])){
                 $con = \app\bo\model\Contract::get($old['o_cid']);
                 if($con){

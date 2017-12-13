@@ -232,7 +232,7 @@
                         <a href="/#acceptance/detail?id=<{$value['ou_otid']}>" target="_blank" style="color: blue;"><{$value['ou_otid']}></a>
                         <input type="hidden" name="used[2][value][]" value="<{$value['ou_used']}>">
                         <input type="hidden" name="used[2][date][]" value="<?php echo date("Y-m-d", $value['ou_date']); ?>">
-                        <input type="hidden" name="used[2][ot_id][]" value="<{$value['ou_oid']}>">
+                        <input type="hidden" name="used[2][ot_id][]" value="<{$value['ou_otid']}>">
                     </td>
                 </tr>
                 <{/volist}>
@@ -269,7 +269,7 @@
                         <a href="/#invoice/detail?id=<{$value['ou_otid']}>" target="_blank" style="color: blue;"><{$value['ou_otid']}></a>
                         <input type="hidden" name="used[1][value][]" value="<{$value['ou_used']}>">
                         <input type="hidden" name="used[1][date][]" value="<?php echo date("Y-m-d", $value['ou_date']); ?>">
-                        <input type="hidden" name="used[1][ot_id][]" value="<{$value['ou_oid']}>">
+                        <input type="hidden" name="used[1][ot_id][]" value="<{$value['ou_otid']}>">
                     </td>
                 </tr>
                 <{/volist}>
@@ -306,7 +306,7 @@
                         <a href="/#received/detail?id=<{$value['ou_otid']}>" target="_blank" style="color: blue;"><{$value['ou_otid']}></a>
                         <input type="hidden" name="used[3][value][]" value="<{$value['ou_used']}>">
                         <input type="hidden" name="used[3][date][]" value="<?php echo date("Y-m-d", $value['ou_date']); ?>">
-                        <input type="hidden" name="used[3][ot_id][]" value="<{$value['ou_oid']}>">
+                        <input type="hidden" name="used[3][ot_id][]" value="<{$value['ou_otid']}>">
                     </td>
                 </tr>
                 <{/volist}>

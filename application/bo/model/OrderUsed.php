@@ -46,6 +46,7 @@ class OrderUsed extends BoModel
 
     public function setOrderUsed($id, $data)
     {
+        $this->resetOrderUsed($id);
         $this->where("ou_oid", "=", $id)->delete();
         $array = array();
         if(!is_array($data)){

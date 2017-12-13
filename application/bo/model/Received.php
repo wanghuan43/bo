@@ -79,28 +79,19 @@ class Received extends BoModel
     public function getList($search = array(), $limit = 20)
     {
         $member = $this->getCurrent();
+        $this->alias('r');
         if ($member->m_isAdmin == "2") {
-            $c = new Circulation();
-            $c->alias("c")->field('r.*')->join("__RECEIVED__ r", "c.ci_otid = r.r_id", "LEFT")
-                ->where("c.ci_type", "=", "received")->where("c.ci_mid|r.r_mid", "=", $member->m_id);
-            foreach ($search as $key => $value) {
-                $c->where("r." . $value['field'], $value['opt'], $value['val']);
-            }
-            if ($limit === false) {
-                $list = $c->select();
-            } else {
-                $list = $c->paginate($limit);
-            }
-        }else{
-            $this->alias('r')->field("r.*");
-            foreach ($search as $key => $value) {
-                $this->where("r." . $value['field'], $value['opt'], $value['val']);
-            }
-            if ($limit === false) {
-                $list = $this->select();
-            } else {
-                $list = $this->paginate($limit);
-            }
+            $this->join('__CIRCULATION__ c', "r.r_id = c.ci_otid AND c.ci_type = 'received'",'left');
+            $this->where("c.ci_mid|r.r_mid", "=", $member->m_id)->group('r.r_id');
+        }
+        $this->field("r.*");
+        foreach ($search as $key => $value) {
+            $this->where("r." . $value['field'], $value['opt'], $value['val']);
+        }
+        if ($limit === false) {
+            $list = $this->select();
+        } else {
+            $list = $this->paginate($limit);
         }
         return $list;
     }
@@ -115,14 +106,13 @@ class Received extends BoModel
         }
         $return = true;
         if ($op == "-") {
-            if ($tmp['r_noused'] - $money < 0) {
-                $return = false;
-            } else {
-                $this->save(['r_noused' => ($tmp['r_noused'] - $money), 'r_used' => ($tmp['r_used'] + $money)], ["r_id" => $id]);
-            }
-        } else {
-            $this->save(['r_noused' => ($tmp['r_noused'] + $money), 'r_used' => ($tmp['r_used'] - $money)], ["r_id" => $id]);
+            $noused = ($tmp['r_noused'] - $money);
+            $used = ($tmp['r_used'] + $money);
+        }else{
+            $noused = ($tmp['r_noused'] + $money);
+            $used = ($tmp['r_used'] - $money);
         }
+        $this->update(['r_noused' => $noused, 'r_used' => $used], ["r_id" => $id]);
         return $return;
     }
 
