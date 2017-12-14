@@ -33,7 +33,7 @@ class ReportEntity extends BoModel
     /**
      * @param $type
      */
-    public function doReport($type, $sendCells, $search=array())
+    public function doReport($type, $sendCells, $search = array())
     {
         set_time_limit(0);
         ini_set('memory_limit', '1024M');
@@ -66,25 +66,26 @@ class ReportEntity extends BoModel
             default:
                 $mname = "app\\bo\\model\\" . ucfirst($type);
                 $mtmp = new $mname();
-                $where = [];
+                if ($type == "contract") {
+                    $f = "ct";
+                } else {
+                    $f = substr($type, 0, 1);
+                }
+                $mtmp->alias($f);
                 foreach ($search['fields'] as $key => $value) {
                     $val = count($search['values'][$key]) > 1 ? $search['values'][$key] : trim($search['values'][$key][0]);
                     $opt = trim($search['operators'][$key]);
                     $val = is_array($val) ? ((empty($val['0']) AND empty($val['1'])) ? "" : $val) : $val;
-                    if (!empty($val)) {
+                    if ($val != "") {
                         if ($opt == "between") {
                             $val = is_array($val) ? $val : explode(" ~ ", $val);
                         } elseif ($opt == "like") {
                             $val = "%$val%";
                         }
-                        $where[] = array(
-                            "field" => $value,
-                            "opt" => $opt,
-                            "val" => $val
-                        );
+                        $mtmp->where($f . "." . $value, $opt, $val);
                     }
                 }
-                $lists = $mtmp->where($where)->select();
+                $lists = $mtmp->select();
                 $begin = 1;
                 $id = "";
                 $tmps = $model->field("SUM(o_money) as om,o_pid,o_type")->group("o_pid,o_type")->select();
@@ -98,7 +99,7 @@ class ReportEntity extends BoModel
                     $tax = intval(getTaxList($val['o_tax'])) / 100;
                     if (isset($cclist[$val['o_pid']][$val['o_type']])) {
                         $cclist[$val['o_pid']][$val['o_type']] += $val['o_money'] - $val['o_money'] * $tax;
-                    }else{
+                    } else {
                         $cclist[$val['o_pid']][$val['o_type']] = $val['o_money'] - $val['o_money'] * $tax;
                     }
                 }
@@ -195,17 +196,17 @@ class ReportEntity extends BoModel
                             $in = true;
                             $count = $model->reportList($tmp["orders"], $activeSheet, $type, $begin, $ii->o_id);
                         }
-                        if($count === false OR !$in){
-                            $begin = $begin -1;
-                        }else{
+                        if ($count === false OR !$in) {
+                            $begin = $begin - 1;
+                        } else {
                             $begin = $count;
                         }
-                    } elseif(isset($tmp["orders"])) {
+                    } elseif (isset($tmp["orders"])) {
                         $begin = $begin + 1;
                         $count = $model->reportList($tmp["orders"], $activeSheet, $type, $begin, $id);
-                        if($count === false){
-                            $begin = $begin -1;
-                        }else{
+                        if ($count === false) {
+                            $begin = $begin - 1;
+                        } else {
                             $begin = $count;
                         }
                     }
