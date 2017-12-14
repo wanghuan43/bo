@@ -9,9 +9,7 @@
         <{else/}>
         <th style="width:1em;"></th>
         <{/if}>
-        <{if $type == 'contract'}>
-        <th style="width: 4em">内/外</th>
-        <{else/}>
+        <{if $type != 'contract'}>
         <th style="width: 4em">状态</th>
         <{/if}>
         <th>
@@ -32,6 +30,11 @@
         <th>
             <a href="<{$formUrl}>/sort/o_type/order/<{:getSortOrder($sort,'o_type')}>">
                 收支<i class="<{:getSortClass($sort,'o_type')}>"></i>
+            </a>
+        </th>
+        <th>
+            <a href="<{$formUrl}>/sort/o_lie/order/<{:getSortOrder($sort,'o_lie')}>">
+                内/外<i class="<{:getSortClass($sort,'o_lie')}>"></i>
             </a>
         </th>
         <th>
@@ -70,15 +73,14 @@
         <{else/}>
         <td></td>
         <{/if}>
-        <{if $type == 'contract'}>
-        <td><{:getLieList($vo.o_lie)}></td>
-        <{else/}>
+        <{if $type != 'contract'}>
         <td><?php echo getStatusList($vo['o_status']);?></td>
         <{/if}>
         <td class="nowrap"><a href="#orders/operation?op=edit&op_id=<{$vo.o_id}>" style="color:blue;"><{$vo.o_no}></a></td>
         <td><{$vo.o_pname}></td>
         <td><{$vo.o_subject}></td>
         <td><?php echo getTypeList($vo['o_type']);?></td>
+        <td><{:getLieList($vo['o_lie'])}></td>
         <td><{$vo.o_coname}></td>
         <td><{$vo.o_mname}></td>
         <td class="date"><?php echo date("Y-m-d", $vo['o_date']);?></td>

@@ -58,8 +58,8 @@ class BoController extends Controller
                     } elseif ($opt == "like") {
                         $val = "%$val%";
                     }
-                    if(in_array($value, ['i_type', 'i_tax', 'c_type', 'a_type', 'r_type', 'o_type','m_isAdmin']) AND empty($val)){
-                        break;
+                    if(in_array($value, ['i_type', 'i_tax', 'c_type', 'a_type', 'r_type', 'o_type','o_lie','m_isAdmin']) AND empty($val)){
+                        continue;
                     }
                     $search[] = array(
                         "field" => $value,
@@ -198,8 +198,8 @@ class BoController extends Controller
                     } elseif ($opt == "like") {
                         $val = "%$val%";
                     }
-                    if(in_array($value, ['i_type', 'i_tax', 'c_type', 'a_type', 'r_type', 'o_type','m_isAdmin']) AND empty($val)){
-                        break;
+                    if(in_array($value, ['i_type', 'i_tax', 'c_type', 'a_type', 'r_type', 'o_type','o_lie','m_isAdmin']) AND empty($val)){
+                        continue;
                     }
                     $search[] = array(
                         "field" => $value,
