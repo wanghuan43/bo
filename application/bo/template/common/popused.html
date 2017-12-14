@@ -72,26 +72,7 @@
                 method: "post",
                 data: formData,
                 success:function(data){
-                    $("#<{$type}>List").html(data.content);
-                    clickBind(className);
-                    $("#<{$type}>List a").click(function(){
-                        var href = $(this).attr("href");
-                        if(href != "" && href != "#"){
-                            href = href.replace("#", "/");
-                            var tts = {
-                                url: href,
-                                method: "post",
-                                data:formData,
-                                dataType:"json",
-                                success:function(data){
-                                    $("#<{$type}>List").html(data.content);
-                                    clickBind(className);
-                                }
-                            }
-                            contentAjax("<{$type}>List", tts, 'jump');
-                        }
-                        return false;
-                    });
+                    aClick(data, className);
                 }
             };
             contentAjax("<{$type}>List", tt, 'jump');
@@ -99,6 +80,28 @@
         });
         $("#<{$type}>Form").submit();
     });
+    function aClick(data, className){
+        $("#<{$type}>List").html(data.content);
+        clickBind(className);
+        $("#<{$type}>List a").click(function() {
+            var href = $(this).attr("href");
+            if (href != "" && href != "#") {
+                href = href.replace("#", "/");
+                var formData = $("#<{$type}>Form").serialize();
+                var tts = {
+                    url: href,
+                    method: "post",
+                    data: formData,
+                    dataType: "json",
+                    success: function (data) {
+                        aClick(data, className);
+                    }
+                }
+                contentAjax("<{$type}>List", tts, 'jump');
+            }
+            return false;
+        });
+    }
     function getClassByType(type){
         var r = "";
         switch(type){

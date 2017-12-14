@@ -47,12 +47,19 @@ class BoController extends Controller
             foreach ($post['fields'][$name] as $key => $value) {
                 $val = count($post['values'][$name][$key]) > 1 ? $post['values'][$name][$key] : trim($post['values'][$name][$key][0]);
                 $opt = trim($post['operators'][$name][$key]);
-                $val = is_array($val) ? ((empty($val['0']) AND empty($val['1'])) ? "" : $val) : $val;
-                if (!empty($val)) {
+                if(is_array($val)){
+                    $val = (trim($val['0'])!="" AND trim($val['1'])!="") ? $val : "";
+                }else{
+                    $val = trim($val);
+                }
+                if ($val != "") {
                     if ($opt == "between") {
                         $val = is_array($val) ? $val : explode(" ~ ", $val);
                     } elseif ($opt == "like") {
                         $val = "%$val%";
+                    }
+                    if(in_array($value, ['i_type', 'i_tax', 'c_type', 'a_type', 'r_type', 'o_type']) AND empty($val)){
+                        break;
                     }
                     $search[] = array(
                         "field" => $value,
@@ -180,12 +187,19 @@ class BoController extends Controller
             foreach ($post['fields'][$mName] as $key => $value) {
                 $val = count($post['values'][$mName][$key]) > 1 ? $post['values'][$mName][$key] : trim($post['values'][$mName][$key][0]);
                 $opt = trim($post['operators'][$mName][$key]);
-                $val = is_array($val) ? ((empty($val['0']) AND empty($val['1'])) ? "" : $val) : $val;
-                if (!empty($val)) {
+                if(is_array($val)){
+                    $val = (trim($val['0'])!="" AND trim($val['1'])!="") ? $val : "";
+                }else{
+                    $val = trim($val);
+                }
+                if ($val != "") {
                     if ($opt == "between") {
                         $val = is_array($val) ? $val : explode(" ~ ", $val);
                     } elseif ($opt == "like") {
                         $val = "%$val%";
+                    }
+                    if(in_array($value, ['i_type', 'i_tax', 'c_type', 'a_type', 'r_type', 'o_type']) AND empty($val)){
+                        break;
                     }
                     $search[] = array(
                         "field" => $value,
@@ -220,7 +234,6 @@ class BoController extends Controller
                 'val' => $co_type
             ];
         }
-
         $this->formartSearch($model, $search);
         return $search;
     }

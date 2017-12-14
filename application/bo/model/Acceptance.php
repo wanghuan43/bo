@@ -89,7 +89,7 @@ class Acceptance extends BoModel
         $this->alias('a');
         if ($member->m_isAdmin == "2") {
             $this->join('__CIRCULATION__ c', "a.a_id = c.ci_otid", "left");
-            $this->where("c.ci_mid|a.a_mid", "=", $member->m_id)->where('c.ci_type', "=", "acceptance")
+            $this->where("((c.ci_mid = ".$member->m_id." and c.ci_type = 'acceptance') OR a.a_mid = ".$member->m_id.")")
                 ->group('a.a_id');
         }
         $this->field("a.*");
