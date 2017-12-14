@@ -257,7 +257,7 @@ return [
         ],
 
         'orders20171208' => [
-            'file' => 'uploads/xlsx/orders20171208.xlsx',
+            'file' => 'uploads/default/orders20171214.xlsx',
             'model' => 'orders',
             'index' => 0,
             'fields' => [
@@ -310,7 +310,7 @@ return [
         ],
 
         'orderstags' => [
-            'file' => 'uploads/xlsx/orders20171208.xlsx',
+            'file' => 'uploads/default/orders20171214.xlsx',
             'model' => 'taglink',
             'index' => 0,
             'fields' => [
@@ -319,6 +319,16 @@ return [
             ],
             'defaultFields' => [
                 'model' => 'orders'
+            ]
+        ],
+
+        'ordersforeign' =>[
+            'file' => 'uploads/default/orders20171214.xlsx',
+            'model' => 'orders',
+            'index' =>0,
+            'fields' => [
+                'o_no' => 'A',
+                'o_foreign' => 'Q'
             ]
         ]
 
