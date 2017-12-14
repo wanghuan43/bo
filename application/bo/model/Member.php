@@ -31,7 +31,7 @@ class Member extends BoModel
             ),
         ),
         "m_office" => array(
-            "name" => "用户部门",
+            "name" => "组织",
             "type" => "text",
             "operators" => array(
                 "like" => "包含"
@@ -45,7 +45,7 @@ class Member extends BoModel
             )
         ),
         'm_department' => array(
-            'name' => '科室',
+            'name' => '部门',
             'type' => 'text',
             'operators' => array(
                 'like' => '包含'
