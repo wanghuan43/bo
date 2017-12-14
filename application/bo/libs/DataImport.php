@@ -131,7 +131,11 @@ class DataImport
 
         CustomUtils::writeImportLog('IMPORT START',$modelName);
 
-        $res =  $model->import($dataset);
+        if($modelName == 'Orders' && isset($data['o_foreign'])){
+            $res = $model->updateForeign($dataset);
+        }else {
+            $res = $model->import($dataset);
+        }
 
         CustomUtils::writeImportLog('IMPORT END',$modelName);
 
