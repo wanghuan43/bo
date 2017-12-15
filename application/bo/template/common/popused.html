@@ -136,9 +136,9 @@
                 $(this).attr("c", "true");
                 var jdata = JSON.parse(decodeURIComponent($(this).attr("json"))),
                     money = parseFloat($("#o_money").val()),
-                    used = parseFloat($("."+className).find("tr:eq(0)").find("td:eq(2)").html()),
-                    total = money - used;
-                jdata.noused = parseFloat(jdata.noused);
+                    used = parseFloat($("."+className).find("tr:eq(0)").find("td:eq(2)").html());
+                    jdata.noused = parseFloat(jdata.noused);
+                    var total = money - used;
                 if(money > jdata.noused){
                     money = jdata.noused;
                 }else if(money < jdata.noused){
@@ -153,6 +153,9 @@
                 }
                 if(money >= total){
                     money = total;
+                }
+                if(jdata.noused < money){
+                    money = jdata.noused;
                 }
                 money = money.toFixed(2);
                 $(cla).find(".on_class").html(jdata.id);
