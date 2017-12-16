@@ -31,7 +31,9 @@ class Company extends BoController
     {
         $post = $this->request->post();
 
-        $arr = ['code','name','mnemonic_code','industry','address','tax_id','reg_id','lr','internal_name','create_org','remark'];
+        $arr = ['code','name','mnemonic_code','industry','address','tax_id','reg_id','lr',
+            'internal_name','create_org','remark','bank','bank_card',
+            'invoice_type','invoice_address','invoice_recipient','invoice_phone'];
 
         foreach( $arr as $item ){
             $data['co_'.$item] = trim($post[$item]);
@@ -85,7 +87,9 @@ class Company extends BoController
 
     public function update(){
         $post = $this->request->post();
-        $arr = ['code','name','mnemonic_code','industry','address','tax_id','reg_id','lr','internal_name','create_org','remark'];
+        $arr = ['code','name','mnemonic_code','industry','address','tax_id','reg_id','lr',
+            'internal_name','create_org','remark','bank','bank_card',
+            'invoice_type','invoice_address','invoice_recipient','invoice_phone'];
 
         foreach( $arr as $item ){
             $data['co_'.$item] = trim($post[$item]);
