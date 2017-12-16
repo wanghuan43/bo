@@ -159,9 +159,12 @@ class Received extends BoModel
                 unset($dataset[$key]);
                 continue;
             }
-
-            $data['r_noused'] = $data['r_money'];
-            $data['r_createtime'] = $data['r_updatetime'] = time();
+            if(isset($data['r_money'])) {
+                $data['r_noused'] = $data['r_money'];
+                $data['r_createtime'] = $data['r_updatetime'] = time();
+            }else{
+                $data['r_updatetime'] = time();
+            }
             $dataset[$key] = $data;
         }
         return $this->insertDuplicate($dataset);

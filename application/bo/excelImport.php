@@ -169,10 +169,10 @@ return [
                 ]
             ]
         ],
-        'received171202' => [
-            'file' => 'uploads/xlsx/received20171208.xlsx',
+        'received' => [ //import new received
+            'file' => 'uploads/default/received20171216.xlsx',
             'model' => 'received',
-            'index' => 0,
+            'index' => 1,
             'fields' => [
                 'r_no' => 'A',
                 'r_mname' => 'C',
@@ -181,12 +181,39 @@ return [
                 'r_money' => 'H',
                 'r_date' => 'G',
                 'r_subject' => 'D',
-                //'r_content' => 'K',
+                'r_content' => 'K',
                 'r_dname' => 'B',
                 'r_accdate' => 'J'
             ],
             'dateFields' => ['r_date'],
             'moneyFields' => ['r_money'],
+            'desFields' => ['r_content'],
+            'enumFields' => [
+                'r_type' => [
+                    '收入' => 1,
+                    '支出' => 2
+                ]
+            ]
+        ],
+        'received171216' => [ //update r_content
+            'file' => 'uploads/default/received20171216.xlsx',
+            'model' => 'received',
+            'index' => 0,
+            'fields' => [
+                'r_no' => 'A',
+                'r_mname' => 'C',
+                'r_coname' => 'F',
+                'r_type' => 'E',
+                //'r_money' => 'H',
+                'r_date' => 'G',
+                'r_subject' => 'D',
+                'r_content' => 'K',
+                'r_dname' => 'B',
+                'r_accdate' => 'J'
+            ],
+            'dateFields' => ['r_date'],
+            'moneyFields' => ['r_money'],
+            'desFields' => ['r_content'],
             'enumFields' => [
                 'r_type' => [
                     '收入' => 1,

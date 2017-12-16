@@ -95,6 +95,10 @@ class DataImport
                         $data[$key] = $enum['default'];
                     }
                 }
+                if(isset($config['desFields']) && in_array($key,$config['desFields'])){
+                    $data[$key] = str_replace('\\\\','\\',$data[$key]);
+                    $data[$key] = str_replace('\\','\r\n',$data[$key]);
+                }
             }
 
             if(isset($config['validate'])){
@@ -116,7 +120,7 @@ class DataImport
                 $dataset[] = $data;
 
         }
-        //var_dump($dataset);die;
+
         $res = null;
 
         if( isset($config['model']) ){
