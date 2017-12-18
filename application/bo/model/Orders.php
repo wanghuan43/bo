@@ -91,6 +91,13 @@ class   Orders extends BoModel
                 "like" => "包含"
             ]
         ],
+        'o_subject' => [
+            'name' => '订单摘要',
+            'type' => 'text',
+            'operators' => [
+                'like' => '包含'
+            ]
+        ]
     ];
 
     public function getList($search, $limit = false)
