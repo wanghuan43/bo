@@ -98,7 +98,7 @@ class Invoice extends BoModel
         $this->alias('i');
         if ($member->m_isAdmin == "2") {
             $this->join('__CIRCULATION__ c', "i.i_id = c.ci_otid", "left");
-            $this->where("((c.ci_mid = ".$member->m_id." and c.ci_type = 'invoice') OR i.i_mid = ".$member->m_id.")")
+            $this->where("(i.i_id IN (SELECT ci_otid FROM kj_circulation WHERE ci_mid = ".$member->m_id." and ci_type = 'invoice') OR i.i_mid = ".$member->m_id.")")
                 ->group('i.i_id');
         }
         $this->field("i.*");
