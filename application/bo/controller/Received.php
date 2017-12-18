@@ -9,6 +9,8 @@ use app\bo\model\Received as MReceived;
 
 class Received extends BoController
 {
+    protected $limit=50;
+
     public function __construct(Request $request)
     {
         $this->model = new MReceived();

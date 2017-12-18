@@ -11,6 +11,8 @@ use think\Request;
 class Invoice extends BoController
 {
 
+    protected $limit=50;
+
     public function __construct(Request $request)
     {
         $this->model = new ModelInvoice();
