@@ -73,6 +73,13 @@ class Received extends BoModel
                 '>' => '大于',
                 '<' => '小于'
             )
+        ),
+        'r_mname' => array(
+            'name' => '责任人',
+            'type' => 'text',
+            'operators' => array(
+                'like' => '包含'
+            )
         )
     );
 

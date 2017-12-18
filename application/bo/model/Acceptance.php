@@ -80,6 +80,13 @@ class Acceptance extends BoModel
             'operators' => array(
                 'like' => '包含'
             )
+        ),
+        'a_mname' => array(
+            'name' => '责任人',
+            'type' => 'text',
+            'operators' => array(
+                'like' => '包含'
+            )
         )
     );
 

@@ -17,6 +17,11 @@
                 摘要<i class="<{:getSortClass($sort,'i_subject')}>"></i>
             </a>
         </th>
+        <th>
+            <a href="/invoice/all/sort/i_mname/order/<{:getSortOrder($sort,'i_mname')}>">
+                责任人<i class="<{:getSortClass($sort,'i_mname')}>"></i>
+            </a>
+        </th>
         <th width="200">
             <a href="/invoice/all/sort/i_coname/order/<{:getSortOrder($sort,'i_coname')}>">
                 对方名称<i class="<{:getSortClass($sort,'i_coname')}>"></i>
@@ -61,6 +66,7 @@
         <td><input type="checkbox" value="<{$val.i_id}>" class="lists-id" data-name="<{$val.i_no}>"></td>
         <td><a href="/invoice/detail?id=<{$val.i_id}>"><{$val.i_no}></a></td>
         <td><{$val.i_subject}></td>
+        <td><{$val.i_mname}></td>
         <td><{$val.i_coname}></td>
         <td><?php echo getTaxList($val['i_tax']); ?></td>
         <td><{:getTypeList2($val.i_type)}></td>
