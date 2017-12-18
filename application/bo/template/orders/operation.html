@@ -224,7 +224,7 @@
                 <{volist name="oused[2]" id="value" key="k"}>
                 <tr>
                     <td>
-                        <i class="fa fa-minus-circle" data="<{$value['ou_id']}>"></i>
+                        <i class="fa fa-minus-circle" data="<{$value['ou_otid']}>"></i>
                     </td>
                     <td><?php echo date("Y-m-d", $value['ou_date']); ?></td>
                     <td class="mony-acceptance"><{$value['ou_used']}></td>
@@ -261,7 +261,7 @@
                 <{volist name="oused[1]" id="value" key="k"}>
                 <tr>
                     <td>
-                        <i class="fa fa-minus-circle" data="<{$value['ou_id']}>"></i>
+                        <i class="fa fa-minus-circle" data="<{$value['ou_otid']}>"></i>
                     </td>
                     <td><?php echo date("Y-m-d", $value['ou_date']); ?></td>
                     <td class="mony-invoice"><{$value['ou_used']}></td>
@@ -298,7 +298,7 @@
                 <{volist name="oused[3]" id="value" key="k"}>
                 <tr>
                     <td>
-                        <i class="fa fa-minus-circle" data="<{$value['ou_id']}>"></i>
+                        <i class="fa fa-minus-circle" data="<{$value['ou_otid']}>"></i>
                     </td>
                     <td><?php echo date("Y-m-d", $value['ou_date']); ?></td>
                     <td class="mony-received"><{$value['ou_used']}></td>
