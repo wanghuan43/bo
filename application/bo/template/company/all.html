@@ -10,9 +10,11 @@
             <li>
                 <a href="/circulation/add/type/company" id="btn-circulation" target="_blank" onclick="return false;"><i class="fa fa-users"></i>传阅<i class="fa fa-sort-desc"></i></a>
             </li>
+            <{if $isAdmin}>
             <li>
                 <a href="/company/del" id="lists-delete" target="_blank" onclick="return false;"><i class="fa fa-trash"></i>删除</a>
             </li>
+            <{/if}>
         </ul>
     </div>
 </div>

@@ -180,4 +180,31 @@ class Invoice extends BoController
         return $this->doExport();
     }
 
+    protected function deleteCheck($ids)
+    {
+        $failed = [];
+
+        $mOrderUsed = new OrderUsed();
+
+        foreach ($ids as $id){
+            $res = $mOrderUsed->where('ou_type','=',1)->where('ou_otid','=',$id)->find();
+            if($res){
+                $failed[] = $id;
+            }
+            if($this->current->m_isAdmin != 1){
+                $i = $this->model->where('i_id','=',$id)->find();
+                if(empty($i) || $i->i_mid != $this->current->m_id)
+                    $failed[] = $id;
+            }
+        }
+
+        if(empty($failed)){
+            $ret = true;
+        }else{
+            $ret = ['failed'=>$failed];
+        }
+
+        return $ret;
+    }
+
 }

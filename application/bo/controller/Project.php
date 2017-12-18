@@ -188,4 +188,32 @@ class Project extends BoController
         return $this->doExport();
     }
 
+    protected function deleteCheck($ids)
+    {
+        $failed = [];
+
+        $mOrders = new Orders();
+
+        foreach ($ids as $id){
+            $res = $mOrders->where('o_pid','=',$id)->find();
+            if($res){
+                $failed[] = $id;
+            }
+            if($this->current->m_isAdmin != 1){
+                $p = $this->model->where('p_id','=',$id)->find();
+                if(empty($p) || $p->p_mid != $this->current->m_id)
+                    $failed[] = $id;
+            }
+        }
+
+        if(empty($failed)){
+            $ret = true;
+        }else{
+            $ret = ['failed'=>$failed];
+        }
+
+        return $ret;
+
+    }
+
 }

@@ -47,7 +47,16 @@
                     $(this).remove();
                 }
             });
+            setTimeout("resetSelect2()",100);
         });
+        window.resetSelect2 = function(){
+            var e = ".f-layer-" + mName + "-all .selected-ids select";
+            $(e).find("option").each(function(){
+                if($(this).hasClass("red")){
+                    $(e).parent().find("li[title="+$(this).html()+"]").addClass("red");
+                }
+            });
+        };
     })(jQuery);
 </script>
 
