@@ -10,9 +10,11 @@
             <!--li>
                 <a href="<{:url("/member/searchMemberNoList")}>" target="_blank" id="searchList" stype="<{$stype}>"><i class="fa fa-filter"></i>筛选</a>
             </li-->
+            <{if $isAdmin}>
             <li>
                 <a href="/member/del" id="lists-delete" target="_blank" onclick="return false;"><i class="fa fa-trash"></i>删除</a>
             </li>
+            <{/if}>
         </ul>
     </div>
 </div>

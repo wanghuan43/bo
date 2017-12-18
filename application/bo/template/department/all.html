@@ -7,9 +7,11 @@
             <li>
                 <a href="<{:url('/department/export')}>" target="_blank" id="link-export" data-type="department" data-list-type="3"><i class="fa fa-file-excel-o"></i>导出</a>
             </li>
+            <{if $isAdmin}>
             <li>
                 <a href="/department/del" id="lists-delete" target="_blank" onclick="return false;"><i class="fa fa-trash"></i>删除</a>
             </li>
+            <{/if}>
         </ul>
     </div>
 </div>

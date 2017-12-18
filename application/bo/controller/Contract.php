@@ -180,4 +180,31 @@ class Contract extends BoController
         return $this->doExport();
     }
 
+    protected function deleteCheck($ids)
+    {
+        $failed = [];
+
+        $mOrders = new \app\bo\model\Orders();
+
+        foreach ($ids as $id){
+            $res = $mOrders->where('o_cid','=',$id)->find();
+            if($res){
+                $failed[] = $id;
+            }
+            if($this->current->m_isAdmin != 1){
+                $c = $this->model->where('c_id','=',$id)->find();
+                if(empty($c) || $c->c_mid != $this->current->m_id)
+                    $failed[] = $id;
+            }
+        }
+
+        if(empty($failed)){
+            $ret = true;
+        }else{
+            $ret = ['failed'=>$failed];
+        }
+
+        return $ret;
+    }
+
 }

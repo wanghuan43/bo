@@ -65,6 +65,17 @@
                     "dataType": "json",
                     "success": function (res) {
                         custom.alert(res.msg);
+
+                        if(res.failed){
+                            var f = res.failed;
+                            var c = $("#main-container .search-panel .f-layer .selected-ids");
+                            for(var i=0;i<f.length;i++){
+                               var id = f[i];
+                               var h = c.find("option[value="+id+"]").addClass("red").html();
+                               c.find("li[title="+h+"]").addClass("red");
+                            }
+                        }
+
                         if (res.flag == 1 || res.status==1)
                             window.setTimeout("location.reload()", 500);
                     }

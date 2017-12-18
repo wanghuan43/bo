@@ -20,7 +20,11 @@
 
     custom.alert = function ( msg ) {
         var params = $.extend({},this.params,{content:msg});
-        $("#dialog-box").dialogBox(params);
+        if($("#dialog-box").length>0) {
+            $("#dialog-box").dialogBox(params);
+        }else{
+            $("#dialog-box1").dialogBox(params);
+        }
     };
 
     custom.confirm = function(msg,func){

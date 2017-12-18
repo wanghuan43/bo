@@ -168,4 +168,31 @@ class Acceptance extends BoController
         return $this->doExport();
     }
 
+    protected function deleteCheck($ids)
+    {
+        $failed = [];
+
+        $mOrderUsed = new OrderUsed();
+
+        foreach ($ids as $id){
+            $res = $mOrderUsed->where('ou_type','=',2)->where('ou_otid','=',$id)->find();
+            if($res){
+                $failed[] = $id;
+            }
+            if($this->current->m_isAdmin != 1){
+                $a = $this->model->where('a_id','=',$id)->find();
+                if(empty($a) || $a->a_mid != $this->current->m_id)
+                    $failed[] = $id;
+            }
+        }
+
+        if(empty($failed)){
+            $ret = true;
+        }else{
+            $ret = ['failed'=>$failed];
+        }
+
+        return $ret;
+    }
+
 }

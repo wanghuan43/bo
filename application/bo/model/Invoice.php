@@ -89,6 +89,13 @@ class Invoice extends BoModel
                 '1' => '销售',
                 '2' => '采购'
             )
+        ),
+        'i_mname' => array(
+            'name' => '责任人',
+            'type' => 'text',
+            'operators' => array(
+                'like' => '包含'
+            )
         )
     );
 

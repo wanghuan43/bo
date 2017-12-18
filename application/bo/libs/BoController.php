@@ -279,6 +279,7 @@ class BoController extends Controller
 
     public function all()
     {
+
         $this->assign("empty", "<tr><td>无数据</td></tr>");
         if (empty($this->model)) {
             $ret = '<h2>Error Page!</h2>';
@@ -297,9 +298,19 @@ class BoController extends Controller
                 $this->model->order($sort);
             }
 
+            $aType = 1;
+
+            if(isset($params['atype'])){
+                $aType = $params['atype'];
+            }elseif(isset($params['aType'])){
+                $aType = $params['aType'];
+            }
+
+            $isAdmin = $this->current->m_isAdmin == 1? true:false;
+
             $modelName = strtolower($this->model->getModelName());
             $search = $this->getSearch();
-            $list = $this->model->getList($search, $this->limit);
+            $list = $this->model->getList($search, $this->limit,$aType);
             $this->assign('sort', $sort);
             $this->assign('search', $this->model->getSearchable());
             $this->assign('searchValues', $search);
@@ -307,6 +318,8 @@ class BoController extends Controller
             $this->assign('other', 'main-pannel');
             $this->assign('lists', $list);
             $this->assign('types', getTypeList());
+            $this->assign('aType',$aType);
+            $this->assign('isAdmin',$isAdmin);
             if (isset($params['fields']) || isset($params['page']) || isset($params['sort'])) {
                 $ret = $this->fetch($modelName . '/list/2');
             } else {
@@ -324,20 +337,42 @@ class BoController extends Controller
 
             $ids = $this->request->post('ids/a');
 
-            if (is_array($ids) && count($ids) > 0) {
+            $res = $this->deleteCheck($ids);
 
-                $res = $this->model->whereIn($this->model->getPk(), $ids)->delete();
+            if($res === true) {
 
-                if ($res) {
-                    $ret = ['flag' => 1, 'msg' => '删除成功'];
+                if (is_array($ids) && count($ids) > 0) {
+
+                    $res = $this->model->whereIn($this->model->getPk(), $ids)->delete();
+
+                    if ($res) {
+                        $ret = ['flag' => 1, 'msg' => '删除成功'];
+                    } else {
+                        $ret = ['flag' => 0, 'msg' => '删除失败'];
+                    }
                 } else {
-                    $ret = ['flag' => 0, 'msg' => '删除失败'];
+                    $ret = ['flag' => 0, 'msg' => '参数错误'];
                 }
-            } else {
-                $ret = ['flag' => 0, 'msg' => '参数错误'];
+
+            }else{
+                $ret = $res;
+                if(!isset($ret['flag'])) $ret['flag'] = 0;
+                if(!isset($ret['msg'])) $ret['msg'] = '选择项不能全部被删除';
             }
+
         }
 
+        return $ret;
+
+    }
+
+    protected function deleteCheck($ids)
+    {
+        if($this->current->m_isAdmin == 1){
+            $ret = true;
+        }else{
+            $ret = ['flag'=>0,'msg'=>'无权限操作'];
+        }
         return $ret;
     }
 

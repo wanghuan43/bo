@@ -725,6 +725,10 @@ label.error:before{
     width:2200px;
 }
 
+.select2-selection--multiple .select2-selection__choice.red{
+    color:#c00;
+}
+
 @-moz-document url-prefix() {
     select.input-sm {
         -moz-appearance: none;

@@ -18,6 +18,11 @@
                     合同名称<i class="<{:getSortClass($sort,'c_name')}>"></i>
                 </a>
             </th>
+            <th>
+                <a href="/contract/all/sort/c_mname/order/<{:getSortOrder($sort,'c_mname')}>">
+                    责任人<i class="<{:getSortClass($sort,'c_mname')}>"></i>
+                </a>
+            </th>
             <th width="200">
                 <a href="/contract/all/sort/c_coname/order/<{:getSortOrder($sort,'c_coname')}>">
                     对方名称<i class="<{:getSortClass($sort,'c_coname')}>"></i>
@@ -52,11 +57,12 @@
         </tr>
         </thead>
         <tbody>
-        <{volist name="lists" id="val" empty="<tr><td colspan='10'>暂无数据</td></tr>"}>
+        <{volist name="lists" id="val" empty="<tr><td colspan='11'>暂无数据</td></tr>"}>
         <tr>
             <td><input type="checkbox" value="<{$val.c_id}>" class="lists-id" data-name="<{$val.c_no}>"></td>
             <td><a href="/contract/detail?id=<{$val.c_id}>"><{$val.c_no}></a></td>
             <td><{$val.c_name}></td>
+            <td><{$val.c_mname}></td>
             <td><{$val.c_coname}></td>
             <td style="color:<{if $val['c_type']==1}>green<{elseif $val['c_type']==2}>#c00<{else}>#000<{/if}>"><?php echo getTypeList($val['c_type']);?></td>
             <td><?php echo date("Y-m-d", $val['c_date']); ?></td>
