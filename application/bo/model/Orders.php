@@ -466,13 +466,13 @@ class   Orders extends BoModel
                 $v = $list[2][0] - $list[2][0] * $tax;
                 break;
             case "o_imoney" . $value['o_type'] . "_tax":
-                $v = $list[1][0] - $list[1][0];
+                $v = $list[1][0];
                 break;
             case "o_imoney" . $value['o_type']:
                 $v = $list[1][0] - $list[1][0] * $tax;
                 break;
             case "o_rmoney" . $value['o_type'] . "_tax":
-                $v = $list[3][0] - $list[3][0];
+                $v = $list[3][0];
                 break;
             case "o_rmoney" . $value['o_type']:
                 $v = $list[3][0] - $list[3][0] * $tax;
