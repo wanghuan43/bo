@@ -360,18 +360,19 @@ class   Orders extends BoModel
         $this->getOu();
         $count = $begin;
         $in = false;
-        $where = [];
+        $f = "o";
+        $this->alias($f);
         switch ($type) {
             case "project":
-                $this->where("o_pid", "=", $id);
+                $this->where($f.".o_pid", "=", $id);
                 break;
             case "contract":
-                $this->where("o_cid", "=", $id);
+                $this->where($f.".o_cid", "=", $id);
                 break;
             case "invoice":
             case "received":
             case "acceptance":
-                $this->where("o_id", "=", $id);
+                $this->where($f."o_id", "=", $id);
                 break;
         }
         if (is_array($search)) {
@@ -385,15 +386,14 @@ class   Orders extends BoModel
                     } elseif ($opt == "like") {
                         $val = "%$val%";
                     }
-                    $where[] = array(
-                        "field" => $value,
-                        "opt" => $opt,
-                        "val" => $val
-                    );
+                    if(in_array($value, ['i_type', 'i_tax', 'c_type', 'a_type', 'r_type', 'o_type','m_isAdmin']) AND empty($val)){
+                        break;
+                    }
+                    $this->where($f.".".$value, $opt, $val);
                 }
             }
         }
-        $list = $this->where($where)->select();
+        $list = $this->select();
         foreach ($list as $key => $value) {
             $in = true;
             $count = $cell = intval($begin) + intval($key);
