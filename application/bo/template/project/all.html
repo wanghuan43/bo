@@ -7,7 +7,11 @@
             <li>
                 <a href="<{:url('/project/export')}>" target="_blank" id="link-export" data-type="project" data-list-type="3"><i class="fa fa-file-excel-o"></i>导出</a>
             </li>
-
+            <{if $isAdmin}>
+            <li>
+                <a href="<{:url('/circulation/delAll/type/received')}>" id="btn-circulation-del" target="_blank" onclick="return false;"><i class="fa fa-users"></i>取消传阅<i class="fa fa-sort-desc"></i></a>
+            </li>
+            <{/if}>
             <li>
                 <a href="/circulation/add/type/project" id="btn-circulation" target="_blank" onclick="return false;"><i class="fa fa-users"></i>传阅<i class="fa fa-sort-desc"></i></a>
             </li>

@@ -87,7 +87,7 @@ class Circulation extends BoController
 
         $lists = $this->model->getList($id, $type);
 
-        $typeModel = model(ucfirst($type));
+        $typeModel = \model(ucfirst($type));
 
         $res = $typeModel->getCodeAndNameById($id);
 
@@ -99,6 +99,82 @@ class Circulation extends BoController
 
         $this->assign('lists', $lists);
         return $this->fetch();
+    }
+
+    public function delAll($type=false)
+    {
+        if($this->current->m_isAdmin != 1){
+            return ['flag'=>0,'msg'=>'无权限操作'];
+        }
+
+        if(empty($type)){
+            return ['flag'=>0,'msg'=>'参数错误'];
+        }
+
+        $params = $this->request->param();
+
+        if(empty($params['mids']) || empty($params['ids'])){
+            return ['flag'=>0,'msg'=>'参数错误'];
+        }
+
+        $this->model->where('ci_type','=',$type)->whereIn('ci_mid',$params['mids'])->whereIn('ci_otid',$params['ids'])->delete();
+
+        return ['flag'=>0,'msg'=>'操作成功'];
+
+    }
+
+    protected function deleteCheck($ids)
+    {
+        $ret = true;
+
+        if(empty($ids)){
+            $ret = ['flag'=>0,'msg'=>'参数错误'];
+        }elseif($this->current->m_isAdmin!=1){
+            $res = $this->model->whereIn('ci_id',$ids)->select();
+            $type = $otid = false;
+            foreach($res as $item){
+                if(empty($type)){
+                    $type = $item->ci_type;
+                    $otid = $item->ci_otid;
+                }elseif($type != $item->ci_type || $otid != $item->ci_otid){
+                    $ret = ['flag'=>0,'msg'=>'参数错误'];
+                    break;
+                }
+            }
+            $model = \model(ucfirst($type));
+            $res = $model->where($model->getPk(),'=',$otid)->find();
+            if(empty($res)){
+                $ret = ['flag'=>0,'msg'=>'系统错误，请联系管理员'];
+            }else{
+                switch ($type){
+                    case 'orders':
+                        $mid = $res->o_mid;
+                        break;
+                    case 'project':
+                        $mid = $res->p_mid;
+                        break;
+                    case 'contract':
+                        $mid = $res->c_mid;
+                        break;
+                    case 'invoice':
+                        $mid = $res->i_mid;
+                        break;
+                    case 'acceptance':
+                        $mid = $res->a_mid;
+                        break;
+                    case 'received':
+                        $mid = $res->r_mid;
+                        break;
+                    case 'company':
+                        $mid = $res->co_mid;
+                        break;
+                }
+                if($mid != $this->current->m_id){
+                    $ret = ['flag'=>0,'msg'=>'您无此操作权限'];
+                }
+            }
+        }
+        return $ret;
     }
 
 }

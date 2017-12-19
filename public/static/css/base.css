@@ -163,6 +163,10 @@ table.list thead{
     color: #37ac85;
 }
 
+#main-container #btn-circulation-del .fa-users {
+    color:#222;
+}
+
 .fa-filter {
     color: #4fadd8;
 }

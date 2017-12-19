@@ -118,14 +118,17 @@
 
     $("#btn-circulation").click(function () {
         var ids = new Array(), $this = $(this),url=$(this).attr("href");
+        var fLayer = "#popDIV .f-layer-member";
         $(".lists-id:checked").each(function () {
             ids.push($(this).val());
         });
         if (ids.length > 0) {
             if ($(".f-layer-member").length > 0) {
-                if( $._data($(".f-layer-member .save")[0],"events").click[0].data.url != url ){
-                    $(".f-layer-member .save").unbind("click").click({url:url},doCirculation);
+                if( $._data($("#popDIV .f-layer-member .save")[0],"events").click[0].data.url != url ){
+                    $("#popDIV .f-layer-member .save").unbind("click").click({url:url},doCirculation);
                 }
+                $(fLayer).find(".save").html("传阅");
+                $(fLayer).find(".close").html("关闭");
                 $(".f-layer-member-back").show();
                 $(".f-layer-member").addClass("show");
             } else {
@@ -148,6 +151,72 @@
                 })
             };
         } else {
+            custom.alert('请至少选择一项');
+        }
+        return false;
+    });
+
+    var doDelCirculation = function(e){
+        var url = e.data.url, ids = new Array(), mids = new Array();
+        ids = $("#main-container .selected-ids select").val();
+        mids = $("#sel-ids").val();
+        if (mids.length > 0) {
+            loading.show();
+            $.ajax({
+                url: url,
+                data: {
+                    ids: ids,
+                    mids: mids
+                },
+                method: "POST",
+                dataType: "json",
+                success: function (res) {
+                    loading.hide();
+                    if(e.data.refresh){
+                        contentAjax('main-container',{url:e.data.refresh});
+                    }else {
+                        custom.alert(res.msg);
+                    }
+                }
+            });
+        } else {
+            custom.alert("请至少选择一个用户");
+        }
+    };
+
+    $("#btn-circulation-del").click(function(){
+        var ids = $("#main-container .selected-ids select").val();
+        var url = $(this).attr("href");
+        var fLayer = "#popDIV .f-layer-member";
+        if(ids.length>0){
+            if ($(fLayer).length > 0) {
+                if( $._data($("#popDIV .f-layer-member .save")[0],"events").click[0].data.url != url ){
+                    $("#popDIV .f-layer-member .save").unbind("click").click({url:url},doDelCirculation);
+                }
+                $(fLayer).find(".save").html("取消传阅");
+                $(fLayer).find(".close").html("关闭");
+                $("#popDIV .f-layer-member-back").show();
+                $("#popDIV .f-layer-member").addClass("show");
+            } else {
+                $.ajax({
+                    url: '/member/searchMember',
+                    success: function (res) {
+                        $("#popDIV").append(res.content);
+                        $(".f-layer-member .save").html("取消传阅");
+                        $(".f-layer-member .close").html("关闭");
+                        $(".f-layer-member-back").show();
+                        $(".f-layer-member .close").click(function () {
+                            $(".f-layer-member-back").hide();
+                            $(".f-layer-member").removeClass("show");
+                        });
+                        $("#sel-ids").select2();
+                        $("#checked-result").show();
+                        $(".f-layer-member .save").click({url:url},doDelCirculation);
+                        setTimeout("$('.f-layer-member').addClass('show')", 500);
+                    }
+                })
+            };
+        }else{
             custom.alert('请至少选择一项');
         }
         return false;

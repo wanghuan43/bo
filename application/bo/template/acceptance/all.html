@@ -10,6 +10,11 @@
             <!--li>
                 <a href="<{:url("/acceptance/searchAcceptanceNoList")}>" target="_blank" id="searchList" stype="<{$stype}>"><i class="fa fa-filter"></i>筛选</a>
             </li-->
+            <{if $isAdmin}>
+            <li>
+                <a href="<{:url('/circulation/delAll/type/received')}>" id="btn-circulation-del" target="_blank" onclick="return false;"><i class="fa fa-users"></i>取消传阅<i class="fa fa-sort-desc"></i></a>
+            </li>
+            <{/if}>
             <li>
                 <a href="/circulation/add/type/acceptance" id="btn-circulation" target="_blank" onclick="return false;"><i class="fa fa-users"></i>传阅<i class="fa fa-sort-desc"></i></a>
             </li>
