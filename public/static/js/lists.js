@@ -282,4 +282,140 @@
         return false;
     });
 
+    $("#btn-taglib-del").click(function(){
+        var ids = new Array(), $this = $(this),url=$(this).attr("href");
+        var fLayer = "#popDIV .f-layer-taglib";
+        $(".lists-id:checked").each(function () {
+            ids.push($(this).val());
+        });
+        if (ids.length > 0) {
+            if ($(".f-layer-taglib").length > 0) {
+                if( $._data($("#popDIV .f-layer-taglib .save")[0],"events").click[0].data.url != url ){
+                    $("#popDIV .f-layer-taglib .save").unbind("click").click({url:url},doTaglibDel);
+                }
+                $(fLayer).find(".save").html("保存");
+                $(fLayer).find(".close").html("关闭");
+                $(".f-layer-taglib-back").show();
+                $(".f-layer-taglib").addClass("show");
+            } else {
+                $.ajax({
+                    url: '/taglib/searchTaglib',
+                    success: function (res) {
+                        $("#popDIV").append(res.content);
+                        $(".f-layer-taglib .save").html("保存");
+                        $(".f-layer-taglib .close").html("关闭");
+                        $(".f-layer-taglib-back").show();
+                        $(".f-layer-taglib .close").click(function () {
+                            $(".f-layer-taglib-back").hide();
+                            $(".f-layer-taglib").removeClass("show");
+                        });
+                        $("#sel-ids").select2();
+                        $("#checked-result").show();
+                        $(".f-layer-taglib .save").click({url:url},doCirculation);
+                        setTimeout("$('.f-layer-taglib').addClass('show')", 500);
+                    }
+                })
+            };
+        } else {
+            custom.alert('请至少选择一项');
+        }
+        return false;
+    });
+
+    $("#btn-taglib").click(function(){
+        var ids = new Array(), $this = $(this),url=$(this).attr("href");
+        var fLayer = "#popDIV .f-layer-taglib";
+        $(".lists-id:checked").each(function () {
+            ids.push($(this).val());
+        });
+        if (ids.length > 0) {
+            if ($(".f-layer-taglib").length > 0) {
+                if( $._data($("#popDIV .f-layer-taglib .save")[0],"events").click[0].data.url != url ){
+                    $("#popDIV .f-layer-taglib .save").unbind("click").click({url:url},doTaglib);
+                }
+                $(fLayer).find(".save").html("保存");
+                $(fLayer).find(".close").html("关闭");
+                $(".f-layer-taglib-back").show();
+                $(".f-layer-taglib").addClass("show");
+            } else {
+                $.ajax({
+                    url: '/taglib/searchTaglib',
+                    success: function (res) {
+                        $("#popDIV").append(res.content);
+                        $(".f-layer-taglib .save").html("保存");
+                        $(".f-layer-taglib .close").html("关闭");
+                        $(".f-layer-taglib-back").show();
+                        $(".f-layer-taglib .close").click(function () {
+                            $(".f-layer-taglib-back").hide();
+                            $(".f-layer-taglib").removeClass("show");
+                        });
+                        $("#sel-ids").select2();
+                        $("#checked-result").show();
+                        $(".f-layer-taglib .save").click({url:url},doCirculation);
+                        setTimeout("$('.f-layer-taglib').addClass('show')", 500);
+                    }
+                })
+            };
+        } else {
+            custom.alert('请至少选择一项');
+        }
+        return false;
+    });
+
+    var doTaglibDel = function(e){
+        var url = e.data.url, ids = new Array(), mids = new Array();
+        ids = $("#main-container .selected-ids select").val();
+        mids = $("#sel-ids").val();
+        if (mids.length > 0) {
+            loading.show();
+            $.ajax({
+                url: url,
+                data: {
+                    ids: ids,
+                    mids: mids
+                },
+                method: "POST",
+                dataType: "json",
+                success: function (res) {
+                    loading.hide();
+                    if(e.data.refresh){
+                        contentAjax('main-container',{url:e.data.refresh});
+                    }else {
+                        custom.alert(res.msg);
+                    }
+                }
+            });
+        } else {
+            custom.alert("请至少选择一个用户");
+        }
+    };
+
+    var doTaglib = function ( e ) {
+        var url = e.data.url, ids = new Array(), mids = new Array();
+        ids = $("#main-container .selected-ids select").val();
+        mids = $("#sel-ids").val();
+        if (mids.length > 0) {
+            loading.show();
+            $.ajax({
+                url: url,
+                data: {
+                    ids: ids,
+                    mids: mids
+                },
+                method: "POST",
+                dataType: "json",
+                success: function (res) {
+                    loading.hide();
+                    if(e.data.refresh){
+                        contentAjax('main-container',{url:e.data.refresh});
+                    }else {
+                        custom.alert(res.msg);
+                    }
+                }
+            });
+        } else {
+            custom.alert("请至少选择一个用户");
+        }
+    };
+
 })(jQuery);
