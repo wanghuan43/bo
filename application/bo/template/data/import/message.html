@@ -1,17 +1,21 @@
+<{notempty name="msgs"}>
 <ul>
+    <{volist name="msgs" id="msg"}>
+    <li class="bg-success"><i class="fa fa-info-circle fa-lg"></i> <{$msg}></li>
+    <{/volist}>
+</ul>
+<{/notempty}>
 <{notempty name="errors"}>
-<{volist name="errors" id="error"}>
-	<li class="error"><{$error}></li>
-<{/volist}>
+<ul>
+    <{volist name="errors" id="error"}>
+    <li class="bg-danger"><i class="fa fa-times-circle fa-lg"></i> <{$error}></li>
+    <{/volist}>
+</ul>
 <{/notempty}>
 <{notempty name="warnings"}>
-<{volist name="warnings" id="warning"}>
-	<li class="warning"><{$warning}></li>
-<{/volist}>
-<{/notempty}>
-<{notempty name="msgs"}>
-<{volist name="msgs" id="msg"}>
-	<li class="msg"><{$msg}></li>
-<{/volist}>
-<{/notempty}>
+<ul>
+    <{volist name="warnings" id="warning"}>
+    <li class="bg-warning"><i class="fa fa-warning fa-lg"></i> <{$warning}></li>
+    <{/volist}>
 </ul>
+<{/notempty}>

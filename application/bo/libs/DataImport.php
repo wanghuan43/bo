@@ -20,11 +20,14 @@ class DataImport
      * @param $type
      * @param bool $filePath
      * @param bool $sheetIndex
+     * @param $result
      * @return bool
      * @throws \Exception
      */
-    public function excelImport($type, $filePath = false, $sheetIndex = false)
+    public function excelImport($type, $filePath = false, $sheetIndex = false,&$result,$forceUpdate=true)
     {
+
+        $result = ['sCnt'=>0,'fCnt'=>0,'eLists'=>[]];
 
         $type = strtolower($type);
 
@@ -82,6 +85,8 @@ class DataImport
                         if(!$data[$key]) {
                             throw new \Exception('日期列 '.$val.' 格式不对');
                         }
+                    }else{
+                        $data[$key] = 0;
                     }
                 }
                 if(isset($config['moneyFields']) && in_array($key,$config['moneyFields'])){
@@ -138,7 +143,7 @@ class DataImport
         if($modelName == 'Orders' && isset($data['o_foreign'])){
             $res = $model->updateForeign($dataset);
         }else {
-            $res = $model->import($dataset);
+            $res = $model->import($dataset,$result,$forceUpdate);
         }
 
         CustomUtils::writeImportLog('IMPORT END',$modelName);

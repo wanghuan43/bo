@@ -26,7 +26,9 @@ class DataImport extends Command
 
         $import = new LibImport();
 
-        $import->excelImport($type);
+        $result = false;
+
+        $import->excelImport($type,false,false,$result);
 
     }
     

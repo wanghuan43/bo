@@ -181,9 +181,9 @@ return [
                 'r_money' => 'H',
                 'r_date' => 'G',
                 'r_subject' => 'D',
-                'r_content' => 'K',
                 'r_dname' => 'B',
-                'r_accdate' => 'J'
+                'r_accdate' => 'I',
+                'r_content' => 'J'
             ],
             'dateFields' => ['r_date'],
             'moneyFields' => ['r_money'],
@@ -192,6 +192,42 @@ return [
                 'r_type' => [
                     '收入' => 1,
                     '支出' => 2
+                ]
+            ]
+        ],
+        'invoice' => [
+            'file' => 'uploads/xlsx/invoice20171208.xlsx',
+            'model' => 'invoice',
+            'index' => 0,
+            'fields' => [
+                'i_no' => 'A',
+                'i_dname' => 'B',
+                'i_mname' => 'C',
+                'i_subject' => 'D',
+                'i_type' => 'E',
+                'i_coname' => 'F',
+                'i_date' => 'G',
+                'i_money' => 'H',
+                'i_tax' => 'I',
+                'i_accdate' => 'J',
+                'i_content' => 'K'
+            ],
+            'dateFields' => ['i_date'],
+            'moneyFields' => ['i_money'],
+            'desFields' => ['i_content'],
+            'enumFields' => [
+                'i_type' => [
+                    '收入' => 1,
+                    '支出' => 2
+                ],
+                'i_tax' => [
+                    '3%' => 1,
+                    '5%' => 2,
+                    '6%' => 3,
+                    '11%' => 4,
+                    '13' => 5,
+                    '17%' => 6,
+                    'default' => 7
                 ]
             ]
         ],
@@ -247,40 +283,17 @@ return [
                 ]
             ]
         ],
-        'invoice20171208' => [
-            'file' => 'uploads/xlsx/invoice20171208.xlsx',
+        'invoice20171220' => [ // update invoice i_content
+            'file' => 'uploads/default/invoice20171220.xlsx',
             'model' => 'invoice',
             'index' => 0,
             'fields' => [
                 'i_no' => 'A',
-                'i_subject' => 'D',
-                'i_coname' => 'F',
-                'i_money' => 'H',
-                'i_date' => 'G',
-                'i_mname' => 'C',
-                'i_type' => 'E',
-                'i_tax' => 'I',
-                'i_accdate' => 'J',
-                'i_dname' => 'B'
+                'i_date' => 'B',
+                'i_content' => 'C'
             ],
             'dateFields' => ['i_date'],
-            //'defaultFields' => ['co_code'=>''],
-            'moneyFields' => ['i_money'],
-            'enumFields' => [
-                'i_type' => [
-                    '收入' => 1,
-                    '支出' => 2
-                ],
-                'i_tax' => [
-                    '3%' => 1,
-                    '5%' => 2,
-                    '6%' => 3,
-                    '11%' => 4,
-                    '13' => 5,
-                    '17%' => 6,
-                    'default' => 7
-                ]
-            ]
+            'desFields' => ['i_content']
         ],
 
         'orders20171208' => [

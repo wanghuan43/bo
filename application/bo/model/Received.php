@@ -130,7 +130,7 @@ class Received extends BoModel
         return ['code' => $data['r_no'], 'name' => '付款单' . $data['r_no']];
     }
 
-    public function doImport($dataset = false)
+    public function doImport($dataset = false,&$result,$forceUpdate)
     {
         $mMember = new Member();
         $mCompany = new Company();
@@ -138,9 +138,17 @@ class Received extends BoModel
 
         foreach ($dataset as $key => $data) {
 
+            if(empty($forceUpdate)){
+                if($this->where('r_no','=',$data['r_no'])->find()){
+                    $result['failed'][] = array_merge($data,['error'=>'付款单已存在']);
+                }
+            }
+
             $did = $mDepartment->getDepartmentIdByName($data['r_dname']);
             if(empty($did)){
                 CustomUtils::writeImportLog('Department ID is null - '.serialize($data),strtolower($this->name));
+                $data['error'] = '部门没找到';
+                $result['failed'][] = $data;
                 unset($dataset[$key]);
                 continue;
             }else{
@@ -151,6 +159,8 @@ class Received extends BoModel
 
             if (empty($member)) {
                 CustomUtils::writeImportLog('Member ID is null - ' . serialize($data), strtolower($this->name));
+                $data['error'] = '员工未找到';
+                $result['failed'][] = $data;
                 unset($dataset[$key]);
                 continue;
             } else {
@@ -163,18 +173,33 @@ class Received extends BoModel
                 $data['r_coid'] = $c->co_id;
             } else {
                 CustomUtils::writeImportLog('Company ID is null - '.serialize($data),strtolower($this->name));
+                $data['error'] = '对方公司未找到';
+                $result['failed'][] = $data;
                 unset($dataset[$key]);
                 continue;
             }
             if(isset($data['r_money'])) {
+                if(empty($data['r_money'])){
+                    $result['warnings'][] = array_merge($data,['warning'=>'付款单金额为0']);
+                }
                 $data['r_noused'] = $data['r_money'];
                 $data['r_createtime'] = $data['r_updatetime'] = time();
             }else{
                 $data['r_updatetime'] = time();
             }
+
+            if(empty($data['r_date'])){
+                $result['warnings'][] = array_merge($data,['warning'=>'付款单日期为空']);
+            }
+
             $dataset[$key] = $data;
+
         }
+
+        $result['success'] = $dataset;
+
         return $this->insertDuplicate($dataset);
+
     }
 
 }

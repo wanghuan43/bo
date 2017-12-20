@@ -500,6 +500,8 @@ table.list td:first-child {
     border-top: solid 1px #eee;
     padding: 12px 0;
     margin-top: 2em;
+    height:500px;
+    overflow-y:scroll;
 }
 
 #import-msg ul {
@@ -514,16 +516,19 @@ table.list td:first-child {
     padding-left: 1.5em;
 }
 
-#import-msg ul li.error {
-    background: #f2dede;
+#import-msg .bg-success{
+    color:#1d9d74;
+    font-weight: bold;
 }
 
-#import-msg ul li.warning {
-    background: #fcf8e3;
+#import-msg .bg-warning{
+    color:#8a6d3b;
+    font-weight: bold;
 }
 
-#import-msg ul li.msg {
-    background: #dff0d8;
+#import-msg .bg-danger{
+    color:#c7254e;
+    font-weight: bold;
 }
 
 #loading {

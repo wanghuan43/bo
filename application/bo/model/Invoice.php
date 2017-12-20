@@ -148,9 +148,11 @@ class Invoice extends BoModel
 
     /**
      * @param $dataset
+     * @param $result
+     * @param $forceUpdate
      * @return array|bool
      */
-    protected function doImport($dataset)
+    protected function doImport($dataset,&$result,$forceUpdate)
     {
 
         $mCompany = new Company();
@@ -159,45 +161,104 @@ class Invoice extends BoModel
 
         foreach ($dataset as $key=>$data){
 
-            $did = $mDepartment->getDepartmentIdByName($data['i_dname']);
-            if(empty($did)){
-                CustomUtils::writeImportLog('Department ID is null - '.serialize($data),strtolower($this->name));
-                unset($dataset[$key]);
-                continue;
-            }else{
-                $data['i_did'] = $did;
+            if(isset($data['i_dname'])) {
+                $did = $mDepartment->getDepartmentIdByName($data['i_dname']);
+                if (empty($did)) {
+                    CustomUtils::writeImportLog('Department ID is null - ' . serialize($data), strtolower($this->name));
+                    $data['error'] = '部门未找到';
+                    $result['failed'][] = $data;
+                    unset($dataset[$key]);
+                    continue;
+                } else {
+                    $data['i_did'] = $did;
+                }
             }
 
-            $type = $data['i_type'] == 1 ? 2 : 1;
+            if(isset($data['i_coname'])) {
+                $type = $data['i_type'] == 1 ? 2 : 1;
 
-            $company = $mCompany->getCompany(false,$data['i_coname'],$type);
+                $company = $mCompany->getCompany(false, $data['i_coname'], $type);
 
-            if($company){
-                $data['i_coid'] = $company->co_id;
-            }else{
-                CustomUtils::writeImportLog('Company ID is null - '.serialize($data),strtolower($this->name));
-                unset($dataset[$key]);
-                continue;
+                if ($company) {
+                    $data['i_coid'] = $company->co_id;
+                } else {
+                    CustomUtils::writeImportLog('Company ID is null - ' . serialize($data), strtolower($this->name));
+                    $data['error'] = '公司未找到';
+                    $result['failed'][] = $data;
+                    unset($dataset[$key]);
+                    continue;
+                }
             }
 
-            $member = $mMember->getMemberByName($data['i_mname'],$data['i_dname']);
-
-            if($member){
-                $data['i_mid'] = $member->m_id;
-            }else{
-                CustomUtils::writeImportLog('Member ID is null - '.serialize($data),strtolower($this->name));
-                unset($dataset[$key]);
-                continue;
+            if(isset($data['i_mname'])) {
+                $member = $mMember->getMemberByName($data['i_mname'], $data['i_dname']);
+                if ($member) {
+                    $data['i_mid'] = $member->m_id;
+                } else {
+                    CustomUtils::writeImportLog('Member ID is null - ' . serialize($data), strtolower($this->name));
+                    $data['error'] = '负责人未找到';
+                    $result['failed'][] = $data;
+                    unset($dataset[$key]);
+                    continue;
+                }
             }
 
-            $data['i_noused'] = $data['i_money'];
-            $data['i_createtime'] = $data['i_updatetime'] = time();
+            if(empty($forceUpdate)){ //唯一性检查
+                if($this->where('i_no','=',$data['i_no'])->where('i_date','=',$data['i_date'])->find()){
+                    CustomUtils::writeImportLog('Data duplication - '.serialize($data),strtolower($this->name));
+                    $data['error'] = '发票已存在';
+                    $result['failed'][] = $data;
+                    unset($dataset[$key]);
+                    continue;
+                }
+            }
+
+            if(isset($data['i_date']) && empty($data['i_date'])){
+                $data['warning'] = '发票日期为空，请确认日期格式';
+                $result['warnings'][] = $data;
+                unset($data['warning']);
+            }
+
+            if(isset($data['i_money']) && empty($data['i_money'])){
+                $data['warning'] = '发票金额为0';
+                $result['warnings'][] = $data;
+                unset($data['warning']);
+            }
+
+            if(isset($data['i_money'])) {
+                $data['i_noused'] = $data['i_money'];
+                $data['i_createtime'] = $data['i_updatetime'] = time();
+            }else{
+                $data['i_updatetime'] = time();
+            }
 
             $dataset[$key] = $data;
 
         }
 
-        return $this->insertDuplicate($dataset);
+        $result['success'] = $dataset;
+
+        if(isset($data['i_did']) && isset($data['i_mid']) && isset($data['i_coid'])) {
+            return $this->insertDuplicate($dataset);
+        }else{
+            $sqlPrev = 'UPDATE `kj_invoice` SET ';
+            $arr = ['i_no','i_content'];
+            foreach ($dataset as $data){
+                $sql = "";
+                foreach($data as $key => $val){
+                    if(in_array($key,$arr)){
+                        $val = "'".$val."'";
+                    }
+                    if(empty($sql)){
+                        $sql = $sqlPrev.$key."=".$val;
+                    }else{
+                        $sql .= ",".$key."=".$val;
+                    }
+                }
+                $sql .= " WHERE i_no='".$data['i_no']."' AND i_date=".$data['i_date'];
+                $this->db()->execute($sql);
+            }
+        }
 
     }
 

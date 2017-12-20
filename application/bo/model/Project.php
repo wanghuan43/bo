@@ -102,16 +102,17 @@ class Project extends BoModel
      * @param $dataset
      * @return array|bool
      */
-    protected function doImport($dataset)
+    protected function doImport($dataset,&$result,$forceUpdate)
     {
         $mModel = new Member();
         $dModel =new Department();
 
         foreach ($dataset as $key => $data) {
-            if ($data['p_type'] != '项目编号') {
+
+            if ( isset($data['p_type']) && $data['p_type'] != '项目编号' ) {
                 unset($dataset[$key]);
                 continue;
-            } else {
+            } elseif( isset($data['p_type']) ) {
                 unset($data['p_type']);
             }
 

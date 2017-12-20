@@ -58,7 +58,7 @@ abstract class BoModel extends Model
         return $this->where($pk, '=', $id)->find()->getData();
     }
 
-    public function import($dataset){
+    public function import($dataset,&$result,$forceUpdate){
 
         $validateClass = '\\app\\bo\\validate\\'.$this->name;
 
@@ -68,22 +68,18 @@ abstract class BoModel extends Model
             $validate = false;
         }
 
-        $res = [];
-
         if($validate){
             foreach ($dataset as $key=>$data){
                 if(!$validate->scene('import')->check($data)) {
-                    $res[$key]['data'] = $data;
-                    $res[$key]['msg'] = $validate->getError();
-                    CustomUtils::writeImportLog('FAILED  - '.serialize($res[$key]),strtolower($this->name));
+                    $data['error'] = $validate->getError();
+                    $result['failed'][] = $data;
+                    CustomUtils::writeImportLog('FAILED  - '.serialize($data),strtolower($this->name));
                     unset($dataset[$key]);
                 }
             }
         }
 
-        $ret['validate'] = $res;
-
-        $ret['res'] = $this->doImport($dataset);
+        return $this->doImport($dataset,$result,$forceUpdate);
 
     }
 
