@@ -32,7 +32,8 @@ class Company extends BoModel
         $this->alias('co');
         if ($member->m_isAdmin == "2") {
             $this->join('__CIRCULATION__ c', "co.co_id = c.ci_otid", 'left');
-            $this->where("c.ci_mid", "=", $member->m_id)->where('c.ci_type', "=", "company");
+            $this->where("c.ci_mid", "=", $member->m_id)->where('c.ci_type', "=", "company")
+                ->group('co.co_id');
         }
         $this->field("co.*");
         foreach ($search as $key => $value) {

@@ -8,7 +8,7 @@
             <input type="checkbox" class="checkAll" value="all"/>
         </th>
         <th>发票号</th>
-        <th>开票摘要</th>
+        <th>摘要</th>
         <th>对方名称</th>
         <th>税率</th>
         <th>开票日期</th>
@@ -24,7 +24,7 @@
     <tr>
     <td><input type="checkbox" value="<{$val.i_id}>" class="lists-id"></td>
     <td><{$val.i_no}></td>
-    <td><{$val.i_content}></td>
+    <td><{$val.i_subject}></td>
     <td><{$val.i_coname}></td>
     <td><?php echo getTaxList($val['i_tax']); ?></td>
     <td><?php echo date("Y-m-d", $val['i_date']); ?></td>
