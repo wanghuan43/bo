@@ -196,6 +196,7 @@
     });
 
     $("#ipt-member-name").click(function () {
+
         $(".f-layer-back").show();
         if ($(".f-layer-member-1").length > 0) {
             custom.showFilter(".f-layer-member-1");
@@ -204,7 +205,15 @@
                 url: "/member/selectMember",
                 method: "POST",
                 success: function (res) {
-                    $("body").append(res);
+                    $("#popDIV").html(res);
+                    $("#member-1-list a").click(function(){
+                        var data = {
+                            url:$(this).attr("href"),
+                            method:"POST"
+                        }
+                        contentAjax("member-1-list",data);
+                        return false;
+                    });
                     $(".f-layer-member-1 .btn.save").click(function () {
                         var radio = $(".f-layer-member-1 .selectRadio:checked");
                         if (radio.length > 0) {
