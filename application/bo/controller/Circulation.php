@@ -127,7 +127,7 @@ class Circulation extends BoController
     {
         $ret = true;
 
-        if(empty($ids)){
+        /*if(empty($ids)){
             $ret = ['flag'=>0,'msg'=>'参数错误'];
         }elseif($this->current->m_isAdmin!=1){
             $res = $this->model->whereIn('ci_id',$ids)->select();
@@ -173,7 +173,7 @@ class Circulation extends BoController
                     $ret = ['flag'=>0,'msg'=>'您无此操作权限'];
                 }
             }
-        }
+        }*/
         return $ret;
     }
 
