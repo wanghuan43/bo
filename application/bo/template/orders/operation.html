@@ -461,7 +461,8 @@
 </form>
 <{load href="/static/js/plugin/select/select.min.js,/static/js/jquery-ui.custom.js"/}>
 <script>
-    var baseMonth = '<{$baseMonth}>',opCheck='<{$op_id}>',cmid = '<{$current.m_id}>',omid = '<{$order.o_mid}>';
+    var baseMonth = '<{$baseMonth}>',opCheck='<{$op_id}>',cmid = '<{$current.m_id}>',omid = '<{$order.o_mid}>',
+    isAdmin = '<{$isAdmin}>';
     var baseUrl = {
         contract: "<{:url('/contract/searchContract')}>",
         project: "<{:url('/project/searchProject')}>",
@@ -484,6 +485,10 @@
     };
 
     $(document).ready(function () {
+        if(isAdmin != '1'){
+            $("#opform input").prop("disabled", true);
+            $("#opform select").prop("disabled", true);
+        }
         if (opCheck != '0'){
             $("#o_deal option").each(function(index, element){
                 if(parseInt($(element).val()) < parseInt("<{$order.o_deal}>")){
