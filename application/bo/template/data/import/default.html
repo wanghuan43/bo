@@ -10,6 +10,13 @@
 		</div>	
 	</form>
 	<button class="btn btn-default" id="btn-data-import">确认</button>
+	<div class="bg-danger" id="import-info">
+		<ul>
+			<li><i class="fa fa-warning fa-lg"></i> Excel非必填列可以留空、但不能删除</li>
+			<li><i class="fa fa-warning fa-lg"></i> 为保证Excel能正常解析,请务必保证导入的Excel没有不需要的内容,包括背景色,尤其是超出有效内容范围的各种格式设置</li>
+			<li><i class="fa fa-warning fa-lg"></i> 请务必保证日期列格式为Y/m/d或者Y-m-d（记账月不在此例）</li>
+		</ul>
+	</div>
 	<div id="import-msg">
 		<{include file="data/import/message"}>
 	</div>

@@ -163,7 +163,7 @@ abstract class BoModel extends Model
         }catch (\Exception $e){
             $db->rollback();
             $log = 'Exception - '. $e->getMessage();
-            CustomUtils::writeImportLog($log,strtotime($this->name));
+            CustomUtils::writeImportLog($log,strtolower($this->name));
             return false;
         }
 

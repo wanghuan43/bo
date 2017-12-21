@@ -38,13 +38,13 @@ class Member extends BoController
     {
         $post = $this->request->post();
 
-        $arr = ['code', 'name', 'email', 'phone', 'department', 'did', 'office', 'password', 'isAdmin'];
+        $arr = ['code', 'name', 'email', 'phone', 'department', 'did', 'office', 'password', 'isAdmin','cname'];
 
         foreach ($arr as $item) {
             $data['m_' . $item] = trim($post[$item]);
         }
 
-        //$arr['m_email'] = strtoupper($arr['m_email']);
+        $data['m_email'] = strtoupper($data['m_email']);
 
         $validate = new \app\bo\validate\Member();
 
@@ -100,13 +100,13 @@ class Member extends BoController
     {
         $post = $this->request->post();
 
-        $arr = ['email', 'code', 'isAdmin', 'name', 'phone', 'department', 'did', 'office', 'password'];
+        $arr = ['email', 'code', 'isAdmin', 'name', 'phone', 'department', 'did', 'office', 'password','cname'];
 
         foreach ($arr as $k) {
             $member['m_' . $k] = trim($post[$k]);
         }
 
-        //$member['m_email'] = strtoupper($member['m_email']);
+        $member['m_email'] = strtoupper($member['m_email']);
 
         $member['m_id'] = $post['id'];
 

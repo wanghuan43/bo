@@ -77,8 +77,13 @@ class DataImport
                 $data = $config['defaultFields'];
             }
 
+            $hasValue = false;
+
             foreach ($config['fields'] as $key=>$val){
                 $data[$key] = addslashes(trim($row[$cols[$val]]));
+                if(!empty($data[$key])){
+                    $hasValue = true;
+                }
                 if(isset($config['dateFields']) && in_array($key,$config['dateFields'])){
                     if($data[$key]) {
                         $data[$key] = strtotime($data[$key]);
@@ -121,7 +126,7 @@ class DataImport
                 }
             }
 
-            if( $data )
+            if( $data && $hasValue )
                 $dataset[] = $data;
 
         }

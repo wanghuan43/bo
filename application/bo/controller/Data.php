@@ -144,7 +144,10 @@ class Data extends BoController
 
         }
 
-        $this->assign('msgs',['导入结束']);
+        $sCnt = isset($result['success'])?count($result['success']):0;
+        $fCnt = isset($result['failed'])?count($result['failed']):0;
+
+        $this->assign('msgs',["导入结束! 成功 $sCnt 失败 $fCnt"]);
         $this->assign('errors', $errors );
         $this->assign('warnings',$warnings);
 

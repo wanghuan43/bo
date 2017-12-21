@@ -7,7 +7,7 @@
     <div class="form-group">
         <label for="inputEmail" class="col-sm-2 control-label"><i class="asterisk">*</i>Email</label>
         <div class="col-sm-10">
-            <input type="text" class="form-control input-sm" id="inputEmail" name="email" required email="true"/>
+            <input type="text" class="form-control input-sm" id="inputEmail" name="email" required email="true" onkeyup="toUpperCase(this)" onblur="toUpperCase(this)"/>
         </div>
     </div>
 
@@ -40,7 +40,7 @@
     </div>
 
     <div class="form-group">
-        <label for="inputDepartment" class="col-sm-2 control-label"><i class="asterisk">*</i>科室</label>
+        <label for="inputDepartment" class="col-sm-2 control-label"><i class="asterisk">*</i>部门</label>
         <div class="col-sm-10">
             <input type="text" class="form-control input-sm" id="inputDepartment" name="department" readonly required/>
             <input type="hidden" name="did" />
@@ -48,9 +48,16 @@
     </div>
 
     <div class="form-group">
-        <label for="inputOffice" class="col-sm-2 control-label">部门</label>
+        <label for="inputOffice" class="col-sm-2 control-label">组织</label>
         <div class="col-sm-10">
             <input type="text" class="form-control input-sm" id="inputOffice" name="office"/>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label for="inputCompany" class="col-sm-2 control-label">公司</label>
+        <div class="col-sm-10">
+            <input type="text" class="form-control input-sm" id="inputCompany" name="cname"/>
         </div>
     </div>
 

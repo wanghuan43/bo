@@ -41,11 +41,11 @@ return [
             'fields' => [
                 'm_code' => 'A',
                 'm_name' => 'B',
-                'm_email' => 'C',
-                'm_phone' => 'D',
+                'm_phone' => 'C',
+                'm_email' => 'D',
                 'm_cname' => 'E',
-                'm_department' => 'G',
                 'm_office' => 'F',
+                'm_department' => 'G',
                 'm_isAdmin' => 'H'
             ],
             'enumFields' => [
@@ -283,7 +283,7 @@ return [
                 ]
             ]
         ],
-        'invoice20171220' => [ // update invoice i_content
+        'invoice20171220' => [
             'file' => 'uploads/default/invoice20171220.xlsx',
             'model' => 'invoice',
             'index' => 0,
@@ -292,8 +292,7 @@ return [
                 'i_date' => 'B',
                 'i_content' => 'C'
             ],
-            'dateFields' => ['i_date'],
-            'desFields' => ['i_content']
+            'dateFields' => ['i_date']
         ],
 
         'orders20171208' => [

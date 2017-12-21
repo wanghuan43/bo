@@ -26,6 +26,11 @@
             </a>
         </th>
         <th>
+            <a href="/member/all/sort/m_cname/order/<{:getSortOrder($sort,'m_cname')}>">
+                公司<i class="<{:getSortClass($sort,'m_cname')}>"></i>
+            </a>
+        </th>
+        <th>
             <a href="/member/all/sort/m_office/order/<{:getSortOrder($sort,'m_office')}>">
                 组织<i class="<{:getSortClass($sort,'m_office')}>"></i>
             </a>
@@ -55,6 +60,7 @@
         <td><{$vo.m_code}></td>
         <td><{$vo.m_email}></td>
         <td><{$vo.m_phone}></td>
+        <td><{$vo.m_cname}></td>
         <td><{$vo.m_office}></td>
         <td><{$vo.m_department}></td>
         <td><{if $vo.m_is_lead == 1}><span style="color: green;">是</span><{else}><span style="color:red">否</span><{/if}></td>
