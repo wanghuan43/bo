@@ -104,14 +104,21 @@ class Department extends BoController
     public function del()
     {
         $ids = $this->request->post('ids/a');
-        $list = $this->model->whereIn($this->model->getPk(),$ids)->select();
-        $mCodes = [];
-        $ret = parent::del();
-        if($ret['flag']==1){ //删除成功
-            foreach ($list as $i){
-                $mCodes[] = $i->m_code;
+        $res = $this->deleteCheck($ids);
+        if($res === true) {
+            $list = $this->model->whereIn($this->model->getPk(), $ids)->select();
+            $mCodes = [];
+            $ret = parent::del();
+            if ($ret['flag'] == 1) { //删除成功
+                foreach ($list as $i) {
+                    $mCodes[] = $i->m_code;
+                }
+                Member::update(['m_is_lead' => 0], ['m_code' => ['in', $mCodes]]);
             }
-            Member::update(['m_is_lead'=>0],['m_code'=>['in',$mCodes]]);
+        }else{
+            $ret = $res;
+            if(!isset($ret['flag'])) $ret['flag'] = 0;
+            if(!isset($ret['msg'])) $ret['msg'] = '选择项不能全部被删除';
         }
         return $ret;
     }
