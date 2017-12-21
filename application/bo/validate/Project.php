@@ -35,7 +35,7 @@ class Project extends BoValidate
     ];
 
     protected $scene = [
-        'import' => ['p_no' => 'require', 'p_name']
+        'import' => ['p_no' =>'require|alphaDash', 'p_name','p_income','p_pay']
     ];
 
 }

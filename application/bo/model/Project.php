@@ -116,12 +116,22 @@ class Project extends BoModel
                 unset($data['p_type']);
             }
 
+            if(empty($forceUpdate)){
+                if($this->where('p_no','=',$data['p_no'])->find()){
+                    CustomUtils::writeImportLog('Project is already exist - '.serialize($data),strtolower($this->name));
+                    $result['failed'][] = array_merge($data,['error'=>'项目已存在']);
+                    unset($dataset[$key]);
+                    continue;
+                }
+            }
+
             $m = $mModel->getMemberByName($data['p_mname'],$data['p_dname']);
 
             if(!empty($m))
                 $data['p_mid'] = $m->m_id;
             else{
                 CustomUtils::writeImportLog('Member ID is null - '.serialize($data),strtolower($this->name));
+                $result['failed'][] = array_merge($data,['error'=>'责任人未找到']);
                 unset($dataset[$key]);
                 continue;
             }
@@ -129,20 +139,29 @@ class Project extends BoModel
             $did = $dModel->getDepartmentIdByName($data['p_dname']);
             if(empty($did)){
                 CustomUtils::writeImportLog('Department ID is null - '.serialize($data),strtolower($this->name));
+                $result['failed'][] = array_merge($data,['error'=>'部门未找到']);
                 unset($dataset[$key]);
                 continue;
             }else{
                 $data['p_did'] = $did;
             }
 
-            $data['p_income'] = floatval($data['p_income']);
-            $data['p_pay'] = floatval($data['p_pay']);
+            if(isset($data['p_income']))
+                $data['p_income'] = floatval($data['p_income']);
+
+            if(isset($data['p_pay']))
+                $data['p_pay'] = floatval($data['p_pay']);
+
+            if(!isset($data['p_date']) || empty($data['p_date']))
+                $data['p_date'] = time();
 
             $data['p_createtime'] = $data['p_updatetime'] = time();
 
             $dataset[$key] = $data;
 
         }
+
+        $result['success'] = $dataset;
 
         return $this->insertDuplicate($dataset);
 

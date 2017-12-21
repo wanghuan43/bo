@@ -18,25 +18,29 @@ class Acceptance extends BoValidate
         'a_coname' => 'require',
         'a_money' => 'require|money|moneyValidity',
         'a_date' => 'require|date',
-        'a_accdate' => 'accounting'
+        'a_accdate' => 'accounting',
+        'a_dname' => 'require',
+        'a_mname' => 'require'
     ];
 
     protected $message = [
         'a_no.require' => '验收单号不能为空',
         'a_no.alphaDash' => '验收单号格式不正确',
         'a_no.unique' => '验收单号已存在',
-        'a_subject' => '主题不能为空',
+        'a_subject' => '摘要不能为空',
         'a_coname' => '对方公司不能为空',
         'a_money.require' => '总金额不能为空',
         'a_money.money' => '总金额格式不正确',
         'a_money.moneyValidity' => '总金额和已对应订单金额冲突',
         'a_date.require' => '验收时间不能为空',
         'a_date.date' => '验收日期格式不正确',
-        'a_accdate' => '记账月格式不正确'
+        'a_accdate' => '记账月格式不正确',
+        'a_dname' => '部门不能为空',
+        'a_mname' => '责任人不能为空'
     ];
 
     protected $scene = [
-        'import' => ['a_no'=>'require']
+        'import' => ['a_no'=>'require','a_subject','a_coname','a_dname'=>'require','a_manme'=>'require']
     ];
 
     protected function moneyValidity($value,$rule,$data)

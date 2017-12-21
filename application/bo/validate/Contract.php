@@ -35,11 +35,13 @@ class Contract extends BoValidate
         'c_money.money' => '合同金额不正确',
         'c_date.require' => '签约日期不能为空',
         'c_date.date' => '签约日期格式不正确',
-        'c_accdate' => '记账月格式不正确'
+        'c_accdate' => '记账月格式不正确',
+        'c_mname' => '责任人不能为空',
+        'c_dname' => '部门不能为空'
     ];
 
     protected $scene = [
-        'import' => ['c_no'=>'require','c_name']
+        'import' => ['c_no'=>'require','c_name','c_coname','c_money','c_date','c_mname'=>'require','c_dname'=>'require']
     ];
 
 }

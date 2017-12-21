@@ -143,7 +143,11 @@ class DataImport
 
         $model = new $class();
 
-        CustomUtils::writeImportLog('IMPORT START',$modelName);
+        $mid = $model->getCurrent();
+
+        if(empty($mid)) $mid = 'COMMAND';
+
+        CustomUtils::writeImportLog('IMPORT START BY '.$mid,$modelName);
 
         if($modelName == 'Orders' && isset($data['o_foreign'])){
             $res = $model->updateForeign($dataset);
@@ -151,7 +155,7 @@ class DataImport
             $res = $model->import($dataset,$result,$forceUpdate);
         }
 
-        CustomUtils::writeImportLog('IMPORT END',$modelName);
+        CustomUtils::writeImportLog('IMPORT END BY '.$mid,$modelName);
 
         return $res;
 
