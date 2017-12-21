@@ -59,6 +59,8 @@ class Contract extends BoController
 
         $data['c_mid'] = $this->current->m_id;
         $data['c_mname'] = $this->current->m_name;
+        $data['c_did'] = $this->current->m_did;
+        $data['c_dname'] = $this->current->m_department;
 
         $data['c_createtime'] = $data['c_updatetime'] = time();
 
