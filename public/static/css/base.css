@@ -744,6 +744,10 @@ label.error:before{
     color:#c00;
 }
 
+textarea.form-control{
+    min-height:8em;
+}
+
 @-moz-document url-prefix() {
     select.input-sm {
         -moz-appearance: none;
