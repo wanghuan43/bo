@@ -3,6 +3,7 @@
 namespace app\bo\model;
 
 use app\bo\libs\BoModel;
+use app\bo\libs\CustomUtils;
 use think\Request;
 
 class Company extends BoModel
@@ -39,9 +40,9 @@ class Company extends BoModel
         foreach ($search as $key => $value) {
             $this->where("co." . $value['field'], $value['opt'], $value['val']);
         }
-        if( $limit===false ){
+        if ($limit === false) {
             $list = $this->select();
-        }else {
+        } else {
             $list = $this->paginate($limit, false, array("query" => ["c_type" => Request::instance()->get("c_type")]));
         }
         return $list;
@@ -54,12 +55,13 @@ class Company extends BoModel
      * @param bool $type
      * @return array|false|\PDOStatement|string|\think\Model
      */
-    public function getCompany($code=false,$name=false,$type=false){
+    public function getCompany($code = false, $name = false, $type = false)
+    {
 
 
-        if(!$code && !$name){
+        if (!$code && !$name) {
             $res = false;
-        }else {
+        } else {
             $this->where('co_status', '=', 1);
 
             if ($code) {
@@ -79,8 +81,37 @@ class Company extends BoModel
 
     }
 
-    protected function doImport($dataset)
+    protected function doImport($dataset, &$result, $forceUpdate)
     {
+
+        foreach ($dataset as $key=>$data) {
+
+            if (!$forceUpdate) {
+                $coName = $data['co_name'];
+                $coCode = $data['co_code'];
+                $coStatus = isset($data['co_status']) && $data['co_status'] ? $data['co_status'] : 1;
+                $coType = isset($data['co_type']) && $data['co_type'] ? $data['co_type'] : 1;
+                $t = $coType == 1 ? '供应商' : '客户';
+                $res = $this->where('co_name', '=', $coName)->where('co_code', '=', $coCode)
+                    ->where('co_status', '=', $coStatus)->where('co_type', '=', $coType)->find();
+                if ($res) {
+                    CustomUtils::writeImportLog('Failed for unique key - ' . serialize($data), strtolower($this->name));
+                    $result['failed'][] = array_merge($data, ['error' => $t . '已存在']);
+                    unset($dataset[$key]);
+                    continue;
+                }
+
+            }
+
+            if(!isset($data['co_create_time']) || empty($data['co_create_time'])){
+                $data['co_create_time'] = time();
+            }
+            $data['co_updatetime'] = time();
+
+            $dataset[$key] = $data;
+
+        }
+        $result['success'] = $dataset;
         return $this->insertDuplicate($dataset);
     }
 

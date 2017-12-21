@@ -35,7 +35,7 @@ class Member extends BoValidate
     ];
 
     protected $scene = [
-        'import' => ['m_email'=>'require|email','m_code'=>'require','m_name']
+        'import' => ['m_email','m_code','m_name','m_phone','m_department']
     ];
 
 

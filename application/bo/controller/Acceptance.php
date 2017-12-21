@@ -54,6 +54,8 @@ class Acceptance extends BoController
         $data['a_accdate'] = trim($post['accdate']);
         $data['a_mid'] = $this->current->m_id;
         $data['a_mname'] = $this->current->m_name;
+        $data['a_dname'] = $this->current->m_department;
+        $data['a_did'] = $this->current->m_did;
 
         $validate = validate('Acceptance');
 

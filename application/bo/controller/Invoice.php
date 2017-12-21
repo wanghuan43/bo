@@ -57,6 +57,8 @@ class Invoice extends BoController
         $data['i_accdate'] = trim($post['accdate']);
         $data['i_mid'] = $this->current->m_id;
         $data['i_mname'] = $this->current->m_name;
+        $data['i_did'] = $this->current->m_did;
+        $data['i_dname'] = $this->current->m_department;
         $data['i_createtime'] = $data['i_updatetime'] = time();
 
         $validate = validate('Invoice');

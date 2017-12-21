@@ -16,6 +16,7 @@
                 <{/if}>
             </th>
             <th>付/回款单号</th>
+            <th>摘要</th>
             <th>对方名称</th>
             <th>类型</th>
             <th class="date">付/回款日期</th>
@@ -45,6 +46,7 @@
             <td><input type="radio" <{if !empty($fi)}><{$val['r_noused']=="0.00"?"disabled":""}><{/if}> class="selectRadio" name="selectRadio" value="<{$val.r_id}>" data="<{$val.r_no}>" json="<?php echo urlencode(json_encode($json)); ?>" /></td>
             <td><{$val.r_no}></td>
             <{/if}>
+            <td><{$val.r_subject}></td>
             <td><{$val.r_coname}></td>
             <td><?php echo getTypeList($val['r_type']); ?></td>
             <td><?php echo date("Y-m-d", $val['r_date']); ?></td>

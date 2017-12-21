@@ -29,11 +29,12 @@ return [
                 'p_dname' => 'D',
                 'p_income' => 'E',
                 'p_pay' => 'F',
-                'p_date' => 'G'
+                'p_date' => 'G',
+                'p_content'=>'H'
             ],
             'dateFields' => ['p_date'],
-            'moneyFields' => ['p_income', 'p_pay'],
-            'defaultFields' => ['p_type' => '项目编号']
+            'desFields' => ['p_content'],
+            'moneyFields' => ['p_income', 'p_pay']
         ],
         'member' => [
             'file' => 'uploads/xlsx/人事员工.xlsx',
@@ -41,11 +42,11 @@ return [
             'fields' => [
                 'm_code' => 'A',
                 'm_name' => 'B',
-                'm_email' => 'C',
-                'm_phone' => 'D',
+                'm_phone' => 'C',
+                'm_email' => 'D',
                 'm_cname' => 'E',
-                'm_department' => 'G',
                 'm_office' => 'F',
+                'm_department' => 'G',
                 'm_isAdmin' => 'H'
             ],
             'enumFields' => [
@@ -62,40 +63,40 @@ return [
             'fields' => [
                 'co_code' => 'A',
                 'co_name' => 'B',
-                'co_remark' => 'L',
-                //'co_mnemonic_code' => 'C', //助记码
-                //'co_industry' => 'D', //行业
+                'co_tax_id' => 'C', //税务登记号
                 'co_address' => 'D',
                 'co_phone' => 'E',
-                //'co_internal_flag' => 'G', //内部
-                'co_tax_id' => 'C', //税务登记号
-                //'co_reg_id' => 'I', //工商注册号
-                //'co_lr' => 'J', //法人代表
-                //'co_status' => 'K', //状态 0 => 禁用，1=>核准
-                //'co_internal_name' => 'L', //集团内公司名称
-                //'co_create_time' => 'M',
-                //'co_flag' => 'N', //委外商 0=>否,1=>是
-                //'co_create_org' => 'O' //创建管理单元/创建组织
                 'co_bank' => 'F',
                 'co_bank_card' => 'G',
                 'co_invoice_type' => 'H',
                 'co_invoice_address' => 'I',
-                'co_invoice_recipient' => 'J',//发票接收人
-                'co_invoice_phone' => 'K' //发票接收人电话
+                'co_invoice_recipient' => 'J',//发票接收人L
+                'co_invoice_phone' => 'K', //发票接收人电话
+                'co_remark' => 'L',
+                'co_mnemonic_code' => 'M', //助记码
+                'co_industry' => 'N', //行业
+                'co_internal_flag' => 'O', //内部
+                'co_reg_id' => 'P', //工商注册号
+                'co_lr' => 'Q', //法人代表
+                'co_status' => 'R', //状态 0 => 禁用，1=>核准
+                'co_internal_name' => 'S', //集团内公司名称
+                'co_create_time' => 'T',
+                'co_flag' => 'U', //委外商 0=>否,1=>是
+                'co_create_org' => 'V' //创建管理单元/创建组织
             ],
             'dateFields' => ['co_create_time'],
             'enumFields' => [
                 'co_internal_flag' => [
-                    '否' => 0,
-                    'default' => 1
+                    '是' => 1,
+                    'default' => 0
                 ],
                 'co_status' => [
                     '禁用' => 0,
                     'default' => 1
                 ],
                 'co_flag' => [
-                    '否' => 0,
-                    'default' => 1
+                    '是' => 1,
+                    'default' => 0
                 ]
             ],
             'defaultFields' => [
@@ -109,32 +110,30 @@ return [
             'fields' => [
                 'co_code' => 'A',
                 'co_name' => 'B',
-                'co_remark' => 'L',
-                //'co_mnemonic_code' => 'C', //助记码
-                //'co_industry' => 'D', //行业
+                'co_tax_id' => 'C', //税务登记号
                 'co_address' => 'D',
                 'co_phone' => 'E',
-                //'co_internal_flag' => 'G', //内部
-                'co_tax_id' => 'C', //税务登记号
-                //'co_reg_id' => 'I', //工商注册号
-                //'co_lr' => 'J', //法人代表
-                //'co_status' => 'K', //状态 0 => 禁用，1=>核准
-                //'co_internal_name' => 'L', //集团内公司名称
-                //'co_create_time' => 'M',
-                //'co_flag' => 'N', //委外商 0=>否,1=>是
-                //'co_create_org' => 'O' //创建管理单元/创建组织
                 'co_bank' => 'F',
                 'co_bank_card' => 'G',
                 'co_invoice_type' => 'H',
                 'co_invoice_address' => 'I',
-                'co_invoice_recipient' => 'J',//发票接收人
-                'co_invoice_phone' => 'K' //发票接收人电话
+                'co_invoice_recipient' => 'J',//发票接收人L
+                'co_invoice_phone' => 'K', //发票接收人电话
+                'co_remark' => 'L',
+                'co_mnemonic_code' => 'M', //助记码
+                'co_industry' => 'N', //行业
+                'co_internal_flag' => 'O', //内部
+                'co_reg_id' => 'P', //工商注册号
+                'co_lr' => 'Q', //法人代表
+                'co_status' => 'R', //状态 0 => 禁用，1=>核准
+                'co_create_org' => 'S', //创建管理单元/创建组织
+                'co_create_time' => 'T'
             ],
             'dateFields' => ['co_create_time'],
             'enumFields' => [
                 'co_internal_flag' => [
-                    '否' => 0,
-                    'default' => 1
+                    '是' => 1,
+                    'default' => 0
                 ],
                 'co_status' => [
                     '禁用' => 0,
@@ -142,7 +141,8 @@ return [
                 ]
             ],
             'defaultFields' => [
-                'co_type' => 2
+                'co_type' => 2,
+                'co_flag' => 0
             ]
         ],
         'contract' => [ //主数据 - 销售合同
@@ -150,22 +150,52 @@ return [
             'model' => 'contract',
             'index' => 0,
             'fields' => [
-                'c_money' => 'H',
-                'c_coname' => 'F',
-                'c_mname' => 'C',
-                'c_date' => 'G',
                 'c_no' => 'A',
+                'c_dname' => 'B',
+                'c_mname' => 'C',
                 'c_name' => 'D',
                 'c_type' => 'E',
+                'c_coname' => 'F',
+                'c_date' => 'G',
+                'c_money' => 'H',
                 'c_accdate' => 'I',
-                'c_dname' => 'B'
+                'c_bakup' => 'J'
             ],
             'dateFields' => ['c_date'],
             'moneyFields' => ['c_money'],
+            'desFields' => ['c_bakup'],
             'enumFields' => [
                 'c_type' => [
                     '收入' => 1,
-                    '支出' => 2
+                    '支出' => 2,
+                    'default' => 1
+                ]
+            ]
+        ],
+        'acceptance' => [
+            'file' => 'uploads/xlsx/acceptance20171208.xlsx',
+            'model' => 'acceptance',
+            'index' => 0,
+            'fields' => [
+                'a_no' => 'A',
+                'a_dname' => 'B',
+                'a_mname' => 'C',
+                'a_subject' => 'D',
+                'a_type' => 'E',
+                'a_coname' => 'F',
+                'a_date' => 'G',
+                'a_money' => 'H',
+                'a_accdate' => 'I',
+                'a_content' => 'J'
+            ],
+            'dateFields' => ['a_date'],
+            'moneyFields' => ['a_money'],
+            'desFields' => ['a_content'],
+            'enumFields' => [
+                'a_type' => [
+                    '收入' => 1,
+                    '支出' => 2,
+                    'default' => 1
                 ]
             ]
         ],
@@ -283,7 +313,7 @@ return [
                 ]
             ]
         ],
-        'invoice20171220' => [ // update invoice i_content
+        'invoice20171220' => [
             'file' => 'uploads/default/invoice20171220.xlsx',
             'model' => 'invoice',
             'index' => 0,
@@ -292,8 +322,7 @@ return [
                 'i_date' => 'B',
                 'i_content' => 'C'
             ],
-            'dateFields' => ['i_date'],
-            'desFields' => ['i_content']
+            'dateFields' => ['i_date']
         ],
 
         'orders20171208' => [

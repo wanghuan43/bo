@@ -137,7 +137,7 @@ class Acceptance extends BoModel
         return ['code' => $data['a_no'], 'name' => '验收单' . $data['a_no']];
     }
 
-    public function doImport($dataset = false)
+    public function doImport($dataset = false,&$result,$forceUpdate)
     {
         $mCompany = new Company();
         $mMember = new Member();
@@ -147,6 +147,7 @@ class Acceptance extends BoModel
             $did = $mDepartment->getDepartmentIdByName($data['a_dname']);
             if (empty($did)) {
                 CustomUtils::writeImportLog('Department ID is null - ' . serialize($data), strtolower($this->name));
+                $result['failed'][] = array_merge($data,['error'=>'部门未找到']);
                 unset($dataset[$key]);
                 continue;
             } else {
@@ -156,6 +157,7 @@ class Acceptance extends BoModel
             $m = $mMember->getMemberByName($data['a_mname'], $data['a_dname']);
             if (empty($m)) {
                 CustomUtils::writeImportLog('Member ID is null - ' . serialize($data), strtolower($this->name));
+                $result['failed'][] = array_merge($data,['error'=>'责任人未找到']);
                 unset($dataset[$key]);
                 continue;
             } else {
@@ -169,6 +171,14 @@ class Acceptance extends BoModel
                 $data['a_coid'] = $c->co_id;
             } else {
                 CustomUtils::writeImportLog('Company ID is null - '.serialize($data),strtolower($this->name));
+                $result['failed'][] = array_merge($data,['error'=>'公司未找到']);
+                unset($dataset[$key]);
+                continue;
+            }
+
+            if(empty($forceUpdate) && $this->where('a_no','=',$data['a_no'])->find()){
+                CustomUtils::writeImportLog('Acceptance is already exist - '.serialize($data),strtolower($this->name));
+                $result['failed'][] = array_merge($data,['error'=>'验收单已存在']);
                 unset($dataset[$key]);
                 continue;
             }

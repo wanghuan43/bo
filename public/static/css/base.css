@@ -510,10 +510,8 @@ table.list td:first-child {
 
 #import-msg ul li {
     display: block;
-    height: 3em;
-    line-height: 3em;
     margin-bottom: 2px;
-    padding-left: 1.5em;
+    padding:1em 1.5em;
 }
 
 #import-msg .bg-success{
@@ -521,11 +519,19 @@ table.list td:first-child {
     font-weight: bold;
 }
 
+#import-info,
 #import-msg .bg-warning{
     color:#8a6d3b;
     font-weight: bold;
 }
-
+#import-info{
+    margin-top:15px;
+    padding:15px;
+}
+#import-info ul li{
+    height:1.8em;
+    line-height:1.8em;
+}
 #import-msg .bg-danger{
     color:#c7254e;
     font-weight: bold;
@@ -736,6 +742,10 @@ label.error:before{
 
 .select2-selection--multiple .select2-selection__choice.red{
     color:#c00;
+}
+
+textarea.form-control{
+    min-height:8em;
 }
 
 @-moz-document url-prefix() {

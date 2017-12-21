@@ -16,7 +16,11 @@ class BoValidate extends Validate
     //金额验证
     protected function money($value,$rule,$data)
     {
-        return $this->regex($value,'/^\-?(([1-9][0-9]*)|(([0]\.\d{0,2}|[1-9][0-9]*\.\d{0,2})))$/');
+        if($value == '' || $value === 0 || $value === '0'){
+            return true;
+        }else {
+            return $this->regex($value, '/^\-?(([1-9][0-9]*)|(([0]\.\d{0,2}|[1-9][0-9]*\.\d{0,2})))$/');
+        }
     }
 
     //电话号码验证

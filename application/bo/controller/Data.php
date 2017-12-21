@@ -8,7 +8,7 @@ use app\bo\libs\DataImport;
 class Data extends BoController
 {
 
-    protected $types = ['department', 'member', 'supplier', 'customer', 'project', 'contract','invoice','received'];
+    protected $types = ['department', 'member', 'supplier', 'customer', 'project', 'contract','invoice','received','acceptance'];
 
     protected $typeNames = [
         'department' => '部门',
@@ -18,7 +18,8 @@ class Data extends BoController
         'project' => '项目',
         'contract' => '合同',
         'invoice' => '发票',
-        'received' => '付款单'
+        'received' => '付款单',
+        'acceptance' => '验收单'
     ];
 
     public function import($type = FALSE)
@@ -144,7 +145,10 @@ class Data extends BoController
 
         }
 
-        $this->assign('msgs',['导入结束']);
+        $sCnt = isset($result['success'])?count($result['success']):0;
+        $fCnt = isset($result['failed'])?count($result['failed']):0;
+
+        $this->assign('msgs',["导入结束! 成功 $sCnt 失败 $fCnt"]);
         $this->assign('errors', $errors );
         $this->assign('warnings',$warnings);
 

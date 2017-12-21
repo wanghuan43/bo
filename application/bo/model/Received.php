@@ -80,6 +80,13 @@ class Received extends BoModel
             'operators' => array(
                 'like' => '包含'
             )
+        ),
+        'r_subject' => array(
+            'name' => '摘要',
+            'type' => 'text',
+            'operators' => array(
+                'like' => '包含'
+            )
         )
     );
 

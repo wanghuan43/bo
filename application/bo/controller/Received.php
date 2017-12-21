@@ -54,6 +54,8 @@ class Received extends BoController
         $data['r_accdate'] = trim($post['accdate']);
         $data['r_mid'] = $this->current->m_id;
         $data['r_mname'] = $this->current->m_name;
+        $data['r_did'] = $this->current->m_did;
+        $data['r_dname'] = $this->current->m_department;
         $data['r_createtime'] = $data['r_updatetime'] = time();
 
         $validate = validate('Received');
