@@ -136,6 +136,7 @@
                     url: '/member/searchMember',
                     success: function (res) {
                         $("#popDIV").append(res.content);
+                        pageLimit();
                         $(".f-layer-member .save").html("传阅");
                         $(".f-layer-member .close").html("关闭");
                         $(".f-layer-member-back").show();
@@ -202,6 +203,7 @@
                     url: '/member/searchMember',
                     success: function (res) {
                         $("#popDIV").append(res.content);
+                        pageLimit();
                         $(".f-layer-member .save").html("取消传阅");
                         $(".f-layer-member .close").html("关闭");
                         $(".f-layer-member-back").show();
@@ -235,6 +237,7 @@
                 url: '/member/searchMember',
                 success: function (res) {
                     $("#popDIV").append(res.content);
+                    pageLimit();
                     $(".f-layer-member .save").html("传阅");
                     $(".f-layer-member .close").html("关闭");
                     $(".f-layer-member-back").show();
@@ -268,6 +271,7 @@
             success: function (data) {
                 loading.hide();
                 $("#popDIV").html(data.content);
+                pageLimit();
                 $(cla).addClass("show");
                 //$(cla).show();
                 $(cla + "-back").show();
@@ -302,6 +306,7 @@
                     url: '/taglib/searchTaglib',
                     success: function (res) {
                         $("#popDIV").append(res.content);
+                        pageLimit();
                         $(".f-layer-taglib .save").html("保存");
                         $(".f-layer-taglib .close").html("关闭");
                         $(".f-layer-taglib-back").show();
@@ -342,6 +347,7 @@
                     url: '/taglib/searchTaglib',
                     success: function (res) {
                         $("#popDIV").append(res.content);
+                        pageLimit();
                         $(".f-layer-taglib .save").html("保存");
                         $(".f-layer-taglib .close").html("关闭");
                         $(".f-layer-taglib-back").show();

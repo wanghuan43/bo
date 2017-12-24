@@ -102,7 +102,6 @@ class   Orders extends BoModel
 
     public function getList($search, $limit = false)
     {
-        $member = $this->getCurrent();
         $this->alias('o');
         $this->field("o.*");
         foreach ($search as $key => $value) {

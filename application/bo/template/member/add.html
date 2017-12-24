@@ -64,8 +64,30 @@
     <div class="form-group">
         <label class="col-sm-2 control-label">是否管理员</label>
         <div class="col-sm-10">
-            <label class="radio-inline"><input type="radio" name="isAdmin" value="2" checked/>否 </label>
-            <label class="radio-inline"><input type="radio" name="isAdmin" value="1"/>是 </label>
+            <label class="radio-inline"><input type="radio" name="isAdmin" class="isAdmin" value="2" checked/>否 </label>
+            <label class="radio-inline"><input type="radio" name="isAdmin" class="isAdmin" value="1"/>是 </label>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-sm-2 control-label">权限设置</label>
+        <div class="col-sm-10">
+            <table id="tree" style="width: 300px;margin: 0 10px;">
+                <colgroup>
+                    <col width="100px">
+                </colgroup>
+                <thead class="alignCenter">
+                <tr>
+                    <th><span style="display: inline-block;float: left;padding-left: 20px;"><input type="checkbox" id="checkAll"></span>菜单</th>
+                </tr>
+                </thead>
+                <tbody>
+                <!-- Define a row template for all invariant markup: -->
+                <tr>
+                    <td></td>
+                </tr>
+                </tbody>
+            </table>
         </div>
     </div>
 
@@ -74,7 +96,197 @@
             <button class="btn btn-default" id="btn-add-project" type="submit">确认</button>
         </div>
     </div>
-
+    <input type="hidden" name="permissions" id="permissions" value="">
 </form>
+<{load href="/static/js/jquery-ui.custom.js,/static/fancytree/jquery.fancytree.min.js,/static/fancytree/jquery.fancytree-all.min.js,/static/fancytree/skin-win8/ui.fancytree.min.css"}>
+<{load href="/static/js/menu.js"}>
+<script type="text/javascript">
 
-<{load file="/static/js/update.js"}>
+    var SOURCE =<{$menuList}>, tree="";
+
+    $(function () {
+        laydate.render({
+            elem: "input[name='date']",
+            min: '1970-01-01 08:00:00',
+            max: 0
+        });
+        tree = $("#tree").fancytree({
+            checkbox: true,
+            titlesTabbable: true,     // Add all node titles to TAB chain
+            quicksearch: true,        // Jump to nodes when pressing first character
+            source: SOURCE,
+            //source: { url: "ajax-tree-products.json"},
+
+            extensions: ["edit", "dnd", "table", "gridnav"],
+
+            dnd: {
+                preventVoidMoves: true,
+                preventRecursiveMoves: true,
+                autoExpandMS: 400,
+                dragStart: function (node, data) {
+                    return true;
+                },
+                dragEnter: function (node, data) {
+                    // return ["before", "after"];
+                    return true;
+                },
+                dragDrop: function (node, data) {
+                    data.otherNode.moveTo(node, data.hitMode);
+                }
+            },
+            table: {
+                indentation: 20,
+                //nodeColumnIdx: 2,
+                //checkboxColumnIdx: 0
+            },
+            gridnav: {
+                autofocusInput: false,
+                handleCursorKeys: true
+            },
+            click: function (event, data) {
+                if(data.targetType != "checkbox"){
+                    return;
+                }
+                var selected = data.node.selected == undefined ? true : (data.node.selected == false ? true : false);
+                if(data.node.children != null){
+                    for (var i in data.node.children) {
+                        data.node.children[i].setSelected(selected);
+                    }
+                }else if(data.node.parent != null){
+                    var c = false;
+                    for(var i in data.node.parent.children){
+                        if(data.node.parent.children[i] == data.node){
+                            if(selected == true){
+                                c = selected;
+                            }
+                        }else if(data.node.parent.children[i].selected == true){
+                            c = true;
+                        }
+                    }
+                    data.node.parent.setSelected(c);
+                }
+            },
+        });
+        tree = $("#tree").fancytree("getTree");
+
+        $("#form-member-add [type='submit']").click(function () {
+            loading.show();
+            var form = $(".form-add:first");
+            var nodes = tree.getSelectedNodes(), ids = [];
+            if (nodes.length > 0) {
+                for (var i in nodes) {
+                    ids.push(nodes[i].data.id);
+                }
+            }
+            $("#permissions").val(ids.join(","));
+            form.validate({
+                'submitHandler': function () {
+                    var form = $(".form-add:first");
+                    var data = new FormData(form[0]);
+                    $.ajax({
+                        url: form.attr("action"),
+                        method: form.attr("method"),
+                        data: data,
+                        contentType: false,
+                        processData: false,
+                        dataType: "json",
+                        success: function (res) {
+                            loading.hide();
+                            custom.alert(res.msg);
+                            if(res.flag == 1) {
+                                var el;
+                                if ($("#ipt-attachment").length > 0) {
+                                    el = "#ipt-attachment";
+                                }
+                                $(el).val("");
+                                if ( res.image !== undefined) {
+                                    $(el).parent().addClass("attachment").find("img").remove();
+                                    $(el).parent().find("a").remove();
+                                    $(el).parent().prepend('<img src="' + res.image + '"  width="240" data-action="zoom"/>');
+                                }else if (res.file !== undefined){
+                                    $(el).parent().find("img").remove();
+                                    $(el).parent().find("a").remove();
+                                    $(el).parent().prepend('<a href="' + res.file + '" target="_blank"><i class="fa fa-paperclip"></i> 附件</a>');
+                                }
+                            }
+                        }
+                    });
+                }
+            });
+        });
+        $(".isAdmin").click(function(){
+            var val = $(this).val();
+            if(val == "1"){
+                for(var i in tree.rootNode.children){
+                    tree.rootNode.children[i].setSelected(true);
+                    tree.rootNode.children[i].unselectable = true;
+                    if(tree.rootNode.children[i].children != null){
+                        for(var j in tree.rootNode.children[i].children){
+                            tree.rootNode.children[i].children[j].setSelected(true);
+                            tree.rootNode.children[i].children[j].unselectable = true;
+                        }
+                    }
+                }
+                $("#checkAll").prop("checked", true);
+                $("#checkAll").prop("disabled", true);
+            }else{
+                $("#checkAll").prop("disabled", false);
+                for(var i in tree.rootNode.children){
+                    tree.rootNode.children[i].unselectable = false;
+                    if(tree.rootNode.children[i].children != null){
+                        for(var j in tree.rootNode.children[i].children){
+                            tree.rootNode.children[i].children[j].unselectable = false;
+                        }
+                    }
+                }
+            }
+        });
+        $("#checkAll").click(function(){
+            var c = $(this).prop("checked");
+            for(var i in tree.rootNode.children){
+                tree.rootNode.children[i].setSelected(c);
+                if(tree.rootNode.children[i].children != null){
+                    for(var j in tree.rootNode.children[i].children){
+                        tree.rootNode.children[i].children[j].setSelected(c);
+                    }
+                }
+            }
+        });
+        $("#inputDepartment").click(function () {
+            $(".f-layer-back").show();
+            if ($(".f-layer-department").length > 0) {
+                $(".f-layer-back").hide();
+                $(".f-layer-department-back").show();
+                $(".f-layer-department").addClass("show");
+            } else {
+                $.ajax({
+                    url: "/department/searchDepartment",
+                    method: "post",
+                    dataType: "json",
+                    success: function (res) {
+                        $(".f-layer-back").hide();
+                        $("#popDIV").append(res.content);
+                        $(".f-layer-department .close").click(function () {
+                            $(".f-layer-department-back").hide();
+                            $(".f-layer-department").removeClass("show");
+                        });
+                        $(".f-layer-department .save").click(function () {
+                            var radio = $(".f-layer-department .selectRadio:checked");
+                            if (radio.length > 0) {
+                                $("input[name='did']").val(radio.val());
+                                $("input[name='department']").val(radio.attr('data'));
+                                $("input[name='dname']").val(radio.attr('data'));
+                                $(".f-layer-department .close").click();
+                            } else {
+                                custom.alert('请至少选择一项');
+                            }
+
+                        });
+                        $(".f-layer-department-back").show();
+                        setTimeout('$(".f-layer-department").addClass("show")', 500);
+                    }
+                });
+            }
+        });
+    });
+</script>

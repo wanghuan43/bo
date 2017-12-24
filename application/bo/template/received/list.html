@@ -2,9 +2,9 @@
 <{assign name="listType" value="1"}>
 <{/if}>
 
-<div class="paginate">
+<nav aria-label="Page navigation" style="width: 80%;display: inline-block;">
     <{$lists->render()}>
-</div>
+</nav>
 
 <div class="search-result">
     <table cellspacing="0" class="list">
@@ -61,9 +61,9 @@
     </table>
 </div>
 
-<div class="paginate">
+<nav aria-label="Page navigation" style="width: 80%;display: inline-block;">
     <{$lists->render()}>
-</div>
+</nav>
 
 <script>
     (function($){

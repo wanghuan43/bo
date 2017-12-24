@@ -1,6 +1,14 @@
-<nav aria-label="Page navigation">
+<nav aria-label="Page navigation" style="width: 80%;display: inline-block;">
     <{$lists->render()}>
 </nav>
+<div style="position: relative;float: right;margin: 30px 0;">
+    <select class="pageLimit">
+        <option value="20">20</option>
+        <option value="50">50</option>
+        <option value="100">100</option>
+        <option value="200">200</option>
+    </select>
+</div>
 <table class="list table" cellspacing="0">
     <thead>
     <tr>
@@ -91,7 +99,15 @@
     <{/volist}>
     </tbody>
 </table>
-<nav aria-label="Page navigation">
+<nav aria-label="Page navigation" style="width: 80%;display: inline-block;">
     <{$lists->render()}>
 </nav>
+<div style="position: relative;float: right;margin: 30px 0;">
+    <select class="pageLimit">
+        <option value="20">20</option>
+        <option value="50">50</option>
+        <option value="100">100</option>
+        <option value="200">200</option>
+    </select>
+</div>
 <{load file='/static/js/all.js'}>

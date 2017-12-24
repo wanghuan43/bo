@@ -10,6 +10,7 @@
             data: data,
             success: function (res) {
                 $("#main-pannel").html(res);
+                pageLimit();
             }
         });
         return false;
@@ -23,6 +24,7 @@
             data: data,
             success: function (res) {
                 $(".main-pannel.all-page").html(res);
+                pageLimit();
             }
         });
         return false;

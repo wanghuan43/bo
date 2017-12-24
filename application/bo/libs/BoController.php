@@ -10,7 +10,7 @@ use think\Url;
 
 class BoController extends Controller
 {
-    protected $limit = 20;
+    public $limit;
     protected $current = false;
 
     protected $model;
@@ -32,6 +32,13 @@ class BoController extends Controller
         if (!$this->current AND $nowAction != "login") {
             $this->redirect(Url::build('/dashboard/login', "", false));
         }
+        $this->limit = $_SESSION['pageLimit'];
+        $this->assign("pageLimit", $this->limit);
+    }
+
+    public function setPageLimit()
+    {
+        $_SESSION['pageLimit'] = Request::instance()->post("pageLimit", 20);
     }
 
     protected function search($model, $file = "common/poplayer", $colspan = "3")
@@ -47,9 +54,9 @@ class BoController extends Controller
             foreach ($post['fields'][$name] as $key => $value) {
                 $val = count($post['values'][$name][$key]) > 1 ? $post['values'][$name][$key] : trim($post['values'][$name][$key][0]);
                 $opt = trim($post['operators'][$name][$key]);
-                if(is_array($val)){
-                    $val = (trim($val['0'])!="" AND trim($val['1'])!="") ? $val : "";
-                }else{
+                if (is_array($val)) {
+                    $val = (trim($val['0']) != "" AND trim($val['1']) != "") ? $val : "";
+                } else {
                     $val = trim($val);
                 }
                 if ($val != "") {
@@ -58,7 +65,7 @@ class BoController extends Controller
                     } elseif ($opt == "like") {
                         $val = "%$val%";
                     }
-                    if(in_array($value, ['i_type', 'i_tax', 'c_type', 'a_type', 'r_type', 'o_type','o_lie','m_isAdmin']) AND empty($val)){
+                    if (in_array($value, ['i_type', 'i_tax', 'c_type', 'a_type', 'r_type', 'o_type', 'o_lie', 'm_isAdmin']) AND empty($val)) {
                         continue;
                     }
                     $search[] = array(
@@ -187,9 +194,9 @@ class BoController extends Controller
             foreach ($post['fields'][$mName] as $key => $value) {
                 $val = count($post['values'][$mName][$key]) > 1 ? $post['values'][$mName][$key] : trim($post['values'][$mName][$key][0]);
                 $opt = trim($post['operators'][$mName][$key]);
-                if(is_array($val)){
-                    $val = (trim($val['0'])!="" AND trim($val['1'])!="") ? $val : "";
-                }else{
+                if (is_array($val)) {
+                    $val = (trim($val['0']) != "" AND trim($val['1']) != "") ? $val : "";
+                } else {
                     $val = trim($val);
                 }
                 if ($val != "") {
@@ -198,7 +205,7 @@ class BoController extends Controller
                     } elseif ($opt == "like") {
                         $val = "%$val%";
                     }
-                    if(in_array($value, ['i_type', 'i_tax', 'c_type', 'a_type', 'r_type', 'o_type','o_lie','m_isAdmin']) AND empty($val)){
+                    if (in_array($value, ['i_type', 'i_tax', 'c_type', 'a_type', 'r_type', 'o_type', 'o_lie', 'm_isAdmin']) AND empty($val)) {
                         continue;
                     }
                     $search[] = array(
@@ -300,17 +307,17 @@ class BoController extends Controller
 
             $aType = 1;
 
-            if(isset($params['atype'])){
+            if (isset($params['atype'])) {
                 $aType = $params['atype'];
-            }elseif(isset($params['aType'])){
+            } elseif (isset($params['aType'])) {
                 $aType = $params['aType'];
             }
 
-            $isAdmin = $this->current->m_isAdmin == 1? true:false;
+            $isAdmin = $this->current->m_isAdmin == 1 ? true : false;
 
             $modelName = strtolower($this->model->getModelName());
             $search = $this->getSearch();
-            $list = $this->model->getList($search, $this->limit,$aType);
+            $list = $this->model->getList($search, $this->limit, $aType);
             $this->assign('sort', $sort);
             $this->assign('search', $this->model->getSearchable());
             $this->assign('searchValues', $search);
@@ -318,8 +325,8 @@ class BoController extends Controller
             $this->assign('other', 'main-pannel');
             $this->assign('lists', $list);
             $this->assign('types', getTypeList());
-            $this->assign('aType',$aType);
-            $this->assign('isAdmin',$isAdmin);
+            $this->assign('aType', $aType);
+            $this->assign('isAdmin', $isAdmin);
             if (isset($params['fields']) || isset($params['page']) || isset($params['sort'])) {
                 $ret = $this->fetch($modelName . '/list/2');
             } else {
@@ -339,7 +346,7 @@ class BoController extends Controller
 
             $res = $this->deleteCheck($ids);
 
-            if($res === true) {
+            if ($res === true) {
 
                 if (is_array($ids) && count($ids) > 0) {
 
@@ -354,10 +361,10 @@ class BoController extends Controller
                     $ret = ['flag' => 0, 'msg' => '参数错误'];
                 }
 
-            }else{
+            } else {
                 $ret = $res;
-                if(!isset($ret['flag'])) $ret['flag'] = 0;
-                if(!isset($ret['msg'])) $ret['msg'] = '选择项不能全部被删除';
+                if (!isset($ret['flag'])) $ret['flag'] = 0;
+                if (!isset($ret['msg'])) $ret['msg'] = '选择项不能全部被删除';
             }
 
         }
@@ -368,10 +375,10 @@ class BoController extends Controller
 
     protected function deleteCheck($ids)
     {
-        if($this->current->m_isAdmin == 1){
+        if ($this->current->m_isAdmin == 1) {
             $ret = true;
-        }else{
-            $ret = ['flag'=>0,'msg'=>'无权限操作'];
+        } else {
+            $ret = ['flag' => 0, 'msg' => '无权限操作'];
         }
         return $ret;
     }
@@ -576,7 +583,7 @@ class BoController extends Controller
     {
         $file = ROOT_PATH . DS . 'public' . $file;
         $file = new File($file);
-        return explode('/',$file->getMime())[0];
+        return explode('/', $file->getMime())[0];
     }
 
 }

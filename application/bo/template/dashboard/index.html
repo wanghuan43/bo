@@ -289,7 +289,7 @@
                 }else{
                     $("#"+id).html(data);
                 }
-
+                pageLimit();
                 loading.hide();
                 $("#"+id+" a[target!='_blank'],button[type='button']").unbind("click");
                 $("#"+id+" a[target!='_blank'],button[type='button']").click(function(){
@@ -308,6 +308,7 @@
         	ajaxData.success = function(data){
         		loading.hide();
         		succ(data);
+                pageLimit();
         	}
         }
         if(ajaxData.error == undefined){
@@ -368,6 +369,38 @@
             }
         }
         sessionStorage.historyBack = JSON.stringify(sessionStore);
+    }
+
+    function pageLimit(){
+        var pt = "<{$pageLimit}>";
+        if(pt != $(".pageLimit").val()){
+            $(".pageLimit option").each(function(index, element){
+                if($(element).val() == pt){
+                    $(element).prop("selected", true);
+                }else{
+                    $(element).prop("selected", false);
+                }
+            });
+        }
+        $(".pageLimit").change(function(){
+            var val = $(this).val();
+            $(".pageLimit option").each(function(index, element){
+                if($(element).val() == val){
+                    $(element).prop("selected", true);
+                }else{
+                    $(element).prop("selected", false);
+                }
+            });
+            $.ajax({
+                url: "<{:url('/Dashboard/setPageLimit')}>",
+                method: "POST",
+                data: "pageLimit="+val,
+                success: function () {
+                    return false;
+                    location.reload();
+                }
+            });
+        });
     }
 </script>
 </body>

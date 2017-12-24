@@ -50,14 +50,16 @@ class Permissions extends BoController
             $tmp[] = ["menu_id"=>$val,"member_id"=>"","opt"=>"2"];
         }
         $permissions->where("member_id", "in", $post['mids'])->delete();
-        $all = [];
-        foreach($post['mids'] as $val){
-            foreach($tmp as $k=>$v){
-                $v["member_id"] = $val;
-                $all[] = $v;
+        if(count($tmp) > 0){
+            $all = [];
+            foreach($post['mids'] as $val){
+                foreach($tmp as $k=>$v){
+                    $v["member_id"] = $val;
+                    $all[] = $v;
+                }
             }
+            $permissions->saveAll($all);
         }
-        $permissions->saveAll($all);
         return ["status" => true, "message" => "保存成功"];
     }
 }

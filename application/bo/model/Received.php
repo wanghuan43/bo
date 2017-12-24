@@ -90,7 +90,7 @@ class Received extends BoModel
         )
     );
 
-    public function getList($search = array(), $limit = 20)
+    public function getList($search = array(), $limit = false)
     {
         $member = $this->getCurrent();
         $this->alias('r');

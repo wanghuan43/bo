@@ -1,7 +1,7 @@
 <{if (!isset($listType)) OR empty($listType) }>
 <{assign name="listType" value="1"}>
 <{/if}>
-<nav aria-label="Page navigation">
+<nav aria-label="Page navigation" style="width: 80%;display: inline-block;">
     <{$lists->render()}>
 </nav>
 <div class="search-result">
@@ -43,7 +43,7 @@
         </tbody>
     </table>
 </div>
-<nav aria-label="Page navigation">
+<nav aria-label="Page navigation" style="width: 80%;display: inline-block;">
     <{$lists->render()}>
 </nav>
 <script>

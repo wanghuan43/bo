@@ -153,16 +153,26 @@
             if(val == "1"){
                 for(var i in tree.rootNode.children){
                     tree.rootNode.children[i].setSelected(true);
+                    tree.rootNode.children[i].unselectable = true;
                     if(tree.rootNode.children[i].children != null){
                         for(var j in tree.rootNode.children[i].children){
                             tree.rootNode.children[i].children[j].setSelected(true);
+                            tree.rootNode.children[i].unselectable = true;
                         }
                     }
                 }
-                tree.options.disabled = true;
+                $("#checkAll").prop("checked", true);
+                $("#checkAll").prop("disabled", true);
             }else{
                 $("#checkAll").prop("disabled", false);
-                tree.options.disabled = false;
+                for(var i in tree.rootNode.children){
+                    tree.rootNode.children[i].unselectable = false;
+                    if(tree.rootNode.children[i].children != null){
+                        for(var j in tree.rootNode.children[i].children){
+                            tree.rootNode.children[i].unselectable = false;
+                        }
+                    }
+                }
             }
         });
         $("#checkAll").click(function(){
@@ -180,9 +190,14 @@
             $(".admin:eq(0)").prop("checked", true);
             $("#checkAll").click();
             $("#checkAll").prop("disabled", true);
-        }else{
-            $(".admin:eq(1)").prop("checked", true);
-            $("#checkAll").prop("disabled", false);
+            for(var i in tree.rootNode.children){
+                tree.rootNode.children[i].unselectable = true;
+                if(tree.rootNode.children[i].children != null){
+                    for(var j in tree.rootNode.children[i].children){
+                        tree.rootNode.children[i].children[j].unselectable = true;
+                    }
+                }
+            }
         }
     });
 </script>

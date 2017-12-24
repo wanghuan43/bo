@@ -26,7 +26,7 @@ class BoValidate extends Validate
     //电话号码验证
     protected function phone($value,$rule,$data)
     {
-        return $this->regex($value,'/^((13[0-9])|(14[5|7])|(15([0-3]|[5-9]))|(18[0,5-9]))\\d{8}$/');
+        return $this->regex($value,'/^((13[0-9])|(14[5|7])|(15([0-3]|[5-9]))|(18[0,5-9])|(17[0,5-9]))\\d{8}$/');
     }
 
     //记账月验证,格式:yymm,例:1711

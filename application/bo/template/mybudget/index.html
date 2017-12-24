@@ -10,9 +10,17 @@
     </div>
 </div>
 <div class="main-pannel" id="main-pannel">
-    <nav aria-label="Page navigation">
+    <nav aria-label="Page navigation" style="width: 80%;display: inline-block;">
         <{$lists->render()}>
     </nav>
+    <div style="position: relative;float: right;margin: 30px 0;">
+        <select class="pageLimit">
+            <option value="20">20</option>
+            <option value="50">50</option>
+            <option value="100">100</option>
+            <option value="200">200</option>
+        </select>
+    </div>
     <table class="list" cellspacing="0">
         <colgroup>
             <col width="40px">
@@ -54,8 +62,16 @@
         <{/foreach}>
         </tbody>
     </table>
-    <nav aria-label="Page navigation">
+    <nav aria-label="Page navigation" style="width: 80%;display: inline-block;">
         <{$lists->render()}>
     </nav>
+    <div style="position: relative;float: right;margin: 30px 0;">
+        <select class="pageLimit">
+            <option value="20">20</option>
+            <option value="50">50</option>
+            <option value="100">100</option>
+            <option value="200">200</option>
+        </select>
+    </div>
 </div>
 <{load href="/static/js/plugin/select/select.min.js,/static/js/lists.js,/static/js/budget.js"}>
