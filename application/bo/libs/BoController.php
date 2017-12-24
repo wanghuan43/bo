@@ -32,7 +32,7 @@ class BoController extends Controller
         if (!$this->current AND $nowAction != "login") {
             $this->redirect(Url::build('/dashboard/login', "", false));
         }
-        $this->limit = $_SESSION['pageLimit'];
+        $this->limit = !empty($_SESSION['pageLimit']) ? $_SESSION['pageLimit'] : "20";
         $this->assign("pageLimit", $this->limit);
     }
 
