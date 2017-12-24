@@ -330,21 +330,19 @@
         var sessionStore = JSON.parse(sessionStorage.historyBack);
         var url = "/";
         if(sessionStore.length > 0){
-            url = sessionStore.pop();
+            sessionStore.pop();
+            url = sessionStore[(sessionStore.length-1)];
             sessionStorage.historyBack = JSON.stringify(sessionStore);
         }
         var ajaxData = {
             url : url
         }
-        if(url == sessionStorage.current){
-            historyBack();
-        }else{
-            contentAjax("main-container",ajaxData, "jump");
-        }
+        location.href = "/#"+url.substr(1);
+        location.reload();
     }
     function setHistoryBack(url) {
         var sessionStore = sessionStorage.historyBack;
-        sessionStore = sessionStore == undefined ? [] : JSON.parse(sessionStore);
+        sessionStore = (sessionStore == undefined || sessionStore == "") ? [] : JSON.parse(sessionStore);
         var tmp = url != "" && url != undefined ? url : location.href;
         var i = tmp.indexOf("/");
         if(i >= 0){
