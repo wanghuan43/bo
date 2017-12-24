@@ -47,7 +47,7 @@ class Member extends BoController
     {
         $post = $this->request->post();
 
-        $permissions = $post['permissions'];
+        $permissions = trim($post['permissions']);
 
         $arr = ['code', 'name', 'email', 'phone', 'department', 'did', 'office', 'password', 'isAdmin','cname'];
 
@@ -133,7 +133,7 @@ class Member extends BoController
     {
         $post = $this->request->post();
 
-        $permissions = $post['permissions'];
+        $permissions = trim($post['permissions']);
 
         $arr = ['email', 'code', 'isAdmin', 'name', 'phone', 'department', 'did', 'office', 'password','cname'];
 
