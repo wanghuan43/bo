@@ -372,6 +372,7 @@
     }
 
     function pageLimit(){
+        $(".pageLimit").unbind("change");
         var pt = "<{$pageLimit}>";
         if(pt != $(".pageLimit").val()){
             $(".pageLimit option").each(function(index, element){
