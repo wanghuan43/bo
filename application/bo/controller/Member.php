@@ -133,7 +133,7 @@ class Member extends BoController
     {
         $post = $this->request->post();
 
-        $permissions = trim($post['permissions']);
+        $permissions = isset($post['permissions']) ? trim($post['permissions']) : false ;
 
         $arr = ['email', 'code', 'isAdmin', 'name', 'phone', 'department', 'did', 'office', 'password','cname'];
 
@@ -157,16 +157,18 @@ class Member extends BoController
             $error = $this->model->getError();
             if (empty($error)) {
                 $ret = ['flag' => 1, 'msg' => '更新成功'];
-                $permissionsModel = new \app\bo\model\Permissions();
-                $permissionsModel->where("member_id", "=", $post['id'])->delete();
-                if($member['m_isAdmin'] == "2" AND !empty($permissions)){
-                    $all = [];
-                    $permissions = explode(",", $permissions);
-                    foreach($permissions as $val){
-                        $tmp = ["menu_id"=>$val,"member_id"=>$post['id'],"opt"=>"2"];
-                        $all[] = $tmp;
+                if(!empty($permissions)) {
+                    $permissionsModel = new \app\bo\model\Permissions();
+                    $permissionsModel->where("member_id", "=", $post['id'])->delete();
+                    if ($member['m_isAdmin'] == "2" AND !empty($permissions)) {
+                        $all = [];
+                        $permissions = explode(",", $permissions);
+                        foreach ($permissions as $val) {
+                            $tmp = ["menu_id" => $val, "member_id" => $post['id'], "opt" => "2"];
+                            $all[] = $tmp;
+                        }
+                        $permissionsModel->saveAll($all);
                     }
-                    $permissionsModel->saveAll($all);
                 }
             } else {
                 $ret = ['flag' => 0, 'msg' => '更新失败'];

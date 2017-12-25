@@ -444,7 +444,17 @@ class BoController extends Controller
 
             ini_set("memory_limit", "1024M");
             $post = $this->request->post();
+            $params = $this->request->param();
             $type = strtolower($this->model->getModelName());
+
+            if (isset($params['sort'])) {
+                if ($params['order'] == 1) {
+                    $sort[$params['sort']] = 'asc';
+                } else {
+                    $sort[$params['sort']] = 'desc';
+                }
+                $this->model->order($sort);
+            }
 
             if (isset($post['ids'])) {
                 $res = $this->model->where($this->model->getPk(), 'IN', $post['ids'])->select();

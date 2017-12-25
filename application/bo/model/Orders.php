@@ -97,6 +97,13 @@ class   Orders extends BoModel
             'operators' => [
                 'like' => '包含'
             ]
+        ],
+        'o_dname' => [
+            'name' => '部门',
+            'type' => 'text',
+            'operators' => [
+                'like' => '包含'
+            ]
         ]
     ];
 

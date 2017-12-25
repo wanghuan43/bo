@@ -11,7 +11,7 @@ return [
         'orders' => [
             'A' => ['title'=>'部门','key'=>'o_dname'],
             'B' => ['title'=>'责任人','key'=>'o_mname'],
-            'C' => ['title'=>'项目号','key'=>'p_no'],
+            'C' => ['title'=>'订单号','key'=>'o_no'],
             'D' => ['title'=>'项目名称','key'=>'o_pname'],
             'E' => ['title'=>'对方名称','key'=>'o_coname'],
             'F' => ['title'=>'关键字','key'=>'tags'],
@@ -22,13 +22,12 @@ return [
             'K' => ['title'=>'购销','key'=>'o_type'],
             'L' => ['title'=>'发生金额','key'=>'op_used'],
             'M' => ['title'=>'发生日(计划)','key'=>'op_date'],
-            'N' => ['title'=>'商务阶段','key'=>'op_type'],
-            'O' => ['title'=>'订单号','key'=>'o_no'],
+            'N' => ['title'=>'商务阶段','key'=>'op_type']
         ],
         'orders-contract' => [
             'A' => ['title'=>'部门','key'=>'o_dname'],
             'B' => ['title'=>'责任人','key'=>'o_mname'],
-            'C' => ['title'=>'项目号','key'=>'p_no'],
+            'C' => ['title'=>'订单号','key'=>'o_no'],
             'D' => ['title'=>'项目名称','key'=>'o_pname'],
             'E' => ['title'=>'对方名称','key'=>'o_coname'],
             'F' => ['title'=>'关键字','key'=>'tags'],
@@ -45,7 +44,6 @@ return [
             //'Q' => ['title'=>'记账月','key'=>''],
             'P' => ['title'=>'合同号','key'=>'c_no'],
             'Q' => ['title'=>'合同名称','key'=>'c_name'],
-            'R' => ['title'=>'订单号','key'=>'o_no'],
         ],
         'project' => [
             'A' => ['title'=>'项目编号','key'=>'p_no'],
