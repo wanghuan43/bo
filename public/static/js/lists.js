@@ -13,11 +13,40 @@
         $(".lists-id").prop("checked", _this.prop("checked"));
     });
 
+    var getSort = function(){
+        var table = $("#main-container .main-pannel table");
+        var sort = "";
+        table.find("th i.fa").each(function(){
+            if($(this).hasClass("gray") == false){
+                var aUrl = $(this).parent().attr("href");
+                var arr = aUrl.split("/");
+                for( var i=0; i<arr.length; i++ ){
+                    if( arr[i] == "sort" ){
+                        sort += "/sort/" + arr[i+1];
+                    }
+                    if( arr[i] == "order" ){
+                        if(arr[i+1] == 1) {
+                            sort += "/order/2";
+                        }else{
+                            sort += "/order/1";
+                        }
+                    }
+                }
+            }
+        });
+        return sort;
+    };
+
     $("#link-export").click(function(){
         var type = $(this).attr("data-type");
         var action = $(this).attr("href");
         var form = $("#"+type+"AllForm");
         var values = false;
+
+        var sort = getSort();
+        if( sort != "" ){
+            action = action.replace(".html",sort+".html");
+        }
 
         form.find(".values").each(function(){
             var val = $(this).val();
