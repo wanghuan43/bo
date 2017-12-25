@@ -391,8 +391,9 @@ class Orders extends BoController
 
             $view = $type == 'orders' ? 'kj_vw_my_orders' : 'kj_vw_my_contract';
 
-            $sql = 'SELECT * FROM ' . $view . ' WHERE `o_id` IN (' . $ids . ') ORDER BY `o_updatetime` DESC';
+            $order = "ORDER BY `o_updatetime` DESC";
 
+            $sql = 'SELECT * FROM ' . $view . ' WHERE `o_id` IN (' . $ids . ') GROUP BY `o_id` '.$order;
             $res = $this->model->query($sql);
 
 

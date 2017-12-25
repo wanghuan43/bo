@@ -114,6 +114,7 @@ class   Orders extends BoModel
         foreach ($search as $key => $value) {
             $this->where("o." . $value['field'], $value['opt'], $value['val']);
         }
+        $this->order("o.o_id", "desc");
         if (empty($limit)) {
             $list = $this->select();
         } else {
@@ -444,9 +445,18 @@ class   Orders extends BoModel
         }
         switch ($val) {
             case "o_money" . $value['o_type'] . "_tax":
-                $v = $value['o_money'];
+                if($value['o_type'] == "1"){
+                    $v = $list[1][0] - $list[3][0];
+                }else{
+                    $v = $list[2][0] - $list[3][0];
+                }
                 break;
             case "o_money" . $value['o_type']:
+                if($value['o_type'] == "1"){
+                    $v = ($list[1][0] - $list[1][0] * $tax) - ($list[3][0] - $list[3][0] * $tax);
+                }else{
+                    $v = ($list[2][0] - $list[2][0] * $tax) - ($list[3][0] - $list[3][0] * $tax);
+                }
                 $v = $value['o_money'] - $value['o_money'] * $tax;
                 break;
             case "o_cmoney" . $value['o_type'] . "_tax":
@@ -481,11 +491,19 @@ class   Orders extends BoModel
             case "o_rmoney" . $value['o_type']:
                 $v = $list[3][0] - $list[3][0] * $tax;
                 break;
-            case "o_wmoney1":
-                $v = $value['o_money'] - $list[1][0];
+            case "o_wimoney1":
+                if($value['o_type'] == "1"){
+                    $v = $value['o_money'] - $list[1][0];
+                }else{
+                    $v = 0;
+                }
                 break;
             case "o_wimoney2":
-                $v = $value['o_money'] - $list[3][0];
+                if($value['o_type'] == "2"){
+                    $v = $value['o_money'] - $list[1][0];
+                }else{
+                    $v = 0;
+                }
                 break;
             case "o_cr_date":
                 $v = $list[2][1];
