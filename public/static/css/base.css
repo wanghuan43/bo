@@ -748,6 +748,10 @@ textarea.form-control{
     min-height:8em;
 }
 
+#popinfo .fa.fa-user-circle{
+    color:#0000ff;
+}
+
 @-moz-document url-prefix() {
     select.input-sm {
         -moz-appearance: none;

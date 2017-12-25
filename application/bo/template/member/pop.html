@@ -25,16 +25,17 @@
                     <td class="bo-label"><label for="ipt-dm-phone"><i class="asterisk">*</i>电话:</label></td>
                     <td><input class="input-sm" type="text" name="phone" id="ipt-dm-phone" value="<{$data.m_phone}>" required/></td>
                     <td class="bo-label"><label for="inputDepartment"><i class="asterisk">*</i>部门:</label></td>
-                    <td><input class="input-sm" type="text" readonly name="department" id="inputDepartment" value="<{$data.m_department}>"/> <input type="hidden" name="did" value="<{$data.m_did}>"/></td>
+                    <td><input class="input-sm bg-warning" type="text" readonly name="department" id="inputDepartment" value="<{$data.m_department}>"/> <input type="hidden" name="did" value="<{$data.m_did}>"/></td>
                 </tr>
                 <tr>
                     <td class="bo-label"><label for="ipt-dm-office">组织:</label></td>
-                    <td><input type="text" class="input-sm" name="office" id="ipt-dm-office" value="<{$data.m_office}>"/></td>
+                    <td><input type="text" class="input-sm bg-warning" name="office" id="ipt-dm-office" value="<{$data.m_office}>" readonly/></td>
+                    <td class="bo-label"><label for="ipt-dm-cname">公司:</label></td>
+                    <td><input type="text" class="input-sm bg-warning" name="cname" id="ipt-dm-cname" value="<{$data.m_cname}>" readonly/></td>
                     <td class="bo-label"></td>
                     <td>
                         <input type="hidden" name="isAdmin" value="<{$data.m_isAdmin}>">
                     </td>
-                    <td colspan="2"></td>
                 </tr>
             </table>
         </div>
