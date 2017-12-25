@@ -32,6 +32,9 @@ class BoController extends Controller
         if (!$this->current AND $nowAction != "login") {
             $this->redirect(Url::build('/dashboard/login', "", false));
         }
+        if( !!$this->current && $this->current->m_password == encryptPassword('123123') && $nowAction != 'changepassword'){
+            $this->redirect(Url::build('/dashboard/changePassword','',false));
+        }
         $this->limit = !empty($_SESSION['pageLimit']) ? $_SESSION['pageLimit'] : "20";
         $this->assign("pageLimit", $this->limit);
     }
