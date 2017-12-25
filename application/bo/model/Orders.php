@@ -369,7 +369,7 @@ class   Orders extends BoModel
             case "invoice":
             case "received":
             case "acceptance":
-                $this->where($f."o_id", "=", $id);
+                $this->where($f.".o_id", "=", $id);
                 break;
         }
         if (is_array($search)) {
