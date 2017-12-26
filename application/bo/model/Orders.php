@@ -485,16 +485,12 @@ class   Orders extends BoModel
             case "o_rmoney" . $value['o_type']:
                 $v = $list[3][0] / (1 + $tax);
                 break;
-            case "o_wimoney1":
-                if ($value['o_type'] == "1") {
-                    $v = $value['o_money'] - $list[1][0];
-                } else {
-                    $v = 0;
-                }
+            case "o_wimoney".$value['o_type']:
+                $v = $value['o_money'] - $list[1][0];
                 break;
-            case "o_wimoney2":
-                if ($value['o_type'] == "2") {
-                    $v = $value['o_money'] - $list[1][0];
+            case "o_wmoney" . $value['o_type']:
+                if (empty($value['o_cid'])) {
+                    $v = $value['o_money'];
                 } else {
                     $v = 0;
                 }
