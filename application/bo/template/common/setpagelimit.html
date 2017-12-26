@@ -1,4 +1,5 @@
-<span class="page-limit">
+<{if $lists->hasPages()}>
+    <span class="page-limit">
         每页显示
         <select class="pageLimit input-sm">
             <option value="20">20</option>
@@ -7,3 +8,4 @@
             <option value="200">200</option>
         </select>条
     </span>
+<{/if}>
