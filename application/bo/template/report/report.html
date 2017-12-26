@@ -106,16 +106,18 @@
                 t = true;
             }
             if(!f) {
+                var next = $(".selectCell:eq(0) select option:selected:last").next();
                 $(".selectCell:eq(0) select option:selected").each(function (index, element) {
-                    var ele = $(element).clone(), next = $(element).next();
-                    $(ele).insertAfter($(next));
+                    var ele = $(element).clone();
+                    $(next).after($(ele));
                     $(element).remove();
                 })
             }
             if(!t) {
+                var next = $(".selectCell:eq(1) select option:selected:last").next();
                 $(".selectCell:eq(1) select option:selected").each(function (index, element) {
-                    var ele = $(element).clone(), next = $(element).next();
-                    $(ele).insertAfter($(next));
+                    var ele = $(element).clone();
+                    $(next).after($(ele));
                     $(element).remove();
                 })
             }
