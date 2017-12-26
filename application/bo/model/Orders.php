@@ -20,7 +20,7 @@ class   Orders extends BoModel
             ]
         ],
         'o_no' => [
-            'name' => '订单号',
+            'name' => '项目号/订单号',
             'type' => 'text',
             'operators' => [
                 'like' => '包含'
