@@ -63,7 +63,6 @@
 <script>
     var settingTable = "", rclickTD = "", baseTable =<{$template.cols ? $template.cols : "[]"}>, noreadOnly = true,type="template";
     $(document).ready(function () {
-        $(".context-menu-list").remove();
         $.contextMenu("html5");
         $.contextMenu.fromMenu($('#html5polyfill'));
         $(".table").change(function () {
