@@ -45,14 +45,14 @@ class   Orders extends BoModel
                 '2' => '支出',
             ]
         ],
-        'o_lie' =>[
+        'o_lie' => [
             'name' => '内/外',
-            'type' =>'select',
-            'operators' =>[
-                '=' =>'等于'
+            'type' => 'select',
+            'operators' => [
+                '=' => '等于'
             ],
-            'options' =>[
-                '0' =>'-请选择-',
+            'options' => [
+                '0' => '-请选择-',
                 '1' => '内部',
                 '2' => '外部'
             ]
@@ -279,16 +279,16 @@ class   Orders extends BoModel
                 continue;
             }
 
-            if($data['o_lie'] == 1){
+            if ($data['o_lie'] == 1) {
                 $did = $mDepartment->getDepartmentIdByName($data['o_coname']);
-                if($did){
+                if ($did) {
                     $data['o_coid'] = $did;
-                }else{
-                    CustomUtils::writeImportLog('Inner department ID is null - '.serialize($data),strtolower($this->name));
+                } else {
+                    CustomUtils::writeImportLog('Inner department ID is null - ' . serialize($data), strtolower($this->name));
                     unset($dataset[$key]);
                     continue;
                 }
-            }else {
+            } else {
                 $co_type = $data['o_type'] == 1 ? 2 : 1;
                 $company = $mCompany->getCompany(false, $data['o_coname'], $co_type);
                 if ($company) {
@@ -323,23 +323,23 @@ class   Orders extends BoModel
     public function updateForeign($dataset)
     {
 
-        foreach($dataset as $data){
-            if(empty($data['o_no'])){
-                CustomUtils::writeImportLog('Order no is null - '.serialize($data),$this->name);
+        foreach ($dataset as $data) {
+            if (empty($data['o_no'])) {
+                CustomUtils::writeImportLog('Order no is null - ' . serialize($data), $this->name);
                 continue;
             }
-            if(empty($data['o_foreign'])){
+            if (empty($data['o_foreign'])) {
                 continue;
             }
 
-            $o = $this->where('o_no','=',$data['o_no'])->find();
-            if(empty($o)){
-                CustomUtils::writeImportLog('Order is not found - '.$data['o_no'],$this->name);
+            $o = $this->where('o_no', '=', $data['o_no'])->find();
+            if (empty($o)) {
+                CustomUtils::writeImportLog('Order is not found - ' . $data['o_no'], $this->name);
                 continue;
             }
-            $fo = $this->where('o_no','=',$data['o_foreign'])->find();
-            if(empty($fo)){
-                CustomUtils::writeImportLog('Foreign order is not found - '.$data['o_foreign'],$this->name);
+            $fo = $this->where('o_no', '=', $data['o_foreign'])->find();
+            if (empty($fo)) {
+                CustomUtils::writeImportLog('Foreign order is not found - ' . $data['o_foreign'], $this->name);
                 continue;
             }
 
@@ -347,11 +347,11 @@ class   Orders extends BoModel
                 $d['o_foreign'] = $fo->o_id;
                 $d['o_id'] = $o->o_id;
                 $res = parent::save($d, ['o_id' => $o->o_id]);
-                if(empty($res)){
-                    CustomUtils::writeImportLog('Fail to save - '.serialize($data),$this->name);
+                if (empty($res)) {
+                    CustomUtils::writeImportLog('Fail to save - ' . serialize($data), $this->name);
                 }
-            }catch (\Exception $e){
-                CustomUtils::writeImportLog('Save exception - '.$e->getMessage().' - '.serialize($data),$this->name);
+            } catch (\Exception $e) {
+                CustomUtils::writeImportLog('Save exception - ' . $e->getMessage() . ' - ' . serialize($data), $this->name);
             }
 
         }
@@ -369,15 +369,15 @@ class   Orders extends BoModel
         $this->alias($f);
         switch ($type) {
             case "project":
-                $this->where($f.".o_pid", "=", $id);
+                $this->where($f . ".o_pid", "=", $id);
                 break;
             case "contract":
-                $this->where($f.".o_cid", "=", $id);
+                $this->where($f . ".o_cid", "=", $id);
                 break;
             case "invoice":
             case "received":
             case "acceptance":
-                $this->where($f.".o_id", "=", $id);
+                $this->where($f . ".o_id", "=", $id);
                 break;
         }
         if (is_array($search)) {
@@ -391,10 +391,10 @@ class   Orders extends BoModel
                     } elseif ($opt == "like") {
                         $val = "%$val%";
                     }
-                    if(in_array($value, ['i_type', 'i_tax', 'c_type', 'a_type', 'r_type', 'o_type','m_isAdmin']) AND empty($val)){
+                    if (in_array($value, ['i_type', 'i_tax', 'c_type', 'a_type', 'r_type', 'o_type', 'm_isAdmin']) AND empty($val)) {
                         break;
                     }
-                    $this->where($f.".".$value, $opt, $val);
+                    $this->where($f . "." . $value, $opt, $val);
                 }
             }
         }
@@ -445,19 +445,13 @@ class   Orders extends BoModel
         }
         switch ($val) {
             case "o_money" . $value['o_type'] . "_tax":
-                if($value['o_type'] == "1"){
-                    $v = $list[1][0] - $list[3][0];
-                }else{
-                    $v = $list[2][0] - $list[3][0];
-                }
+                $v = $value['o_money'];
                 break;
             case "o_money" . $value['o_type']:
-                if($value['o_type'] == "1"){
-                    $v = ($list[1][0]/(1+$tax)) - ($list[3][0]/(1+$tax));
-                }else{
-                    $v = ($list[2][0]/(1+$tax)) - ($list[3][0]/(1+$tax));
-                }
-                $v = $value['o_money']/(1+$tax);
+                $v = $value['o_money'] / (1 + $tax);
+                break;
+            case "o_iomoney" . $value['o_type'] . "_tax":
+                $v = $list[1][0] / (1 + $tax) - $list[3][0] / (1 + $tax);
                 break;
             case "o_cmoney" . $value['o_type'] . "_tax":
                 if (!empty($value['o_cid'])) {
@@ -468,7 +462,7 @@ class   Orders extends BoModel
                 break;
             case "o_cmoney" . $value['o_type']:
                 if (!empty($value['o_cid'])) {
-                    $v = $value['o_money']/(1+$tax);
+                    $v = $value['o_money'] / (1 + $tax);
                 } else {
                     $v = 0;
                 }
@@ -477,31 +471,31 @@ class   Orders extends BoModel
                 $v = $list[2][0];
                 break;
             case "o_amoney" . $value['o_type']:
-                $v = $list[2][0]/(1+$tax);
+                $v = $list[2][0] / (1 + $tax);
                 break;
             case "o_imoney" . $value['o_type'] . "_tax":
                 $v = $list[1][0];
                 break;
             case "o_imoney" . $value['o_type']:
-                $v = $list[1][0]/(1+$tax);
+                $v = $list[1][0] / (1 + $tax);
                 break;
             case "o_rmoney" . $value['o_type'] . "_tax":
                 $v = $list[3][0];
                 break;
             case "o_rmoney" . $value['o_type']:
-                $v = $list[3][0]/(1+$tax);
+                $v = $list[3][0] / (1 + $tax);
                 break;
             case "o_wimoney1":
-                if($value['o_type'] == "1"){
+                if ($value['o_type'] == "1") {
                     $v = $value['o_money'] - $list[1][0];
-                }else{
+                } else {
                     $v = 0;
                 }
                 break;
             case "o_wimoney2":
-                if($value['o_type'] == "2"){
+                if ($value['o_type'] == "2") {
                     $v = $value['o_money'] - $list[1][0];
-                }else{
+                } else {
                     $v = 0;
                 }
                 break;
