@@ -453,11 +453,11 @@ class   Orders extends BoModel
                 break;
             case "o_money" . $value['o_type']:
                 if($value['o_type'] == "1"){
-                    $v = ($list[1][0] - $list[1][0] * $tax) - ($list[3][0] - $list[3][0] * $tax);
+                    $v = ($list[1][0]/(1+$tax)) - ($list[3][0]/(1+$tax));
                 }else{
-                    $v = ($list[2][0] - $list[2][0] * $tax) - ($list[3][0] - $list[3][0] * $tax);
+                    $v = ($list[2][0]/(1+$tax)) - ($list[3][0]/(1+$tax));
                 }
-                $v = $value['o_money'] - $value['o_money'] * $tax;
+                $v = $value['o_money']/(1+$tax);
                 break;
             case "o_cmoney" . $value['o_type'] . "_tax":
                 if (!empty($value['o_cid'])) {
@@ -468,7 +468,7 @@ class   Orders extends BoModel
                 break;
             case "o_cmoney" . $value['o_type']:
                 if (!empty($value['o_cid'])) {
-                    $v = $value['o_money'] - $value['o_money'] * $tax;
+                    $v = $value['o_money']/(1+$tax);
                 } else {
                     $v = 0;
                 }
@@ -477,19 +477,19 @@ class   Orders extends BoModel
                 $v = $list[2][0];
                 break;
             case "o_amoney" . $value['o_type']:
-                $v = $list[2][0] - $list[2][0] * $tax;
+                $v = $list[2][0]/(1+$tax);
                 break;
             case "o_imoney" . $value['o_type'] . "_tax":
                 $v = $list[1][0];
                 break;
             case "o_imoney" . $value['o_type']:
-                $v = $list[1][0] - $list[1][0] * $tax;
+                $v = $list[1][0]/(1+$tax);
                 break;
             case "o_rmoney" . $value['o_type'] . "_tax":
                 $v = $list[3][0];
                 break;
             case "o_rmoney" . $value['o_type']:
-                $v = $list[3][0] - $list[3][0] * $tax;
+                $v = $list[3][0]/(1+$tax);
                 break;
             case "o_wimoney1":
                 if($value['o_type'] == "1"){
