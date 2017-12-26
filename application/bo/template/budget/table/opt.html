@@ -102,6 +102,7 @@
     $(document).ready(function () {
         $("#permissions").select2();
         $("#rw").select2();
+        $.contextMenu('destroy');
         $.contextMenu('html5');
         $("#tid").change(function () {
             var val = $(this).val();

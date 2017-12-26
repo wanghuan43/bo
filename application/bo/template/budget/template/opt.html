@@ -63,6 +63,7 @@
 <script>
     var settingTable = "", rclickTD = "", baseTable =<{$template.cols ? $template.cols : "[]"}>, noreadOnly = true,type="template";
     $(document).ready(function () {
+        $.contextMenu('destroy');
         $.contextMenu('html5');
         $(".table").change(function () {
             var row = parseInt($("#t_row").val());
