@@ -27,8 +27,8 @@ return [
                 'p_name' => 'B',
                 'p_mname' => 'C',
                 'p_dname' => 'D',
-                'p_income' => 'E',
-                'p_pay' => 'F',
+                'p_pay' => 'E',
+                'p_income' => 'F',
                 'p_date' => 'G',
                 'p_content'=>'H'
             ],

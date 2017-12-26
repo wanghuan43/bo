@@ -751,6 +751,22 @@ textarea.form-control{
 #popinfo .fa.fa-user-circle{
     color:#0000ff;
 }
+.pagination{
+    width:auto;
+    float:left;
+}
+span.page-limit{
+    display: inline-block;
+    /*line-height:34px;*/
+    height:34px;
+    float:left;
+    margin:20px 0 20px 1em;
+    color:#777;
+    font-size:14px;
+}
+span.page-limit .pageLimit{
+    margin:0 .6em 0 .4em;
+}
 
 @-moz-document url-prefix() {
     select.input-sm {
