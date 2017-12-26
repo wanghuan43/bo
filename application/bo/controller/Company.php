@@ -54,11 +54,17 @@ class Company extends BoController
         $validate = validate('Company');
 
         if($validate->check($data)){
-            if( $res = $this->model->save($data) ){
-                $ret = ['flag'=>1,'msg'=>'添加成功'];
-            }else{
-                $ret = ['flag'=>0,'msg'=>'添加失败'];
+            try{
+                $res = $this->model->save($data);
+                if( $res ){
+                    $ret = ['flag'=>1,'msg'=>'添加成功'];
+                }else{
+                    $ret = ['flag'=>0,'msg'=>'添加失败'];
+                }
+            }catch (\Exception $e){
+               $ret = ['flag'=>0,'msg'=>'公司已存在'];
             }
+
         }else{
             $ret = ['flag'=>0,'msg'=>$validate->getError()];
         }

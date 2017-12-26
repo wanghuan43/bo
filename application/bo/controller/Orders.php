@@ -467,8 +467,11 @@ class Orders extends BoController
 
                     $i['c_no'] = '';
                     $i['c_name'] = '';
-
-                    $val[$k] = $i;
+                    if(empty($i['op_type']) || empty($i['ou_type'])){
+                        unset($val[$k]);
+                    }else {
+                        $val[$k] = $i;
+                    }
                 }
                 $val = array_merge([$arr1], $val);
                 $arr[$key] = $val;

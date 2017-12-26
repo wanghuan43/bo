@@ -50,14 +50,16 @@ return [
             'B' => ['title'=>'项目名称','key'=>'p_name']
         ],
         'contract' => [
-            'A' => ['title'=>'项目名称','key'=>'c_pname'],
-            'B' => ['title'=>'合同编号','key'=>'c_no'],
-            'C' => ['title'=>'合同名','key'=>'c_name'],
-            'D' => ['title'=>'合同标的额（元）','key'=>'c_money','type'=>'money'],
-            'E' => ['title'=>'供应商/客户','key'=>'c_coname'],
-            'F' => ['title'=>'商务工作流类别','key'=>'c_type','type'=>'type'],
-            'G' => ['title'=>'合同签订时间','key'=>'c_date','type'=>'date'],
-            'H' => ['title'=>'责任人','key'=>'c_mname']
+            'A' => ['title'=>'合同号','key'=>'c_no'],
+            'B' => ['title'=>'部门','key'=>'c_dname'],
+            'C' => ['title'=>'责任人','key'=>'c_mname'],
+            'D' => ['title'=>'合同名','key'=>'c_name'],
+            'E' => ['title'=>'类型','key'=>'c_type','type'=>'type'],
+            'F' => ['title'=>'对方公司','key'=>'c_coname'],
+            'G' => ['title'=>'签约日期','key'=>'c_date','type'=>'date'],
+            'H' => ['title'=>'合同标的额（元）','key'=>'c_money','type'=>'money'],
+            'I' => ['title'=>'记账月','key'=>'c_accdate'],
+            'J' => ['title'=>'说明','key'=>'c_bakup']
         ],
         'acceptance' => [ //验收单
             'A' => ['title'=>'验收单号','key'=>'a_no'],
