@@ -102,7 +102,9 @@
     $(document).ready(function () {
         $("#permissions").select2();
         $("#rw").select2();
-        $.contextMenu('html5');
+        $(".context-menu-list").remove();
+        $.contextMenu("html5");
+        $.contextMenu.fromMenu($('#html5polyfill'));
         $("#tid").change(function () {
             var val = $(this).val();
             if (val != "0") {
