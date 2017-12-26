@@ -63,7 +63,8 @@
 <script>
     var settingTable = "", rclickTD = "", baseTable =<{$template.cols ? $template.cols : "[]"}>, noreadOnly = true,type="template";
     $(document).ready(function () {
-        $.contextMenu('html5');
+        $.contextMenu("html5");
+        $.contextMenu.fromMenu($('#html5polyfill'));
         $(".table").change(function () {
             var row = parseInt($("#t_row").val());
             var col = parseInt($("#t_col").val());
