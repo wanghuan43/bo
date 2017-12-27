@@ -425,7 +425,7 @@ class   Orders extends BoModel
                     } elseif ($opt == "like") {
                         $val = "%$val%";
                     }
-                    if (in_array($value, ['i_type', 'i_tax', 'c_type', 'a_type', 'r_type', 'o_type', 'm_isAdmin']) AND empty($val)) {
+                    if (in_array($value, ['i_type', 'i_tax', 'c_type', 'a_type', 'r_type', 'o_type', 'm_isAdmin', 'o_tax']) AND empty($val)) {
                         break;
                     }
                     $this->where($f . "." . $value, $opt, $val);
@@ -479,6 +479,9 @@ class   Orders extends BoModel
         }
         switch ($val) {
             case "o_money" . $value['o_type'] . "_tax":
+                $v = $value['o_money'];
+                break;
+            case "o_money_tax":
                 $v = $value['o_money'];
                 break;
             case "o_money" . $value['o_type']:
