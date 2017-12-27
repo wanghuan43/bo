@@ -82,7 +82,7 @@ class ReportEntity extends BoModel
                         } elseif ($opt == "like") {
                             $val = "%$val%";
                         }
-                        if(in_array($value, ['i_type', 'i_tax', 'c_type', 'a_type', 'r_type', 'o_type','m_isAdmin']) AND empty($val)){
+                        if(in_array($value, ['i_type', 'i_tax', 'c_type', 'a_type', 'r_type', 'o_type','m_isAdmin','o_tax']) AND empty($val)){
                             break;
                         }
                         $mtmp->where($f . "." . $value, $opt, $val);
