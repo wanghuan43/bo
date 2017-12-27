@@ -10,6 +10,7 @@ class   Orders extends BoModel
 {
     protected $pk = 'o_id';
     protected $ouList = "";
+    protected $ol = [];
 
     protected $searchable = [
         'o_pname' => [
@@ -396,7 +397,6 @@ class   Orders extends BoModel
 
     public function reportList($cols, &$obj, $type = "", $begin = "2", $id = "", $search = "", $otid="")
     {
-        $this->getOu();
         $count = $begin;
         $in = false;
         $f = "o";
@@ -468,7 +468,6 @@ class   Orders extends BoModel
 
     private function customCellValue($value, $val, $type, $otid)
     {
-        $ul = $this->getAllused($type);
         $v = "";
         $tax = intval(getTaxList($value['o_tax'])) / 100;
         $list = [1 => [0, 0], 2 => [0, 0], 3 => [0, 0]];
@@ -542,13 +541,13 @@ class   Orders extends BoModel
                 $v = $list[3][1];
                 break;
             case "o_gmoney":
-                $v = isset($ul[$value['o_id']][$otid]) ? $ul[$value['o_id']][$otid] : "0";
+                $v = isset($this->ol[$value['o_id']][$otid]) ? $this->ol[$value['o_id']][$otid] : "0";
                 break;
         }
         return $v;
     }
 
-    private function getAllused($type)
+    public function getAllused($type)
     {
         $v = "";
         switch ($type) {
@@ -563,7 +562,8 @@ class   Orders extends BoModel
                 break;
         }
         if (empty($v)) {
-            return [];
+            $this->ol = [];
+            return;
         }
         $ou = new OrderUsed();
         $tmp = $ou->where("ou_type", "=", $v)->select();
@@ -571,10 +571,10 @@ class   Orders extends BoModel
         foreach ($tmp as $val) {
             $list[$val['ou_oid']][$val['ou_otid']] = $val['ou_used'];
         }
-        return $list;
+        $this->ol = $list;
     }
 
-    private function getOu()
+    public function getOu()
     {
         $ou = new OrderUsed();
         $tmp = $ou->field("sum(ou_used) as su,ou_type,ou_oid,max(ou_date) as ou_date")

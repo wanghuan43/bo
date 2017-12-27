@@ -59,6 +59,8 @@ class ReportEntity extends BoModel
         }
         $model = new Orders();
         $omodel = new Orders();
+        $model->getAllused($type);
+        $model->getOu();
         switch ($type) {
             case "orders":
                 $model->reportList($tmp[$type], $activeSheet, $type, 2, "", $search);
