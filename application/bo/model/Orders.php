@@ -104,6 +104,26 @@ class   Orders extends BoModel
             'operators' => [
                 'like' => '包含'
             ]
+        ],
+        'o_deal' => [
+            'name' => '成交机会',
+            'type' => 'text',
+            'operators' => [
+                'between' => '介于',
+                '=' => '等于',
+                '>' => '大于',
+                '<' => '小于'
+            ]
+        ],
+        'o_status' => [
+            'name' => '商机状态',
+            'type' => 'text',
+            'operators' => [
+                'between' => '介于',
+                '=' => '等于',
+                '>' => '大于',
+                '<' => '小于'
+            ]
         ]
     ];
 
