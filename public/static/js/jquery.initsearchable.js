@@ -99,6 +99,9 @@
                 var oldField = getExcludeField();
                 var oi = lists[oldField];
 
+                $(el).find("option").removeAttr("selected");
+                $(el).find("option[value="+f+"]").attr("selected",true);
+
                 p.find('.operators').remove();
                 p.find('.values').remove();
                 p.append(getOperatorHtml(f, oi));
