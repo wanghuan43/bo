@@ -547,8 +547,8 @@ class   Orders extends BoModel
     private function getOu()
     {
         $ou = new OrderUsed();
-        $tmp = $ou->field("sum(ou_used) as su,ou_type,ou_oid,ou_date")
-            ->group("ou_oid,ou_type")->order("ou_date", "desc")->select();
+        $tmp = $ou->field("sum(ou_used) as su,ou_type,ou_oid,max(ou_date) as ou_date")
+            ->group("ou_oid,ou_type")->select();
         $list = [];
         foreach ($tmp as $value) {
             $list[$value['ou_oid']][$value['ou_type']] = [$value['su'], date("Y-m-d", $value['ou_date'])];
