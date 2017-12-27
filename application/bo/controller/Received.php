@@ -99,6 +99,7 @@ class Received extends BoController
         $data = $this->model->getDataById($id);
         $modelOrderUsed = new OrderUsed();
         $orders = $modelOrderUsed->getOrderUsedByOtid($id,3);
+        $this->setOrderUsed($orders);
         $this->setUpdateParams($data['r_mid']);
         if(!empty($orders)){
             $this->assign('readonly',true);

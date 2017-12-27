@@ -105,6 +105,7 @@ class Invoice extends BoController
         $data = $this->model->getDataById($id);
         $modelOrderUsed = new OrderUsed();
         $orders = $modelOrderUsed->getOrderUsedByOtid($id,1);
+        $this->setOrderUsed($orders);
         $this->setUpdateParams($data['i_mid']);
         if(!empty($orders)){
             $this->assign('readonly',true);

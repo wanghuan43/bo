@@ -105,19 +105,25 @@
                 <tr>
                     <!--th id="btn-add-order"><i class="fa fa-plus-circle"></i></th-->
                     <th>订单号</th>
-                    <th>订单金额</th>
-                    <th>对应金额</th>
+                    <th class="money">订单金额</th>
+                    <th class="money">对应金额</th>
+                    <th class="money">已交付</th>
+                    <th class="money">已开票</th>
+                    <th class="money">已付款</th>
                     <th>订单主题</th>
                     <th>对方名称</th>
                     <th>责任人</th>
                     <th>项目名称</th>
                 </tr>
-                <{volist name="orders" id="order" empty="<tr><td colspan='8' style='text-align: center'>暂无数据</td></tr>"}>
+                <{volist name="orders" id="order" empty="<tr><td colspan='11' style='text-align: center'>暂无数据</td></tr>"}>
                 <tr>
                     <!--td><i class="fa fa-minus-circle"></i><input type="hidden" name="oids[]" value="<{$order.o_id}>"</td-->
                     <td class="nowrap"><a href="/orders/operation?op=edit&op_id=<{$order.o_id}>"><{$order.o_no}></a></td>
-                    <td><{$order.o_money}></td>
-                    <td><{$order.ou_used}><input type="hidden" name="oused[]" value="<{$order.ou_used}>"</td>
+                    <td class="money"><{$order.o_money|number_format=2}></td>
+                    <td class="money"><{$order.ou_used|number_format=2}><input type="hidden" name="oused[]" value="<{$order.ou_used}>"</td>
+                    <td class="money"><{$ordersUsed[$order.o_id]['acceptance']|number_format=2}></td>
+                    <td class="money"><{$ordersUsed[$order.o_id]['invoice']|number_format=2}></td>
+                    <td class="money"><{$ordersUsed[$order.o_id]['received']|number_format=2}></td>
                     <td><{$order.o_subject}></td>
                     <td><{$order.o_coname}></td>
                     <td><{$order.o_mname}></td>

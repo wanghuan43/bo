@@ -108,6 +108,7 @@ class Contract extends BoController
         $data = $this->model->getDataById($id);
         $modelOrders = new \app\bo\model\Orders();
         $orders = $modelOrders->getOrdersByContractId($id);
+        $this->setOrderUsed($orders);
         $this->setUpdateParams($data['c_mid']);
         if(!empty($orders)){
             $this->assign('readonly',true);
