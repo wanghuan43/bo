@@ -432,7 +432,6 @@ class   Orders extends BoModel
             }
         }
         $list = $this->select();
-        echo $this->getLastSql();exit;
         foreach ($list as $key => $value) {
             $in = true;
             $count = $cell = intval($begin) + intval($key);
