@@ -4,6 +4,7 @@ namespace app\bo\controller;
 use app\bo\libs\BoController;
 use app\bo\model\Logs;
 use app\bo\model\Orders;
+use app\bo\model\OrderUsed;
 use app\bo\model\Project as ModelProject;
 use think\File;
 use think\Request;
@@ -106,6 +107,7 @@ class Project extends BoController
         $data = $this->model->getDataById($id);
         $mOrders = new Orders();
         $orders = $mOrders->where('o_pid','=',$id)->select();
+        $this->setOrderUsed($orders);
         $this->setUpdateParams($data['p_mid']);
         if(!empty($orders)){
             $this->assign('readonly','true');

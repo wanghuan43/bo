@@ -324,6 +324,11 @@ th.icon {
     overflow: scroll;
 }
 
+.table2 th,
+.table3 th{
+    word-break: keep-all;
+    white-space: nowrap;
+}
 .list th {
     text-align: left;
     background: #D2F0FF;
