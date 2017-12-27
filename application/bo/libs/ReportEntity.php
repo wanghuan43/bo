@@ -59,6 +59,8 @@ class ReportEntity extends BoModel
         }
         $model = new Orders();
         $omodel = new Orders();
+        $model->getAllused($type);
+        $model->getOu();
         switch ($type) {
             case "orders":
                 $model->reportList($tmp[$type], $activeSheet, $type, 2, "", $search);
@@ -107,6 +109,7 @@ class ReportEntity extends BoModel
                     }
                 }
                 foreach ($lists as $key => $value) {
+                    $ot_id = "";
                     switch ($type) {
                         case "project":
                             $id = $value['p_id'];
@@ -115,16 +118,19 @@ class ReportEntity extends BoModel
                             $id = $value['c_id'];
                             break;
                         case "invoice":
+                            $ot_id = $value['i_id'];
                             $id = $omodel->alias("o")->join("__ORDER_USED__ ou", "o.o_id = ou.ou_oid", "left")
                                 ->field("o.o_id")->where("ou.ou_otid", "=", $value['i_id'])
                                 ->where("ou.ou_type", "=", "1")->select();
                             break;
                         case "received":
+                            $ot_id = $value['r_id'];
                             $id = $omodel->alias("o")->join("__ORDER_USED__ ou", "o.o_id = ou.ou_oid", "left")
                                 ->field("o.o_id")->where("ou.ou_otid", "=", $value['r_id'])
                                 ->where("ou.ou_type", "=", "3")->select();
                             break;
                         case "acceptance":
+                            $ot_id = $value['a_id'];
                             $id = $omodel->alias("o")->join("__ORDER_USED__ ou", "o.o_id = ou.ou_oid", "left")
                                 ->field("o.o_id")->where("ou.ou_otid", "=", $value['a_id'])
                                 ->where("ou.ou_type", "=", "2")->select();
@@ -197,7 +203,7 @@ class ReportEntity extends BoModel
                         $in = false;
                         foreach ($id as $ii) {
                             $in = true;
-                            $count = $model->reportList($tmp["orders"], $activeSheet, $type, $begin, $ii->o_id);
+                            $count = $model->reportList($tmp["orders"], $activeSheet, $type, $begin, $ii->o_id, "", $ot_id);
                         }
                         if ($count === false OR !$in) {
                             $begin = $begin - 1;
@@ -206,7 +212,7 @@ class ReportEntity extends BoModel
                         }
                     } elseif (isset($tmp["orders"])) {
                         $begin = $begin + 1;
-                        $count = $model->reportList($tmp["orders"], $activeSheet, $type, $begin, $id);
+                        $count = $model->reportList($tmp["orders"], $activeSheet, $type, $begin, $id, "", $ot_id);
                         if ($count === false) {
                             $begin = $begin - 1;
                         } else {
