@@ -2,6 +2,7 @@
 
 namespace app\bo\libs;
 
+use app\bo\model\OrderUsed;
 use think\Config;
 use think\Controller;
 use think\File;
@@ -68,7 +69,7 @@ class BoController extends Controller
                     } elseif ($opt == "like") {
                         $val = "%$val%";
                     }
-                    if (in_array($value, ['i_type', 'i_tax', 'c_type', 'a_type', 'r_type', 'o_type', 'o_lie', 'm_isAdmin','o_tax']) AND empty($val)) {
+                    if (in_array($value, ['i_type', 'i_tax', 'c_type', 'a_type', 'r_type', 'o_type', 'o_lie','o_tax','m_isAdmin']) AND empty($val)) {
                         continue;
                     }
                     $search[] = array(
@@ -208,7 +209,7 @@ class BoController extends Controller
                     } elseif ($opt == "like") {
                         $val = "%$val%";
                     }
-                    if (in_array($value, ['i_type', 'i_tax', 'c_type', 'a_type', 'r_type', 'o_type', 'o_lie', 'm_isAdmin','o_tax']) AND empty($val)) {
+                    if (in_array($value, ['i_type', 'i_tax', 'c_type', 'a_type', 'r_type', 'o_type', 'o_lie','o_tax','m_isAdmin']) AND empty($val)) {
                         continue;
                     }
                     $search[] = array(
@@ -597,6 +598,36 @@ class BoController extends Controller
         $file = ROOT_PATH . DS . 'public' . $file;
         $file = new File($file);
         return explode('/', $file->getMime())[0];
+    }
+
+    protected function setOrderUsed( $orders )
+    {
+        $ordersUsed = [];
+        if(!!$orders){
+            $m = new OrderUsed();
+            foreach ($orders as $key=>$order){
+                $invoice = 0;
+                $acceptance = 0;
+                $received = 0;
+                $res = $m->where('ou_oid','=',$order->o_id)->select();
+                if($res){
+                    foreach ($res as $ou){
+                        if($ou->ou_type == 1){ //发票
+                            $invoice += $ou->ou_used;
+                        }elseif($ou->ou_type == 2){ //验收单
+                            $acceptance += $ou->ou_used;
+                        }elseif($ou->ou_type == 3){ //回款
+                            $received += $ou->ou_used;
+                        }
+                    }
+                }
+                $ordersUsed[$order->o_id]['invoice'] = $invoice;
+                $ordersUsed[$order->o_id]['acceptance'] = $acceptance;
+                $ordersUsed[$order->o_id]['received'] = $received;
+            }
+        }
+        $this->assign('ordersUsed',$ordersUsed);
+        return $ordersUsed;
     }
 
 }
