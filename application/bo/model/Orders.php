@@ -480,6 +480,9 @@ class   Orders extends BoModel
             case "o_money" . $value['o_type'] . "_tax":
                 $v = $value['o_money'];
                 break;
+            case "o_money_tax":
+                $v = $value['o_money'];
+                break;
             case "o_money" . $value['o_type']:
                 $v = $value['o_money'] / (1 + $tax);
                 break;

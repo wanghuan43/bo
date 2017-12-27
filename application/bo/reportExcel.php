@@ -102,7 +102,7 @@ return [
         "订单对方名称"=>["col"=>"o_coname","by"=>"orders"],
         "订单税率"=>["col"=>"o_tax","by"=>"orders"],
         "所属项目名称"=>["col"=>"o_pname","by"=>"orders"],
-        "订单预计收入(含税)"=>["col"=>"o_money1_tax","by"=>"orders"],
+        "订单预计金额(含税)"=>["col"=>"o_money_tax","by"=>"orders"],
         "最近交付日期"=>["col"=>"o_cr_date","by"=>"orders"],
         "实际交付收入(含税)"=>["col"=>"o_amoney1_tax","by"=>"orders"],
         "实际交付支出(含税)"=>["col"=>"o_amoney2_tax","by"=>"orders"],
