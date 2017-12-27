@@ -737,7 +737,7 @@
         });
         $(".sliderValue").each(function(index, element){
             $(element).change(function(){
-                valueChange(this);
+                valueChange(this, "inputChange");
             });
         });
         $(".content:eq(0) input").focus(function(){
@@ -1145,7 +1145,7 @@
         });
         $(".orderProject_value_" + index).unbind("change");
         $(".orderProject_value_" + index).change(function(){
-            valueChange(this);
+            valueChange(this, "inputChange");
         });
         $(".fa-remove").unbind("click");
         $(".fa-remove").click(function () {
@@ -1245,7 +1245,7 @@
             'type="text" value="'+tdValue+'"/></td></tr>';
         return baseTr;
     }
-    function valueChange(em){
+    function valueChange(em, inputChange){
         var parentSlider = $(em).parent().prev().find("input");
         var persent = $(em).parent().prev().find(".slider");
         var val = parseFloat($(em).val().replace(",",""));
@@ -1274,20 +1274,24 @@
             $(persent).slider("value", val);
             $(parentSlider).val(val);
         }
-        sliderElement(persent, val);
+        sliderElement(persent, val, undefined, inputChange);
     }
-    function sliderElement(ele, val, sendMax){
+    function sliderElement(ele, val, sendMax, inputChange){
         if($(ele).slider('instance') != undefined){
             $(ele).slider('destroy');
         }
         var max = $("#o_money").val() == "" ? 0 : $("#o_money").val(), max = parseFloat(max),
             max = sendMax == undefined ? max : sendMax,
             className = $(ele).parent().next().find("input").attr("class").split(" ")[0],tt = 0
-            ,cn = $(ele).parent().next().find("input");
+            ,cn = $(ele).parent().next().find("input"),numStep = max/100*5,step=1;
+        if(inputChange == undefined){
+            step = numStep;
+        }
         $( ele ).slider({
             min: 0,
             max: max,
             value: val,
+            step: step,
             create: function (event,ui) {
                 p = 0;
                 if(max > 0){
@@ -1298,6 +1302,7 @@
                 $(ele).next().val(p);
             },
             slide: function (event, ui){
+                console.log($(this).slider('option','step',numStep));
                 var value = ui.value, p = Math.round(100 - (max - value) / max * 100)+"%";
                 $(ui.handle).text(p);
             },
