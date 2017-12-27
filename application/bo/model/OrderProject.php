@@ -38,13 +38,7 @@ class OrderProject extends BoModel
         foreach ($list as $key => $value) {
             foreach ($value['month'] as $k => $val) {
                 $tmp['op_oid'] = $op_id;
-                $month = explode(" ", $val);
-                if (count($month) == 2) {
-                    $tm = str_replace("M", "months", $val);
-                    $tmp['op_date'] = strtotime($tm, $date);
-                } else {
-                    $tmp['op_date'] = $date;
-                }
+                $tmp['op_date'] = strtotime($val);
                 $tmp['op_month'] = $val;
                 $tmp['op_percent'] = $value['percent'][$k];
                 $tmp['op_used'] = $value['value'][$k];

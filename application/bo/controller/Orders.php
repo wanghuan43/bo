@@ -154,17 +154,15 @@ class Orders extends BoController
             $result = $this->ordersModel->save($post, $where);
             if ($result AND $post['o_lie'] == '1') {
                 $nO = new \app\bo\model\Orders();
-                if ($post['o_type'] == "1") {
-                    $post['o_pid'] = $zc['zc_id'];
-                    $post['o_pname'] = $zc['zc_name'];
-                    $post['o_did'] = $zc['zc_did'];
-                    $post['o_dname'] = $zc['zc_dname'];
-                    $post['o_mid'] = $zc['zc_mid'];
-                    $post['o_mname'] = $zc['zc_mname'];
-                    $post['o_coid'] = $zc['zc_coid'];
-                    $post['o_coname'] = $zc['zc_coname'];
-                    $post['o_foreign'] = $this->ordersModel->o_id;
-                }
+                $post['o_pid'] = $zc['zc_id'];
+                $post['o_pname'] = $zc['zc_name'];
+                $post['o_did'] = $zc['zc_did'];
+                $post['o_dname'] = $zc['zc_dname'];
+                $post['o_mid'] = $zc['zc_mid'];
+                $post['o_mname'] = $zc['zc_mname'];
+                $post['o_coid'] = $zc['zc_coid'];
+                $post['o_coname'] = $zc['zc_coname'];
+                $post['o_foreign'] = $this->ordersModel->o_id;
                 $post['o_type'] = $post['o_type'] == '1' ? '2' : '1';
                 $post['o_no'] = $nO->getOrderNO($post['o_pid'], $post['o_type']);
                 $result = $nO->save($post, $where);

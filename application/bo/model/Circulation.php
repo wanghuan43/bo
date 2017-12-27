@@ -36,4 +36,15 @@ class Circulation extends BoModel
             $this->insertDuplicate($cl);
         }
     }
+
+    public function setOrderCirculation($ot_id, $list, $model = "orders"){
+        $this->where("ci_otid", "=", $ot_id)->where("ci_type", "=", $model)->delete();
+        $cl = array();
+        foreach ($list as $value) {
+            $cl[] = array("ci_otid" => $ot_id, "ci_type" => $model, "ci_mid" => $value);
+        }
+        if (count($cl) > 0) {
+            $this->saveAll($cl);
+        }
+    }
 }

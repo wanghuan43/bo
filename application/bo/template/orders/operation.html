@@ -118,6 +118,7 @@
                     </select>
                 </td>
             </tr>
+            <{if condition="$op == 'add'"}>
             <tr class="zproject" style="display: none">
                 <td class="txt">
                     <label for="zc_name"><i class="asterisk">*</i>支出项目:</label>
@@ -140,6 +141,7 @@
                     <input type="hidden" name="zc_mname" id="zc_mname" value=""/>
                 </td>
             </tr>
+            <{/if}>
             <tr>
                 <td class="txt"><label for="o_date"><i class="asterisk">*</i><{if condition="$op=='add'"}>预计日期:<{else /}>签约日期:<{/if}></label></td>
                 <td><input class="input-sm" type="text" name="o_date" id="o_date" value="<?php echo (empty($order['o_date']) ? "" : date("Y-m-d", $order['o_date'])) ?>" required/></td>
@@ -335,9 +337,7 @@
                 <tr>
                     <td class="icon"><i class="fa fa-remove"></i></td>
                     <td>
-                        <select class="orderProject_month_2" name="project[2][month][]">
-                            <option value="<{$value.op_month}>" selected><{$value.op_month}></option>
-                        </select>
+                        <input type="text" class="orderProject_month_2" name="project[2][month][]" value="<{$value.op_month}>">
                     </td>
                     <td>
                         <div class="slider" style="margin: 0 20px;">
@@ -351,8 +351,7 @@
                 <tr>
                     <td class="icon"></td>
                     <td>
-                        <select class="orderProject_month_2" name="project[2][month][]">
-                        </select>
+                        <input type="text" class="orderProject_month_2" name="project[2][month][]">
                     </td>
                     <td>
                         <div class="slider" style="margin: 0 20px;">
@@ -381,9 +380,7 @@
                 <tr>
                     <td class="icon"><i class="fa fa-remove"></i></td>
                     <td>
-                        <select class="orderProject_month_1" name="project[1][month][]">
-                            <option value="<{$value.op_month}>" selected><{$value.op_month}></option>
-                        </select>
+                        <input type="text" class="orderProject_month_1" name="project[1][month][]" value="<{$value.op_month}>">
                     </td>
                     <td>
                         <div class="slider" style="margin: 0 20px;"></div>
@@ -396,8 +393,7 @@
                 <tr>
                     <td class="icon"></td>
                     <td>
-                        <select class="orderProject_month_1" name="project[1][month][]">
-                        </select>
+                        <input type="text" class="orderProject_month_1" name="project[1][month][]">
                     </td>
                     <td>
                         <div class="slider" style="margin: 0 20px;">
@@ -426,9 +422,7 @@
                 <tr>
                     <td class="icon"><i class="fa fa-remove"></i></td>
                     <td>
-                        <select class="orderProject_month_3" name="project[3][month][]">
-                            <option value="<{$value.op_month}>" selected><{$value.op_month}></option>
-                        </select>
+                        <input type="text" class="orderProject_month_3" name="project[3][month][]" value="<{$value.op_month}>">
                     </td>
                     <td>
                         <div class="slider" style="margin: 0 20px;">
@@ -442,8 +436,7 @@
                 <tr>
                     <td class="icon"></td>
                     <td>
-                        <select class="orderProject_month_3" name="project[3][month][]">
-                        </select>
+                        <input type="text" class="orderProject_month_3" name="project[3][month][]">
                     </td>
                     <td>
                         <div class="slider" style="margin: 0 20px;">
@@ -507,11 +500,26 @@
             $("#o_status option:last").prop("disabled", true);
         }
         bindRemove();
+        for(var iii=1;iii<=3;iii++){
+            lay(".orderProject_month_"+iii).each(function(){
+                laydate.render({
+                    elem: this
+                    ,type: 'month'
+                });
+            });
+        }
         $("#o_type").change(function(){
             var cla = ".f-layer-company",lie = $("#o_lie").val();
             $(cla).remove();
             $(cla + "-back").remove();
-            if($(this).val() == "2" && lie == "1"){
+            if($(this).val() == "1"){
+                $(".zproject .txt:eq(0) label").html("支出项目");
+                $(".zproject .txt:eq(1) label").html("支出责任人");
+            }else{
+                $(".zproject .txt:eq(0) label").html("收入项目");
+                $(".zproject .txt:eq(1) label").html("收入责任人");
+            }
+            if(lie == "1"){
                 zproject.show();
             }else{
                 zproject.hide();
@@ -1028,19 +1036,13 @@
         });
         $("#o_lie").change(function(){
             if($(this).val() == 1){
-                $("#o_type option:eq(0)").prop("selected", true);
-                $("#o_type option:eq(1)").prop("disabled", true);
                 $("#o_coname").parent().prev().find("label").html('<i class="asterisk">*</i>对方部门:');
-            }else{
-                $("#o_type option:eq(1)").prop("disabled", false);
-                $("#o_coname").parent().prev().find("label").html('<i class="asterisk">*</i>对方名称:');
-            }
-            var o_type = $("#o_type").val();
-            if($(this).val() == "1" && o_type == "1"){
                 zproject.show();
             }else{
+                $("#o_coname").parent().prev().find("label").html('<i class="asterisk">*</i>对方名称:');
                 zproject.hide();
             }
+            var o_type = $("#o_type").val();
             $("#o_coname").val("");
             $("#o_coid").val("");
             $("#o_coname").parent().prev().find("i").eq(1).show();
@@ -1131,6 +1133,12 @@
             max -= parseFloat($(cla).find("tr:eq(0)").find("td:eq(2)").html());
         }
         $(element).append(baseTR);
+        lay(".orderProject_month_"+index).each(function(){
+            laydate.render({
+                elem: this
+                ,type: 'month'
+            });
+        });
         if($(".orderProject_percent_"+index).length == 1){
             $(".fa-remove").eq(0).remove();
         }
@@ -1227,17 +1235,10 @@
         }
     }
     function getBaseTR(index, inputValue) {
-        var baseTr = '<tr><td class="icon"><i class="fa fa-remove"></i></td><td><select class="orderProject_month_' + index + '" name="project[' + index + '][month][]">';
+        var baseTr = '<tr><td class="icon"><i class="fa fa-remove"></i></td><td><input type="text" class="orderProject_month_' + index + '" name="project[' + index + '][month][]">';
         var bm = JSON.parse(baseMonth);
         var len = bm.length,tdValue = inputValue == undefined ? 0 : inputValue.toFixed(2);
-        for (var i = 0; i < len; i++) {
-            baseTr += '<option value="+' + bm[i] + '">+ ' + bm[i] + '</option>';
-        }
-        baseTr += '<option value="0 M" selected>0 M</option>';
-        for (var i = (len - 1); i >= 0; i--) {
-            baseTr += '<option value="-' + bm[i] + '">- ' + bm[i] + '</option>';
-        }
-        baseTr += '</select></td><td><div class="slider" style="margin: 0 20px;"></div>' +
+        baseTr += '</td><td><div class="slider" style="margin: 0 20px;"></div>' +
             '<input type="text" class="orderProject_percent_' + index + ' sliderPercent" style="display: none;" ' +
             'name="project[' + index + '][percent][]" value="0"/></td>' +
             '<td><input class="orderProject_value_' + index + ' sliderValue" ' +
@@ -1302,7 +1303,7 @@
                 $(ele).next().val(p);
             },
             slide: function (event, ui){
-                console.log($(this).slider('option','step',numStep));
+                $(this).slider('option','step',numStep);
                 var value = ui.value, p = Math.round(100 - (max - value) / max * 100)+"%";
                 $(ui.handle).text(p);
             },
