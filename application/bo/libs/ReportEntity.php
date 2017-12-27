@@ -101,9 +101,9 @@ class ReportEntity extends BoModel
                 foreach ($tmps as $val) {
                     $tax = intval(getTaxList($val['o_tax'])) / 100;
                     if (isset($cclist[$val['o_pid']][$val['o_type']])) {
-                        $cclist[$val['o_pid']][$val['o_type']] += $val['o_money'] - $val['o_money'] * $tax;
+                        $cclist[$val['o_pid']][$val['o_type']] += $val['o_money']/(1+$tax);
                     } else {
-                        $cclist[$val['o_pid']][$val['o_type']] = $val['o_money'] - $val['o_money'] * $tax;
+                        $cclist[$val['o_pid']][$val['o_type']] = $val['o_money']/(1+$tax);
                     }
                 }
                 foreach ($lists as $key => $value) {

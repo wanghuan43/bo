@@ -45,8 +45,8 @@ return [
         "待签约支出(含税)"=>["col"=>"o_wmoney2","by"=>"orders"],
         "未实现开票(含税)"=>["col"=>"o_wimoney1","by"=>"orders"],
         "未实现回票(含税)"=>["col"=>"o_wimoney2","by"=>"orders"],
-        "应收帐款(含税)"=>["col"=>"o_money1_tax","by"=>"orders"],
-        "应付帐款(含税)"=>["col"=>"o_money2_tax","by"=>"orders"],
+        "应收帐款(含税)"=>["col"=>"o_iomoney1_tax","by"=>"orders"],
+        "应付帐款(含税)"=>["col"=>"o_iomoney2_tax","by"=>"orders"],
     ],
     "orders" => [
         "订单号"=>["col"=>"o_no","by"=>"orders"],
@@ -81,8 +81,8 @@ return [
         "待签约支出(含税)"=>["col"=>"o_wmoney2","by"=>"orders"],
         "未实现开票(含税)"=>["col"=>"o_wimoney1","by"=>"orders"],
         "未实现回票(含税)"=>["col"=>"o_wimoney2","by"=>"orders"],
-        "应收帐款(含税)"=>["col"=>"o_money1_tax","by"=>"orders"],
-        "应付帐款(含税)"=>["col"=>"o_money2_tax","by"=>"orders"],
+        "应收帐款(含税)"=>["col"=>"o_iomoney1_tax","by"=>"orders"],
+        "应付帐款(含税)"=>["col"=>"o_iomoney2_tax","by"=>"orders"],
     ],
     "contract" => [
         "合同号"=>["col"=>"c_no","by"=>"contract"],
@@ -114,8 +114,8 @@ return [
         "实际付款(含税)"=>["col"=>"o_rmoney2_tax","by"=>"orders"],
         "未实现开票(含税)"=>["col"=>"o_wimoney1","by"=>"orders"],
         "未实现回票(含税)"=>["col"=>"o_wimoney2","by"=>"orders"],
-        "应收帐款(含税)"=>["col"=>"o_money1_tax","by"=>"orders"],
-        "应付帐款(含税)"=>["col"=>"o_money2_tax","by"=>"orders"],
+        "应收帐款(含税)"=>["col"=>"o_iomoney1_tax","by"=>"orders"],
+        "应付帐款(含税)"=>["col"=>"o_iomoney2_tax","by"=>"orders"],
     ],
     "invoice" => [
         "发票号"=>["col"=>"i_no","by"=>"invoice"],
