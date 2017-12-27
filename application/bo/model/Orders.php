@@ -451,7 +451,7 @@ class   Orders extends BoModel
                 $v = $value['o_money'] / (1 + $tax);
                 break;
             case "o_iomoney" . $value['o_type'] . "_tax":
-                $v = $list[1][0] / (1 + $tax) - $list[3][0] / (1 + $tax);
+                $v = $list[1][0] - $list[3][0];
                 break;
             case "o_cmoney" . $value['o_type'] . "_tax":
                 if (!empty($value['o_cid'])) {
