@@ -119,8 +119,6 @@ class Circulation extends BoController
 
         $this->model->where('ci_type','=',$type)->whereIn('ci_mid',$params['mids'])->whereIn('ci_otid',$params['ids'])->delete();
 
-        var_dump($this->model->getLastSql());
-
         return ['flag'=>1,'msg'=>'操作成功'];
 
     }
