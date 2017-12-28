@@ -380,6 +380,9 @@ class Orders extends BoController
             if (isset($post['ids'])) {
                 $ids = $post['ids'];
             } else {
+                if ($this->current->m_isAdmin == "2") {
+                    $this->model->where("o.o_mid", "=", $this->current->m_id);
+                }
                 $res = $this->model->getList($search);
                 foreach ($res as $i)
                     $ids[] = $i->o_id;
