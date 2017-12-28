@@ -407,11 +407,11 @@ class Orders extends BoController
                 $arr1 = $val[0];
                 if ($type == 'orders') {
                     $arr1['op_type'] = 'C合同';
-                    $arr1['op_used'] = 0;
+                    $arr1['op_used'] = $arr1['o_money'];
                     $arr1['o_date'] = $arr1['op_date'] = date('Y/m/d', $arr1['o_date']);
                 } else {
                     $arr1['ou_type'] = 'C合同';
-                    $arr1['ou_used'] = $arr1['c_used'];
+                    $arr1['ou_used'] = $arr1['o_money'];
                     $arr1['ou_date'] = date('Y/m/d', $arr1['c_date']);
                     $arr1['o_date'] = date('Y/m/d', $arr1['o_date']);
                 }
@@ -457,9 +457,9 @@ class Orders extends BoController
                         $arr1['o_status'] = $i['o_status'] = '6合同';
                     }
                     if ($i['o_lie'] == 1) {
-                        $arr1['o_lie'] = $i['o_lie'] = '1';
+                        $arr1['o_lie'] = $i['o_lie'] = '内部';
                     } elseif ($i['o_lie'] == 2) {
-                        $arr1['o_lie'] = $i['o_lie'] = '';
+                        $arr1['o_lie'] = $i['o_lie'] = '外部';
                     } else {
                         $arr1['o_lie'] = $i['o_lie'] = '';
                     }
