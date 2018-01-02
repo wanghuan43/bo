@@ -39,9 +39,9 @@
                     <td><{$contract.c_date|date='Y-m-d',###}></td>
                     <td class="money"><{$contract.c_money|number_format=2}></td>
                     <td class="money"><{$contract.c_used|number_format=2}></td>
-                    <td class="money"><{$total['received']|number_format=2}></td>
-                    <td class="money"><{$total['invoice']|number_format=2}></td>
                     <td class="money"><{$total['acceptance']|number_format=2}></td>
+                    <td class="money"><{$total['invoice']|number_format=2}></td>
+                    <td class="money"><{$total['received']|number_format=2}></td>
                 </tr>
             </tbody>
         </table>
@@ -76,9 +76,9 @@
                 <td><{$order.o_tax|getTaxList}></td>
                 <td class="money"><{$order.o_money|number_format=2}></td>
                 <td class="money"><{if empty($order.o_cid)}>0.00<{else}><{$order.o_money|number_format=2}><{/if}></td>
-                <td class="money"><{$total['orders'][$order.o_id]['received']|number_format=2}></td>
-                <td class="money"><{$total['orders'][$order.o_id]['invoice']|number_format=2}></td>
                 <td class="money"><{$total['orders'][$order.o_id]['acceptance']|number_format=2}></td>
+                <td class="money"><{$total['orders'][$order.o_id]['invoice']|number_format=2}></td>
+                <td class="money"><{$total['orders'][$order.o_id]['received']|number_format=2}></td>
             </tr>
             <{/volist}>
             </tbody>

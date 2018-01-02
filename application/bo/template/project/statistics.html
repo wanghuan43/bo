@@ -52,9 +52,9 @@
                     <td class="money"><{$project.p_pay|number_format=2}></td>
                     <td class="money"><{$total[2]['plan']|number_format=2}></td>
                     <td class="money"><{$total[2]['contract']|number_format=2}></td>
-                    <td class="money"><{$total[2]['received']|number_format=2}></td>
-                    <td class="money"><{$total[2]['invoice']|number_format=2}></td>
                     <td class="money"><{$total[2]['acceptance']|number_format=2}></td>
+                    <td class="money"><{$total[2]['invoice']|number_format=2}></td>
+                    <td class="money"><{$total[2]['received']|number_format=2}></td>
                 </tr>
             </tbody>
         </table>
@@ -89,9 +89,9 @@
                 <td><{$order.o_tax|getTaxList}></td>
                 <td class="money"><{$order.o_money|number_format=2}></td>
                 <td class="money"><{if empty($order.o_cid)}>0.00<{else}><{$order.o_money|number_format=2}><{/if}></td>
-                <td class="money"><{$total['orders'][$order.o_id]['received']|number_format=2}></td>
-                <td class="money"><{$total['orders'][$order.o_id]['invoice']|number_format=2}></td>
                 <td class="money"><{$total['orders'][$order.o_id]['acceptance']|number_format=2}></td>
+                <td class="money"><{$total['orders'][$order.o_id]['invoice']|number_format=2}></td>
+                <td class="money"><{$total['orders'][$order.o_id]['received']|number_format=2}></td>
             </tr>
             <{/volist}>
             </tbody>
