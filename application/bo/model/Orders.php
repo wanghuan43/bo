@@ -149,6 +149,7 @@ class   Orders extends BoModel
         foreach ($search as $key => $value) {
             $this->where("o." . $value['field'], $value['opt'], $value['val']);
         }
+        $this->group('o.o_id');
         $this->order("o.o_id", "desc");
         if (empty($limit)) {
             $list = $this->select();
