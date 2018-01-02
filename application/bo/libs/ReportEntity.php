@@ -196,6 +196,9 @@ class ReportEntity extends BoModel
                                     break;
                             }
                         }
+                        if(is_float($v)){
+                            $v = round($v,2);
+                        }
                         $activeSheet->setCellValue($k . $begin, $v);
                     }
                     if (is_array($id) AND isset($tmp["orders"])) {

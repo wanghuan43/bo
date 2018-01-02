@@ -467,6 +467,9 @@ class   Orders extends BoModel
             } else {
                 $v = $this->customCellValue($value, $val, $type, $otid);
             }
+            if(is_float($v)){
+                $v = round($v,2);
+            }
             $obj->setCellValue($key . $cell, $v);
         }
     }
