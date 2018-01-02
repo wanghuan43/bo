@@ -355,7 +355,7 @@ th.icon {
     word-break: keep-all;
 }
 .nowrap a,.nowrap span{
-    padding-right:1em;
+    padding-right:.2em;
 }
 table .money{
     text-align:right;
@@ -385,6 +385,22 @@ table.list tr.border {
 table.list td:first-child {
     width: 2em;
     text-align: center;
+}
+
+.f-statistics-layer table.list td:first-child{
+    text-align: left;
+}
+
+.f-statistics-layer table:nth-child(3) th.money{
+    text-align: right;
+}
+
+.f-statistics-layer table.detail tr{
+    height:30px;
+}
+
+.f-statistics-layer table.detail{
+    margin-bottom: 1em;
 }
 
 .thead td {
@@ -771,6 +787,11 @@ span.page-limit{
 }
 span.page-limit .pageLimit{
     margin:0 .6em 0 .4em;
+}
+
+.fa-link{
+    color:#0431ff;
+    cursor: pointer;
 }
 
 @-moz-document url-prefix() {

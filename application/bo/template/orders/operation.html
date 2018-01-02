@@ -209,7 +209,7 @@
             <table class="acceptance_2" data="2">
                 <thead>
                 <tr>
-                    <td><i class="fa fa-search" data="acceptance"></i></td>
+                    <td><i class="fa fa-link fa-lg" data="acceptance"></i></td>
                     <td>&#931;已交付</td>
                     <td>0.00</td>
                     <td>0%</td>
@@ -246,7 +246,7 @@
             <table class="invoice_1" data="1">
                 <thead>
                 <tr>
-                    <td><i class="fa fa-search" data="invoice"></i></td>
+                    <td><i class="fa fa-link fa-lg" data="invoice"></i></td>
                     <td>&#931;已开票</td>
                     <td>0.00</td>
                     <td>0%</td>
@@ -283,7 +283,7 @@
             <table class="received_3" data="3">
                 <thead>
                 <tr>
-                    <td><i class="fa fa-search" data="received"></i></td>
+                    <td><i class="fa fa-link fa-lg" data="received"></i></td>
                     <td>&#931;已付款</td>
                     <td>0.00</td>
                     <td>0%</td>
@@ -788,7 +788,7 @@
             });
         });
 
-        $(".fa-search").click(function () {
+        $(".fa-link").click(function () {
             var type = $(this).attr("data"),thisEle = this,inputs = $(this).parent().next().find("input"),
                 valss = $(inputs).val(),otype = $("#o_type").val(),olie = $("#o_lie").val(),url = ""
                 per = $(this).parents("tr").find("td:last").html();
