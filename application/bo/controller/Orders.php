@@ -89,6 +89,11 @@ class Orders extends BoController
             $f = getFirstCharter($value['tl_name']);
             $tagList[$f][] = $value;
         }
+        $mimeType = false;
+        if($order['o_attachment']){
+            $mimeType = $this->getAttachmentMimeType($order['o_attachment']);
+        }
+        $this->assign('aMimeType',$mimeType);
         $this->assign('order', $order);
         $this->assign('typeList', getTypeList());
         $this->assign('taxList', getTaxList());
@@ -118,6 +123,18 @@ class Orders extends BoController
         $post['o_date'] = strtotime($post['o_date']);
         $where = [];
         $message = "保存成功";
+
+        $file = $this->request->file('o_attachment');
+        $res = $this->uploadFile($file);
+
+        if($res['flag'] === 0){
+            return $res;
+        }elseif ($res['flag'] === 1){
+            $post['o_attachment'] = $res['name'];
+        }else{
+            $post['o_attachment'] = '';
+        }
+
         if ($op == "edit") {
 //            $search = [
 //                "l_otid" => $op_id,
@@ -130,6 +147,7 @@ class Orders extends BoController
 //                return array("status" => 0, "message" => "已有还未审核的修改,请等待上一次提交的审核.");
 //            }
             $old = $this->ordersModel->getOrderById($op_id);
+            $post['o_updatetime'] = time();
             $logModel->saveLogs($post, $old, $op_id, "orders", "edit");
             $_POST['id'] = $logModel->l_id;
             $_POST['val'] = 1;

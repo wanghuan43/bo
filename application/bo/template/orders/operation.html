@@ -199,6 +199,21 @@
                     </select>
                 </td>
             </tr>
+            <tr>
+                <td class="txt"><label for="area-content">说明:</label></td>
+                <td colspan="5">
+                    <textarea class="form-control" id="area-content" name="o_content"><{$order.o_content}></textarea>
+                </td>
+            </tr>
+            <tr>
+                <td class="txt"><label for="ipt-attachment">附件:</label></td>
+                <td colspan="5">
+                    <{if $aMimeType}>
+                    <a href="<{$order.o_attachment}>" target="_blank"><i class="fa fa-paperclip"></i> 附件</a>
+                    <{/if}>
+                    <input type="file" id="ipt-attachment" name="o_attachment"/>
+                </td>
+            </tr>
         </table>
     </div>
 </div>
@@ -763,12 +778,15 @@
                     var o_pname = $("#o_pname"),o_subject = $("#o_subject"),
                         o_coname = $("#o_coname"),o_date = $("#o_date"),o_money = $("#o_money"),o_num = $("#o_num"),
                         o_profits = $("#o_profits"),url = form.attr("action"),par = form.serialize(),check=false;
+                    par = new FormData(form[0]);
                     form.prop("disabled", "true");
                     loading.show();
                     $.ajax({
                         url:url,
                         dataType: "json",
                         method: "post",
+                        contentType: false,
+                        processData: false,
                         data:par,
                         success:function(data){
                             loading.hide();
