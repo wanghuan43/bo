@@ -218,4 +218,73 @@ class Project extends BoController
 
     }
 
+    public function statistics($id)
+    {
+        $project = $this->model->where('p_id','=',$id)->find();
+        $mOrders = new Orders();
+        $mOrderUsed = new OrderUsed();
+        $orders = $mOrders->where('o_pid','=',$id)->order('o_date','desc')->select();
+        $total = [
+            1 => [
+                'plan' => 0, //计划
+                'contract' => 0, //签约
+                'received' => 0, //交付
+                'invoice' => 0, //开票
+                'acceptance' => 0 //收款
+            ],
+            2 => [
+                'plan' => 0,
+                'contract' => 0,
+                'received' => 0,
+                'invoice' => 0,
+                'acceptance' => 0
+            ],
+            'pLeftIncome' => $project->p_income,
+            'pProfit' => 0
+        ];
+        $oIncome = 0;
+        $oPay = 0;
+        foreach ($orders as $order){
+            $ous = $mOrderUsed->where('ou_oid','=',$order->o_id)->select();
+
+            $total[$order->o_type]['plan'] += $order->o_money;
+            if( !!$order->o_cid ){
+                $total[$order->o_type]['contract'] += $order->o_money;
+            }
+            $r = 0;
+            $i = 0;
+            $a = 0;
+            if(!!$ous){
+                foreach ($ous as $ou){
+                    if($ou->ou_type == 1){
+                        $i += $ou->ou_used;
+                    }elseif ($ou->ou_type == 2){
+                        $a += $ou->ou_used;
+                    }elseif($ou->ou_type == 3){
+                        $r += $ou->ou_used;
+                    }
+                }
+            }
+            $total[$order->o_type]['received'] += $r;
+            $total[$order->o_type]['invoice'] += $i;
+            $total[$order->o_type]['acceptance'] += $a;
+            $total['orders'][$order->o_id] = [
+                'received' => $order->o_money - $r,
+                'invoice' => $order->o_money - $i,
+                'acceptance' => $order->o_money - $a
+            ];
+            if($order->o_type == 1){
+                $total['pLeftIncome'] -= $order->o_money;
+                $oIncome  += $order->o_money/(1+intval(getTaxList($order->o_tax))/100);
+            }elseif ($order->o_type == 2){
+                $oPay += $order->o_money/(1+intval(getTaxList($order->o_tax))/100);
+            }
+        }
+        $total['pProfit'] = $oIncome-$oPay;
+        $this->assign('total',$total);
+        $this->assign('project',$project);
+        $this->assign('orders',$orders);
+        return $this->fetch();
+    }
+
 }

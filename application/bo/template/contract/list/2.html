@@ -62,7 +62,10 @@
         <{volist name="lists" id="val" empty="<tr><td colspan='11'>暂无数据</td></tr>"}>
         <tr>
             <td><input type="checkbox" value="<{$val.c_id}>" class="lists-id" data-name="<{$val.c_no}>"></td>
-            <td><a href="/contract/detail?id=<{$val.c_id}>"><{$val.c_no}></a></td>
+            <td class="nowrap">
+                <a href="/contract/statistics/id/<{$val.c_id}>" class="link-statistics" title="合同执行情况"><i class="fa fa-windows"></i></a>
+                <a href="/contract/detail?id=<{$val.c_id}>"><{$val.c_no}></a>
+            </td>
             <td><{$val.c_name}></td>
             <td><{$val.c_mname}></td>
             <td><{$val.c_coname}></td>

@@ -57,6 +57,18 @@
         }
     });
 
+    $("table.list td a.link-statistics").unbind("click").click(function(){
+        var url = $(this).attr("href");
+        $.get(url,function(data){
+            $("#popDIV").html(data);
+            $("#popDIV .f-layer .close").click(function(){
+                custom.hideFilter($("#popDIV .f-layer"));
+            });
+            custom.showFilter($("#popDIV .f-layer"),true);
+        });
+        return false;
+    });
+
     var selIDs = {
 
         e: "#main-container .selected-ids select",

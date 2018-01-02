@@ -42,7 +42,8 @@
             <td>
                 <input type="checkbox" value="<{$val.p_id}>" class="lists-id" data-name="<{$val.p_no}>">
             </td>
-            <td>
+            <td class="nowrap">
+                <a href="/project/statistics/id/<{$val.p_id}>" class="link-statistics" title="项目执行情况"><i class="fa fa-windows"></i></a>
                 <a href="/project/detail?id=<{$val.p_id}>"><{$val.p_no}></a>
             </td>
             <td><{$val.p_name}></td>

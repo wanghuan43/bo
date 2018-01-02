@@ -3,6 +3,8 @@ namespace app\bo\controller;
 
 use app\bo\libs\BoController;
 use app\bo\model\Logs;
+use app\bo\model\Orders;
+use app\bo\model\OrderUsed;
 use think\Request;
 
 class Contract extends BoController
@@ -208,6 +210,49 @@ class Contract extends BoController
         }
 
         return $ret;
+    }
+
+    public function statistics($id)
+    {
+        $contract = $this->model->where('c_id','=',$id)->find();
+        $mOrders = new Orders();
+        $mOrderUsed = new OrderUsed();
+        $orders = $mOrders->where('o_cid','=',$id)->order('o_date','desc')->select();
+        $total = [
+                'received' => 0,
+                'invoice' => 0,
+                'acceptance' => 0
+        ];
+
+        foreach ($orders as $order){
+            $ous = $mOrderUsed->where('ou_oid','=',$order->o_id)->select();
+            $r = 0;
+            $i = 0;
+            $a = 0;
+            if(!!$ous){
+                foreach ($ous as $ou){
+                    if($ou->ou_type == 1){
+                        $i += $ou->ou_used;
+                    }elseif ($ou->ou_type == 2){
+                        $a += $ou->ou_used;
+                    }elseif($ou->ou_type == 3){
+                        $r += $ou->ou_used;
+                    }
+                }
+            }
+            $total['received'] += $r;
+            $total['invoice'] += $i;
+            $total['acceptance'] += $a;
+            $total['orders'][$order->o_id] = [
+                'received' => $order->o_money - $r,
+                'invoice' => $order->o_money - $i,
+                'acceptance' => $order->o_money - $a
+            ];
+        }
+        $this->assign('total',$total);
+        $this->assign('contract',$contract);
+        $this->assign('orders',$orders);
+        return $this->fetch();
     }
 
 }
