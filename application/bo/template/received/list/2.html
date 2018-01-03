@@ -40,6 +40,11 @@
                     付/回款日期<i class="<{:getSortClass($sort,'r_date')}>"></i>
                 </a>
             </th>
+            <th class="datetime">
+                <a href="/received/all/sort/r_createtime/order/<{:getSortOrder($sort,'r_createtime')}>">
+                    付/回款日期<i class="<{:getSortClass($sort,'r_createtime')}>"></i>
+                </a>
+            </th>
             <th class="date">
                 <a href="/received/all/sort/r_accdate/order/<{:getSortOrder($sort,'r_accdate')}>">
                     记账月<i class="<{:getSortClass($sort,'r_accdate')}>"></i>
@@ -62,12 +67,13 @@
         <{volist name="lists" id="val" empty="<tr><td colspan='10'>暂无数据</td></tr>"}>
         <tr>
             <td><input type="checkbox" value="<{$val.r_id}>" class="lists-id" data-name="<{$val.r_no}>"></td>
-            <td><a href="/received/detail?id=<{$val.r_id}>"><{$val.r_no}></a></td>
+            <td class="nowrap"><a href="/received/detail?id=<{$val.r_id}>"><{$val.r_no}></a></td>
             <td><{$val.r_subject}></td>
             <td><{$val.r_mname}></td>
             <td><{$val.r_coname}></td>
             <td><?php echo getTypeList($val['r_type']); ?></td>
             <td><?php echo date("Y-m-d", $val['r_date']); ?></td>
+            <td><{$val.r_createtime|date='Y-m-d H:i:s',###}></td>
             <td><{$val.r_accdate}></td>
             <td class="money"><{$val.r_money|number_format=2}></td>
             <td class="money"><{$val.r_noused|number_format=2}></td>

@@ -40,6 +40,11 @@
                     签约日期<i class="<{:getSortClass($sort,'c_date')}>"></i>
                 </a>
             </th>
+            <th class="datetime">
+                <a href="/contract/all/sort/c_createtime/order/<{:getSortOrder($sort,'c_createtime')}>">
+                    创建时间<i class="<{:getSortClass($sort,'c_createtime')}>"></i>
+                </a>
+            </th>
             <th>
                 <a href="/contract/all/sort/c_accdate/order/<{:getSortOrder($sort,'c_accdate')}>">
                     记账月<i class="<{:getSortClass($sort,'c_accdate')}>"></i>
@@ -71,6 +76,7 @@
             <td><{$val.c_coname}></td>
             <td style="color:<{if $val['c_type']==1}>green<{elseif $val['c_type']==2}>#c00<{else}>#000<{/if}>"><?php echo getTypeList($val['c_type']);?></td>
             <td><?php echo date("Y-m-d", $val['c_date']); ?></td>
+            <td><{$val.c_createtime|date='Y-m-d H:i:s',###}></td>
             <td><{$val.c_accdate}></td>
             <td class="money"><{$val.c_money|number_format=2}></td>
             <td class="money"><{$val.c_noused|number_format=2}></td>

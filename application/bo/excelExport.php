@@ -46,8 +46,14 @@ return [
             'Q' => ['title'=>'合同名称','key'=>'c_name'],
         ],
         'project' => [
-            'A' => ['title'=>'项目编号','key'=>'p_no'],
-            'B' => ['title'=>'项目名称','key'=>'p_name']
+            'A' => ['title'=>'项目号','key'=>'p_no'],
+            'B' => ['title'=>'项目名称','key'=>'p_name'],
+            'C' => ['title'=>'责任人','key'=>'p_mname'],
+            'D' => ['title'=>'立项部门','key'=>'p_dname'],
+            'E' => ['title'=>'预计总收入','key'=>'p_income','type'=>'money'],
+            'F' => ['title'=>'预计总支出','key'=>'p_pay','type'=>'money'],
+            'G' => ['title'=>'立项时间','key'=>'p_date','type'=>'date'],
+            'H' => ['title'=>'创建时间','key'=>'p_createtime','type'=>'date']
         ],
         'contract' => [
             'A' => ['title'=>'合同号','key'=>'c_no'],
@@ -84,14 +90,18 @@ return [
         ],
         'invoice' => [ //发票
             'A' => ['title'=>'发票号','key'=>'i_no'],
-            'B' => ['title'=>'责任人','key'=>'i_mname'],
-            'C' => ['title'=>'类型','key'=>'i_type','type'=>'type'],
-            'D' => ['title'=>'对方公司','key'=>'i_coname'],
-            'E' => ['title'=>'总金额','key'=>'i_money','type'=>'money'],
-            'F' => ['title'=>'已使用金额','key'=>'i_used','type'=>'money'],
-            'G' => ['title'=>'未使用金额','key'=>'i_noused','type'=>'money'],
-            'H' => ['title'=>'日期','key'=>'i_date','type'=>'date'],
-            'I' => ['title'=>'描述','key'=>'i_content']
+            'B' => ['title'=>'部门','key'=>'i_dname'],
+            'C' => ['title'=>'责任人','key'=>'i_mname'],
+            'D' => ['title'=>'摘要','key'=>'i_subject'],
+            'E' => ['title'=>'类型','key'=>'i_type','type'=>'type'],
+            'F' => ['title'=>'对方公司','key'=>'i_coname'],
+            'G' => ['title'=>'开票日期','key'=>'i_date','type'=>'date'],
+            'H' => ['title'=>'总金额','key'=>'i_money','type'=>'money'],
+            'I' => ['title'=>'已使用金额','key'=>'i_used','type'=>'money'],
+            'J' => ['title'=>'未使用金额','key'=>'i_noused','type'=>'money'],
+            'K' => ['title'=>'税率','key'=>'i_tax','type'=>'tax'],
+            'L' => ['title'=>'记账月','key'=>'i_accdate'],
+            'M' => ['title'=>'说明','key'=>'i_content']
         ],
         'department' => [
             'A' => ['title'=>'成本中心编码','key'=>'d_code'],

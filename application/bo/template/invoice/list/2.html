@@ -39,9 +39,14 @@
                 类型<i class="<{:getSortClass($sort,'i_type')}>"></i>
             </a>
         </th>
-        <th>
+        <th class="date">
             <a href="/invoice/all/sort/i_date/order/<{:getSortOrder($sort,'i_date')}>">
                 开票日期<i class="<{:getSortClass($sort,'i_date')}>"></i>
+            </a>
+        </th>
+        <th class="datetime">
+            <a href="/invoice/all/sort/i_createtime/order/<{:getSortOrder($sort,'i_createtime')}>">
+                创建时间<i class="<{:getSortClass($sort,'i_createtime')}>"></i>
             </a>
         </th>
         <th>
@@ -73,6 +78,7 @@
         <td><?php echo getTaxList($val['i_tax']); ?></td>
         <td><{:getTypeList2($val.i_type)}></td>
         <td><?php echo date("Y-m-d", $val['i_date']); ?></td>
+        <td><{$val.i_createtime|date='Y-m-d H:i:s',###}></td>
         <td><{$val.i_accdate}></td>
         <td class="money"><{$val.i_money|number_format=2}></td>
         <td class="money"><{$val.i_noused|number_format=2}></td>

@@ -36,6 +36,11 @@
                 验收日期<i class="<{:getSortClass($sort,'a_date')}>"></i>
             </a>
         </th>
+        <th class="datetime">
+            <a href="/acceptance/all/sort/a_createtime/order/<{:getSortOrder($sort,'a_createtime')}>">
+                创建时间<i class="<{:getSortClass($sort,'a_createtime')}>"></i>
+            </a>
+        </th>
         <th>
             <a href="/acceptance/all/sort/a_accdate/order/<{:getSortOrder($sort,'a_accdate')}>">
                 记账月<i class="<{:getSortClass($sort,'a_accdate')}>"></i>
@@ -64,6 +69,7 @@
         <td><{$val.a_coname}></td>
         <td><?php echo getTypeList2($val['a_type']); ?></td>
         <td><?php echo date("Y-m-d", $val['a_date']); ?></td>
+        <td><{$val.a_createtime|date='Y-m-d H:i:s',###}></td>
         <td><{$val['a_accdate']}></td>
         <td class="money"><{$val.a_money|number_format=2}></td>
         <td class="money"><{$val.a_noused|number_format=2}></td>

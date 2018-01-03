@@ -507,6 +507,8 @@ class BoController extends Controller
                                     $val = '';
                             } elseif ($i['type'] == 'date') {
                                 $val = date('Y/m/d', $val);
+                            } elseif ($i['type'] == 'tax' ){
+                                $val = getTaxList($val);
                             }
                         }
                     }
