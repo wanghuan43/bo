@@ -70,23 +70,27 @@ return [
         'acceptance' => [ //验收单
             'A' => ['title'=>'验收单号','key'=>'a_no'],
             'B' => ['title'=>'责任人','key'=>'a_mname'],
-            'C' => ['title'=>'描述','key'=>'a_content'],
+            'C' => ['title'=>'摘要','key'=>'a_subject'],
             'D' => ['title'=>'类型','key'=>'a_type','type'=>'type'],
             'E' => ['title'=>'对方公司','key'=>'a_coname'],
             'F' => ['title'=>'总金额','key'=>'a_money','type'=>'money'],
             'G' => ['title'=>'已使用金额','key'=>'a_used','type'=>'money'],
             'H' => ['title'=>'未使用金额','key'=>'a_noused','type'=>'money'],
-            'I' => ['title'=>'日期','key'=>'a_date','type'=>'date']
+            'I' => ['title'=>'日期','key'=>'a_date','type'=>'date'],
+            'J' => ['title'=>'记账月','key'=>'a_accdate']
         ],
         'received' => [ //付款单
             'A' => ['title'=>'付款单号','key'=>'r_no'],
             'B' => ['title'=>'责任人','key'=>'r_mname'],
-            'C' => ['title'=>'类型','key'=>'r_type','type'=>'type'],
-            'D' => ['title'=>'对方公司','key'=>'r_coname'],
-            'E' => ['title'=>'总金额','key'=>'r_money','type'=>'money'],
-            'F' => ['title'=>'已使用金额','key'=>'r_used','type'=>'money'],
-            'G' => ['title'=>'未使用金额','key'=>'r_noused','type'=>'money'],
-            'H' => ['title'=>'日期','key'=>'r_date','type'=>'date']
+            'C' => ['title'=>'摘要','key'=>'r_subject'],
+            'D' => ['title'=>'类型','key'=>'r_type','type'=>'type'],
+            'E' => ['title'=>'对方公司','key'=>'r_coname'],
+            'F' => ['title'=>'总金额','key'=>'r_money','type'=>'money'],
+            'G' => ['title'=>'已使用金额','key'=>'r_used','type'=>'money'],
+            'H' => ['title'=>'未使用金额','key'=>'r_noused','type'=>'money'],
+            'I' => ['title'=>'日期','key'=>'r_date','type'=>'date'],
+            'J' => ['title'=>'记账月','key'=>'r_accdate'],
+            'K' => ['title'=>'说明','key'=>'r_content']
         ],
         'invoice' => [ //发票
             'A' => ['title'=>'发票号','key'=>'i_no'],
