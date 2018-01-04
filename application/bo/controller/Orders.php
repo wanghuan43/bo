@@ -412,7 +412,7 @@ class Orders extends BoController
 
             $order = "ORDER BY `o_updatetime` DESC";
 
-            $sql = 'SELECT * FROM ' . $view . ' WHERE `o_id` IN (' . $ids . ') GROUP BY `o_id` '.$order;
+            $sql = 'SELECT * FROM ' . $view . ' WHERE `o_id` IN (' . $ids . ') '.$order;
             $res = $this->model->query($sql);
 
 
@@ -420,6 +420,7 @@ class Orders extends BoController
             foreach ($res as $item) {
                 $arr[$item['o_id']][] = $item;
             }
+
             $res = [];
             foreach ($arr as $key => $val) {
                 $arr1 = $val[0];
@@ -442,51 +443,36 @@ class Orders extends BoController
                             $arr1['op_used'] += $i['op_used'];
                             $i['op_type'] = 'I发票';
                         } elseif ($i['op_type'] == 2) {
-                            $i['op_type'] = '付款单';
+                            $i['op_type'] = 'R付款';
                         } elseif ($i['op_type'] == 3) {
-                            $i['op_type'] = '验收单';
+                            $i['op_type'] = 'A验收';
                         } else {
                             $i['op_type'] = '';
                         }
                         $i['op_date'] = date('Y/m/d', $i['op_date']);
                     } else {
                         if ($i['ou_type'] == 1) {
-                            $i['ou_type'] = '已开票';
+                            $i['ou_type'] = 'I已开票';
                         } elseif ($i['ou_type'] == 2) {
-                            $i['ou_type'] = '已交付';
+                            $i['ou_type'] = 'R已交付';
                         } elseif ($i['ou_type'] == 3) {
-                            $i['ou_type'] = '已付款';
+                            $i['ou_type'] = 'A已付款';
                         } else {
                             $i['ou_type'] = '';
                         }
                         $i['ou_date'] = date('Y/m/d', $i['ou_date']);
                     }
-                    if ($i['o_status'] == 1) {
-                        $arr1['o_status'] = $i['o_status'] = '1接洽';
-                    } elseif ($i['o_status'] == 2) {
-                        $arr1['o_status'] = $i['o_status'] = '2意向';
-                    } elseif ($i['o_status'] == 3) {
-                        $arr1['o_status'] = $i['o_status'] = '3立项';
-                    } elseif ($i['o_status'] == 4) {
-                        $arr1['o_status'] = $i['o_status'] = '4招标';
-                    } elseif ($i['o_status'] == 5) {
-                        $arr1['o_status'] = $i['o_status'] = '5定向';
-                    } elseif ($i['o_status'] == 6) {
-                        $arr1['o_status'] = $i['o_status'] = '6合同';
-                    }
-                    if ($i['o_lie'] == 1) {
-                        $arr1['o_lie'] = $i['o_lie'] = '内部';
-                    } elseif ($i['o_lie'] == 2) {
-                        $arr1['o_lie'] = $i['o_lie'] = '外部';
-                    } else {
-                        $arr1['o_lie'] = $i['o_lie'] = '';
-                    }
+
+                    $arr1['o_status'] = $i['o_status'] = getStatusList($i['o_status']);
+
+                    $arr1['o_lie'] = $i['o_lie'] = getLieList($i['o_lie']);
+
                     $i['o_type'] = isset($types[$i['o_type']]) ? $types[$i['o_type']] : '';
                     $i['o_date'] = date('Y/m/d', $i['o_date']);
 
                     $i['c_no'] = '';
                     $i['c_name'] = '';
-                    if(empty($i['op_type']) || empty($i['ou_type'])){
+                    if( (isset($i['op_type']) && empty($i['op_type'])) || (isset($i['ou_type']) && empty($i['ou_type'])) ){
                         unset($val[$k]);
                     }else {
                         $val[$k] = $i;

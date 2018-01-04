@@ -64,8 +64,9 @@ return [
             'F' => ['title'=>'对方公司','key'=>'c_coname'],
             'G' => ['title'=>'签约日期','key'=>'c_date','type'=>'date'],
             'H' => ['title'=>'合同标的额（元）','key'=>'c_money','type'=>'money'],
-            'I' => ['title'=>'记账月','key'=>'c_accdate'],
-            'J' => ['title'=>'说明','key'=>'c_bakup']
+            'I' => ['title'=>'未对应订单金额','key'=>'c_noused','type'=>'money'],
+            'J' => ['title'=>'记账月','key'=>'c_accdate'],
+            'K' => ['title'=>'说明','key'=>'c_bakup']
         ],
         'acceptance' => [ //验收单
             'A' => ['title'=>'验收单号','key'=>'a_no'],
@@ -81,8 +82,8 @@ return [
         ],
         'received' => [ //付款单
             'A' => ['title'=>'付款单号','key'=>'r_no'],
-            'B' => ['title'=>'责任人','key'=>'r_mname'],
-            'C' => ['title'=>'摘要','key'=>'r_subject'],
+            'B' => ['title'=>'摘要','key'=>'r_subject'],
+            'C' => ['title'=>'责任人','key'=>'r_mname'],
             'D' => ['title'=>'类型','key'=>'r_type','type'=>'type'],
             'E' => ['title'=>'对方公司','key'=>'r_coname'],
             'F' => ['title'=>'总金额','key'=>'r_money','type'=>'money'],
