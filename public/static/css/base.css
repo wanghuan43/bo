@@ -794,6 +794,17 @@ span.page-limit .pageLimit{
     cursor: pointer;
 }
 
+.page-limit input.page-jump{
+    display: inline-block;
+    width:3em;
+    margin:0 .5em;
+    text-align: center;
+}
+
+.page-limit input.page-jump.btn{
+    width: auto;
+}
+
 @-moz-document url-prefix() {
     select.input-sm {
         -moz-appearance: none;

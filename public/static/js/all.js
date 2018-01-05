@@ -138,4 +138,34 @@
             });
         }
     });
+
+    $("input[type=button].page-jump").unbind("click").click(function(){
+        var page = $(this).parent().find("input.page-jump").val();
+        var url = $(this).attr("data-url");
+        if(url.match("[\?]")) {
+            url = url + "&page=" + page;
+        } else {
+            url= url + "?page=" + page;
+        }
+        var reg = /^\d+(?=\.{0,1}\d+$|$)/;
+        if(reg.test(page) && page > 0){
+            $.ajax({
+                url:url,
+                method:"POST",
+                success:function(res){
+                    $("#main-pannel").html(res);
+                    pageLimit();
+                }
+            });
+        }else{
+            custom.alert("页数错误");
+        }
+    });
+
+    $("input[type=text].page-jump").keydown(function(e){
+        if(e.keyCode==13){
+            $(this).parent().find("input[type=button].page-jump").click();
+        }
+    });
+
 })(jQuery);

@@ -100,7 +100,7 @@ return [
 
     //分页配置
     'paginate'               => [
-        'type'      => 'bootstrap',
+        'type'      => '\\app\\bo\\libs\BoPaginator',
         'var_page'  => 'page',
         'list_rows' => 20,
     ],

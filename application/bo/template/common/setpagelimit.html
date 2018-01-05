@@ -1,5 +1,9 @@
 <{if $lists->hasPages()}>
     <span class="page-limit">
+        到<input type="text" class="input-sm page-jump" value="<{$lists->getCurrentPage()}>" data-url="<{$lists->getBaseUrl()}>" />页
+        <input type="button" class="page-jump btn input-sm" data-url="<{$lists->getBaseUrl()}>" value="跳转" />
+    </span>
+    <span class="page-limit">
         每页显示
         <select class="pageLimit input-sm">
             <option value="20">20</option>
