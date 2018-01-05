@@ -142,6 +142,7 @@
     $("input[type=button].page-jump").unbind("click").click(function(){
         var page = $(this).parent().find("input.page-jump").val();
         var url = $(this).attr("data-url");
+        var data = $("#main-container .f-layer form").serialize();
         if(url.match("[\?]")) {
             url = url + "&page=" + page;
         } else {
@@ -151,6 +152,7 @@
         if(reg.test(page) && page > 0){
             $.ajax({
                 url:url,
+                data:data,
                 method:"POST",
                 success:function(res){
                     $("#main-pannel").html(res);
