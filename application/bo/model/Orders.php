@@ -176,7 +176,7 @@ class   Orders extends BoModel
                     $c = $i;
             }
         }
-        return $project->p_no . "-" . $str . str_pad(($c + 1), 3, "0", STR_PAD_LEFT);
+        return $project->p_no . "-" . $str . str_pad(($c + 1), 4, "0", STR_PAD_LEFT);
     }
 
     public function getOrderById($id)
