@@ -167,12 +167,16 @@ class   Orders extends BoModel
         if ($otype == '1') {
             $str = "X";
         }
-        $tmp = $this->field("o_no")->where("o_pid", "=", $p_id)->where("o_type", "=", $otype)->order("o_createtime", "desc")->find();
+        $tmp = $this->field("o_no")->where("o_pid", "=", $p_id)->where("o_type", "=", $otype)->select();
         $c = 0;
         if ($tmp) {
-            $c = intval(str_replace(['C', 'X'], "", explode("-", $tmp->o_no)[1]));
+            foreach ($tmp as $o) {
+                $i = intval(str_replace(['C', 'X'], "", explode("-", $o->o_no)[1]));
+                if($i>$c)
+                    $c = $i;
+            }
         }
-        return $project->p_no . "-" . $str . str_pad(($c + 1), 4, "0", STR_PAD_LEFT);
+        return $project->p_no . "-" . $str . str_pad(($c + 1), 3, "0", STR_PAD_LEFT);
     }
 
     public function getOrderById($id)

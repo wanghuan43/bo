@@ -632,4 +632,9 @@ class BoController extends Controller
         return $ordersUsed;
     }
 
+    public function delAttachment($id)
+    {
+        
+    }
+
 }
