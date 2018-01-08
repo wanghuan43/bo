@@ -107,7 +107,7 @@ class DataImport
                 }
                 if(isset($config['desFields']) && in_array($key,$config['desFields'])){
                     $data[$key] = str_replace('\\\\','\\',$data[$key]);
-                    $data[$key] = str_replace('\\','\r\n',$data[$key]);
+                    $data[$key] = str_replace('\\',PHP_EOL,$data[$key]);
                 }
             }
 

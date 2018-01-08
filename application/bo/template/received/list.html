@@ -16,6 +16,7 @@
                 <{/if}>
             </th>
             <th>付/回款单号</th>
+            <th>银行账号</th>
             <th>摘要</th>
             <th>对方名称</th>
             <th>类型</th>
@@ -28,7 +29,7 @@
         </tr>
         </thead>
         <tbody>
-        <{volist name="lists" id="val" empty="$empty"}>
+        <{volist name="lists" id="val" empty="<td colspan='10'>暂无数据</td>"}>
         <?php
             $json = array(
                 "id"=>$val['r_id'],
@@ -46,6 +47,12 @@
             <td><input type="radio" <{if !empty($fi)}><{$val['r_noused']=="0.00"?"disabled":""}><{/if}> class="selectRadio" name="selectRadio" value="<{$val.r_id}>" data="<{$val.r_no}>" json="<?php echo urlencode(json_encode($json)); ?>" /></td>
             <td><{$val.r_no}></td>
             <{/if}>
+            <td>
+                <?php
+                    $arr = explode(PHP_EOL,$val['r_content']);
+                    if(isset($arr[1])) echo $arr[1];
+                ?>
+            </td>
             <td><{$val.r_subject}></td>
             <td><{$val.r_coname}></td>
             <td><?php echo getTypeList($val['r_type']); ?></td>
