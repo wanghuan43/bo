@@ -56,7 +56,8 @@ class Orders extends Command
                         $oNo = $model->getOrderNO($order->o_pid,$order->o_type);
                     }
                     try {
-                        if ($res = $model->save(['o_no' => $oNo, 'o_id' => $order->o_id,'o_date'=>$order->o_date], ['o_id' => $order->o_id])) {
+                        $sql = 'UPDATE kj_orders SET o_no=\''.$oNo. '\' WHERE o_id='.$order->o_id;
+                        if ($res = $model->execute($sql)) {
                             echo "更新成功，".$arr[0]."-".$arr[1]."、".$oNo."\n";
                         }else{
                             echo "\n更新失败，".$arr[0]."-".$arr[1]."、".$oNo."\n";
