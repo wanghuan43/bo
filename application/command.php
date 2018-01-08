@@ -11,5 +11,6 @@
 
 return [
     'app\bo\command\DataImport',
+    'app\bo\command\Orders',
     'app\bo\command\Test'
 ];
