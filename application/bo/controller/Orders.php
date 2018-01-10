@@ -354,7 +354,7 @@ class Orders extends BoController
         return $this->search($this->ordersModel, "common/poplayer", 11);
     }
 
-    private function setType($type, $params)
+    private function setType($type, $params,$trashed=2)
     {
         unset($params['type']);
         $this->ordersModel->alias("o");
@@ -395,8 +395,9 @@ class Orders extends BoController
                 //$this->ordersModel->where("o.o_status", "<>", "6");
                 if ($this->current->m_isAdmin == "2") {
                     $this->ordersModel->join("__CIRCULATION__ c", "o.o_id = c.ci_otid", "LEFT");
-                    $this->ordersModel->where("c.ci_mid", "=", $this->current->m_id)->where('c.ci_type', "=", "orders");
-                    $this->ordersModel->whereOr("o.o_mid", "=", $this->current->m_id);
+                    $this->ordersModel->where(function ($query){
+                        $query->where('c.ci_mid','=',$this->current->m_id)->where('c.ci_type','=','orders')->whereOr('o.o_mid','=',$this->current->m_id);
+                    });
                 }
                 break;
         }
