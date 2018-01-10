@@ -553,4 +553,32 @@ class Orders extends BoController
             return $this->filter("export", 3);
         }
     }
+
+    public function restore()
+    {
+        $ids = $this->request->post('ids/a');
+        if(empty($ids)){
+            $ret = ['flag'=>0,'msg'=>'参数错误'];
+        }else{
+            $orders = $this->model->whereIn($this->model->getPk(),$ids)->select();
+            $fo = [];
+            foreach($orders as $order){
+                if($order->o_foreign)
+                    $fo[] = $order->o_foreign;
+            }
+            $ids = array_merge($ids,$fo);
+            try {
+                $res = $this->model->whereIn($this->model->getPk(), $ids)->update([$this->model->getTrashedField()=>2]);
+                if($res){
+                    $ret = ['flag'=>1,'msg'=>'操作成功'];
+                }else{
+                    $ret = ['flag'=>0,'msg'=>'操作失败'];
+                }
+            }catch (\Exception $e) {
+                $ret = ['flag'=>0,'msg'=>'发生错误'];
+            }
+        }
+        return $ret;
+    }
+
 }
