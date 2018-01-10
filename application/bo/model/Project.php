@@ -67,7 +67,7 @@ class Project extends BoModel
         ]
     );
 
-    public function getList($search = array(), $limit = 20)
+    public function getList($search = array(), $limit = 20,$aType=false,$trashed=2)
     {
         $member = $this->getCurrent();
         $this->alias('p');
@@ -80,6 +80,7 @@ class Project extends BoModel
         foreach ($search as $key => $value) {
             $this->where('p.' . $value['field'], $value['opt'], $value['val']);
         }
+        $this->where('p_trashed','=',$trashed);
         if ($limit==false) {
             $list = $this->select();
         } else {
@@ -182,6 +183,11 @@ class Project extends BoModel
 
         return $project;
 
+    }
+
+    public function getTrashedField()
+    {
+        return 'p_trashed';
     }
 
 }

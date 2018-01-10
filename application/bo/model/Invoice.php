@@ -99,7 +99,7 @@ class Invoice extends BoModel
         )
     );
 
-    public function getList($search, $limit)
+    public function getList($search, $limit,$aType=false,$trashed=2)
     {
         $member = $this->getCurrent();
         $this->alias('i');
@@ -112,6 +112,7 @@ class Invoice extends BoModel
         foreach ($search as $key => $value) {
             $this->where("i." . $value['field'], $value['opt'], $value['val']);
         }
+        $this->where('i_trashed','=',$trashed);
         if( $limit===false ){
             $list = $this->select();
         }else {
@@ -260,6 +261,11 @@ class Invoice extends BoModel
             }
         }
 
+    }
+
+    public function getTrashedField()
+    {
+        return 'i_trashed';
     }
 
 }

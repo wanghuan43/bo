@@ -12,7 +12,11 @@
         <th style="width:1em;"></th>
         <{/if}>
         <{if $type != 'contract'}>
-        <th style="width: 4em">状态</th>
+        <th style="width: 4em">
+            <a href="<{$formUrl}>/sort/o_status/order/<{:getSortOrder($sort,'o_status')}>">
+                状态<i class="<{:getSortClass($sort,'o_status')}>"></i>
+            </a>
+        </th>
         <{/if}>
         <th>
             <a href="<{$formUrl}>/sort/o_no/order/<{:getSortOrder($sort,'o_no')}>">
@@ -64,7 +68,9 @@
                 发生金额<i class="<{:getSortClass($sort,'o_money')}>"></i>
             </a>
         </th>
+        <{if condition="empty(isset($pageType))"}>
         <th style="width: 40px;">操作</th>
+        <{/if}>
     </tr>
     </thead>
     <tbody>
@@ -88,7 +94,9 @@
         <td class="date"><?php echo date("Y-m-d", $vo['o_date']);?></td>
         <td><{$vo.o_createtime|date='Y-m-d H:i:s',###}></td>
         <td class="money"><{$vo.o_money|number_format=2}></td>
+        <{if condition="empty(isset($pageType))"}>
         <td><a href="<{:url("/orders/delete/opID/".$vo['o_id'])}>" target="_blank" class="deleteOrders" style="color: blue;">删除</a></td>
+        <{/if}>
     </tr>
     <{/volist}>
     </tbody>

@@ -73,7 +73,7 @@ class Company extends BoController
 
     }
 
-    public function all()
+    public function all($trashed=2)
     {
         $type = $this->request->param('type');
         $titleName = $type == '2'?'客户':'供应商';
@@ -81,7 +81,7 @@ class Company extends BoController
         $this->assign('type',$type);
         $this->assign("stype", "company");
         $this->assign('formUrl','/company/all/type/'.$type);
-        return parent::all();
+        return parent::all($trashed);
     }
 
     public function detail($id)

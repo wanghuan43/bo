@@ -90,7 +90,7 @@ class Acceptance extends BoModel
         )
     );
 
-    public function getList($search, $limit)
+    public function getList($search, $limit,$aType=false,$trashed=2)
     {
         $member = $this->getCurrent();
         $this->alias('a');
@@ -103,6 +103,7 @@ class Acceptance extends BoModel
         foreach ($search as $key => $value) {
             $this->where('a.' . $value['field'], $value['opt'], $value['val']);
         }
+        $this->where('a_trashed','=',$trashed);
         if ($limit === false) {
             $list = $this->select();
         } else {
@@ -189,6 +190,11 @@ class Acceptance extends BoModel
 
         }
         return $this->insertDuplicate($dataset);
+    }
+
+    public function getTrashedField()
+    {
+        return 'a_trashed';
     }
 
 }

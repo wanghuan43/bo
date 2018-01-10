@@ -3,7 +3,9 @@
     <h2>付款单管理.付款单列表</h2>
 
     <div class="link-pannel">
+
         <ul>
+            <{if empty(isset($pageType))}>
             <li>
                 <a href="<{:url('/received/export')}>" id="link-export" target="_blank" data-type="received" data-list-type="3"><i class="fa fa-file-excel-o"></i>导出</a>
             </li>
@@ -24,7 +26,13 @@
             <li>
                 <a href="<{:url("/taglib/add/type/received")}>" target="_blank" id="btn-taglib"><i class="fa fa-braille" style="color: #1d9d74;"></i>标签<i class="fa fa-sort-desc"></i></a>
             </li>
+            <{elseif $pageType=='trashed'}>
+            <li>
+                <a href="<{:url('/received/restore')}>" target="_blank" id="btn-restore"><i class="fa fa-mail-reply-all"></i>恢复</a>
+            </li>
+            <{/if}>
         </ul>
+
     </div>
 </div>
 
@@ -35,4 +43,4 @@
 <div class="main-pannel all-page" id="main-pannel">
     <{include file="received/list/2"}>
 </div>
-<{load href="/static/js/lists.js"}>
+<script type="text/javascript" src="/static/js/lists.js?v=1801101410"></script>

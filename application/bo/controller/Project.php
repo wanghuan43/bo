@@ -32,12 +32,12 @@ class Project extends BoController
         return $this->search($this->model);
     }
 
-    public function all()
+    public function all($trashed=2)
     {
         $this->assign('empty','<tr><td colspan="3">没有数据</td></tr>');
         $this->assign('stype','project');
         $this->assign('title','所有项目');
-        return parent::all();
+        return parent::all($trashed);
     }
 
     /**

@@ -453,4 +453,27 @@
         }
     };
 
+    $("#btn-restore").click(function(){
+        var ids = $("#main-container .selected-ids select").val();
+        var url = $(this).attr("href");
+        if(ids.length>0){
+            $.ajax({
+                url:url,
+                method:"POST",
+                data:{
+                    ids:ids
+                },
+                success:function(res){
+                    custom.alert(res.msg);
+                    if(res.flag == 1){
+                        $("#main-container form button[type=submit]").click();
+                    }
+                }
+            });
+        }else{
+            custom.alert("请至少选择一项");
+        }
+        return false;
+    });
+
 })(jQuery);

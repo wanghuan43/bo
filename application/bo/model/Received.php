@@ -90,7 +90,7 @@ class Received extends BoModel
         )
     );
 
-    public function getList($search = array(), $limit = false)
+    public function getList($search = array(), $limit = false,$aType=false,$trashed=2)
     {
         $member = $this->getCurrent();
         $this->alias('r');
@@ -103,6 +103,7 @@ class Received extends BoModel
         foreach ($search as $key => $value) {
             $this->where("r." . $value['field'], $value['opt'], $value['val']);
         }
+        $this->where('r_trashed','=',$trashed);
         if ($limit === false) {
             $list = $this->select();
         } else {
@@ -207,6 +208,11 @@ class Received extends BoModel
 
         return $this->insertDuplicate($dataset);
 
+    }
+
+    public function getTrashedField()
+    {
+        return 'r_trashed';
     }
 
 }

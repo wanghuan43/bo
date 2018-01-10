@@ -221,22 +221,6 @@ class BoController extends Controller
             }
         }
 
-        if ($mName == "orders" && $type == 'contract') {
-            $search[] = [
-                'field' => 'o_status',
-                'opt' => '=',
-                'val' => 6
-            ];
-        } elseif ($mName == 'orders') {
-            if (empty($type) || $type == 'orders') {
-                $search[] = [
-                    'field' => 'o_status',
-                    'opt' => '<>',
-                    'val' => 6
-                ];
-            }
-        }
-
         if ($mName == 'company') {
             $co_type = $this->request->param('type');
             $search[] = [
@@ -288,7 +272,7 @@ class BoController extends Controller
         }
     }
 
-    public function all()
+    public function all($trashed=2)
     {
 
         $this->assign("empty", "<tr><td>无数据</td></tr>");
@@ -321,7 +305,7 @@ class BoController extends Controller
 
             $modelName = strtolower($this->model->getModelName());
             $search = $this->getSearch();
-            $list = $this->model->getList($search, $this->limit, $aType);
+            $list = $this->model->getList($search, $this->limit, $aType,$trashed);
             $this->assign('sort', $sort);
             $this->assign('search', $this->model->getSearchable());
             $this->assign('searchValues', $search);
@@ -334,7 +318,7 @@ class BoController extends Controller
             if (isset($params['fields']) || isset($params['page']) || isset($params['sort'])) {
                 $ret = $this->fetch($modelName . '/list/2');
             } else {
-                $ret = $this->fetch();
+                $ret = $this->fetch('all');
             }
         }
         return $ret;
@@ -342,7 +326,7 @@ class BoController extends Controller
 
     public function del()
     {
-        if (empty($this->model)) {
+        if (empty($this->model) || $this->model->getModelName() == 'Orders') {
             $ret = ['flag' => 0, 'msg' => '发生错误'];
         } else {
 
@@ -354,7 +338,11 @@ class BoController extends Controller
 
                 if (is_array($ids) && count($ids) > 0) {
 
-                    $res = $this->model->whereIn($this->model->getPk(), $ids)->delete();
+                    if( method_exists($this->model,'getTrashedField')){
+                        $res = $this->model->whereIn($this->model->getPk(),$ids)->update([$this->model->getTrashedField() => 1]);
+                    }else {
+                        $res = $this->model->whereIn($this->model->getPk(), $ids)->delete();
+                    }
 
                     if ($res) {
                         $ret = ['flag' => 1, 'msg' => '删除成功'];
@@ -630,6 +618,41 @@ class BoController extends Controller
         }
         $this->assign('ordersUsed',$ordersUsed);
         return $ordersUsed;
+    }
+
+    public function trashed()
+    {
+        if(method_exists($this->model,'getTrashedField')) {
+            $this->assign('formUrl','/'.strtolower($this->model->getModelName()).'/trashed');
+            $this->assign('pageType', 'trashed');
+            return $this->all(1);
+        }else{
+            return false;
+        }
+    }
+
+    public function restore()
+    {
+        if(method_exists($this->model,'getTrashedField')){
+            $ids = $this->request->post('ids/a');
+            if(empty($ids)){
+                $ret = ['flag'=>0,'msg'=>'参数错误'];
+            }else{
+                try {
+                    $res = $this->model->whereIn($this->model->getPk(), $ids)->update([$this->model->getTrashedField()=>2]);
+                    if($res){
+                        $ret = ['flag'=>1,'msg'=>'操作成功'];
+                    }else{
+                        $ret = ['flag'=>0,'msg'=>'操作失败'];
+                    }
+                }catch (\Exception $e) {
+                    $ret = ['flag'=>0,'msg'=>'发生错误'];
+                }
+            }
+        }else{
+            $ret = ['flag'=>0,'msg'=>'非法操作'];
+        }
+        return $ret;
     }
 
     public function delAttachment($id)

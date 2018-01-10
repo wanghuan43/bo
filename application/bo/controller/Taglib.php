@@ -16,13 +16,13 @@ class Taglib extends BoController
         $this->model = new \app\bo\model\Taglib();
     }
 
-    public function all()
+    public function all($trashed=2)
     {
         $list = $this->model->getList();
         $this->assign('lists', $list);
         $this->assign("stype", "taglib");
         $this->assign('formUrl', '/taglib/all');
-        return parent::all();
+        return parent::all($trashed);
     }
 
     public function searchTaglib()

@@ -49,6 +49,26 @@ class Orders extends BoController
         return $this->all();
     }
 
+    public function trashed()
+    {
+        $type = 'orders';
+        $this->setType($type, []);
+        $this->assign("title", '回收站.订单列表');
+        $this->assign("type", $type);
+        $this->assign("stype", "orders");
+
+        $formUrl = "/orders/trashed";
+
+        if ($type == 'orders' || $type == 'contract') {
+            $this->assign('hideSelected', false);
+        } else {
+            $this->assign('hideSelected', true);
+        }
+        $this->assign('pageType','trashed');
+        $this->assign('formUrl', $formUrl);
+        return $this->all(1);
+    }
+
     public function operation($op = "add", $op_id = 0)
     {
         $tagLinkModel = new Taglink();
@@ -347,7 +367,7 @@ class Orders extends BoController
                 }
                 break;
             case "favourite":
-                $this->title = "我的收藏";
+                $this->title = "订单管理.我的收藏";
                 $this->ordersModel->join("__FAVORITE__ f", "o.o_id = f.f_oid", "LEFT");
 //                if(!$this->current->m_isAdmin){
                 $this->ordersModel->where("f.f_mid", "=", $this->current->m_id);
@@ -371,9 +391,11 @@ class Orders extends BoController
                 $this->ordersModel->where("l.l_panding", "=", "0");
                 break;
             default:
-                $this->title = "订单（预计）";
-                $this->ordersModel->where("o.o_status", "<>", "6");
+                $this->title = "订单管理.订单列表";
+                //$this->ordersModel->where("o.o_status", "<>", "6");
                 if ($this->current->m_isAdmin == "2") {
+                    $this->ordersModel->join("__CIRCULATION__ c", "o.o_id = c.ci_otid", "LEFT");
+                    $this->ordersModel->where("c.ci_mid", "=", $this->current->m_id)->where('c.ci_type', "=", "orders");
                     $this->ordersModel->where("o.o_mid", "=", $this->current->m_id);
                 }
                 break;

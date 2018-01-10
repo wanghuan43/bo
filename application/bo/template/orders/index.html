@@ -1,8 +1,9 @@
 <div class="clearfix header">
     <h2><{$title}></h2>
     <div class="link-pannel">
-        <{if condition="in_array($type, array('contract', 'orders'))"}>
+
         <ul>
+            <{if condition="in_array($type, array('contract', 'orders')) AND empty(isset($pageType))"}>
             <li>
                 <a href="<{:url('/orders/export/type/'.$type)}>" target="_blank" id="link-export" data-type="<{$stype}>" data-list-type="3"><i class="fa fa-file-excel-o"></i>导出</a>
             </li>
@@ -23,8 +24,13 @@
             <!--<li>-->
                 <!--<a href="#"><i class="fa fa-tags"></i>标签<i class="fa fa-sort-desc"></i></a>-->
             <!--</li>-->
+            <{elseif condition="isset($pageType) AND $pageType=='trashed'"}>
+            <li>
+                <a href="<{:url('/orders/restore')}>" target="_blank" id="btn-restore"><i class="fa fa-mail-reply-all"></i>恢复</a>
+            </li>
+            <{/if}>
         </ul>
-        <{/if}>
+
     </div>
 </div>
 
@@ -35,4 +41,4 @@
 <div class="main-pannel all-page" id="main-pannel">
     <{include file='orders/list/2'}>
 </div>
-<{load href="/static/js/lists.js"}>
+<script type="text/javascript" src="/static/js/lists.js?v=1801101410"></script>
