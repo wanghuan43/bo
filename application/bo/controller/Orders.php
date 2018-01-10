@@ -396,7 +396,7 @@ class Orders extends BoController
                 if ($this->current->m_isAdmin == "2") {
                     $this->ordersModel->join("__CIRCULATION__ c", "o.o_id = c.ci_otid", "LEFT");
                     $this->ordersModel->where("c.ci_mid", "=", $this->current->m_id)->where('c.ci_type', "=", "orders");
-                    $this->ordersModel->where("o.o_mid", "=", $this->current->m_id);
+                    $this->ordersModel->whereOr("o.o_mid", "=", $this->current->m_id);
                 }
                 break;
         }
