@@ -1,6 +1,6 @@
 <div class="clearfix header">
 
-    <h2>项目管理.项目列表</h2>
+    <h2><{if empty(isset($pageType))}>项目管理<{elseif $pageType=='trashed'}>回收站<{/if}>.项目列表</h2>
 
     <div class="link-pannel">
         <ul>

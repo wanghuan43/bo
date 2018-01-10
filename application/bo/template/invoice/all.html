@@ -1,6 +1,6 @@
 <div class="clearfix header">
 
-    <h2>发票管理.发票列表</h2>
+    <h2><{if empty(isset($pageType))}>发票管理<{elseif $pageType=='trashed'}>回收站<{/if}>.发票列表</h2>
 
     <div class="link-pannel">
 
