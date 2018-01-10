@@ -120,6 +120,12 @@ class Acceptance extends BoController
             $data['a_' . $i] = trim($post[$i]);
         }
 
+        $mModel = new \app\bo\model\Member();
+        $m = $mModel->where('m_id','=',$data['a_mid'])->find();
+        if($m){
+            $data['a_dname'] = $m->m_department;
+            $data['a_did'] = $m->m_did;
+        }
 
         $validate = \validate('Acceptance');
 
