@@ -228,9 +228,9 @@ class   Orders extends BoModel
             if ($c) {
                 $c->c_used = $c->c_used + $data['o_money'];
                 $c->c_noused = $c->c_money - $c->c_used;
-                if ($c->c_noused < 0) {
+                /*if ($c->c_noused < 0) {
                     return -10;
-                }
+                }*/
                 $c->save();
             }
         }
