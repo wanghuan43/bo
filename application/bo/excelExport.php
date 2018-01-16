@@ -19,10 +19,15 @@ return [
             'H' => ['title'=>'赢单机会','key'=>'cs_name'],
             'I' => ['title'=>'商机状态','key'=>'o_status'],
             'J' => ['title'=>'行动日','key'=>'o_date'],
-            'K' => ['title'=>'购销','key'=>'o_type'],
+            'K' => ['title'=>'收支','key'=>'o_type'],
             'L' => ['title'=>'发生金额','key'=>'op_used'],
             'M' => ['title'=>'发生日(计划)','key'=>'op_date'],
-            'N' => ['title'=>'商务阶段','key'=>'op_type']
+            'N' => ['title'=>'备注','key'=>'c_bakup'],
+            'O' => ['title'=>'商务阶段','key'=>'op_type'],
+            'P' => ['title'=>'发生','key'=>'flag1'],
+            'Q' => ['title'=>'合同号','key'=>'c_no'],
+            'R' => ['title'=>'合同名称','key'=>'c_name'],
+            'S' => ['title'=>'验收单号/发票号/付款号','key'=>'b_no']
         ],
         'orders-contract' => [
             'A' => ['title'=>'部门','key'=>'o_dname'],

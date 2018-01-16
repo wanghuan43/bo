@@ -22,7 +22,7 @@ class Orders extends BoController
 {
     private $ordersModel;
     protected $title;
-    protected $unuseF = ["zc_name", "zc_id", "zc_dname", "zc_did", "zc_mid", "zc_mname","zc_coname","zc_coid"];
+    protected $unuseF = ["zc_name", "zc_id", "zc_dname", "zc_did", "zc_mid", "zc_mname", "zc_coname", "zc_coid"];
 
     function __construct(Request $request)
     {
@@ -64,7 +64,7 @@ class Orders extends BoController
         } else {
             $this->assign('hideSelected', true);
         }
-        $this->assign('pageType','trashed');
+        $this->assign('pageType', 'trashed');
         $this->assign('formUrl', $formUrl);
         return $this->all(1);
     }
@@ -110,10 +110,10 @@ class Orders extends BoController
             $tagList[$f][] = $value;
         }
         $mimeType = false;
-        if($order['o_attachment']){
+        if ($order['o_attachment']) {
             $mimeType = $this->getAttachmentMimeType($order['o_attachment']);
         }
-        $this->assign('aMimeType',$mimeType);
+        $this->assign('aMimeType', $mimeType);
         $this->assign('order', $order);
         $this->assign('typeList', getTypeList());
         $this->assign('taxList', getTaxList());
@@ -147,11 +147,11 @@ class Orders extends BoController
         $file = $this->request->file('o_attachment');
         $res = $this->uploadFile($file);
 
-        if($res['flag'] === 0){
+        if ($res['flag'] === 0) {
             return $res;
-        }elseif ($res['flag'] === 1){
+        } elseif ($res['flag'] === 1) {
             $post['o_attachment'] = $res['name'];
-        }else{
+        } else {
             $post['o_attachment'] = '';
         }
 
@@ -186,7 +186,7 @@ class Orders extends BoController
                 "zc_coname" => empty($post['zc_coname']) ? "" : $post['zc_coname'],
                 "zc_coid" => $post['zc_coid'],
             ];
-            foreach($this->unuseF as $v){
+            foreach ($this->unuseF as $v) {
                 unset($post[$v]);
             }
             $result = $this->ordersModel->save($post, $where);
@@ -316,7 +316,7 @@ class Orders extends BoController
         $log = Logs::get($id);
         $new = unserialize($log['l_new']);
         $old = unserialize($log['l_old']);
-        foreach($this->unuseF as $val){
+        foreach ($this->unuseF as $val) {
             unset($new[$val]);
             unset($old[$val]);
         }
@@ -324,15 +324,15 @@ class Orders extends BoController
         if ($vp == "1") {
             $log->l_panding = 2;
             $new['o_id'] = $log->l_otid;
-            if(!empty($old['o_cid'])){
+            if (!empty($old['o_cid'])) {
                 $con = \app\bo\model\Contract::get($old['o_cid']);
-                if($con){
+                if ($con) {
                     $con->c_noused += $old['o_money'];
                     $con->c_used -= $old['o_money'];
                     $con->save();
                 }
             }
-            if($old['o_pid'] != $new['o_pid']){
+            if ($old['o_pid'] != $new['o_pid']) {
                 $new['o_no'] = $this->ordersModel->getOrderNO($new['o_pid'], $old['o_type']);
             }
             $this->ordersModel->save($new);
@@ -354,7 +354,7 @@ class Orders extends BoController
         return $this->search($this->ordersModel, "common/poplayer", 11);
     }
 
-    private function setType($type, $params,$trashed=2)
+    private function setType($type, $params, $trashed = 2)
     {
         unset($params['type']);
         $this->ordersModel->alias("o");
@@ -395,8 +395,8 @@ class Orders extends BoController
                 //$this->ordersModel->where("o.o_status", "<>", "6");
                 if ($this->current->m_isAdmin == "2") {
                     $this->ordersModel->join("__CIRCULATION__ c", "o.o_id = c.ci_otid", "LEFT");
-                    $this->ordersModel->where(function ($query){
-                        $query->where('c.ci_mid','=',$this->current->m_id)->where('c.ci_type','=','orders')->whereOr('o.o_mid','=',$this->current->m_id);
+                    $this->ordersModel->where(function ($query) {
+                        $query->where('c.ci_mid', '=', $this->current->m_id)->where('c.ci_type', '=', 'orders')->whereOr('o.o_mid', '=', $this->current->m_id);
                     });
                 }
                 break;
@@ -435,7 +435,7 @@ class Orders extends BoController
 
             $order = "ORDER BY `o_updatetime` DESC";
 
-            $sql = 'SELECT * FROM ' . $view . ' WHERE `o_id` IN (' . $ids . ') '.$order;
+            $sql = 'SELECT * FROM ' . $view . ' WHERE `o_id` IN (' . $ids . ') ' . $order;
             $res = $this->model->query($sql);
 
 
@@ -446,71 +446,101 @@ class Orders extends BoController
 
             $res = [];
             foreach ($arr as $key => $val) {
+
                 $arr1 = $val[0];
-                if ($type == 'orders') {
-                    $arr1['op_type'] = 'C合同';
-                    $arr1['op_used'] = $arr1['o_money'];
-                    $arr1['o_date'] = $arr1['op_date'] = date('Y/m/d', $arr1['o_date']);
-                } else {
-                    $arr1['ou_type'] = 'C合同';
-                    $arr1['ou_used'] = $arr1['o_money'];
-                    $arr1['ou_date'] = date('Y/m/d', $arr1['c_date']);
-                    $arr1['o_date'] = date('Y/m/d', $arr1['o_date']);
-                }
-                $types = getTypeList();
-                $arr1['o_type'] = isset($types[$arr1['o_type']]) ? $types[$arr1['o_type']] : '';
+                $arr1['op_type'] = $arr1['o_status'] == 6 ? 'C合同' : 'O机会';
+                $arr1['op_used'] = $arr1['o_money'];
+                $arr1['o_date'] = $arr1['op_date'] = date('Y/m/d', $arr1['o_date']);
+                $arr1['o_type'] = getTypeList($arr1['o_type']);
+                $arr1['c_bakup'] = '';
+                $arr1['flag1'] = '';
+                $arr1['b_no'] = '';
+                $arr1['c_no'] = $arr1['c_name'] = '';
 
                 foreach ($val as $k => $i) {
-                    if ($type == 'orders') {
-                        if ($i['op_type'] == 1) {
-                            $arr1['op_used'] += $i['op_used'];
-                            $i['op_type'] = 'I发票';
-                        } elseif ($i['op_type'] == 2) {
-                            $i['op_type'] = 'R付款';
-                        } elseif ($i['op_type'] == 3) {
-                            $i['op_type'] = 'A验收';
-                        } else {
-                            $i['op_type'] = '';
-                        }
-                        $i['op_date'] = date('Y/m/d', $i['op_date']);
+
+                    if ($i['op_type'] == 1) {
+                        //$arr1['op_used'] += $i['op_used'];
+                        $i['op_type'] = 'I发票';
+                    } elseif ($i['op_type'] == 2) {
+                        $i['op_type'] = 'R付款';
+                    } elseif ($i['op_type'] == 3) {
+                        $i['op_type'] = 'A验收';
                     } else {
-                        if ($i['ou_type'] == 1) {
-                            $i['ou_type'] = 'I已开票';
-                        } elseif ($i['ou_type'] == 2) {
-                            $i['ou_type'] = 'R已交付';
-                        } elseif ($i['ou_type'] == 3) {
-                            $i['ou_type'] = 'A已付款';
-                        } else {
-                            $i['ou_type'] = '';
-                        }
-                        $i['ou_date'] = date('Y/m/d', $i['ou_date']);
+                        $i['op_type'] = '';
                     }
 
                     $arr1['o_status'] = $i['o_status'] = getStatusList($i['o_status']);
 
                     $arr1['o_lie'] = $i['o_lie'] = getLieList($i['o_lie']);
 
-                    $i['o_type'] = isset($types[$i['o_type']]) ? $types[$i['o_type']] : '';
+                    $i['o_type'] = getTypeList($i['o_type']);
+
                     $i['o_date'] = date('Y/m/d', $i['o_date']);
+
+                    $i['op_date'] = empty($i['op_date'])? $i['o_date'] : date('Y/m/d', $i['op_date']);
 
                     $i['c_no'] = '';
                     $i['c_name'] = '';
-                    if( (isset($i['op_type']) && empty($i['op_type'])) || (isset($i['ou_type']) && empty($i['ou_type'])) ){
+                    $i['c_bakup'] = '';
+                    $i['flag1'] = '';
+                    $i['b_no'] = '';
+                    if ((isset($i['op_type']) && empty($i['op_type'])) || (isset($i['ou_type']) && empty($i['ou_type']))) {
                         unset($val[$k]);
-                    }else {
+                    } else {
                         $val[$k] = $i;
                     }
                 }
-                $val = array_merge([$arr1], $val);
+
+                $arr2 = false;
+
+                if($arr1['o_status'] == 6){
+
+                    $sql = 'SELECT * FROM kj_vw_my_contract WHERE o_id ='.$arr1['o_id'];
+                    $arr2 = $this->model->query($sql);
+
+                    if(isset($arr2[0])) {
+                        $arr1['c_no'] = $arr2[0]['c_no'];
+                        $arr1['c_name'] = $arr2[0]['c_name'];
+                        $arr1['c_bakup'] = $arr2['0']['c_bakup'];
+                    }
+
+                    foreach ($arr2 as $k=>$v){
+                        $v['c_no'] = $v['c_name'] = $v['c_bakup'] = '';
+                        if($v['ou_type'] == '1'){
+                            $v['op_type'] = 'I发票';
+                        }elseif($v['ou_type'] == '2'){
+                            $v['op_type'] = 'A验收';
+                        }elseif ($v['ou_type'] == '3'){
+                            $v['op_type'] = 'R回款';
+                        }else{
+                            $v['op_type'] = '';
+                        }
+                        $v['b_no'] = $v['no'];
+                        $v['flag1'] = 1;
+                        $v['op_used'] = $v['money'];
+                        $v['op_date'] = date('Y/m/d',$v['ou_date']);
+                        $v['o_type'] = getTypeList($v['o_type']);
+                        $v['o_date'] = date('Y/m/d',$v['o_date']);
+                        $v['o_lie'] = getLieList($v['o_lie']);
+                        $v['o_status'] = getStatusList($v['o_status']);
+                        $arr2[$k] = $v;
+                    }
+
+                    /*echo "<pre>";
+                    var_dump($arr2);die;*/
+
+                }
+
+                if(empty($arr2)) {
+                    $val = array_merge([$arr1], $val);
+                }else{
+                    $val = array_merge([$arr1],$val,$arr2);
+                }
                 $arr[$key] = $val;
             }
 
-            if ($type == 'orders') {
-                $title = '商机表';
-            } else {
-                $type = 'orders-' . $type;
-                $title = '合同跟踪表';
-            }
+            $title = '订单跟踪表';
 
             $res = $arr;
             unset($arr);
@@ -557,25 +587,25 @@ class Orders extends BoController
     public function restore()
     {
         $ids = $this->request->post('ids/a');
-        if(empty($ids)){
-            $ret = ['flag'=>0,'msg'=>'参数错误'];
-        }else{
-            $orders = $this->model->whereIn($this->model->getPk(),$ids)->select();
+        if (empty($ids)) {
+            $ret = ['flag' => 0, 'msg' => '参数错误'];
+        } else {
+            $orders = $this->model->whereIn($this->model->getPk(), $ids)->select();
             $fo = [];
-            foreach($orders as $order){
-                if($order->o_foreign)
+            foreach ($orders as $order) {
+                if ($order->o_foreign)
                     $fo[] = $order->o_foreign;
             }
-            $ids = array_merge($ids,$fo);
+            $ids = array_merge($ids, $fo);
             try {
-                $res = $this->model->whereIn($this->model->getPk(), $ids)->update([$this->model->getTrashedField()=>2]);
-                if($res){
-                    $ret = ['flag'=>1,'msg'=>'操作成功'];
-                }else{
-                    $ret = ['flag'=>0,'msg'=>'操作失败'];
+                $res = $this->model->whereIn($this->model->getPk(), $ids)->update([$this->model->getTrashedField() => 2]);
+                if ($res) {
+                    $ret = ['flag' => 1, 'msg' => '操作成功'];
+                } else {
+                    $ret = ['flag' => 0, 'msg' => '操作失败'];
                 }
-            }catch (\Exception $e) {
-                $ret = ['flag'=>0,'msg'=>'发生错误'];
+            } catch (\Exception $e) {
+                $ret = ['flag' => 0, 'msg' => '发生错误'];
             }
         }
         return $ret;
