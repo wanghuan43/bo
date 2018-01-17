@@ -518,7 +518,7 @@ class Orders extends BoController
                         }
                         $v['b_no'] = $v['no'];
                         $v['flag1'] = 1;
-                        $v['op_used'] = $v['money'];
+                        $v['op_used'] = $v['ou_used'];
                         $v['op_date'] = date('Y/m/d',$v['ou_date']);
                         $v['o_type'] = getTypeList($v['o_type']);
                         $v['o_date'] = date('Y/m/d',$v['o_date']);
