@@ -463,9 +463,9 @@ class Orders extends BoController
                         //$arr1['op_used'] += $i['op_used'];
                         $i['op_type'] = 'I发票';
                     } elseif ($i['op_type'] == 2) {
-                        $i['op_type'] = 'R付款';
+                        $i['op_type'] = 'A交付';
                     } elseif ($i['op_type'] == 3) {
-                        $i['op_type'] = 'A验收';
+                        $i['op_type'] = 'R付款';
                     } else {
                         $i['op_type'] = '';
                     }
@@ -510,9 +510,9 @@ class Orders extends BoController
                         if($v['ou_type'] == '1'){
                             $v['op_type'] = 'I发票';
                         }elseif($v['ou_type'] == '2'){
-                            $v['op_type'] = 'A验收';
+                            $v['op_type'] = 'A交付';
                         }elseif ($v['ou_type'] == '3'){
-                            $v['op_type'] = 'R回款';
+                            $v['op_type'] = 'R付款';
                         }else{
                             $v['op_type'] = '';
                         }
