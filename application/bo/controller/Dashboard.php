@@ -2,6 +2,7 @@
 namespace app\bo\controller;
 
 use app\bo\libs\BoController;
+use app\bo\libs\ICome;
 use app\bo\model\Member;
 use think\Request;
 
@@ -9,6 +10,8 @@ class Dashboard extends BoController
 {
     public function index()
     {
+        $icom = new ICome();
+        $this->assign('icomJs', $icom->getJsAddress());
         $this->assign("member", $this->current);
         $this->assign("menuList", $this->current->menu);
         return $this->fetch('index');

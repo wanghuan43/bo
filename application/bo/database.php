@@ -15,7 +15,7 @@ return [
     // 服务器地址
     'hostname'        => '47.91.20.83',
     // 数据库名
-    'database'        => 'flow',
+    'database'        => 'bo',
     // 用户名
     'username'        => 'root',
     // 密码

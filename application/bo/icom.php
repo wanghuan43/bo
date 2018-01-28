@@ -13,5 +13,6 @@ return [
     'api'=>'http://icome.enncloud.cn:44084',
     'js'=>'/icomeapps/public/icom.js',
     'token'=>'/licensor/access_token',
-    'ticket'=>'/licensor/jsticket'
+    'ticket'=>'/licensor/jsticket',
+    'nonceStr'=>'bo'
 ];

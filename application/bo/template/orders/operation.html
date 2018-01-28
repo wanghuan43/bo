@@ -12,7 +12,7 @@
     <div class="link-pannel">
         <ul>
             <li>
-                <a href="javascript:void(0);"><i class="fa fa-weixin"></i>群聊</a>
+                <a href="javascript:void(0);" id="icom" target="_blank"><i class="fa fa-weixin"></i>群聊</a>
             </li>
             <{if condition="$op != 'add'"}>
             <{if condition="$isAdmin"}>
@@ -1425,23 +1425,29 @@
         }
     }
 </script>
-<script type="text/javascript" src="http://api-icome.enncloud.cn/icomeapps/public/icom.js"></script>
 <script>
     var $config = {
-        authData: {
-            appId: "app_10000111",
-            nonceStr: "${nonceStr}",
-            timestamp: "${timestamp}",
-            signature: "${signature}",
-            jsApiList: [
-                "system.createMultChat"
-            ]
-        }
+        authData: <{$jsAuth['auth']|json_encode=###}>
     };
-</script>
-<script>
     iCom.config($config.authData);
-    iCom.ready(function () {
-
+    var eventListeners = {
+        "system.createMultChat": function () {
+            iCom.system.createMultChat({
+                "eId":"10046472",
+                "eName":"倪翔龙",
+                "gName":"测试",
+                "eIds":['10063421','10052445'],
+                success : function(data) {
+                    console.log(data);
+                },
+                fail : function(err) {
+                    console.log(err)
+                }
+            });
+        },
+    }
+    document.getElementById('icom').addEventListener('click', eventListeners['system.createMultChat']);
+    iCom.error(function (error) {
+        alert("JS 权限校验失败： " + JSON.stringify(error));
     });
 </script>
