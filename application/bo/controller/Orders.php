@@ -15,8 +15,7 @@ use app\bo\libs\BoController;
 use PHPExcel_IOFactory;
 use think\Config;
 use think\Request;
-use think\Response;
-use think\Session;
+use app\bo\libs\iCome;
 
 class Orders extends BoController
 {
@@ -32,6 +31,9 @@ class Orders extends BoController
 
     public function index($type = "orders")
     {
+        $iCome = new ICome();
+        $iCome->getSignature();
+        exit;
         $this->setType($type, []);
         $this->assign("title", $this->title);
         $this->assign("type", $type);
@@ -113,6 +115,7 @@ class Orders extends BoController
         if ($order['o_attachment']) {
             $mimeType = $this->getAttachmentMimeType($order['o_attachment']);
         }
+
         $this->assign('aMimeType', $mimeType);
         $this->assign('order', $order);
         $this->assign('typeList', getTypeList());

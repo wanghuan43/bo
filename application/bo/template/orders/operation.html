@@ -1425,4 +1425,23 @@
         }
     }
 </script>
-<script type="text/javascript" src="http://api-icome.enncloud.cn/icomeapps/public/icom.js">
+<script type="text/javascript" src="http://api-icome.enncloud.cn/icomeapps/public/icom.js"></script>
+<script>
+    var $config = {
+        authData: {
+            appId: "app_10000111",
+            nonceStr: "${nonceStr}",
+            timestamp: "${timestamp}",
+            signature: "${signature}",
+            jsApiList: [
+                "system.createMultChat"
+            ]
+        }
+    };
+</script>
+<script>
+    iCom.config($config.authData);
+    iCom.ready(function () {
+
+    });
+</script>
