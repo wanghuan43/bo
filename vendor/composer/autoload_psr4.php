@@ -7,5 +7,6 @@ $baseDir = dirname($vendorDir);
 
 return array(
     'think\\composer\\' => array($vendorDir . '/topthink/think-installer/src'),
-    'PHPMailer\\PHPMailer\\' => array($vendorDir . '/phpmailer/phpmailer/src'),
+    'think\\' => array($baseDir . '/thinkphp/library/think'),
+    'app\\' => array($baseDir . '/application'),
 );

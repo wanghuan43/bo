@@ -14,7 +14,6 @@ use think\console\Command;
 use think\console\Input;
 use think\console\input\Option;
 use think\console\Output;
-use think\facade\App;
 
 class Clear extends Command
 {
@@ -29,17 +28,27 @@ class Clear extends Command
 
     protected function execute(Input $input, Output $output)
     {
-        $path  = $input->getOption('path') ?: App::getRuntimePath();
+        $path = $input->getOption('path') ?: RUNTIME_PATH;
+
+        if (is_dir($path)) {
+            $this->clearPath($path);
+        }
+
+        $output->writeln("<info>Clear Successed</info>");
+    }
+
+    protected function clearPath($path)
+    {
+        $path  = realpath($path) . DS;
         $files = scandir($path);
         if ($files) {
             foreach ($files as $file) {
                 if ('.' != $file && '..' != $file && is_dir($path . $file)) {
-                    array_map('unlink', glob($path . $file . '/*.*'));
+                    $this->clearPath($path . $file);
                 } elseif ('.gitignore' != $file && is_file($path . $file)) {
                     unlink($path . $file);
                 }
             }
         }
-        $output->writeln("<info>Clear Successed</info>");
     }
 }
