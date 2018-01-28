@@ -2,7 +2,7 @@
 namespace app\bo\controller;
 
 use app\bo\libs\BoController;
-use app\bo\libs\ICome;
+use app\bo\libs\iCome;
 use app\bo\model\Member;
 use think\Request;
 
