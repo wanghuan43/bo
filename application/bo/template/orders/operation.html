@@ -1430,23 +1430,25 @@
         authData: <{$jsAuth['auth']|json_encode=###}>
     };
     iCom.config($config.authData);
-    var eventListeners = {
-        "system.createMultChat": function () {
-            iCom.system.createMultChat({
-                "eId":"10046472",
-                "eName":"倪翔龙",
-                "gName":"测试",
-                "eIds":['10063421','10052445'],
-                success : function(data) {
-                    console.log(data);
-                },
-                fail : function(err) {
-                    console.log(err)
-                }
-            });
-        },
-    }
-    document.getElementById('icom').addEventListener('click', eventListeners['system.createMultChat']);
+    iCom.ready(function () {
+        var eventListeners = {
+            "system.createMultChat": function () {
+                iCom.system.createMultChat({
+                    "eId":"10046472",
+                    "eName":"倪翔龙",
+                    "gName":"测试",
+                    "eIds":['10063421','10052445'],
+                    success : function(data) {
+                        console.log(data);
+                    },
+                    fail : function(err) {
+                        console.log(err)
+                    }
+                });
+            },
+        }
+        document.getElementById('icom').addEventListener('click', eventListeners['system.createMultChat']);
+    })
     iCom.error(function (error) {
         alert("JS 权限校验失败： " + JSON.stringify(error));
     });
