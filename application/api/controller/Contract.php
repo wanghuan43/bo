@@ -113,6 +113,7 @@ class Contract extends ApiController
                         'contract_title' => $temp['c_name'],
                         'department' => $temp['c_dname'],
                         'pm' => $temp['c_mname'],
+                        'company' => $temp['c_coname'],
                         'date' => date("Y-m-d", $temp['c_date']),
                         'money' => number_format($temp['c_money'], 2),
                         'type' => getTypeList2($temp['c_type']),
