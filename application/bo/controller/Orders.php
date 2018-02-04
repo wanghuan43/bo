@@ -15,7 +15,6 @@ use app\bo\libs\BoController;
 use PHPExcel_IOFactory;
 use think\Config;
 use think\Request;
-use app\bo\libs\iCome;
 
 class Orders extends BoController
 {
@@ -113,8 +112,6 @@ class Orders extends BoController
             $mimeType = $this->getAttachmentMimeType($order['o_attachment']);
         }
 
-        $iCome = new ICome();
-        $this->assign('jsAuth', $iCome->getJsAuth());
         $this->assign('aMimeType', $mimeType);
         $this->assign('order', $order);
         $this->assign('typeList', getTypeList());
