@@ -36,6 +36,8 @@ class ApiController extends Controller
         $this->endTime = explode(' ', microtime());
         $this->writeLog();
         header("Access-Control-Allow-Origin:*");
+        header("Access-Control-Allow-Methods:GET,POST,PUT,DELETE,OPTIONS");
+        header("Access-Control-Allow-Headers:Accept, Origin, XRequestedWith, Content-Type, LastModified");
         echo $this->returnString;
         exit;
     }
