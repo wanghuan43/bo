@@ -35,6 +35,7 @@ class ApiController extends Controller
         }
         $this->endTime = explode(' ', microtime());
         $this->writeLog();
+        header("Access-Control-Allow-Origin:*");
         echo $this->returnString;
         exit;
     }
