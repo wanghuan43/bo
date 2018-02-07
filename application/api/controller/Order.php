@@ -12,15 +12,6 @@ use think\Request;
 class Order extends ApiController
 {
     private $trashed;
-
-    public function __construct(Request $request)
-    {
-        parent::__construct($request);
-        $this->controllers = "order";
-        $tmp = new Orders();
-        $this->trashed = $tmp->getTrashedField();
-    }
-
     private $check = [
         'lists' => [
             'must' => ['mid'],
@@ -30,6 +21,14 @@ class Order extends ApiController
             'must' => ['mid', 'oid']
         ]
     ];
+
+    public function __construct(Request $request)
+    {
+        parent::__construct($request);
+        $this->controllers = "order";
+        $tmp = new Orders();
+        $this->trashed = $tmp->getTrashedField();
+    }
 
     public function lists()
     {
