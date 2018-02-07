@@ -59,6 +59,7 @@ class Contract extends ApiController
             $temp = $contractModel
                 ->field('cn.*')
                 ->where("cn." . $this->trashed . "=2")
+                ->order("cn.c_updatetime DESC,cn.c_date DESC")
                 ->paginate(['list_rows' => $post['limit'], 'page' => $post['page']])
                 ->toArray();
             if ($temp['total'] > 0) {

@@ -57,6 +57,7 @@ class Project extends ApiController
             $temp = $projectModel
                 ->field('p.*')
                 ->where("p." . $this->trashed . "=2")
+                ->order("p.p_updatetime DESC,p.p_date DESC")
                 ->paginate(['list_rows' => $post['limit'], 'page' => $post['page']])
                 ->toArray();
             if ($temp['total'] > 0) {

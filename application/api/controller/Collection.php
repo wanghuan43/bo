@@ -58,6 +58,7 @@ class Collection extends ApiController
                 ->field('o.*')
                 ->where("f.f_mid = " . $member->m_id)
                 ->where("o." . $this->trashed . "=2")
+                ->order("o.o_updatetime DESC,o.o_date DESC")
                 ->paginate(['list_rows' => $post['limit'], 'page' => $post['page']])
                 ->toArray();
             if ($temp['total'] > 0) {

@@ -61,6 +61,7 @@ class Order extends ApiController
             $temp = $orderModel
                 ->field('o.*')
                 ->where("o." . $this->trashed . "=2")
+                ->order("o.o_updatetime DESC,o.o_date DESC")
                 ->paginate(['list_rows' => $post['limit'], 'page' => $post['page']])
                 ->toArray();
             if ($temp['total'] > 0) {
