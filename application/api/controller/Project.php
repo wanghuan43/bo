@@ -11,15 +11,6 @@ use think\Request;
 class Project extends ApiController
 {
     private $trashed;
-
-    public function __construct(Request $request)
-    {
-        parent::__construct($request);
-        $this->controllers = "project";
-        $tmp = new \app\bo\model\Project();
-        $this->trashed = $tmp->getTrashedField();
-    }
-
     private $check = [
         'lists' => [
             'must' => ['mid'],
@@ -29,6 +20,14 @@ class Project extends ApiController
             'must' => ['mid', 'pid']
         ]
     ];
+
+    public function __construct(Request $request)
+    {
+        parent::__construct($request);
+        $this->controllers = "project";
+        $tmp = new \app\bo\model\Project();
+        $this->trashed = $tmp->getTrashedField();
+    }
 
     public function lists()
     {
@@ -57,6 +56,7 @@ class Project extends ApiController
             $temp = $projectModel
                 ->field('p.*')
                 ->where("p." . $this->trashed . "=2")
+                ->order("p.p_updatetime DESC,p.p_date DESC")
                 ->paginate(['list_rows' => $post['limit'], 'page' => $post['page']])
                 ->toArray();
             if ($temp['total'] > 0) {

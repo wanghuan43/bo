@@ -12,15 +12,6 @@ use think\Request;
 class Order extends ApiController
 {
     private $trashed;
-
-    public function __construct(Request $request)
-    {
-        parent::__construct($request);
-        $this->controllers = "order";
-        $tmp = new Orders();
-        $this->trashed = $tmp->getTrashedField();
-    }
-
     private $check = [
         'lists' => [
             'must' => ['mid'],
@@ -30,6 +21,14 @@ class Order extends ApiController
             'must' => ['mid', 'oid']
         ]
     ];
+
+    public function __construct(Request $request)
+    {
+        parent::__construct($request);
+        $this->controllers = "order";
+        $tmp = new Orders();
+        $this->trashed = $tmp->getTrashedField();
+    }
 
     public function lists()
     {
@@ -61,6 +60,7 @@ class Order extends ApiController
             $temp = $orderModel
                 ->field('o.*')
                 ->where("o." . $this->trashed . "=2")
+                ->order("o.o_updatetime DESC,o.o_date DESC")
                 ->paginate(['list_rows' => $post['limit'], 'page' => $post['page']])
                 ->toArray();
             if ($temp['total'] > 0) {

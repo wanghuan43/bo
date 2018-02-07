@@ -11,15 +11,6 @@ use think\Request;
 class Contract extends ApiController
 {
     private $trashed;
-
-    public function __construct(Request $request)
-    {
-        parent::__construct($request);
-        $this->controllers = "contract";
-        $tmp = new \app\bo\model\Contract();
-        $this->trashed = $tmp->getTrashedField();
-    }
-
     private $check = [
         'lists' => [
             'must' => ['mid'],
@@ -29,6 +20,14 @@ class Contract extends ApiController
             'must' => ['mid', 'cid']
         ]
     ];
+
+    public function __construct(Request $request)
+    {
+        parent::__construct($request);
+        $this->controllers = "contract";
+        $tmp = new \app\bo\model\Contract();
+        $this->trashed = $tmp->getTrashedField();
+    }
 
     public function lists()
     {
@@ -59,6 +58,7 @@ class Contract extends ApiController
             $temp = $contractModel
                 ->field('cn.*')
                 ->where("cn." . $this->trashed . "=2")
+                ->order("cn.c_updatetime DESC,cn.c_date DESC")
                 ->paginate(['list_rows' => $post['limit'], 'page' => $post['page']])
                 ->toArray();
             if ($temp['total'] > 0) {
