@@ -84,13 +84,13 @@ class ReportEntity extends BoModel
                         } elseif ($opt == "like") {
                             $val = "%$val%";
                         }
-                        if(in_array($value, ['i_type', 'i_tax', 'c_type', 'a_type', 'r_type', 'o_type','m_isAdmin','o_tax']) AND empty($val)){
+                        if (in_array($value, ['i_type', 'i_tax', 'c_type', 'a_type', 'r_type', 'o_type', 'm_isAdmin', 'o_tax']) AND empty($val)) {
                             break;
                         }
                         $mtmp->where($f . "." . $value, $opt, $val);
                     }
                 }
-                $lists = $mtmp->select();
+                $lists = $mtmp->where($f . "." . $f->getTrashedField() . "=1")->select();
                 $begin = 1;
                 $id = "";
                 $tmps = $model->field("SUM(o_money) as om,o_pid,o_type")->group("o_pid,o_type")->select();
@@ -103,9 +103,9 @@ class ReportEntity extends BoModel
                 foreach ($tmps as $val) {
                     $tax = intval(getTaxList($val['o_tax'])) / 100;
                     if (isset($cclist[$val['o_pid']][$val['o_type']])) {
-                        $cclist[$val['o_pid']][$val['o_type']] += $val['o_money']/(1+$tax);
+                        $cclist[$val['o_pid']][$val['o_type']] += $val['o_money'] / (1 + $tax);
                     } else {
-                        $cclist[$val['o_pid']][$val['o_type']] = $val['o_money']/(1+$tax);
+                        $cclist[$val['o_pid']][$val['o_type']] = $val['o_money'] / (1 + $tax);
                     }
                 }
                 foreach ($lists as $key => $value) {
@@ -196,8 +196,8 @@ class ReportEntity extends BoModel
                                     break;
                             }
                         }
-                        if(is_float($v)){
-                            $v = round($v,2);
+                        if (is_float($v)) {
+                            $v = round($v, 2);
                         }
                         $activeSheet->setCellValue($k . $begin, $v);
                     }
