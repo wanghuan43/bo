@@ -493,7 +493,7 @@ class Orders extends BoController
 
                 $arr2 = false;
 
-                if($arr1['op_status'] == 6){
+                if($arr1['o_status'] == 6){
 
                     $sql = 'SELECT * FROM kj_vw_my_contract WHERE o_id ='.$arr1['o_id'];
                     $arr2 = $this->model->query($sql);
