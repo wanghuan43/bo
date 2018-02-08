@@ -201,15 +201,25 @@ class ReportEntity extends BoModel
                         }
                         $activeSheet->setCellValue($k . $begin, $v);
                     }
-                    if (count($id) > 0 AND isset($tmp["orders"])) {
-                        $count = $begin + 1;
-                        $in = false;
-                        foreach ($id as $ii) {
-                            $begin += 1;
-                            $in = true;
-                            $count = $model->reportList($tmp["orders"], $activeSheet, $type, $begin, $ii->o_id, "", $ot_id);
+                    if (is_array($id)) {
+                        if (count($id) > 0 AND isset($tmp["orders"])) {
+                            $count = $begin + 1;
+                            $in = false;
+                            foreach ($id as $ii) {
+                                $begin += 1;
+                                $in = true;
+                                $count = $model->reportList($tmp["orders"], $activeSheet, $type, $begin, $ii->o_id, "", $ot_id);
+                            }
+                            if ($count === false OR !$in) {
+                                $begin = $begin - 1;
+                            } else {
+                                $begin = $count;
+                            }
                         }
-                        if ($count === false OR !$in) {
+                    } elseif (isset($tmp["orders"])) {
+                        $begin = $begin + 1;
+                        $count = $model->reportList($tmp["orders"], $activeSheet, $type, $begin, $id, "", $ot_id);
+                        if ($count === false) {
                             $begin = $begin - 1;
                         } else {
                             $begin = $count;
