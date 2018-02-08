@@ -455,8 +455,7 @@ class Orders extends BoController
                 $arr1['flag1'] = '';
                 $arr1['b_no'] = '';
                 $arr1['c_no'] = $arr1['c_name'] = '';
-                $arr1['op_status'] = $arr1['o_status'];
-                $arr1['o_status'] = $arr1['op_status'] == "6" ? "是" : "否";
+                $arr1['op_status'] = $arr1['o_status'] == "6" ? "是" : "否";
 
                 foreach ($val as $k => $i) {
 
@@ -524,6 +523,7 @@ class Orders extends BoController
                         $v['o_type'] = getTypeList($v['o_type']);
                         $v['o_date'] = date('Y/m/d',$v['o_date']);
                         $v['o_lie'] = getLieList($v['o_lie']);
+                        $v['op_status'] = $v['o_status'] == "6" ? "是" : "否";
                         $v['o_status'] = getStatusList($v['o_status']);
                         $arr2[$k] = $v;
                     }
