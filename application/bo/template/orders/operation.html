@@ -164,7 +164,7 @@
                 <td>
                     <select class="input-sm" name="o_deal" id="o_deal">
                         <{volist name="chancesList" id="cl"}>
-                        <option value="<{$cl.cs_id}>" <{eq name="$cl.cs_id" value="$order.o_deal"}>selected<{/eq}>><{$cl.cs_name}></option>
+                        <option value="<{$cl.cs_id}>" <{eq name="$cl.cs_id" value="$order.o_deal"}>selected<{/eq}>><{$cl.cs_id}>:<{$cl.cs_name}></option>
                         <{/volist}>
                     </select>
                 </td>

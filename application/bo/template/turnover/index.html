@@ -34,6 +34,7 @@
         <thead>
         <tr>
             <th style="min-width: 50px;text-align:center;padding-right:4px;"><input type="checkbox" id="lists-all-checked" value="all"/></th>
+            <th>ID</th>
             <th>名称</th>
             <th>责任人</th>
             <th>是否显示</th>
@@ -45,6 +46,7 @@
         <{volist name="lists" id="vo" empty="<tr><td colspan='5'></td></tr>"}>
         <tr>
             <td><input type="checkbox" value="<{$vo.cs_id}>" class="lists-id"></td>
+            <td><{$vo.cs_id}></td>
             <td><a href="/turnover/opt/cid/<{$vo.cs_id}>"><{$vo.cs_name}></a></td>
             <td><{$vo.cs_mname}></td>
             <td><{if condition="$vo.cs_isShow == 1"}>是<{else}>否<{/if}></td>
