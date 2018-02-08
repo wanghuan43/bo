@@ -444,7 +444,7 @@ class   Orders extends BoModel
                 }
             }
         }
-        $list = $this->where($f . "." . $this->getTrashedField() . "=1")->select();
+        $list = $this->where($f . "." . $this->getTrashedField() . "=2")->select();
         foreach ($list as $key => $value) {
             $in = true;
             $count = $cell = intval($begin) + intval($key);
