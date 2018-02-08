@@ -214,8 +214,6 @@ class ReportEntity extends BoModel
                         } else {
                             $begin = $count;
                         }
-                    } elseif (isset($tmp["orders"])) {
-                        $begin = $begin + 1;
                     }
                 }
                 break;
