@@ -447,7 +447,7 @@ class Orders extends BoController
             foreach ($arr as $key => $val) {
 
                 $arr1 = $val[0];
-                $arr1['op_type'] = $arr1['o_status'] == 6 ? 'C合同' : 'O机会';
+                $arr1['op_type'] = 'C合同';
                 $arr1['op_used'] = $arr1['o_money'];
                 $arr1['o_date'] = $arr1['op_date'] = date('Y/m/d', $arr1['o_date']);
                 $arr1['o_type'] = getTypeList($arr1['o_type']);
@@ -455,6 +455,8 @@ class Orders extends BoController
                 $arr1['flag1'] = '';
                 $arr1['b_no'] = '';
                 $arr1['c_no'] = $arr1['c_name'] = '';
+                $arr1['op_status'] = $arr1['o_status'];
+                $arr1['o_status'] = $arr1['op_status'] == "6" ? "是" : "否";
 
                 foreach ($val as $k => $i) {
 
@@ -462,9 +464,9 @@ class Orders extends BoController
                         //$arr1['op_used'] += $i['op_used'];
                         $i['op_type'] = 'I发票';
                     } elseif ($i['op_type'] == 2) {
-                        $i['op_type'] = 'A交付';
+                        $i['op_type'] = 'D交付';
                     } elseif ($i['op_type'] == 3) {
-                        $i['op_type'] = 'R付款';
+                        $i['op_type'] = 'P付款';
                     } else {
                         $i['op_type'] = '';
                     }
@@ -493,7 +495,7 @@ class Orders extends BoController
 
                 $arr2 = false;
 
-                if($arr1['o_status'] == 6){
+                if($arr1['op_status'] == 6){
 
                     $sql = 'SELECT * FROM kj_vw_my_contract WHERE o_id ='.$arr1['o_id'];
                     $arr2 = $this->model->query($sql);
@@ -509,9 +511,9 @@ class Orders extends BoController
                         if($v['ou_type'] == '1'){
                             $v['op_type'] = 'I发票';
                         }elseif($v['ou_type'] == '2'){
-                            $v['op_type'] = 'A交付';
+                            $v['op_type'] = 'D交付';
                         }elseif ($v['ou_type'] == '3'){
-                            $v['op_type'] = 'R付款';
+                            $v['op_type'] = 'P付款';
                         }else{
                             $v['op_type'] = '';
                         }
