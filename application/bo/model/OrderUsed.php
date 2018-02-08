@@ -16,7 +16,7 @@ class OrderUsed extends BoModel
 
     public function getOrderUesd($id)
     {
-        $lists = $this->where("ou_oid", "=", $id)->select();
+        $lists = $this->where("ou_oid", "=", $id)->order("ou_date DESC")->select();
         $tmp = array();
         foreach ($lists as $value) {
             $tmp[$value['ou_type']][] = array(
