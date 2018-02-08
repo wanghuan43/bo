@@ -455,7 +455,6 @@ class Orders extends BoController
                 $arr1['flag1'] = '';
                 $arr1['b_no'] = '';
                 $arr1['c_no'] = $arr1['c_name'] = '';
-                $arr1['op_status'] = $arr1['o_status'] == "6" ? "是" : "否";
 
                 foreach ($val as $k => $i) {
 

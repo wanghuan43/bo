@@ -27,8 +27,7 @@ return [
             'P' => ['title'=>'发生','key'=>'flag1'],
             'Q' => ['title'=>'合同号','key'=>'c_no'],
             'R' => ['title'=>'合同名称','key'=>'c_name'],
-            'S' => ['title'=>'验收单号/发票号/付款号','key'=>'b_no'],
-            'T' => ['title'=>'商务阶段','key'=>'op_status']
+            'S' => ['title'=>'验收单号/发票号/付款号','key'=>'b_no']
         ],
         'orders-contract' => [
             'A' => ['title'=>'部门','key'=>'o_dname'],
