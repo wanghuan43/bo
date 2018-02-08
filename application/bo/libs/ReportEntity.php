@@ -90,7 +90,7 @@ class ReportEntity extends BoModel
                         $mtmp->where($f . "." . $value, $opt, $val);
                     }
                 }
-                $lists = $mtmp->where($f . "." . $f->getTrashedField() . "=1")->select();
+                $lists = $mtmp->where($f . "." . $mtmp->getTrashedField() . "=1")->select();
                 $begin = 1;
                 $id = "";
                 $tmps = $model->field("SUM(o_money) as om,o_pid,o_type")->group("o_pid,o_type")->select();
