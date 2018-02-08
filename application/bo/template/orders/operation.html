@@ -1352,7 +1352,12 @@
                 $(ui.handle).parent().next().val(p);
             }
         });
-        $(ele).parent().next().find("input").val( $( ele ).slider( "value" ).toFixed(2) );
+        var vvv = parseFloat($(ele).parent().next().find("input").val());
+        if(vvv == ""){
+            $(ele).parent().next().find("input").val( $( ele ).slider( "value" ).toFixed(2) );
+        }else{
+            $(ele).parent().next().find("input").val(vvv.toFixed(2));
+        }
     }
     function initUsed(){
         var base = ["invoice","acceptance","received"],total=parseFloat($("#o_money").val());
