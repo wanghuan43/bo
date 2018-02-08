@@ -447,12 +447,13 @@ class Orders extends BoController
             foreach ($arr as $key => $val) {
 
                 $arr1 = $val[0];
-                $arr1['op_type'] = $arr1['o_status'] == 6 ? 'C合同' : 'O机会';
+                $arr1['op_type'] = 'C合同';
+                $arr1['flag1'] = $arr1['o_status'] == 6 ? '1' : '';
                 $arr1['op_used'] = $arr1['o_money'];
                 $arr1['o_date'] = $arr1['op_date'] = date('Y/m/d', $arr1['o_date']);
                 $arr1['o_type'] = getTypeList($arr1['o_type']);
                 $arr1['c_bakup'] = '';
-                $arr1['flag1'] = '';
+                //$arr1['flag1'] = '';
                 $arr1['b_no'] = '';
                 $arr1['c_no'] = $arr1['c_name'] = '';
 
@@ -464,7 +465,7 @@ class Orders extends BoController
                     } elseif ($i['op_type'] == 2) {
                         $i['op_type'] = 'A交付';
                     } elseif ($i['op_type'] == 3) {
-                        $i['op_type'] = 'R付款';
+                        $i['op_type'] = 'P付款';
                     } else {
                         $i['op_type'] = '';
                     }
@@ -511,7 +512,7 @@ class Orders extends BoController
                         }elseif($v['ou_type'] == '2'){
                             $v['op_type'] = 'A交付';
                         }elseif ($v['ou_type'] == '3'){
-                            $v['op_type'] = 'R付款';
+                            $v['op_type'] = 'P付款';
                         }else{
                             $v['op_type'] = '';
                         }
