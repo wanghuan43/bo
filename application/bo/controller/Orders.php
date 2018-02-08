@@ -452,7 +452,7 @@ class Orders extends BoController
                 $arr1['o_date'] = $arr1['op_date'] = date('Y/m/d', $arr1['o_date']);
                 $arr1['o_type'] = getTypeList($arr1['o_type']);
                 $arr1['c_bakup'] = '';
-                $arr1['flag1'] = '';
+                $arr1['flag1'] = $arr1['o_status'] == "6" ? '1' : '';
                 $arr1['b_no'] = '';
                 $arr1['c_no'] = $arr1['c_name'] = '';
 
