@@ -524,7 +524,11 @@ class Orders extends BoController
                         $v['o_lie'] = getLieList($v['o_lie']);
                         $v['op_status'] = $v['o_status'] == "6" ? "是" : "否";
                         $v['o_status'] = getStatusList($v['o_status']);
-                        $arr2[$k] = $v;
+                        if ((isset($v['op_type']) && empty($v['op_type'])) || (isset($v['ou_type']) && empty($v['ou_type']))) {
+                            unset($arr2[$k]);
+                        } else {
+                            $arr2[$k] = $v;
+                        }
                     }
 
                     /*echo "<pre>";
