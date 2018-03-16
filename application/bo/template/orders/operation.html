@@ -736,22 +736,32 @@
             return false;
         });
         $("#o_money").change(function () {
-            var val = $(this).val().replace(",","");
+            var val = $(this).val().replace(",",""),m=0;
             if(isNaN(val) === true){
                 custom.alert("合同金额只能是数字");
                 $(this).val(0);
                 calculateAll();
                 return false;
             }
+            val = parseFloat(val);
             var max = $(this).attr("max");
             if(max != undefined){
                 max = parseFloat(max);
-                if(max < $(this).val()){
+                if(max < val){
                     custom.alert("合同的可用额度不够，不能超过"+max.toFixed(2));
                     $(this).val(max.toFixed(2));
                 }
             }
-            $(this).val(val);
+            $(".content:eq(1) table").each(function(index,element){
+                var td = parseFloat($(element).find("tr:eq(0) td:eq(2)").html());
+                if(td > m){
+                    m = td;
+                }
+            });
+            if(val < m){
+                custom.alert("订单金额不能低于保存的开票/交付/付款的金额，不能低于"+max.toFixed(2));
+                $(this).val(m.toFixed(2));
+            }
             calculateAll();
         });
         $(".fa-plus").click(function () {
